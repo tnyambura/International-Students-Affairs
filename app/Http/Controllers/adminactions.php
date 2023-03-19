@@ -16,6 +16,7 @@ use App\Models\FetchBuddies;
 use App\Models\FetchCountries;
 use App\Models\User;
 use App\Models\buddies_allocation;
+use App\Models\AllocateBuddyModel;
 use App\Models\addNewBuddy;
 use App\Models\applyKpp;
 use App\Models\applyvisaextension;
@@ -30,11 +31,15 @@ use DB;
 
 class adminactions extends Controller
 {
+    public function KppsUserData($applicationId){
+        $data = DB::table("kpps_application")->where('id','=',$applicationId)->limit(1)->get();
+        $userData = DB::table("student_view_data")->where('student_id','=',$data[0]->student_id)->limit(1)->get();
+        
+        return [$data,$userData];
+    }
     public function NewKPPAPPVIEW(Request $request,$id){
         // $userID= $request->user()->id;        
-        $data = DB::table("kpps_application")->where('id','=',$id)->limit(1)->get();
-        $userData = DB::table("student_view_data")->where('student_id','=',$data[0]->student_id)->limit(1)->get();
-        return view('Layouts/AdminActions/kppapplicationView', ['data'=>$data[0]], ['userData'=>$userData[0]]);
+        return view('Layouts/AdminActions/kppapplicationView', ['data'=>$this->KppsUserData($id)[0][0]], ['userData'=>$this->KppsUserData($id)[1][0]]);
     }
     public function NewVISAAPPVIEW($id){       
         $data = DB::table("extension_application")->where('id','=',$id)->limit(1)->get();
@@ -152,6 +157,11 @@ class adminactions extends Controller
         }
         return $data;
     }
+    public function UsersFecher(){
+        $allUsers = DB::table('users')->select('id','surname','other_names','email')->get();
+        
+        return $allUsers;
+    }
     public function BuddiesFecher(){
         $roles = DB::table('user_roles')->select('user_id')->where('role','=','buddy')->get();
         $data=[];
@@ -162,15 +172,75 @@ class adminactions extends Controller
         }
         return $data;
     }
-    public function AllocateBuddy(){ // new allocation
-        $roles = DB::table('user_roles')->select('user_id')->where('role','=','buddy')->get();
+    public function AllocationsFecher(){
+        $bdAllocations = DB::table('buddies_allocations')->get();
         $data=[];
         
-        foreach ($roles as $user) {
-            $usersDb = DB::table('users')->where('id',$user->user_id)->limit(1)->get();
-                array_push($data,$usersDb[0]);
+        foreach ($bdAllocations as $allocation) {
+            $StudentData = DB::table('users')->select('id','surname','other_names','email')->where('id',$allocation->student_id)->limit(1)->get();
+            $buddyData = DB::table('users')->select('id as bd_id','surname as bd_srnm','other_names as bd_onm','email as bd_eml')->where('id',$allocation->buddy_id)->limit(1)->get();
+                array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0]));
         }
         return $data;
+    }
+    // public function AllocationsFecher(){
+    //     $bdAllocations = DB::table('buddies_allocations')->get();
+    //     $data=[];
+        
+    //     foreach ($bdAllocations as $allocation) {
+    //         $StudentData = DB::table('users')->select('id','surname','other_names','email')->where('id',$allocation->student_id)->limit(1)->get();
+    //         $buddyData = DB::table('users')->select('id as bd_id','surname as bd_srnm','other_names as bd_onm','email as bd_eml')->where('id',$allocation->buddy_id)->limit(1)->get();
+    //             array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0]));
+    //     }
+    //     return $data;
+    // }
+    public function AllocateBuddy(Request $req){ // new allocation
+        
+        $generatedId = rand(1000,1000000);
+        // if($req->hasFile('student_id','buddy_id')){
+
+        $this->validate($req,[
+            'student_id'=>'required',
+            'buddy_id'=>'required',
+            ]
+        );
+        $post = new AllocateBuddyModel;
+        
+        $post->id = $generatedId;
+        $post->student_id = $req->student_id;
+        $post->buddy_id = $req->buddy_id;
+        
+        $post->timestamps = false;
+
+        $post->save();
+        // $allocatedQuery = ;
+
+        // if($post->save()){
+        //     return back()->with('Buddy_Allocation_success','Allocation successful!');
+        // }else{
+            //     return back()->with('Buddy_Allocation_failed','User allocation failed!');
+            // }
+        return back()->with('Buddy_Allocation_success','Allocation successful!');
+            
+            
+        // }
+        
+    }
+    public function EditAllocatedBuddy(Request $req){ // new allocation
+        
+        $generatedId = rand(1000,1000000);
+
+        $this->validate($req,[
+            'student_id'=>'required',
+            'buddy_id'=>'required',
+            ]
+        );
+        DB::table('buddies_allocations')->where('student_id',$req->student_id)->update(['buddy_id'=>$req->buddy_id]);
+        return back()->with('Buddy_modification_success','Allocation successful!');
+            
+            
+        // }
+        
     }
     Public function getAllvisaextensionrequests(){
         $extDb = DB::table('extension_application')->get();
@@ -193,6 +263,9 @@ class adminactions extends Controller
     public function BuddiesManagement(){
         return view('Layouts/AdminActions/Buddies',['buddies'=>$this->BuddiesFecher()]);
     }
+    public function BuddyAllocationsList(){
+        return view('Layouts/AdminActions/listofBuddyAllocations',['BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher()]);
+    }
     public function listofinternationslstudents(){
         return view('Layouts/AdminActions/listofinternationalstudents');
     }
@@ -205,186 +278,17 @@ class adminactions extends Controller
     public function AddNewStudent(){
         return view('Layouts/AdminActions/AddNewStudent');
     }
-    // public function Create_AddNewStudent(request $request){
-    //     $id = $request->suID;        
-    //     $data = DB::select("select * from add_new_students WHERE suID= $id ");
 
-    //     if($data == false){
-    //     $post = new addNewStudent();
-    //     $post->suID = $request->suID;
-    //     $post->suEMAIL = $request->suEMAIL;
-    //     $post->surNAME = $request->surNAME;
-    //     $post->firstNAME = $request->firstNAME;
-    //     $post->lastNAME = $request->lastNAME;
-    //     $post->Faculty = $request->Faculty;
-    //     $post->Course = $request->Course;
-    //     $post->Nationality = $request->Nationality;
-    //     $post->Residence = $request->Residence;
-    //     $post->phoneNUMBER = $request->phoneNUMBER;
-    //     $post->passportNUMBER = $request->passportNUMBER;
-    //     $post->ParentEmail = $request->ParentEmail;
-    //     $post->ParentPhone = $request->ParentPhone;
-    //     $post->ParentNames = $request->ParentNames;
-    //     $post->save();
-    //     return redirect('/listofIS')
-    //     ->with('New_Student_Added','New International Student data has been added Successfully');
-    //     }else{
-    //         return back()->with('New_Student_failed','A student with same Admission Number is already Registered!');
-    //     }
-    //     }
-
-    //     //NEW BUDDY REGISTRATION//
-
-    //     public function AddNewBuddy(request $request){
-    //         return view('Layouts/AdminActions/AddNewBuddy');
-    //     }
-    //     public function RegisterNewBuddy(request $request){
-
-    //         $id = $request->suID;        
-    //         $data = DB::select("select * from buddies WHERE suID= $id ");
-    
-    //         if($data == false){
-    //         $post = new addNewBuddy();
-    //         $post->suID = $request->suID;
-    //         $post->email = $request->email;
-    //         $post->Residence = $request->Residence;
-    //         $post->surNAME = $request->surNAME;
-    //         $post->otherNAMES = $request->otherNAMES;
-    //         $post->Faculty = $request->Faculty;
-    //         $post->course = $request->course;
-    //         $post->Nationality = $request->Nationality;
-    //         $post->phoneNUMBER = $request->phoneNUMBER;
-    //         $post->passportNUMBER = $request->passportNUMBER;
-    //         $post->save();
-    //         return redirect('/AddNewBuddy')
-    //         ->with('New_Student_Added','New Buddy has been enrolled Successfully');
-    //         }else{
-    //             return back()->with('New_Student_failed','A Buddy with same Admission Number is already Registered!');
-    //         }
-    //         }
-    //     //END OF NEW BUDDY REGISTRATION//
-
-    //     //Buddies Management Area//
-
-    //     public function BuddyAllocations(request $request){
-
-    //         $id = $request->suID;        
-    //         $data = DB::select("select * from buddies_allocation WHERE newSTD_suID= $id ");
-    
-    //         if($data == false){
-    //         $post = new buddies_allocation();
-            
-    //         $post->NewSTD_surNAME = $request->surNAME;
-    //         $post->NewSTD_otherNAMES = $request->otherNAMES;
-    //         $post->NewSTD_passportNUMBER = $request->passportNUMBER;
-    //         $post->NewSTD_suID = $request->suID;
-    //         $post->NewSTD_course = $request->Course;
-    //         $post->NewSTD_Nationality = $request->Nationality;
-    //         $post->NewSTD_Faculty = $request->Faculty;
-    //         $post->NewSTD_email = $request->suEMAIL;
-
-    //         $post->Buddy_otherNAMES = $request->BuddyName;
-    //         $post->Buddy_suID = $request->BuddyID;
-
-    //         $post->save();
-    //         return redirect('/listofBuddyRequests')
-    //         ->with('Buddy_Allocated','New Buddy has been Allocated Successfully');
-    //         }else{
-    //             return back()->with('Buddy_Allocation_failed','A Buddy Has Already Been Allocated to the Student!');
-    //         }
-    //         }
-
-    //     Public function getallBuddies(){
-    //         $data= addNewBuddy::all('id','suID','email','surNAME','otherNAMES','course','Nationality');
-    //         return view('Layouts/AdminActions/listofBuddies',['students'=>$data]);
-    //        }
-        
-    //     Public function deletesBuddyrecord($id){
-    //     $dataID= Crypt::decrypt($id);   
-
-    //     DB::table('buddies')->where('id', $dataID)->delete();        
-    //     return back()->with('Record_deleted','Record has been Deleted Successfully');
-
-    //     }
-    //     public function AllocateBuddies($id){
-    //         $get_data= FetchCountries::get();
-    //         $data = array('get_data'=>$get_data);
-
-    //         $get_Buddydata= FetchBuddies::get();
-    //         $Buddydata = array('get_Buddydata'=>$get_Buddydata);
-
-    //         $dataID= Crypt::decrypt($id);
-    //         $BuddyRequest= Request_Buddy::find($dataID);
-    //         return view('Layouts/AdminActions/AllocateBuddies', compact('get_data','BuddyRequest','get_Buddydata'));
-    //     }
-
-    //     Public function BuddyAllocationsList(){
-    //         $Buddies= buddies_allocation::all();
-    //        return view('Layouts/AdminActions/listofBuddyAllocations',['Buddies'=>$Buddies]);
-    //     }
-
-    //     Public function generateBuddyAllocationList(){
-    //         $list = buddies_allocation::count();
-    //         if($list > 0){
-    //         $data= buddies_allocation::all();         
-    //         $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView('Layouts/AdminActions/BuddyAllocationsPDF',['data'=>$data]);  
-    //         return $pdf->download('BuddyAllocations.pdf'); 
-    //         }else{
-    //             return back()->with('data_not_available','No data available');
-    //         }                    
-    //     }
-
-    //     Public function generateRegisteredBuddiesList(){
-    //         $list = FetchBuddies::count();
-    //         if($list > 0){
-    //         $data= FetchBuddies::all();         
-    //         $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView('Layouts/AdminActions/ListofBuddiesPDF',['data'=>$data]);  
-    //         return $pdf->download('ListOfRegisteredBuddies.pdf'); 
-    //         }else{
-    //             return back()->with('data_not_available','No data available');
-    //         }                      
-    //     }
-
-    //     Public function BuddyDetailsEdit($id){
-    //         $dataID= Crypt::decrypt($id); 
-    //         $data= FetchBuddies::find($dataID);
-    //         return view('Layouts/AdminActions/EditBuddyDetails', compact('data'));
-    //      }
-
-    //      Public function BuddyDetailsUpdate(request $req , $id){
-        
-    //         $data = FetchBuddies::find($req->id);        
-            
-    //         $data->surNAME = $req->surNAME;
-    //         $data->otherNAMES = $req->otherNAMES;
-    //         $data->suID = $req->suID;
-    //         $data->email = $req->email;
-    //         $data->Faculty = $req->Faculty;
-    //         $data->Nationality = $req->Nationality;
-    //         $data->course = $req->course;
-    //         $data->Residence = $req->Residence;
-    //         $data->phoneNUMBER = $req->phoneNUMBER;
-    //         $data->passportNUMBER = $req->passportNUMBER;
-    
-    //         $data->update();
-    //         // return back()->with('Record_Updated','Record has been Updated Successfully');
-    //         return redirect('/listofBuddies')->with('Record_Updated','Record has been Updated Successfully');        
-    
-    //         }
-
-    //         Public function BuddyDetailsView($id){
-    //             $dataID= Crypt::decrypt($id); 
-    //             $data = FetchBuddies::find($dataID);        
-    //             return view('Layouts/AdminActions/BuddyDetailsView', compact('data'));
-    //          }
-            
-
-    //     //End of Buddy Management Area//
-    //    Public function getallstudents(){
-    //      $data= addNewStudent::all('id','suID','suEMAIL','firstNAME','lastNAME','Course','Nationality');
-    //      return view('Layouts/AdminActions/listofInternationalstudents',['students'=>$data]);
-    //     }
-
+    public function generateAllocatedBuddieslist(){
+        $list = $this->BuddiesFecher();
+        if(sizeOf($list) > 0){        
+            $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView('Layouts/AdminActions/ListofBuddiesPDF',['data'=>$list]);  
+            return $pdf->download('List_of_all_allocations.pdf'); 
+        }else{
+            return back()->with('data_not_available','There is no data available, kindly add the students to generate report');
+        }   
+                   
+    }
     public function generateBuddieslist(){
         $list = $this->BuddiesFecher();
         if(sizeOf($list) > 0){        

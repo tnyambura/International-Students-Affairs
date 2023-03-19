@@ -420,7 +420,7 @@ class studentactions extends Controller
 
         if($request->hasFile('suID','surNAME','firstNAME','lastNAME','suEMAIL','phoneNUMBER','Faculty','Course','Nationality','passportNUMBER','Residence','ParentNames','ParentEmail','ParentPhone'))
         {
-            $this->validate($request,[
+            $request->validate($request,[
                 'suID'=>'required',
                 'surNAME'=>'required',
                 'firstNAME'=>'required',

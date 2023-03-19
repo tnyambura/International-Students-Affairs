@@ -4,14 +4,14 @@
                         <ol class="breadcrumb mb-4" style="background:#113C7A;">
                             <li class="breadcrumb-item active" style="color:white;">List of all Buddy Allocation Requests</li>
                         </ol>
-                        @if(Session::has('Buddy_Allocated'))
+                        @if(Session::has('Buddy_Allocation_success'))
                         <div class="alert alert-success" role="alert">
-                        {{Session::get('Buddy_Allocated')}}
+                        {{Session::get('Buddy_Allocation_success')}}
                         </div>
                         @endif
-                        @if(Session::has('Buddy_Allocation_fail'))
+                        @if(Session::has('Buddy_Allocation_failed'))
                         <div class="alert alert-danger" role="alert">
-                        {{Session::get('Buddy_Allocation_fail')}}
+                        {{Session::get('Buddy_Allocation_failed')}}
                         </div>
                         @endif
 
@@ -76,7 +76,7 @@
                                                                         <p class="w-100 ">Allocate budy to student <strong>{{$student["id"]. ' - '. $student['surname'].' '.$student['other_names']}}</strong> </p> 
                                                                         <input id="student_id" class="form-control" type="hidden" value={{$student["id"]}} name="student_id" required autofocus />
                                                                         <label for="surNAME">Select Buddy</label> 
-                                                                        <select class='form-select form-select-lg'>
+                                                                        <select class='form-select form-select-lg' name="buddy_id">
                                                                             <option disabled selected>--SELECT BUDDY--</option> 
                                                                             @foreach($buddies as $buddy)
                                                                                 <option value={{$buddy->id}}>{{$buddy->id.' - '. $buddy->surname. $buddy->other_names}}</option> 

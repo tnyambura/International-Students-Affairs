@@ -4,21 +4,9 @@
                         <ol class="breadcrumb mb-4" style="background:#113C7A;">
                             <li class="breadcrumb-item active" style="color:white;">List of all Buddy Allocations</li>
                         </ol>
-                        @if(Session::has('Record_Updated'))
+                        @if(Session::has('Buddy_modification_success'))
                         <div class="alert alert-success" role="alert">
-                        {{Session::get('Record_Updated')}}
-                        </div>
-                        @endif
-
-                        @if(Session::has('New_Student_Added'))
-                        <div class="alert alert-success" role="alert">
-                        {{Session::get('New_Student_Added')}}
-                        </div>
-                        @endif
-                       
-                        @if(Session::has('data_not_available'))
-                        <div class="alert alert-danger" role="alert">
-                        {{Session::get('data_not_available')}}
+                        {{Session::get('Buddy_modification_success')}}
                         </div>
                         @endif
                        
@@ -33,52 +21,96 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>BuddySUID.</th>
-                                                <th>Buddy Names</th>
-                                                <th>suID</th>
-                                                <th>Names</th>
-                                                <th>Email</th>
-                                                <th>Course</th>
-                                                <th>Date Allocated</th>
-                                                <th>Actions</th>
+                                                <th>Buddy ID</th>
+                                                <th>Buddy Name</th>
+                                                <th>List of Allocation</th>
+                                                <th>Number of allocations</th>
+                                                <!-- <th>Actions</th> -->
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>BuddySUID.</th>
-                                                <th>Buddy Names</th>
-                                                <th>suID</th>
-                                                <th>Names</th>
-                                                <th>Email</th>
-                                                <th>Course</th>
-                                                <th>Date Allocated</th>
-                                                <th>Actions</th>
+                                            <th>Buddy ID</th>
+                                                <th>Buddy Name</th>
+                                                <th>List of Allocation</th>
+                                                <th>Number of allocations</th>
+                                                <!-- <th>Actions</th> -->
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                        @foreach($Buddies as $Buddy)
-                                            <tr>
-                                                <td hidden>{{$Buddy['id']}}</td>
-                                                <td>{{$Buddy['Buddy_suID']}}</td>
-                                                <td>{{$Buddy['Buddy_otherNAMES']}}</td>
-                                                <td>{{$Buddy['NewSTD_suID']}}</td>
-                                                <td>{{$Buddy['NewSTD_otherNAMES']}}</td>
-                                                <td>{{$Buddy['NewSTD_email']}}</td>
-                                                <td>{{$Buddy['NewSTD_course']}}</td>
-                                                <td>{{$Buddy['created_at']}}</td>
+                                            @foreach($allbuddies as $Buddy)
+                                            <?php $count=0; ?>
+                                            @php($count=[])
+                                            <tr style='text-align:center;'>
+                                                <td>{{$Buddy->id}}</td>
+                                                <td>{{$Buddy->surname.' '.$Buddy->other_names}}</td>
+                                                
+                                                <td class='flex-grow-1'>
+                                                    <ul class="d-flex flex-fill ">
+                                                        @foreach($BuddiesAllocations as $bdAlloc)
+                                                            @foreach($stUsers as $st_u)
+                                                                @if($st_u->id == $bdAlloc['id'] && $bdAlloc['bd_id'] == $Buddy->id)
+                                                                    @php(array_push($count,$st_u->id))
+                                                                    <li>
+                                                                        <div class="d-flex ">
+                                                                            <span>{{$bdAlloc['id']}}</li>
+                                                                            <span>{{$bdAlloc['surname'].' '.$bdAlloc['other_names']}}</li>
+                                                                            <div class="flex-shrink-1">
+                                                                                <span data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}" style=" color:#CC0D0D" class="fas fa-edit" aria-hidden="true"></span>
+                                                                                
 
+                                                                                <div class="modal fade " id="EditAllocation_{{$st_u->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                                                aria-hidden="true">
+                                                                                    <div class="modal-dialog" role="document">
+                                                                                        <div class="modal-content">
+                                                                                            <div class="modal-header text-center">
+                                                                                                <h4 class="modal-title w-100 font-weight-bold">Change Student Buddy</h4>
+                                                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                                <span aria-hidden="true">&times;</span>
+                                                                                                </button>
+                                                                                            </div>
+                                                                                            <form method="POST" action="{{ __('EditAllocatedBuddy') }}" class='new-staff-form p-4'>
+                                                                                                @csrf
 
+                                                                                                <!-- surNAME -->
+                                                                                                <div class="form-row w-100">
+                                                                                                    <div class="col-lg-4 mb-3 ">   
+                                                                                                        <p class="w-100 ">Modify Student Allocation <strong>{{$st_u->id. ' - '. $st_u->surname.' '.$st_u->other_names}}</strong> </p> 
+                                                                                                        <input id="student_id" class="form-control" type="hidden" value={{$st_u->id}} name="student_id" required autofocus />
+                                                                                                        <label for="surNAME">Select Buddy</label> 
+                                                                                                        <select class='form-select form-select-lg' name="buddy_id">
+                                                                                                            <option disabled selected>--SELECT BUDDY--</option> 
+                                                                                                            @foreach($allbuddies as $a_buddy)
+                                                                                                                @if($a_buddy->id == $bdAlloc['bd_id'])
+                                                                                                                    <option value={{$a_buddy->id}} selected>{{$a_buddy->id.' - '. $a_buddy->surname. $a_buddy->other_names}}</option> 
+                                                                                                                @else
+                                                                                                                    <option value={{$a_buddy->id}}>{{$a_buddy->id.' - '. $a_buddy->surname. $a_buddy->other_names}}</option> 
+                                                                                                                @endif
+                                                                                                            @endforeach
+                                                                                                        </select> 
+                                                                                                    </div></br>
+                                                                                                </div>
+                                                                                                <br/>
+                                                                                                <div class="form-row justify-content-center">
 
-                                                <td>
-                                                @php $BuddyID= Crypt::encrypt($Buddy->id); @endphp                                                                                            
-
-                                                <a href="#" target="blank">
-                                                    <span class="fas fa-eye" aria-hidden="false"></span>
-                                                </a>
-                                                <a href="#" style="color:green">
-                                                <span class="fas fa-edit" aria-hidden="true"></span>
-                                                </a> 
+                                                                                                    <div class="flex items-center justify-end mt-4">
+                                                                                                    <input class="btn btn-success" value="Allocate" type="submit" />
+                                                                                                    
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                            </form>
+                                                                                            <br/>
+                                                                                        </div>
+                                                                                    </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </li>
+                                                                @endif
+                                                            @endforeach
+                                                        @endforeach
+                                                    </ul>
                                                 </td>
+                                                <td>{{sizeOf($count)}}</td>
                                             </tr>
                                       @endforeach
                                           </tbody>

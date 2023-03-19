@@ -123,6 +123,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/AddNewBuddy', [adminactions::class, 'AddNewBuddy'])->middleware('rule:admin')->name('add.AddNewBuddy');
      Route::post('/EnrolNewBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('rule:admin')->name('add.EnrolNewBuddy');
      Route::get('/listofBuddies',[adminactions::class,'getAllBuddies'])->middleware('rule:admin');
+     Route::post('/EditAllocatedBuddy',[adminactions::class,'EditAllocatedBuddy'])->middleware('rule:admin');
      Route::post('/AllocateBuddy',[adminactions::class,'AllocateBuddy'])->middleware('rule:admin');
      Route::post('/BuddyAllocation',[adminactions::class,'BuddyAllocations'])->middleware('rule:admin');
      Route::get('/BuddyAllocationsList',[adminactions::class,'BuddyAllocationsList'])->middleware('rule:admin');

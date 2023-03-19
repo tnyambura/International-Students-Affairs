@@ -111,13 +111,19 @@ ul,
 dl {
   margin-top: 0;
   margin-bottom: 1rem;
+  padding: 0;
 }
 
+/* padding: 0; */
 ol ol,
 ul ul,
 ol ul,
 ul ol {
   margin-bottom: 0;
+}
+
+li{
+  list-style: none;
 }
 
 dt {

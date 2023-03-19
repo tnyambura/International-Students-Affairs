@@ -18,18 +18,20 @@
                                                 <th>Id</th>
                                                 <th>SurName</th>
                                                 <th>OtherNames.</th>
-                                                <th>SU ID</th>
-                                                <th>Email</th>
+                                                <th>email</th>
+                                                <th>Telephone No</th>
+                                                <th>Role</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>Id</th>
+                                            <th>Id</th>
                                                 <th>SurName</th>
                                                 <th>OtherNames.</th>
-                                                <th>SU ID</th>
-                                                <th>Email</th>
+                                                <th>email</th>
+                                                <th>Telephone No</th>
+                                                <th>Role</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </tfoot>
@@ -41,6 +43,7 @@
                                                 <td>{{$users->other_names}}</td>
                                                 <td>{{$users->email}}</td>
                                                 <td>{{$users->phone_number}}</td>
+                                                <td>role</td>
 
                                                 <td>
                                                 <a href="#" >

@@ -5,9 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class buddies_allocation extends Model
+class AllocateBuddyModel extends Model
 {
     use HasFactory;
-    protected $table = 'buddies_allocation';
+    protected $table = "buddies_allocations";
 
+    protected $fillable = [
+		'id','student_id','buddy_id'
+	];
 }

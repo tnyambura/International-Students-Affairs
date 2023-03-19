@@ -162,7 +162,8 @@
                                     </div><br>
                                 </div>
                             </main>
-                <footer class="py-4 bg-light mt-auto">
+                
+                            <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="d-flex align-items-center justify-content-between small">
                             <div class="text-muted">Copyright &copy;Office of the International Students Affairs <?php echo date('Y'); ?></div>
