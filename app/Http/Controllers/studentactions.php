@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Auth;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\FileUploader;
 // use Auth;
 use App\Models\addNewStudent;
 use App\Models\addStudentDetails;
@@ -37,7 +38,7 @@ class studentactions extends Controller
         if($req->hasFile('passportPIC','Biodata','currentVISA','entryVISA')) 
         {
             $path_pp = 'storage/visaExtensionfiles/'. $data->passportPIC;
-            $path_bd = 'storage/visaExtensionfiles/'. $data->passportPIC;
+            $path_bd = 'storage/visaExtensionfiles/'. $data->passportBIO;
             $path_cv = 'storage/visaExtensionfiles/'.$data->currentVISA;
             $path_ev = 'storage/visaExtensionfiles/'.$data->entryVISA;
 
@@ -87,36 +88,30 @@ class studentactions extends Controller
     }
     }
 
-    public function Create_Newstudentpass(request $request){
+    public function userDetailsFetcher(Request $request){
+        $id = $request->user()->id; 
+        $fetcher =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
+        return $fetcher[0];
+    }
 
+    public function Create_Newstudentpass(request $request){
+        $id = $request->user()->id; 
        
         if($request->hasFile('passportPICTURE','biodataPAGE','biodataPAGE','currentVISA','guardiansID','commitmentLETTER'
         ,'academicTRANSCRIPTS','policeCLEARANCE'))
         {
 
+            
             $this->validate($request,[
-            'passportPICTURE' => 'required|mimes:png,jpg,pdf|max:2048',
-            'biodataPAGE' => 'required|mimes:png,jpg,pdf|max:2048',
-            'currentVISA' => 'required|mimes:png,jpg,pdf|max:2048',
-            'guardiansID' => 'required|mimes:png,jpg,pdf|max:2048',
-            'commitmentLETTER' => 'required|mimes:png,jpg,pdf|max:2048',
-            'academicTRANSCRIPTS' => 'required|mimes:png,jpg,pdf|max:2048',
-            'policeCLEARANCE' => 'required|mimes:png,jpg,pdf|max:2048'
+            'passportPICTURE' => 'require|mimes:png,jpg,pdf',
+            'biodataPAGE' => 'mimes:png,jpg,pdf',
+            'currentVISA' => 'mimes:png,jpg,pdf',
+            'guardiansID' => 'mimes:png,jpg,pdf',
+            'commitmentLETTER' => 'mimes:png,jpg,pdf',
+            'academicTRANSCRIPTS' => 'mimes:png,jpg,pdf',
+            'policeCLEARANCE' => 'mimes:png,jpg,pdf'
         ]
         );
-
-            $post = new applykpp();
-            $post->suID = $request->suID;
-            $post->suEMAIL = $request->suEMAIL;
-            $post->surNAME = $request->surNAME;
-            $post->otherNAMES = $request->otherNAMES;
-            $post->passportNUMBER = $request->passportNUMBER;
-            $post->Course = $request->Course;
-            $post->Residence = $request->Residence;
-            $post->Nationality = $request->Nationality;
-            $post->dateofENTRY = $request->dateofENTRY;
-            $post->phoneNUMBER = $request->phoneNUMBER;
-            $post->Faculty = $request->Faculty;
 
             $path_pp=$request->file('passportPICTURE');
             $path_bd=$request->file('biodataPAGE');
@@ -129,45 +124,37 @@ class studentactions extends Controller
             // $allowedFileTypes = config('app.allowedFieTypes');
             // $maxFileSize = config('app.maxFileSize');
             // $rules = [
-            //          'file' => 'required|mimes:'.$allowedFileTypes'|max'.$maxFileSize 
+            //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
             // ];
             
             // $this->validate( $request,$rules);
 
-            $extension1 = $path_pp -> getClientOriginalName();
-            $extension2 = $path_bd -> getClientOriginalName();
-            $extension3 = $path_cv -> getClientOriginalName();
-            $extension4 = $path_gid -> getClientOriginalName();
-            $extension5 = $path_cL -> getClientOriginalName();
-            $extension6 = $path_AT -> getClientOriginalName();
-            $extension7 = $path_PC -> getClientOriginalName();
+            $passportPic = FileUploader::fileupload($request,'passportPICTURE','PassportPhoto','kpps/');
+            $passportBio = FileUploader::fileupload($request,'biodataPAGE','PassportBioData','kpps/');
+            $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa','kpps/');
+            $guardianId = FileUploader::fileupload($request,'guardiansID','GuardianBio','kpps/');
+            $commitmentL = FileUploader::fileupload($request,'commitmentLETTER','CommitmentLetter','kpps/');
+            $academicTrans = FileUploader::fileupload($request,'academicTRANSCRIPTS','AcademicTranscript','kpps/');
+            $policeCl = FileUploader::fileupload($request,'policeCLEARANCE','PoliceClearance','kpps/');
+            
+
+            $post = new applykpp();
+            
+            
+            $post->student_id = $request->suID;
+            $post->passport_picture = $passportPic;
+            $post->passport_biodata = $passportBio;
+            $post->current_visa = $currentV;
+            $post->guardian_biodata = $guardianId;
+            $post->commitment_letter = $commitmentL;
+            $post->accademic_transcript = $academicTrans;
+            $post->police_clearance = $policeCl;
+            $post->application_date = '2023-03-16';
+            $post->application_status = 'pending';
 
 
-            $filename1 = time().'.'.$extension1;
-            $filename2 = time().'.'.$extension2;
-            $filename3 = time().'.'.$extension3;
-            $filename4 = time().'.'.$extension4;
-            $filename5 = time().'.'.$extension5;
-            $filename6 = time().'.'.$extension6;
-            $filename7 = time().'.'.$extension7;
+            $post->timestamps = false;
 
-
-            $path_pp->move('storage/kpps/',$filename1);
-            $path_bd->move('storage/kpps/',$filename2);
-            $path_cv->move('storage/kpps/',$filename3);
-            $path_PC->move('storage/kpps/',$filename4);
-            $path_AT->move('storage/kpps/',$filename5);
-            $path_cL->move('storage/kpps/',$filename6);
-            $path_gid->move('storage/kpps/',$filename7);
-
-
-            $post->passportPICTURE = $filename1;
-            $post->biodataPAGE = $filename2;
-            $post->currentVISA = $filename3;
-            $post->guardiansID = $filename4;
-            $post->commitmentLETTER = $filename5;
-            $post->academicTRANSCRIPTS = $filename6;
-            $post->policeCLEARANCE = $filename7;
             $post->save();
             return back()->with('kpp_request_added','Your student pass application Request has been submitted successfully');
     
@@ -276,30 +263,23 @@ class studentactions extends Controller
     }
 
     public function visaExtensions(request $request){
-        $id = $request->user()->suID;        
-        $data = DB::table("extension_application")->where('student_id','=',$id)->get();
-        return view('Layouts/studentActions/studentvisaapplications',compact('data'));
+        $id = $request->user()->id;        
+        $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
+        $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
+
+        return view('Layouts/studentActions/studentvisaapplications')->with('userData',$userData[0])->with('data',$ext);
 
     }
-    public function NewVisaAPPVIEW($id){
-        $dataID= Crypt::decrypt($id);   
-
-        $data= applyvisaextension::find($dataID);
-        return view('Layouts/studentActions/VisaapplicationView', compact('data'));
+    public function NewVisaAPPVIEW(Request $request){
+        $id = $request->user()->id;        
+        $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
+        $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
+        return view('Layouts/studentActions/VisaapplicationView')->with('userData',$userData[0])->with('data',$ext);
     }
 
     
-    public function Newstudentpass(){
-        // $get_data= CountryController::readFile();
-        // $country = array();
-        // foreach($get_data as $key => $data){
-        //     if($key > 0){
-        //         array_push($country , $data[0]);
-        //     }
-        // }
-        // $get_data= FetchCountries::get();
-        // $data = array('get_data'=>$get_data);
-        return view('Layouts/studentActions/RequestNewKPP')->with('getCountries',$this->getCountries());
+    public function Newstudentpass(Request $request){
+        return view('Layouts/studentActions/RequestNewKPP')->with('getCountries',$this->getCountries())->with('getUserDetails',$this->userDetailsFetcher($request));
     }
     
     //BUDDIES MANAGEMENT SECTION//
@@ -341,17 +321,17 @@ class studentactions extends Controller
     }
 
     Public function MyBuddyAllocation(Request $request){
-        $id = $request->user()->suID;        
-        $Buddies = DB::select("select * from buddies_allocations WHERE newSTD_suID= $id ");
+        $id = $request->user()->id;        
+        $Buddies = DB::select("select * from buddies_allocations WHERE student_id= $id ");
         return view('Layouts/studentActions/AllocatedBuddies',['Buddies'=>$Buddies]);
     }
 
     //END OF BUDDY MANAGEMENT SECTION//
-    public function NewKPPAPPVIEW($id){
-        $dataID= Crypt::decrypt($id);     
-        
-        $data= applykpp::find($dataID);
-        return view('Layouts/studentActions/kppapplicationVIEW', compact('data'));
+    public function NewKPPAPPVIEW(Request $request){
+        $id = $request->user()->id;    
+        $userData = DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
+        $data = DB::table('kpps_application')->where('student_id','=',$id)->limit(1)->get();
+        return view('Layouts/studentActions/kppapplicationVIEW')->with('application',$data[0])->with('data',$userData[0]);
     }
     public function NewKPPAPPEDIT($id ){
         $dataID= Crypt::decrypt($id);     
@@ -371,57 +351,58 @@ class studentactions extends Controller
 
     public function Create_Newvisaextension(request $request){
 
-        if($request->hasFile('passportPIC','entryVISA','Biodata','visaPAGE'))
+        if($request->hasFile('entryVISA','Biodata','visaPAGE'))
         {
+            $this->validate($request,[
+                'entryVISA' => 'mimes:png,jpg,pdf',
+                'Biodata' => 'mimes:png,jpg,pdf',
+                'currentVISA' => 'mimes:png,jpg,pdf'
+            ]
+        );
+
+            // $allowedFileTypes = config('app.allowedFieTypes');
+            // $maxFileSize = config('app.maxFileSize');
+            // $rules = [
+            //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
+            // ];
+            
+            // $this->validate( $request,$rules);
+
+            $passportBio = FileUploader::fileupload($request,'Biodata','PassportBioData','extension/');
+            $entryV = FileUploader::fileupload($request,'entryVISA','entryPage','extension/');
+            $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa','extension/');
+
             $post = new applyvisaextension();
-            $post->suEMAIL = $request->suEMAIL;
-            $post->suID = $request->suID;
-            $post->surNAME = $request->surNAME;
-            $post->otherNAMES = $request->otherNAMES;
-            $post->passportNUMBER = $request->passportNUMBER;
-            $post->Nationality = $request->Nationality;
-            $post->dateofENTRY = $request->dateofENTRY;
             
+            $post->student_id = $request->suID;
+            $post->passport_biodata = $passportBio;
+            $post->entry_visa = $entryV;
+            $post->current_visa = $currentV;
+            $post->date_of_entry = '2023-03-19';
+            $post->application_date = '2023-03-16';
+            $post->application_status = 'pending';
 
-            $path_pp=$request->file('passportPIC');
-            $path_ev=$request->file('entryVISA');
-            $path_bd=$request->file('Biodata');
-            $path_cv=$request->file('currentVISA');
 
-            $extension_PP = $path_pp -> getClientOriginalName();
-            $extension_BD = $path_bd -> getClientOriginalName();
-            $extension_CV = $path_cv -> getClientOriginalName();
-            $extension_EV = $path_ev -> getClientOriginalName();
-
-            $filename_PP = time().'.'.$extension_PP;
-            $filename_BD = time().'.'.$extension_BD;
-            $filename_CV = time().'.'.$extension_CV;
-            $filename_EV = time().'.'.$extension_EV;
-        
-            $path_pp->move('storage/visaExtensionfiles/',$filename_PP);
-            $path_ev->move('storage/visaExtensionfiles/',$filename_BD);
-            $path_bd->move('storage/visaExtensionfiles/',$filename_CV);
-            $path_cv->move('storage/visaExtensionfiles/',$filename_EV);
-
-            $post->passportPIC = $filename_PP;
-            $post->Biodata = $filename_BD;
-            $post->currentVISA = $filename_CV;
-            $post->entryVISA = $filename_EV;
-            
-
+            $post->timestamps = false;
             $post->save();
+    
             return back()->with('visa_request_added','Your visa extension request has been submitted successfully');
 
         }
     }
-    public function NewVisaextension(){
-        return view('Layouts/studentActions/RequestNewVisa')->with('get_data',$this->getCountries());
+    public function NewVisaextension(Request $request){
+        $id = $request->user()->id;        
+        $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
+        $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
+
+        return view('Layouts/studentActions/RequestNewVisa')->with('userData',$userData[0])->with('data',$ext)->with('getCountries',$this->getCountries());
     }
     public function Listofkpps(Request $request){  
-        $id = $request->user()->suID;        
+        $id = $request->user()->id;        
+        $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
         $data = DB::table("kpps_application")->where('student_id','=',$id)->get();
 
-        return view('Layouts/studentActions/studentkppapplications',compact('data'));
+        return view('Layouts/studentActions/studentkppapplications')->with('data',$data)->with('userDetails',$userData[0]);
     }
     public function issuedKpp(){
         return view('Layouts/studentActions/IssuedKpp');
@@ -436,77 +417,99 @@ class studentactions extends Controller
     }
 
     public function AddNewSignup(request $request){
-        $id = $request->suID;        
-        $data = DB::select("select * from users WHERE id= $id ");
 
-        if($data == false){        
-            $post = new addNewStudent();
-            $postDetails = new addStudentDetails();
-            $postGuardian = new studentGuardian();
-            $postVerification = new userVerification();
-            $postRole = new Role();
+        if($request->hasFile('suID','surNAME','firstNAME','lastNAME','suEMAIL','phoneNUMBER','Faculty','Course','Nationality','passportNUMBER','Residence','ParentNames','ParentEmail','ParentPhone'))
+        {
+            $this->validate($request,[
+                'suID'=>'required',
+                'surNAME'=>'required',
+                'firstNAME'=>'required',
+                'lastNAME'=>'required',
+                'suEMAIL'=>'required|unique',
+                'phoneNUMBER'=>'required',
+                'Faculty'=>'required',
+                'Course'=>'required',
+                'Nationality'=>'required',
+                'passportNUMBER'=>'required|unique',
+                'Residence'=>'required',
+                'ParentNames'=>'required',
+                'ParentEmail'=>'required|unique',
+                'ParentPhone'=>'required|unique'
 
-            $post->id = $request->suID;
-            $post->surname = $request->surNAME;
-            $post->other_names = $request->firstNAME.' '.$request->lastNAME;
-            $post->email = $request->suEMAIL;
-            $post->password = Hash::make('123456');
-            $post->status = 0;
+                ]
+            );
+            $id = $request->suID;        
+            $data = DB::select("select * from users WHERE id= $id ");
 
-            $postDetails->student_id = $request->suID;
-            $postDetails->phone_number = $request->phoneNUMBER;
-            $postDetails->faculty = $request->Faculty;
-            $postDetails->course = $request->Course;
-            $postDetails->nationality = $request->Nationality;
-            $postDetails->passport_number = $request->passportNUMBER;
-            $postDetails->passport_expire_date = '2023-03-10';
-            $postDetails->passport_image = 'passport.jpg';
-            $postDetails->residence = $request->Residence;
+            if($data == false){        
+                $post = new addNewStudent();
+                $postDetails = new addStudentDetails();
+                $postGuardian = new studentGuardian();
+                $postVerification = new userVerification();
+                $postRole = new Role();
 
+                $post->id = $request->suID;
+                $post->surname = $request->surNAME;
+                $post->other_names = $request->firstNAME.' '.$request->lastNAME;
+                $post->email = $request->suEMAIL;
+                $post->password = Hash::make('123456');
+                $post->status = 0;
 
-            $postGuardian->student_id = $request->suID;
-            $postGuardian->full_name = $request->ParentNames;
-            $postGuardian->email = $request->ParentEmail;
-            $postGuardian->phone_number = $request->ParentPhone;
-            $postGuardian->status = 'primary';
-
-            $postVerification->user_id = $request->suID;
-            $postVerification->status = 0;
-            $postVerification->verified_at = '2023-03-10 08:00:00';
-            $postVerification->remember_token = "";
-            $postVerification->created_at = '2023-03-10 08:00:00';
-            $postVerification->last_update = '2023-03-10 08:00:00';
-
-            $postRole->user_id = $request->suID;
-            $postRole->role_id = 3;
-
-            $post->timestamps = false;
-            $postDetails->timestamps = false;
-            $postGuardian->timestamps = false;
-            $postVerification->timestamps = false;
-            $postRole->timestamps = false;
-            // $post->suID = $request->suID;
-            // $post->suEMAIL = $request->suEMAIL;
-            // $post->surNAME = $request->surNAME;
-            // $post->firstNAME = $request->firstNAME;
-            // $post->lastNAME = $request->lastNAME;
-            
+                $postDetails->student_id = $request->suID;
+                $postDetails->phone_number = $request->phoneNUMBER;
+                $postDetails->faculty = $request->Faculty;
+                $postDetails->course = $request->Course;
+                $postDetails->nationality = $request->Nationality;
+                $postDetails->passport_number = $request->passportNUMBER;
+                $postDetails->passport_expire_date = '2023-03-10';
+                $postDetails->passport_image = 'passport.jpg';
+                $postDetails->residence = $request->Residence;
 
 
-            // $post->ParentEmail = $request->ParentEmail;
-            // $post->ParentPhone = $request->ParentPhone;
-            // $post->ParentNames = $request->ParentNames;
+                $postGuardian->student_id = $request->suID;
+                $postGuardian->full_name = $request->ParentNames;
+                $postGuardian->email = $request->ParentEmail;
+                $postGuardian->phone_number = $request->ParentPhone;
+                $postGuardian->status = 'primary';
+
+                $postVerification->user_id = $request->suID;
+                $postVerification->status = 0;
+                $postVerification->verified_at = '2023-03-10 08:00:00';
+                $postVerification->remember_token = "";
+                $postVerification->created_at = '2023-03-10 08:00:00';
+                $postVerification->last_update = '2023-03-10 08:00:00';
+
+                $postRole->user_id = $request->suID;
+                $postRole->role = 'student';
+
+                $post->timestamps = false;
+                $postDetails->timestamps = false;
+                $postGuardian->timestamps = false;
+                $postVerification->timestamps = false;
+                $postRole->timestamps = false;
+                // $post->suID = $request->suID;
+                // $post->suEMAIL = $request->suEMAIL;
+                // $post->surNAME = $request->surNAME;
+                // $post->firstNAME = $request->firstNAME;
+                // $post->lastNAME = $request->lastNAME;
+                
 
 
-            
-            $post->save();
-            $postDetails->save();
-            $postGuardian->save();
-            $postVerification->save();
-            $postRole->save();
-            return back()->with('New_Student_Added','New International Student data has been added Successfully');
-        }else{
-            return back()->with('New_Student_failed','A student with Same Admission Number is already Registered, please write to studentpass@strathmore.edu for assistance!');
+                // $post->ParentEmail = $request->ParentEmail;
+                // $post->ParentPhone = $request->ParentPhone;
+                // $post->ParentNames = $request->ParentNames;
+
+
+                
+                $post->save();
+                $postDetails->save();
+                $postGuardian->save();
+                $postVerification->save();
+                $postRole->save();
+                return back()->with('New_Student_Added','New International Student data has been added Successfully');
+            }else{
+                return back()->with('New_Student_failed','A student with Same Admission Number is already Registered, please write to studentpass@strathmore.edu for assistance!');
+            }
         }
 
     }

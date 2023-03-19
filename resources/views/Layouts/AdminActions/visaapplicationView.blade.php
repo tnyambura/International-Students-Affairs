@@ -73,7 +73,7 @@
                            </div>
                         <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        {{ Auth::user()->otherNAMES}}                   
+                        {{ Auth::user()->other_names}}                   
                           </div>
                 </nav>
             </div>
@@ -89,25 +89,28 @@
                                      <div class="card-body">                                    
                                      <div class="form-row">
                                             <div class="col-md-4 mb-3">
-                                            <label for="Surname">Surname:</label>&nbsp&nbsp{{$visarequests->surNAME}}                                  
+                                            <label for="Surname">Surname:</label>&nbsp&nbsp{{$userData->surname}}                                  
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$visarequests->otherNAMES}}                                                                      
+                                            <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$userData->other_names}}                                                                      
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$visarequests->passportNUMBER}}
+                                            <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$userData->passport_number}}
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="Othernames">Date Requested:</label>&nbsp&nbsp{{$visarequests->created_at}}                                                                      
+                                            <label for="Othernames">Date Requested:</label>&nbsp&nbsp{{$visarequests->application_date}}                                                                      
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="PassportNumber">Strathmore ID:</label>&nbsp&nbsp{{$visarequests->suID}}
+                                            <label for="PassportNumber">Strathmore ID:</label>&nbsp&nbsp{{$visarequests->student_id}}
+                                            </div>  
+                                            <div class="col-md-4 mb-3">
+                                            <label for="PassportNumber">Application Status:</label>&nbsp&nbsp{{$visarequests->application_status}}
                                             </div>  
                                                                          
                                      </div>
                                      <div class="form-row">
                                             <div class="col-md-4 mb-3">
-                                            <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp{{$visarequests->dateofENTRY}}                                  
+                                            <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp---------                              
                                             </div>
                                                                              
                                      </div><br/>
@@ -123,32 +126,27 @@
                                             <div class="row">
                                             <div class="col-sm-6">
                                             <label>Passport Biodata Page:</label>&nbsp&nbsp
-                                            <a href="/visaRequestDoc/{{$visarequests->Biodata}}" style="color:green">
+                                            <a href="/visaRequestDoc/{{$visarequests->passport_biodata}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             <div class="col-sm-6">
                                             <label>Passport Entry Visa Page:</label>&nbsp&nbsp
-                                            <a href="/visaRequestDoc/{{$visarequests->entryVISA}}" style="color:green">
+                                            <a href="/visaRequestDoc/{{$visarequests->entry_visa}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             </div></br>
                                             <div class="row">
                                             <div class="col-sm-6">
                                             <label>Passport Current Visa Page:</label>&nbsp&nbsp
-                                            <a href="/visaRequestDoc/{{$visarequests->currentVISA}}" style="color:green">
+                                            <a href="/visaRequestDoc/{{$visarequests->current_visa}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div> 
-                                            <div class="col-sm-6">
-                                            <label>Most Recent Passport Pictures:</label>&nbsp&nbsp
-                                            <a href="/visaRequestDoc/{{$visarequests->passportPIC}}" style="color:green">
-                                            <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
-                                            </div>
                                         </div>
                                         </div></br>
                                         <div class="container">     
                                             <div class="row">
                                             <div class="col-sm-6">                                           
-                                            <label>Application Status:</label>&nbsp&nbsp<span style="color:red">{{$visarequests->status}}</span>
+                                            <label>Application Status:</label>&nbsp&nbsp<span style="color:red">{{$visarequests->application_status}}</span>
                                            
                                             </div>
                                             </div>

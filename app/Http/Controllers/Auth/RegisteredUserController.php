@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Role;
+use App\Models\addNewStudent;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -21,7 +23,8 @@ class RegisteredUserController extends Controller
      */
     
     Public function AddNewUser(){
-        return view('Layouts/AdminActions/addnewuser');
+        $roles = ['admin','super_admin','buddy'];
+        return view('Layouts/AdminActions/addnewuser', ['roles'=>$roles]);
     }
     Public function SuperAddNewUser(){
         return view('Layouts/SuperAdminActions/addnewuser');
@@ -41,26 +44,32 @@ class RegisteredUserController extends Controller
 
         if($Student_data == false){
 
-        $password = 'Kenya2030**';
-
         $request->validate([
             'otherNAMES' => 'required|string|max:255',
             'surNAME' => 'required|string|max:255',
             'suID' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            // 'password' => 'required|string|confirmed|min:8',
+            'user_role' => 'required|string',
         ]);
 
-        $user = User::create([
-            'id' => $request->suID,
-            'surname' => $request->surNAME,
-            'other_names' => $request->otherNAMES,
-            'email' => $request->email,
-            'password' => Hash::make($password),
-        ]);
+        $post = new addNewStudent();
+        $postRole = new Role();
+
+        $post->id = $request->suID;
+        $post->surname = $request->surNAME;
+        $post->other_names = $request->otherNAMES;
+        $post->email = $request->email;
+        $post->password = Hash::make('123456');
+        $post->status = 0;
+
+        $postRole->user_id = $request->suID;
+        $postRole->role = $request->user_role;
+
+        $post->timestamps = false;
+        $postRole->timestamps = false;
         
-        $user->attachRole($request->role_id);
-        event(new Registered($user));
+        $post->save();
+        $postRole->save();
         
         return back()->with('New_User_Added','A New User has been Enrolled Successfully');
         }else{

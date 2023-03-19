@@ -34,7 +34,7 @@
                                                 <th>Id</th>
                                                 <th>Name</th>
                                                 <th>Passport Number</th>
-                                                <th>Email</th>
+                                                <th>Emails</th>
                                                 <th>Status</th>
                                                 <th>Date Requested</th>
                                                 <th>su ID</th>
@@ -44,16 +44,10 @@
                                         <tbody>
                                         @foreach($data as $data)
                                             <tr>
-                                                <td>{{$data->id}} </td>
-                                                <td>{{$data->otherNAMES}}</td>
-                                                <td>{{$data->passportNUMBER}}</td>
-                                                <td>{{$data->suEMAIL}}</td>
-                                                <td>{{$data->status}}</td>
-                                                <td>{{$data->created_at}}</td>
-                                                <td>{{$data->suID}}</td>
+                                                <td>{{$userData->student_id}} </td>
 
                                                 <td>
-                                                @php $data= Crypt::encrypt($data->id); @endphp                                                                                            
+                                                @php $data= Crypt::encrypt($data->student_id); @endphp                                                                                            
 
                                                 <a href="/MyVisaRequestVIEW/{{$data}}" target="blank">
                                                     <span class="fas fa-eye" aria-hidden="false"></span>
@@ -63,8 +57,8 @@
                                                 </a>
                                                 </td>
                                             </tr>
-                                            @endforeach
-                                             </tbody>
+                                        @endforeach
+                                        </tbody>
                                     </table>
                                 </div>
                             </div>

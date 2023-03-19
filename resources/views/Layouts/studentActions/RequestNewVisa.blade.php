@@ -14,29 +14,28 @@
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="Surname">NOM (SURNAME)</label>
-                                    <input type="text" class="form-control" name="surNAME" id="Surname" placeholder="{{ Auth::user()->surNAME}}" value="{{ Auth::user()->surNAME}}" readonly="readonly"
+                                    <input type="text" class="form-control" name="surNAME" id="Surname" value="{{ $userData->surname}}" readonly="readonly"
                                          >
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="othernames">Prenom (Other Names)</label>
-                                    <input type="text" class="form-control" name="otherNAMES" id="othernames" placeholder="{{ Auth::user()->otherNAMES}}" value="{{ Auth::user()->otherNAMES}}" readonly="readonly"
+                                    <input type="text" class="form-control" name="otherNAMES" id="othernames" value="{{ $userData->other_names}}" readonly="readonly"
                                          >
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="validationServerUsername33">Passport Number</label>
-                                    <input type="text" class="form-control" name="passportNUMBER" id="validationServer023" placeholder="Passport Number"
-                                         required>
+                                    <input type="text" class="form-control" name="passportNUMBER" id="validationServer023" value="{{ $userData->passport_number}}">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="AdmissionNo">Admission Number</label>
-                                    <input type="number" name="suID" class="form-control" id="admissionNo" placeholder="{{ Auth::user()->suID}}" value="{{ Auth::user()->suID}}" readonly="readonly"/>
+                                    <input type="number" name="suID" class="form-control" id="admissionNo" value="{{ $userData->student_id}}" readonly="readonly"/>
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="email">Email Address</label>
-                                    <input type="text" class="form-control" name="suEMAIL" id="email" placeholder="{{ Auth::user()->email}}" value="{{ Auth::user()->email}}" readonly="readonly"
+                                    <input type="text" class="form-control" name="suEMAIL" id="email" value="{{ $userData->email}}" readonly="readonly"
                                         />
                                   </div>
                                     <div class="col-md-4 mb-3">
@@ -44,7 +43,7 @@
                                     <select name="Nationality" id="Nationality" class="form-control">
                                     <option selected="" disabled="">Select Country</option>
                                     <?php
-                                    foreach($get_data as $data){
+                                    foreach($getCountries as $data){
                                     ?>
                                     <option value="{{$data}}">{{$data}}</option>
                                     <?php
@@ -68,25 +67,25 @@
                                     <input type="file" class="form-control" name="Biodata" id="biodataPAGE" placeholder="Upload Biodata Page"
                                         required>
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    <!-- <div class="col-md-4 mb-3">
                                     <label for="PassportPicture">Upload Passport Sized Picture</label>
                                     <input type="file" class="form-control" name="passportPIC" id="passportPICTURE" placeholder="Upload Your Passport picture"
                                         required>
-                                    </div>
+                                    </div> -->
                                     <div class="col-md-4 mb-3">
                                     <label for="Entry Visa">Upload Entry Visa</label>
                                     <input type="file" class="form-control" name="entryVISA" id="entryV" placeholder="Upload your entry visa"
                                         required>                                    
                                     </div>
-                                </div><br/>
-                                <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="email">Upload Your Current Visa Page</label>
                                     <input type="file" class="form-control" name="currentVISA" id="currentVISA" placeholder="Upload Your Current Visa Page"
                                         required>
                                   </div>
+                                </div>
+                                <!-- <div class="form-row">
                                    
-                                </div><br/>
+                                </div><br/> -->
                                 <div class="form-group">
                                     <div class="custom-control custom-checkbox">
                                     <input type="checkbox" class="custom-control-input is-valid" id="invalidCheck33" required>

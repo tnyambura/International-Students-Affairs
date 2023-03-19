@@ -87,25 +87,25 @@
                                     <div class="card-body">                                    
                                      <div class="form-row">
                                             <div class="col-md-4 mb-3">
-                                            <label for="Surname">Surname:</label>&nbsp&nbsp{{$data->surNAME}}                                  
+                                            <label for="Surname">Surname:</label>&nbsp&nbsp{{$userData->surname}}                                  
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$data->otherNAMES}}                                                                      
+                                            <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$userData->other_names}}                                                                      
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$data->passportNUMBER}}
+                                            <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$userData->passport_number}}
                                             </div>
                                                                          
                                      </div>
                                      <div class="form-row">
                                             <div class="col-md-4 mb-3">
-                                            <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp{{$data->dateofENTRY}}                                  
+                                            <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp-----                                  
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="Othernames">Date Requested:</label>&nbsp&nbsp{{$data->created_at}}                                                                      
+                                            <label for="Othernames">Date Requested:</label>&nbsp&nbsp{{$data->application_date}}                                                                      
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="PassportNumber">Strathmore ID:</label>&nbsp&nbsp{{$data->suID}}
+                                            <label for="PassportNumber">Strathmore ID:</label>&nbsp&nbsp{{$data->application_status}}
                                             </div>                                    
                                      </div><br/>
                                      <h4>uploaded Documents</h4><br/>
@@ -119,43 +119,43 @@
                                             <div class="row">
                                             <div class="col-sm-6">
                                             <label>Passport Biodata Page:</label>&nbsp&nbsp
-                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->biodataPAGE}}" style="color:green">
+                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->passport_biodata}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             <div class="col-sm-6">
                                             <label>Passport Visa Page:</label>&nbsp&nbsp
-                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->currentVISA}}" style="color:green">
+                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->current_visa}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             </div></br>
                                             <div class="row">
                                             <div class="col-sm-6">
                                             <label>Academic Transcripts:</label>&nbsp&nbsp
-                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->academicTRANSCRIPTS}}" style="color:green">
+                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->accademic_transcript}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             <div class="col-sm-6">
                                             <label>Parents ID/Biodata Page:</label>&nbsp&nbsp
-                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->guardiansID}}" style="color:green">
+                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->guardian_biodata}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             </div></br>
                                             <div class="row">
                                             <div class="col-sm-6">
                                             <label>Commitment Letter:</label>&nbsp&nbsp
-                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->commitmentLETTER}}" style="color:green">
+                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->commitment_letter}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             <div class="col-sm-6">
                                             <label>Police Clearance/Good Conduct:</label>&nbsp&nbsp
-                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->policeCLEARANCE}}" style="color:green">
+                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->police_clearance}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>
                                             </div></br>
                                             <div class="row">
                                             <div class="col-sm-6">
                                             <label>Most Recent Passport Pictures:</label>&nbsp&nbsp
-                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->passportPICTURE}}" style="color:green">
+                                            <a href="/NewAPPFILEDOWNLOAD/{{$data->passport_picture}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false"></span> Download</a> </li>
                                             </div>  
                                         </div>

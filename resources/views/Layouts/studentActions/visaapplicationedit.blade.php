@@ -137,11 +137,11 @@
                                 
                                 <h4>DOCUMENTS UPLOADS</h4><br/>
                                 <div class="form-row">
-                                    <div class="col-md-4 mb-3">
+                                    <!-- <div class="col-md-4 mb-3">
                                     <label for="PassportPicture">Upload a clear Passport Sized Picture</label>
                                     <input type="file" name="passportPIC" class="form-control" id="passportPICTURE" value="{{ ($data->passportPIC)}}"
                                     required >
-                                    </div>
+                                    </div> -->
                                     <div class="col-md-4 mb-3">
                                     <label for="email">Upload a clear Passport Biodata Page</label>
                                     <input type="file" name="Biodata" class="form-control" id="biodataPAGE" value="{{ $data->Biodata}}"

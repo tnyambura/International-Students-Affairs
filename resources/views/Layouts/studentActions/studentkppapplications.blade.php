@@ -20,30 +20,32 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
+                                                <th>application Id</th>
+                                                <th>Full Name</th>
                                                 <th>Passport Number</th>
-                                                <th>R number</th>
                                                 <th>Date Initiated</th>
-                                                <th>su ID</th>
+                                                <th>status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
+                                                <th>application Id</th>
+                                                <th>Full Name</th>
                                                 <th>Passport Number</th>
-                                                <th>R number</th>
                                                 <th>Date Initiated</th>
-                                                <th>su ID</th>
+                                                <th>status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         @foreach($data as $data)
                                             <tr>
-                                                <td>{{$data->student_id}} </td>
+                                                <td>{{$data->id}} </td>
+                                                <td>{{$userDetails->surname}} {{$userDetails->other_names}} </td>
+                                                <td>{{$userDetails->passport_number}} </td>
+                                                <td>{{$data->application_date}} </td>
+                                                <td>{{$data->application_status}} </td>
 
                                                 <td>
                                                 @php $data= Crypt::encrypt($data->student_id); @endphp                                                                                            

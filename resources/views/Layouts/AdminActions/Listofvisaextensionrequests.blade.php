@@ -40,25 +40,53 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                        @foreach($visarequests as $visarequest)
-                                            <tr>                                                 
-                                                <td>{{$visarequest['id']}}</td>
-                                                <td>{{$visarequest['otherNAMES']}}</td>
-                                                <td>{{$visarequest['passportNUMBER']}}</td>
-                                                <td>{{$visarequest['created_at']}}</td>
-                                                <td>{{$visarequest['suEMAIL']}}</td>
-                                                <td>{{$visarequest['status']}}</td>
-                                                <td>{{$visarequest['Nationality']}}</td>                                                                                             
-                                                <td>
-                                                @php $visarequestID= Crypt::encrypt($visarequest->id); @endphp                                                                                            
+                                            @foreach($visarequests as $visarequest)
+                                                <tr>
+                                                    <td> {{$visarequest['id']}}</td>
+                                                    <td> {{$visarequest['student_id']}}</td>
+                                                    <td> {{$visarequest['surname']}} {{$visarequest['other_names']}}</td>
+                                                    <td> {{$visarequest['passport_number']}}</td>
+                                                    <td> {{$visarequest['application_date']}}</td>
+                                                    <td> {{$visarequest['application_status']}}</td>
+                                                    
+                                                    <td class="d-block">
+                                                        @php $data= Crypt::encrypt($visarequest['student_id']); @endphp                                                                                            
 
-                                                <a href="/NewVISAVIEW/{{$visarequestID}}" target="blank">
-                                                <p><span class="fas fa-list-ul" aria-hidden="false"></span> Verify</p>
-                                                </a>                                                                                               
-                                               
-                                                </td>
-                                            </tr>
-                                      @endforeach
+                                                        <div class="d-flex justify-content-around">
+                                                            <a href="/NewVISAVIEW/{{$visarequest['id']}}" target="blank">
+                                                                <span class="fas fa-eye" aria-hidden="false"></span>
+                                                            </a>
+                                                        </div>
+                                                        <form method="POST" action="{{route('add.extensionStatusUpdate')}}">
+                                                        @csrf
+                                                            <input type='hidden' value='{{$visarequest["id"]}}' name='app_id'/>
+                                                            <select class="form-select form-select-lg mt-3 mb-3" id="application_status_select" width='100' name='status_select'>
+                                                                @foreach($applicationStatus[0] as $option)
+                                                                    @if(strtolower($option) == strtolower($applicationStatus[1]))
+                                                                        <option selected value='{{$option}}' >{{$option}}</option>
+                                                                    @else
+                                                                        <option value='{{$option}}' >{{$option}}</option>
+                                                                    @endif
+                                                                @endforeach
+                                                            </select>
+                                                            <input class="btn btn-outline-info p-1 btn-block select-change-btn" id="application_status_submit" type="submit" value='save'/>
+
+                                                            <script>
+                                                                let currentSelected = '<?php echo strtolower($applicationStatus[1])?>'
+                                                                let selectBox = document.querySelector('#application_status_select')
+                                                                let statusBtn = document.querySelector('#application_status_submit')
+                                                                selectBox.addEventListener('change',function(e){
+                                                                    if(currentSelected !== e.target.value){
+                                                                        statusBtn.classList.add("active")
+                                                                    }else{
+                                                                        statusBtn.classList.remove("active")
+                                                                    }
+                                                                })
+                                                            </script>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
                                           </tbody>
                                     </table>
                                 </div>

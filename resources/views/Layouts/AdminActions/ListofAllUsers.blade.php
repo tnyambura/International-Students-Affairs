@@ -5,8 +5,6 @@
                             <li class="breadcrumb-item active" style="color:white;"> List of all International students registered as Users.</li>
                         </ol>
                        
-                        
-                       
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
@@ -63,4 +61,5 @@
                             </div>
                         </div>
                     </div>
+                    
  @endsection             

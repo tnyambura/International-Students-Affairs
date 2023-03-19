@@ -91,6 +91,7 @@
                                                 <a class="delete" href="/ISdelete/{{$studentID}}" style="color:red" data-confirm="Are you sure to delete this Record?">
                                                 <span class="fas fa-trash" aria-hidden="true" ></span>
                                                 </a>
+                                                    
                                                 </td>
                                             </tr>
                                            @endforeach
@@ -100,4 +101,9 @@
                             </div>
                         </div>
                     </div>
+                    <script>
+                        const myModalEl = document.getElementById('myModal')
+                        const modal = new mdb.Modal(myModalEl)
+                        modal.toggle()
+                    </script>
                @endsection

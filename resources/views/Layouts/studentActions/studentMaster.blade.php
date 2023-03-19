@@ -40,15 +40,14 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                                 My Student Pass Applications.
                             </a>
-                            <a class="nav-link" href="{{ __('BuddyProgram')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
-                                Buddy Program
-                            </a>  
-                            
                             <a class="nav-link" href="{{ __('MyvisaextApplications')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                                 My Visa Extension Requests.
                             </a>
+                            <a class="nav-link" href="{{ __('BuddyProgram')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                Buddy Program
+                            </a> 
                              <!-- Add a student list controller and view page-->
                              <a class="nav-link" href="{{ __('ApplyKpp')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
@@ -57,10 +56,6 @@
                             <a class="nav-link" href="{{ __('ApplyVisa')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
                                 Initiate a Visa Extension Application.
-                            </a>                           
-                            <a class="nav-link" href="{{ __('MyIssuedKpp')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-file"></i></div>
-                                Copies of My initial student Passes.
                             </a>
                     </div>
                     <div class="sb-sidenav-footer">

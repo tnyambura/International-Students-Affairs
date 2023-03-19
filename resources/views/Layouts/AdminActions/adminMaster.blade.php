@@ -39,18 +39,9 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
                                 Add New User
                             </a>
-                            <a class="nav-link" href="{{ __('AddNewInternationalStudent')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
-                                Add New International Student
-                            </a>
                             <a class="nav-link" href="{{ __('listsofAllusers')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                                 List of all Users
-                            </a>
-                            <!-- Add a student list controller and view page-->
-                            <a class="nav-link" href="{{ __('listofIS')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                List of International Students
                             </a>
                              <!-- Add a student list controller and view page-->
                              <a class="nav-link" href="{{ __('kppRequestList')}}">
@@ -60,10 +51,6 @@
                             <a class="nav-link" href="{{ __('VisaRequestList')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
                                 Visa Extension Requests 
-                            </a>                            
-                            <a class="nav-link" href="{{ __('initiatedkpps')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-check"></i></div>
-                                Issued Passes
                             </a>
                             
                            

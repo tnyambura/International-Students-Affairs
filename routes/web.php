@@ -72,31 +72,35 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/NewkppAPPFILEDOWNLOAD/{file}/', [studentactions::class, 'download'])->middleware('rule:student');
 
 
+     
      Route::post('/Applyvisaext', [studentactions::class, 'Create_Newvisaextension'])->middleware('rule:student')->name('add.newvisaextension');
      Route::get('/MykppApplications', [studentactions::class, 'Listofkpps'])->middleware('rule:student');
      Route::get('/MyvisaextApplications', [studentactions::class, 'visaExtensions'])->middleware('rule:student');
-
+     
      Route::get('/MyIssuedKpp', [studentactions::class, 'issuedKpp'])->middleware('rule:student');
      Route::get('/RequestBuddy', [studentactions::class, 'newBuddyRequest'])->middleware('rule:student');
      Route::post('/RequestABuddy', [studentactions::class, 'RequestABuddy'])->middleware('rule:student')->name('add.requestabuddy');
      Route::get('/BuddyProgram', [studentactions::class, 'BuddyProgram'])->middleware('rule:student');
      Route::get('/MyBuddyRequest', [studentactions::class, 'MyBuddyRequest'])->middleware('rule:student');
      Route::get('/MyBuddyAllocations', [studentactions::class, 'MyBuddyAllocation'])->middleware('rule:student');
-
-
-
+     
+     
+     
      
      
      /** Admin Actions */
      Route::get('/kppRequestList', [adminactions::class, 'getAllkppApplications'])->middleware('rule:admin');
      Route::get('/VisaRequestList', [adminactions::class, 'getAllvisaextensionrequests'])->middleware('rule:admin');
      Route::get('/initiatedkpps', [adminactions::class, 'initiatedkppApps'])->middleware('rule:admin');
-    //  Route::get('/AddNewStudent', [adminactions::class, 'AddNewStudent']);
+     //  Route::get('/AddNewStudent', [adminactions::class, 'AddNewStudent']);
      Route::get('/AddUser', [RegisteredUserController::class, 'AddNewUser'])->middleware('rule:admin');
      Route::post('/AddUser', [RegisteredUserController::class, 'store'])->middleware('rule:admin');
      Route::get('/NewKPPVIEW/{id}', [adminactions::class, 'NewKPPAPPVIEW'])->middleware('rule:admin');
      Route::get('/NewVISAVIEW/{id}', [adminactions::class, 'NewVISAAPPVIEW'])->middleware('rule:admin');
 
+     Route::post('/kppsStatusUpdate', [adminactions::class, 'KppsStatusUpdate'])->middleware('rule:admin')->name('add.kppsStatusUpdate');
+     Route::post('/applicationStatusUpdate', [adminactions::class, 'ExtensionStatusUpdate'])->middleware('rule:admin')->name('add.extensionStatusUpdate');
+     
      Route::get('/NewStudentView/{id}', [adminactions::class, 'NewStudentView'])->middleware('rule:admin');
      Route::get('/NewAPPFILEDOWNLOAD/{file}/', [adminactions::class, 'download'])->middleware('rule:admin');
      Route::get('/visaRequestDoc/{file}/', [adminactions::class, 'visadownload'])->middleware('rule:admin');
@@ -118,11 +122,11 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/ManageBuddies', [adminactions::class, 'BuddiesManagement'])->middleware('rule:admin');
      Route::get('/AddNewBuddy', [adminactions::class, 'AddNewBuddy'])->middleware('rule:admin')->name('add.AddNewBuddy');
      Route::post('/EnrolNewBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('rule:admin')->name('add.EnrolNewBuddy');
-     Route::get('/listofBuddies',[adminactions::class,'getallBuddies'])->middleware('rule:admin');
-     Route::get('/AllocateBuddies/{id}',[adminactions::class,'AllocateBuddies'])->middleware('rule:admin');
+     Route::get('/listofBuddies',[adminactions::class,'getAllBuddies'])->middleware('rule:admin');
+     Route::post('/AllocateBuddy',[adminactions::class,'AllocateBuddy'])->middleware('rule:admin');
      Route::post('/BuddyAllocation',[adminactions::class,'BuddyAllocations'])->middleware('rule:admin');
      Route::get('/BuddyAllocationsList',[adminactions::class,'BuddyAllocationsList'])->middleware('rule:admin');
-     Route::get('/ListOfBuddies',[adminactions::class,'generateRegisteredBuddiesList'])->middleware('rule:admin');
+     Route::get('/ListOfBuddies',[adminactions::class,'generateBuddieslist'])->middleware('rule:admin'); // Pdf
      Route::get('/EditBuddyDetails/{id}', [adminactions::class, 'BuddyDetailsEdit'])->middleware('rule:admin');
      Route::post('/UpdateBuddyDetails/{id}', [adminactions::class, 'BuddyDetailsUpdate'])->middleware('rule:admin');
      Route::get('/BuddyDetailsView/{id}', [adminactions::class, 'BuddyDetailsView'])->middleware('rule:admin');

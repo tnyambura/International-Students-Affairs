@@ -61,32 +61,13 @@
                                             </tr>
                                         </tfoot>
                                         <tbody>
-                                        @foreach($students as $student)
-                                            <tr>
-                                                <td>{{$student['id']}}</td>
-                                                <td>{{$student['suID']}}</td>
-                                                <td>{{$student['surNAME']}}</td>
-                                                <td>{{$student['otherNAMES']}}</td>
-                                                <td>{{$student['email']}}</td>
-                                                <td>{{$student['course']}}</td>
-                                                <td>{{$student['Nationality']}}</td>
-
-
-                                                <td>
-                                                @php $studentID= Crypt::encrypt($student->id); @endphp                                                                                            
-
-                                                <a href="/BuddyDetailsView/{{$studentID}}" target="blank">
-                                                    <span class="fas fa-eye" aria-hidden="false"></span>
-                                                </a>
-                                                <a href="/EditBuddyDetails/{{$studentID}}" style="color:green">
-                                                <span class="fas fa-edit" aria-hidden="true"></span>
-                                                </a>                                                
-                                                <a href="/DeleteBuddy/{{$studentID}}" style="color:red">
-                                                <span class="fas fa-trash" aria-hidden="true"></span>
-                                                </a>
-                                                </td>
-                                            </tr>
-                                      @endforeach
+                                            @foreach($buddies as $buddy)
+                                                <tr>
+                                                    <td>{{$buddy->id}}</td>
+                                                    <td>{{$buddy->surname.' '.$buddy->other_names}}</td>
+                                                    <td>{{$buddy->email}}</td>
+                                                </tr>
+                                            @endforeach
                                           </tbody>
                                     </table>
                                 </div>

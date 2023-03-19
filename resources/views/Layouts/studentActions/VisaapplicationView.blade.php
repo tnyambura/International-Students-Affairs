@@ -59,7 +59,7 @@
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        {{ Auth::user()->otherNAMES}}                   
+                        {{ Auth::user()->other_names}}                   
 
                     </div>
                 </nav>
@@ -78,25 +78,25 @@
                                     <div class="card-body">                                    
                                      <div class="form-row">
                                             <div class="col-md-4 mb-3">
-                                            <label for="Surname">Surname:</label>&nbsp&nbsp{{$data->surNAME}}                                  
+                                            <label for="Surname">Surname:</label>&nbsp&nbsp{{$userData->surname}}                                  
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$data->otherNAMES}}                                                                      
+                                            <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$userData->other_names}}                                                                      
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$data->passportNUMBER}}
+                                            <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$userData->passport_number}}
                                             </div>
                                                                          
                                      </div>
                                      <div class="form-row">
                                             <div class="col-md-4 mb-3">
-                                            <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp{{$data->dateofENTRY}}                                  
+                                            <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp{{$data[0]->date_of_entry}}                                  
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="Othernames">Date Requested:</label>&nbsp&nbsp{{$data->created_at}}                                                                      
+                                            <label for="Othernames">Date Requested:</label>&nbsp&nbsp{{$data[0]->application_date}}                                                                      
                                             </div>
                                             <div class="col-md-4 mb-3">
-                                            <label for="PassportNumber">Strathmore ID:</label>&nbsp&nbsp{{$data->suID}}
+                                            <label for="PassportNumber">Strathmore ID:</label>&nbsp&nbsp{{$data[0]->application_status}}
                                             </div>                                    
                                      </div><br/>
                                      <h4>uploaded Documents</h4><br/>
@@ -104,14 +104,14 @@
                                      <div class="container">
      
                                             <div class="row">
-                                            <div class="col-sm-6">
+                                            <!-- <div class="col-sm-6">
                                             <label>Most Recent Passport Pictures:</label>&nbsp&nbsp
-                                            <a href="/MyVisaRequestDownload/{{$data->passportPIC}}" style="color:green">
+                                            <a href="/MyVisaRequestDownload/" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                            </div>  
+                                            </div>   -->
                                             <div class="col-sm-6">
                                             <label>Passport Biodata Page:</label>&nbsp&nbsp
-                                            <a href="/MyVisaRequestDownload/{{$data->Biodata}}" style="color:green">
+                                            <a href="/MyVisaRequestDownload/{{$data[0]->passport_biodata}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
                                             </div>
                                             
@@ -119,12 +119,12 @@
                                             <div class="row">
                                             <div class="col-sm-6">
                                             <label>Passport Entry Visa Page:</label>&nbsp&nbsp
-                                            <a href="/MyVisaRequestDownload/{{$data->entryVISA}}" style="color:green">
+                                            <a href="/MyVisaRequestDownload/{{$data[0]->entry_visa}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
                                             </div>
                                             <div class="col-sm-6">
                                             <label>Most Recent Visa page:</label>&nbsp&nbsp
-                                            <a href="/MyVisaRequestDownload/{{$data->currentVISA}}" style="color:green">
+                                            <a href="/MyVisaRequestDownload/{{$data[0]->current_visa}}" style="color:green">
                                             <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
                                             </div>  
                                         </div>

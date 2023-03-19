@@ -9,4 +9,8 @@ class applyKpp extends Model
 {
     use HasFactory;
     protected $table = 'kpps_application';
+    protected $fillable =[
+        'student_id','passport_picture','passport_biodata','current_visa','guardian_biodata','commitment_letter',
+        'accademic_transcript','police_clearance','application_date','application_status'
+    ];
 }
