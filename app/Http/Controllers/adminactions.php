@@ -162,7 +162,7 @@ class adminactions extends Controller
         }
         return $data;
     }
-    public function AllocateBuddy(){
+    public function AllocateBuddy(){ // new allocation
         $roles = DB::table('user_roles')->select('user_id')->where('role','=','buddy')->get();
         $data=[];
         
