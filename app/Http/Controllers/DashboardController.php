@@ -23,7 +23,7 @@ class DashboardController extends Controller
                     break;
                 
                 case 'super_admin':
-                    $userRoleVal = 'Layouts.superadminHome';
+                    $userRoleVal = 'Layouts.adminHome';
                     break;
                 
                 case 'student':

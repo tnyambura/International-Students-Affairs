@@ -31,6 +31,12 @@ use DB;
 
 class adminactions extends Controller
 {
+    public function GetUserRole(Request $request){
+        $userID= $request->user()->id;
+        $data = DB::table("user_roles")->where('user_id','=',$userID)->limit(1)->get();
+        
+        return $data[0]->role;
+    }
     public function KppsUserData($applicationId){
         $data = DB::table("kpps_application")->where('id','=',$applicationId)->limit(1)->get();
         $userData = DB::table("student_view_data")->where('student_id','=',$data[0]->student_id)->limit(1)->get();

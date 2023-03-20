@@ -13,7 +13,11 @@ class Rules
         $user = Auth::user();
         $userRole = DB::table('user_roles')->where('user_id', '=',$user->id)->limit(1)->get()[0]->role;
 
-        if(strtolower($userRole) === strtolower($role)){
+        // if(strtolower($userRole) === strtolower($role)){
+        if($role === 'admin' || $role === 'super_admin'){
+            return $next($request);
+        }
+        if(strtolower($userRole) === 'student'){
             return $next($request);
         }
 
