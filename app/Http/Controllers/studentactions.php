@@ -42,21 +42,23 @@ class studentactions extends Controller
     }
     public function userDetailsFetcher(Request $request){
         $id = $request->user()->id; 
-        $fetcher =  DB::table('student_view_data')->select('id','surname','other_names','email')->where('student_id','=',$id)->limit(1)->get();
+        $fetcher =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
         return $fetcher[0];
     }
     public function FetchKppView( Request $req){
-        $id = $req->session; 
-        $user =  DB::table('users')->select('surname','other_names','email')->where('id','=',$id)->limit(1)->get();
-        $userDetails =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
-        $kppApp = DB::table('kpps_application')->where('id',10)->limit(1)->get();
+        $id = $req->user()->id; 
+        $user =  DB::table('users')->select('surname','other_names','email')->where('id',$id)->limit(1)->get();
+        $userDetails =  DB::table('student_view_data')->where('student_id',$id)->limit(1)->get();
+        $kppApp = DB::table('kpps_application')->where('student_id',$id)->get();
+        
+        $data = [];
+        array_push($data,array_merge((array)$user[0],(array)$userDetails[0]));
         if(sizeOf($kppApp) > 0){
-            $data = [];
-            array_push($data,array_merge((array)$kppApp[0],(array)$userDetails[0],(array)$userDetails));
-            return $data;
-        }else{
-            return [];
+            // array_push($data,$kppApp);
+            // return $data;
+            return $kppApp;
         }
+        return [];
     }
     public function updateVISA( request $req ){
 
@@ -521,8 +523,8 @@ class studentactions extends Controller
         $id = $request->user()->id;        
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
         $data = DB::table("kpps_application")->where('student_id','=',$id)->get();
-
-        return view('Layouts/studentActions/studentkppapplications')->with('data',$data)->with('userDetails',$userData[0]);
+        $fecthData =$this->FetchKppView($request);
+        return view('Layouts/studentActions/studentkppapplications',['data'=>$data,'userDetails'=>$userData[0],'getDataView'=>$fecthData]);
     }
     public function issuedKpp(){
         return view('Layouts/studentActions/IssuedKpp');
@@ -560,6 +562,7 @@ class studentactions extends Controller
             );
             $id = $request->suID;        
             $data = DB::select("select * from users WHERE id= $id ");
+            $status = 0;
 
             if($data == false){        
                 $post = new addNewStudent();
@@ -592,8 +595,11 @@ class studentactions extends Controller
                 $postGuardian->phone_number = $request->ParentPhone;
                 $postGuardian->status = 'primary';
 
+
+                if($request->status === 'active'){ $status = 1;}
+
                 $postVerification->user_id = $request->suID;
-                $postVerification->status = 0;
+                $postVerification->status = $status;
                 $postVerification->verified_at = '2023-03-10 08:00:00';
                 $postVerification->remember_token = "";
                 $postVerification->created_at = '2023-03-10 08:00:00';

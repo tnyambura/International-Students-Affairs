@@ -27,6 +27,7 @@
                             @csrf
 
                             <!-- surNAME -->
+                            <input type="hidden" name="status" value='active' />
                             <div class="form-row">
                             <div class="col-md-4 mb-3">   
                                 <label for="surNAME">SURNAME</label>  

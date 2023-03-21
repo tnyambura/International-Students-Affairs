@@ -32,6 +32,7 @@
                         @endif
                             <form method="POST" action="{{ __('signup')}}" class="border border-primary" style="padding:20px">
                             @csrf
+                            <input type="hidden" name="status" value='not_active' />
                             <h4>ADD YOUR DETAILS</h4><br/>
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">

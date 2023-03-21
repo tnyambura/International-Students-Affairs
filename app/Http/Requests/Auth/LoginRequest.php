@@ -96,19 +96,34 @@ class LoginRequest extends FormRequest
         //         //     'id'=>"Your account is not activated ".json_encode($userRole)
         //         // ]);
         //     }else{
-            if(!Auth::attempt($credentials)){
-                RateLimiter::hit($this->throttleKey());
-                throw ValidationException::withMessages([
-                    'id'=>"Credentials do not match any user"
-                ]);
+            $user = DB::table('users')->where('id',$this->input('suID'))->limit(1)->get();
+            
+            if(sizeOf($user) > 0){
+                if($user[0]->status === 1){
+                    if(!Auth::attempt($credentials)){
+                        RateLimiter::hit($this->throttleKey());
+                        throw ValidationException::withMessages([
+                            'id'=>"Credentials do not match any user"
+                        ]);
+                    }else{
+                            RateLimiter::clear($this->throttleKey());
+                            // return Redirect::to($redirectTo);
+                            // return redirect()->route($redirectTo);
+                            
+                        }
+                }else{
+                    throw ValidationException::withMessages([
+                        'id'=>"User found but not activated",
+                        'fix'=>"Kindly contact the admin to activate the account"
+                    ]);
+                }
+                
+            //     RateLimiter::clear($this->throttleKey());
             }else{
-                RateLimiter::clear($this->throttleKey());
-                // return Redirect::to($redirectTo);
-                // return redirect()->route($redirectTo);
-                    
+                throw ValidationException::withMessages([
+                    'id'=>"User not found, register to get access"
+                ]);
             }
-        //     RateLimiter::clear($this->throttleKey());
-        // }
 
 
         // $user = DB::table('users')->where('id', '=',$this->input('suID'))->limit(1)->get();
