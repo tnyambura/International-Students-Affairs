@@ -59,6 +59,7 @@
                         <div class="small">Logged in as:</div>
                         {{ Auth::user()->surname}}                   
                           </div>
+                          ATBBfBf3jmMhWgdRnrAgJ92tZmLY3006A4A1
                 </nav>
             </div>
        <div id="layoutSidenav_content">

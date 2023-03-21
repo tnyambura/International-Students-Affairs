@@ -12,55 +12,46 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                        <tr>
-                                                <th>Buddy SUID.</th>
-                                                <th>Buddy Name</th>
-                                                <th>Student ID</th>
-                                                <th>Student Name</th>
-                                                <th>Email</th>
-                                                <th>Course</th>
-                                                <th>Nationality</th>
-                                                <th>Actions</th>
+                            <thead>
+                                <tr>
+                                <th>Allocation Id</th>
+                                <th>Buddy Id</th>
+                                <th>Buddy Name</th>
+                                <th>Buddy Email</th>
+                                <th>Buddy Telephone</th>
+                                <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Allocation Id</th>
+                                    <th>Buddy Id</th>
+                                    <th>Buddy Name</th>
+                                    <th>Buddy Email</th>
+                                    <th>Buddy Telephone</th>
+                                    <th>Actions</th>
 
-                                            </tr>
-                                        </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>Buddy SUID.</th>
-                                                <th>Buddy Name</th>
-                                                <th>Student ID</th>
-                                                <th>Student Name</th>
-                                                <th>Email</th>
-                                                <th>Course</th>
-                                                <th>Nationality</th>
-                                                <th>Actions</th>
-
-                                            </tr>
-                                        </tfoot>
-                                        <tbody>
-                                        @foreach($Buddies as $Buddy)
-                                            <tr>
-                                                <td hidden>{{$Buddy->id}}</td>
-                                                <td>{{$Buddy->Buddy_suID}}</td>
-                                                <td>{{$Buddy->Buddy_otherNAMES}}</td>
-                                                <td>{{$Buddy->NewSTD_suID}}</td>
-                                                <td>{{$Buddy->NewSTD_otherNAMES}}</td>
-                                                <td>{{$Buddy->NewSTD_email}}</td>
-                                                <td>{{$Buddy->NewSTD_course}}</td>
-                                                <td>{{$Buddy->NewSTD_Nationality}}</td>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach($allocationGetter as $Buddy)
+                                <tr>
+                                    <td>{{$Buddy['buddy_id']}}</td>
+                                    <td>{{$Buddy['allocation_id']}}</td>
+                                    <td>{{$Buddy['surname'].' '.$Buddy['other_names']}}</td>
+                                    <td>{{$Buddy['email']}}</td>
+                                    <td>-</td>
 
 
-                                                <td>
-                                                @php $BuddyID= Crypt::encrypt($Buddy->id); @endphp                                                                                            
-
-                                                <a href="" target="blank">
-                                                    <span class="fas fa-eye" aria-hidden="false"></span>
-                                                </a>  
-                                                </td>
-                                            </tr>
-                                      @endforeach
-                                </tbody>
+                                    <td>
+                                    <a href="" target="blank">
+                                        <span class="fas fa-edit" aria-hidden="false"></span>
+                                        Request buddy change
+                                    </a>  
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
                         </table>
                     </div>
                 </div>

@@ -4,9 +4,24 @@
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
                             <li class="breadcrumb-item active" style="color:white;">Kenyan Student Pass Application Request</li>
                         </ol>             
+                        @if(Session::has('kpp_updated_successfully'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('kpp_updated_successfully')}}
+                        </div>
+                        @endif
                         @if(Session::has('kpp_request_added'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('kpp_request_added')}}
+                        </div>
+                        @endif
+                        @if(Session::has('kpp_request_fail'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('kpp_request_fail')}}
+                        </div>
+                        @endif
+                        @if(Session::has('kpp_request_ongoing'))
+                        <div class="alert alert-warning" role="alert">
+                        {{Session::get('kpp_request_ongoing')}}
                         </div>
                         @endif
 
@@ -47,35 +62,25 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="Course">Course</label>
-                                    <input type="text" name="Course" class="form-control" id="course" value="{{ $getUserDetails->course}}">                                    
-                                    </div>
-                                    <div class="col-md-4 mb-3">
+                                    <input type="text" disabled name="Course" class="form-control" id="course" value="{{ $getUserDetails->course}}">                                    
+                                </div>
+                                <div class="col-md-4 mb-3">
                                     <div class="form-group">
-                                    <label>Select Your Country<span style="color:red;">*</span></label>
-                                    <select name="Nationality" id="Nationality" class="form-control">
-                                    <option selected="" disabled="">Select Country</option>
-                                    <?php
-                                    foreach($getCountries as $data){
-                                    ?>
-                                    <option value="{{$data}}">{{$data}}</option>
-                                    <?php
-                                    }
-                                    ?>
-                                    </select>
+                                        <label>Country</label>
+                                        <input disabled type="text" name="Nationality" class="form-control" id="course" value="{{ $getUserDetails->nationality}}">                                    
+                                    
                                     </div>                                   
                                 </div>
                                 
                                 <div class="form-row">
                                    <div class="col-md-4 mb-3">
                                     <label for="email">Email Address</label>
-                                    <input type="text" name="suEMAIL" class="form-control" id="email" value="{{ Auth::user()->email}}" readonly="readonly"
-                                        >
+                                    <input type="text" name="suEMAIL" class="form-control" id="email" value="{{ Auth::user()->email}}" readonly="readonly">
                                    </div>
                                    
                                    <div class="col-md-4 mb-3">
                                     <label for="Residence">Residence</label>
-                                    <input type="text" name="Residence" class="form-control" id="Residence" placeholder="Residence"
-                                         >
+                                    <input type="text" name="Residence" class="form-control" id="Residence" placeholder="Residence" value="{{ $getUserDetails->residence}}">
                                    </div>
 
                                     <div class="col-md-4 mb-3">

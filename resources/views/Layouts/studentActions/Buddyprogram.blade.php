@@ -22,7 +22,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-4 col-md-6">
+                            <!-- <div class="col-xl-4 col-md-6">
                                 <div class="card bg-success text-white mb-4">
                                     <div class="card-body">View my Buddy Allocation Requests</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -30,7 +30,7 @@
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- <div class="col-xl-3 col-md-6">
                                 <div class="card bg-danger text-white mb-4">
                                     <div class="card-body">Allocate New Buddies to New International Students</div>
@@ -43,6 +43,16 @@
                         </div>
             
             <div class="card mb-4">
+                @if(Session::has('buddy_cancel_success'))
+                <div class="alert alert-success" role="alert">
+                {{Session::get('buddy_cancel_success')}}
+                </div>
+                @endif
+                @if(Session::has('buddy_cancel_fail'))
+                <div class="alert alert-danger" role="alert">
+                {{Session::get('buddy_cancel_fail')}}
+                </div>
+                @endif
                 <div class="card-header">
                     <i class="fas fa-table mr-1"></i>
                     Buddy Allocation Request for {{ Auth::user()->otherNAMES}} <a href="{{__('MyBuddyAllocations')}}"></a>.
@@ -52,37 +62,39 @@
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                                 <tr>
-                                    <th>id</th>
-                                    <th>Sur Name</th>
-                                    <th>Other Names</th>
+                                    <th>request id</th>
                                     <th>Date Requested</th>
-                                    <th>Email</th>
-                                    <th>Nationality</th>
+                                    <th>status</th>
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tfoot>
                                  <tr>
-                                    <th>id</th>
-                                    <th>Sur Name</th>
-                                    <th>Other Names</th>
+                                    <th>request id</th>
                                     <th>Date Requested</th>
-                                    <th>Email</th>
-                                    <th>Nationality</th>
+                                    <th>status</th>
+                                    <th>Action</th>
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @if($data !== false)
-                                    @foreach($data as $data)
+                                @if($RequestsData !== false)
+                                    @foreach($RequestsData as $data)
                                     <tr>
-                                        <td>{{$data->id}}</td>
-                                        <td>{{$data->student_id}}</td>
+                                        <td>{{$data->buddy_request_id}}</td>
+                                        <td>{{$data->request_date}}</td>
                                         <td>{{$data->status}}</td>
+                                        <td>    
+                                            @if(strtolower($data->status) == 'pending') 
+                                            <a href="{{__('cancelBuddy')}}" style="color:red">
+                                                <span class="fas fa-trash" rule="button" aria-hidden="true"></span> Cancel
+                                            </a>
+                                            @else
+                                            <span class="fas fa-trash" aria-hidden="true" style="color:grey; cursor: default"></span> Cancel
+                                            @endif
+                                        </td>
                                     </tr>
                                     @endforeach
                                 @endif
-                                <tr>
-                                    <td>No data available</td>
-                                </tr>
                             </tbody>
                             
                         </table>

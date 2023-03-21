@@ -19,40 +19,38 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
-                                                <th>Passport Number</th>
-                                                <th>Email</th>
-                                                <th>Status</th>
-                                                <th>Date Requested</th>
-                                                <th>su ID</th>
-                                                <th>Actions</th>
+                                                <th>application Id</th>
+                                                <th>entry date</th>
+                                                <th>application date</th>
+                                                <th>application status</th>
+                                                <th>expire date</th>
+                                                <th>action</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
                                             <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
-                                                <th>Passport Number</th>
-                                                <th>Emails</th>
-                                                <th>Status</th>
-                                                <th>Date Requested</th>
-                                                <th>su ID</th>
-                                                <th>Actions</th>
+                                                <th>application Id</th>
+                                                <th>entry date</th>
+                                                <th>application date</th>
+                                                <th>application status</th>
+                                                <th>expire date</th>
+                                                <th>action</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         @foreach($data as $data)
                                             <tr>
-                                                <td>{{$userData->student_id}} </td>
+                                                <td>{{$data->id}} </td>
+                                                <td>{{$data->date_of_entry}} </td>
+                                                <td>{{$data->application_date}} </td>
+                                                <td>{{$data->application_status}} </td>
+                                                <th>-</th>
+                                                <td>                                                                                           
 
-                                                <td>
-                                                @php $data= Crypt::encrypt($data->student_id); @endphp                                                                                            
-
-                                                <a href="/MyVisaRequestVIEW/{{$data}}" target="blank">
+                                                <a href="/MyVisaRequestVIEW/{{$data->id}}" target="blank">
                                                     <span class="fas fa-eye" aria-hidden="false"></span>
                                                 </a>                                                                                               
-                                                <a href="/MyvisaAppEDIT/{{$data}}" style="color:green">
+                                                <a href="/MyvisaAppEDIT/{{$data->id}}" style="color:green">
                                                 <span class="fas fa-edit" aria-hidden="true"></span>
                                                 </a>
                                                 </td>

@@ -75,6 +75,16 @@
                         {{Session::get('kpp_updated_successfully')}}
                         </div>
                         @endif
+                        @if(Session::has('kpp_request_fail'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('kpp_request_fail')}}
+                        </div>
+                        @endif
+                        @if(Session::has('kpp_request_ongoing'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('kpp_request_fail')}}
+                        </div>
+                        @endif
                             <form method="POST" action="/MyAppEDIT/{id}" enctype="multipart/form-data">
                             @method('PUT')
                             @csrf

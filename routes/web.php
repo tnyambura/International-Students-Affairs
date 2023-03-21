@@ -55,6 +55,7 @@ Route::group(['middleware' => ['auth']], function(){
      
      /** Student Actions */
 
+     Route::get('/fetchkppAppView',[studentactions::class,'FetchKppView'])->middleware('rule:student')->name('add.viewKppApp');
      Route::get('/ApplyKpp', [studentactions::class, 'Newstudentpass'])->middleware('rule:student');
      Route::post('/ApplyKpps', [studentactions::class, 'Create_Newstudentpass'])->middleware('rule:student')->name('add.newkppapp');
      Route::get('/ApplyVisa', [studentactions::class, 'NewVisaextension'])->middleware('rule:student');
@@ -78,6 +79,8 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/MyvisaextApplications', [studentactions::class, 'visaExtensions'])->middleware('rule:student');
      
      Route::get('/MyIssuedKpp', [studentactions::class, 'issuedKpp'])->middleware('rule:student');
+     Route::get('/cancelKppApp', [studentactions::class, 'cancelKppApp'])->middleware('rule:student');
+     Route::get('/cancelBuddy', [studentactions::class, 'cancelBuddy'])->middleware('rule:student');
      Route::get('/RequestBuddy', [studentactions::class, 'newBuddyRequest'])->middleware('rule:student');
      Route::post('/RequestABuddy', [studentactions::class, 'RequestABuddy'])->middleware('rule:student')->name('add.requestabuddy');
      Route::get('/BuddyProgram', [studentactions::class, 'BuddyProgram'])->middleware('rule:student');

@@ -24,6 +24,9 @@ use App\Models\FetchCountries;
 use App\Models\applykpp;
 use App\Models\applyvisaextension;
 use DB;
+use Response;
+
+
 
 
 
@@ -31,6 +34,30 @@ class studentactions extends Controller
 {
 
     
+    public function CurrentDate(){
+        date_default_timezone_set('africa/nairobi');
+        $CurrentDate = date('Y-m-d H:i:s', time());
+
+        return $CurrentDate;
+    }
+    public function userDetailsFetcher(Request $request){
+        $id = $request->user()->id; 
+        $fetcher =  DB::table('student_view_data')->select('id','surname','other_names','email')->where('student_id','=',$id)->limit(1)->get();
+        return $fetcher[0];
+    }
+    public function FetchKppView( Request $req){
+        $id = $req->session; 
+        $user =  DB::table('users')->select('surname','other_names','email')->where('id','=',$id)->limit(1)->get();
+        $userDetails =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
+        $kppApp = DB::table('kpps_application')->where('id',10)->limit(1)->get();
+        if(sizeOf($kppApp) > 0){
+            $data = [];
+            array_push($data,array_merge((array)$kppApp[0],(array)$userDetails[0],(array)$userDetails));
+            return $data;
+        }else{
+            return [];
+        }
+    }
     public function updateVISA( request $req ){
 
         $data = applyvisaextension::find($req->id);
@@ -88,77 +115,138 @@ class studentactions extends Controller
     }
     }
 
-    public function userDetailsFetcher(Request $request){
-        $id = $request->user()->id; 
-        $fetcher =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
-        return $fetcher[0];
-    }
+    
 
     public function Create_Newstudentpass(request $request){
         $id = $request->user()->id; 
        
+        // $validator = validator()->make(request()->all(), [
+        //     'passportPICTURE' => 'required|mimes:png,jpg,pdf',
+        //     'biodataPAGE' => 'mimes:png,jpg,pdf',
+        //     'currentVISA' => 'mimes:png,jpg,pdf',
+        //     'guardiansID' => 'mimes:png,jpg,pdf',
+        //     'commitmentLETTER' => 'mimes:png,jpg,pdf',
+        //     'academicTRANSCRIPTS' => 'mimes:png,jpg,pdf',
+        //     'policeCLEARANCE' => 'mimes:png,jpg,pdf'
+        // ]);
+        
+        // if ($validator->fails())
+        // {
+        //     redirect()->back()->with('error', ['your message here']);
+        // }
         if($request->hasFile('passportPICTURE','biodataPAGE','biodataPAGE','currentVISA','guardiansID','commitmentLETTER'
         ,'academicTRANSCRIPTS','policeCLEARANCE'))
         {
 
             
             $this->validate($request,[
-            'passportPICTURE' => 'require|mimes:png,jpg,pdf',
-            'biodataPAGE' => 'mimes:png,jpg,pdf',
-            'currentVISA' => 'mimes:png,jpg,pdf',
-            'guardiansID' => 'mimes:png,jpg,pdf',
-            'commitmentLETTER' => 'mimes:png,jpg,pdf',
-            'academicTRANSCRIPTS' => 'mimes:png,jpg,pdf',
-            'policeCLEARANCE' => 'mimes:png,jpg,pdf'
-        ]
-        );
+            'dateofENTRY' => 'required|date',
+            'passportPICTURE' => 'required|mimes:png,jpg,pdf',
+            'biodataPAGE' => 'required|mimes:png,jpg,pdf',
+            'currentVISA' => 'required|mimes:png,jpg,pdf',
+            'guardiansID' => 'required|mimes:png,jpg,pdf',
+            'commitmentLETTER' => 'required|mimes:png,jpg,pdf',
+            'academicTRANSCRIPTS' => 'required|mimes:png,jpg,pdf',
+            'policeCLEARANCE' => 'required|mimes:png,jpg,pdf'
+            ]
+            );
 
-            $path_pp=$request->file('passportPICTURE');
-            $path_bd=$request->file('biodataPAGE');
-            $path_cv=$request->file('currentVISA');
-            $path_gid=$request->file('guardiansID');
-            $path_cL=$request->file('commitmentLETTER');
-            $path_AT=$request->file('academicTRANSCRIPTS');
-            $path_PC=$request->file('policeCLEARANCE');
-
-            // $allowedFileTypes = config('app.allowedFieTypes');
-            // $maxFileSize = config('app.maxFileSize');
-            // $rules = [
-            //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
-            // ];
-            
-            // $this->validate( $request,$rules);
-
-            $passportPic = FileUploader::fileupload($request,'passportPICTURE','PassportPhoto','kpps/');
-            $passportBio = FileUploader::fileupload($request,'biodataPAGE','PassportBioData','kpps/');
-            $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa','kpps/');
-            $guardianId = FileUploader::fileupload($request,'guardiansID','GuardianBio','kpps/');
-            $commitmentL = FileUploader::fileupload($request,'commitmentLETTER','CommitmentLetter','kpps/');
-            $academicTrans = FileUploader::fileupload($request,'academicTRANSCRIPTS','AcademicTranscript','kpps/');
-            $policeCl = FileUploader::fileupload($request,'policeCLEARANCE','PoliceClearance','kpps/');
-            
-
-            $post = new applykpp();
-            
-            
-            $post->student_id = $request->suID;
-            $post->passport_picture = $passportPic;
-            $post->passport_biodata = $passportBio;
-            $post->current_visa = $currentV;
-            $post->guardian_biodata = $guardianId;
-            $post->commitment_letter = $commitmentL;
-            $post->accademic_transcript = $academicTrans;
-            $post->police_clearance = $policeCl;
-            $post->application_date = '2023-03-16';
-            $post->application_status = 'pending';
-
-
-            $post->timestamps = false;
-
-            $post->save();
-            return back()->with('kpp_request_added','Your student pass application Request has been submitted successfully');
+            $on_going_request = DB::table('kpps_application')->where("student_id",$id)->limit(1)->get();
+            if(sizeOf($on_going_request) > 0){
+                if($on_going_request[0]->application_status === 'pending' || $on_going_request[0]->application_status === 'in progress' ){
+                    return back()->with('kpp_request_ongoing','Student pass application with ID No "'.$on_going_request[0]->id.'" has a status of "'.$on_going_request[0]->application_status.'". We cannot initiate a new application.');
+                }else{
+                    $path_pp=$request->file('passportPICTURE');
+                    $path_bd=$request->file('biodataPAGE');
+                    $path_cv=$request->file('currentVISA');
+                    $path_gid=$request->file('guardiansID');
+                    $path_cL=$request->file('commitmentLETTER');
+                    $path_AT=$request->file('academicTRANSCRIPTS');
+                    $path_PC=$request->file('policeCLEARANCE');
+        
+                    // $allowedFileTypes = config('app.allowedFieTypes');
+                    // $maxFileSize = config('app.maxFileSize');
+                    // $rules = [
+                    //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
+                    // ];
+                    
+                    // $this->validate( $request,$rules);
+        
+                    $passportPic = FileUploader::fileupload($request,'passportPICTURE','PassportPhoto','kpps/');
+                    $passportBio = FileUploader::fileupload($request,'biodataPAGE','PassportBioData','kpps/');
+                    $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa','kpps/');
+                    $guardianId = FileUploader::fileupload($request,'guardiansID','GuardianBio','kpps/');
+                    $commitmentL = FileUploader::fileupload($request,'commitmentLETTER','CommitmentLetter','kpps/');
+                    $academicTrans = FileUploader::fileupload($request,'academicTRANSCRIPTS','AcademicTranscript','kpps/');
+                    $policeCl = FileUploader::fileupload($request,'policeCLEARANCE','PoliceClearance','kpps/');
+                    
+        
+                    $post = new applykpp();
     
+                    $post->student_id = $request->suID;
+                    $post->passport_picture = $passportPic;
+                    $post->passport_biodata = $passportBio;
+                    $post->current_visa = $currentV;
+                    $post->guardian_biodata = $guardianId;
+                    $post->commitment_letter = $commitmentL;
+                    $post->accademic_transcript = $academicTrans;
+                    $post->police_clearance = $policeCl;
+                    $post->application_date = $this->CurrentDate();
+                    $post->application_status = 'pending';
+    
+                    $post->timestamps = false;
+        
+                    $post->save();
+                    return back()->with('kpp_request_added','Your student pass application Request has been submitted successfully');
+                }
+            }
+            else{
+                $path_pp=$request->file('passportPICTURE');
+                $path_bd=$request->file('biodataPAGE');
+                $path_cv=$request->file('currentVISA');
+                $path_gid=$request->file('guardiansID');
+                $path_cL=$request->file('commitmentLETTER');
+                $path_AT=$request->file('academicTRANSCRIPTS');
+                $path_PC=$request->file('policeCLEARANCE');
+    
+                // $allowedFileTypes = config('app.allowedFieTypes');
+                // $maxFileSize = config('app.maxFileSize');
+                // $rules = [
+                //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
+                // ];
+                
+                // $this->validate( $request,$rules);
+    
+                $passportPic = FileUploader::fileupload($request,'passportPICTURE','PassportPhoto','kpps/');
+                $passportBio = FileUploader::fileupload($request,'biodataPAGE','PassportBioData','kpps/');
+                $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa','kpps/');
+                $guardianId = FileUploader::fileupload($request,'guardiansID','GuardianBio','kpps/');
+                $commitmentL = FileUploader::fileupload($request,'commitmentLETTER','CommitmentLetter','kpps/');
+                $academicTrans = FileUploader::fileupload($request,'academicTRANSCRIPTS','AcademicTranscript','kpps/');
+                $policeCl = FileUploader::fileupload($request,'policeCLEARANCE','PoliceClearance','kpps/');
+                
+    
+                $post = new applykpp();
+
+                $post->student_id = $request->suID;
+                $post->passport_picture = $passportPic;
+                $post->passport_biodata = $passportBio;
+                $post->current_visa = $currentV;
+                $post->guardian_biodata = $guardianId;
+                $post->commitment_letter = $commitmentL;
+                $post->accademic_transcript = $academicTrans;
+                $post->police_clearance = $policeCl;
+                $post->application_date = $this->CurrentDate();
+                $post->application_status = 'pending';
+
+                $post->timestamps = false;
+    
+                $post->save();
+                return back()->with('kpp_request_added','Your student pass application Request has been submitted successfully');
+            }
+            
         }        
+        return back()->with('kpp_request_fail','All fields are required to proceed!');
        
        
 
@@ -286,7 +374,7 @@ class studentactions extends Controller
     public function BuddyProgram(request $request){
         $id = $request->user()->id;        
         $data = DB::table("buddy_request")->where('student_id','=',$id)->get();
-        return view('Layouts/studentActions/Buddyprogram', compact('data'));
+        return view('Layouts/studentActions/Buddyprogram', ['RequestsData'=>$data]);
     }
     public function MyBuddyRequest(request $request){
         $id = $request->user()->id;      
@@ -294,37 +382,69 @@ class studentactions extends Controller
         return view('Layouts/studentActions/RequestedBuddies', compact('data'));
     }
 
-    public function newBuddyRequest(){
-        return view('Layouts/studentActions/RequestABuddy')->with('get_data',$this->getCountries());
+    public function newBuddyRequest(request $request){
+        $id = $request->user()->id;        
+        $data = DB::table("student_details")->where('student_id',$id)->limit(1)->get();
+        
+        return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
     }
 
     public function RequestABuddy(Request $request){
 
         $id = $request->user()->id;             
-        $data = DB::table("buddy_request")->where('student_id','=',$id)->get();
+        $data = DB::table("buddy_request")->where('student_id','=',$id)->limit(1)->get();
 
         if(sizeOf($data) < 1){
             $post = new Request_Buddy();
-            $post->id = 988257;
+            $post->id = rand(1000,1000000);
             $post->student_id = $id;
             $post->status = 'pending';
-            $post->request_date = '2023-03-15';
+            $post->request_date = $this->CurrentDate();
 
             $post->timestamps = false;
 
             $post->save();
             return redirect('/RequestBuddy')
             ->with('Buddy_request_successful','Request submitted Successfully');
-        }else{
+        }
+        if(strtolower($data[0]->status) === 'pending'){
             return back()->with('New_request_failed','Your Request for a buddy is already in Progress! Please be patient');
         }
+        if(strtolower($data[0]->status) !== 'pending'){
+            return back()->with('New_request_assigned','You have already been assigned a buddy! We cannot initiate new request.');
+        }
     }
-
+    
+    Public function cancelKppApp(Request $request){
+        $id = $request->user()->id; 
+        $KppAppCancel = DB::table("kpps_application")->where('student_id',$id)->delete();
+        if($KppAppCancel){
+            return back()->with('kppApp_cancel_success','You have canceled your student pass request successfully. You can not re-activate your request, place a new request when needed.');
+        }
+        return back()->with('kppApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
+    }
+    Public function cancelBuddy(Request $request){
+        $id = $request->user()->id; 
+        $BuddyCancel = DB::table("buddy_request")->where('student_id',$id)->update(['status'=>'cancel']);
+        if($BuddyCancel){
+            return back()->with('buddy_cancel_success','You have canceled your buddy request successfully. You can not re-activate your request, place a new request when needed.');
+        }
+        return back()->with('buddy_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
+    }
     Public function MyBuddyAllocation(Request $request){
         $id = $request->user()->id;        
-        $Buddies = DB::select("select * from buddies_allocations WHERE student_id= $id ");
-        return view('Layouts/studentActions/AllocatedBuddies',['Buddies'=>$Buddies]);
+        $data=[];
+        $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id')->where('student_id',$id)->limit(1)->get();
+        if(sizeOf($BuddyId) > 0){
+            $BuddyUser = DB::table("users")->select('surname','other_names','email')->where('id',$BuddyId[0]->buddy_id)->limit(1)->get();
+            // $BuddyDetails = DB::table("student_details")->select('phone_number')->where('student_id',$BuddyId[0]->buddy_id)->limit(1)->get();
+            array_push($data,array_merge((array)$BuddyUser[0],(array)$BuddyId[0]));
+        }
+
+        return view('Layouts/studentActions/AllocatedBuddies',['allocationGetter'=>$data]);
     }
+
+    
 
     //END OF BUDDY MANAGEMENT SECTION//
     public function NewKPPAPPVIEW(Request $request){

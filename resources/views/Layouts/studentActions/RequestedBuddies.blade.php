@@ -38,12 +38,12 @@
                             <tbody>
                             @foreach($data as $data)
                                 <tr>
-                                    <td>{{$data->id}}</td>
+                                    <td>{{$data->buddy_request_id}}</td>
                                     <td>{{$data->student_id}}</td>
                                     <td>{{$data->request_date}}</td>
                                     <td>{{$data->status}}</td>
                                     <td>
-                                    @php $data= Crypt::encrypt($data->id); @endphp                                                                                            
+                                    @php $data= Crypt::encrypt($data->buddy_request_id); @endphp                                                                                            
 
 
                                                 <a href="" target="blank">
