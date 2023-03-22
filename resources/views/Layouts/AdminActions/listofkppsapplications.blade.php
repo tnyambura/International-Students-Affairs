@@ -23,6 +23,7 @@
                                                 <th>Passport Number</th>
                                                 <th>Date Requested</th>
                                                 <th>NATIONALITY</th>
+                                                <th>status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -34,6 +35,7 @@
                                                 <th>Passport Number</th>
                                                 <th>Date Requested</th>
                                                 <th>NATIONALITY</th>
+                                                <th>status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </tfoot>
@@ -42,7 +44,7 @@
                                                 <tr>
                                                     <td> {{$kpps['id']}}</td>
                                                     <td> {{$kpps['student_id']}}</td>
-                                                    <td> {{$kpps['surname']}} {{$kpps['other_names']}}</td>
+                                                    <td> {{$kpps['surname'].' '.$kpps['other_names']}}</td>
                                                     <td> {{$kpps['passport_number']}}</td>
                                                     <td> {{$kpps['application_date']}}</td>
                                                     <td> {{$kpps['nationality']}}</td>

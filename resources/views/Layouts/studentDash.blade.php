@@ -64,12 +64,11 @@
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
+                                                <th>Student ID</th>
                                                 <th>Surname</th>
                                                 <th>Othernames</th>
-                                                <th>su ID</th>
-                                                <th>R Number</th>
-                                                <th>User Type</th>
                                                 <th>Email</th>
+                                                <th>User Type</th>
                                               
                                             </tr>
                                         </thead>
@@ -78,7 +77,6 @@
                                                 <th>Surname</th>
                                                 <th>Othernames</th>
                                                 <th>su ID</th>
-                                                <th>R Number</th>
                                                 <th>User Type</th>
                                                 <th>Email</th>
                                               
@@ -86,7 +84,7 @@
                                         </tfoot>
                                         <tbody>
                                             <tr>
-                                                <td>{{ Auth::user()->id}}</td>
+                                                <td>{{Auth::user()->id}}</td>
 
                                                 
                                                                                                                                              

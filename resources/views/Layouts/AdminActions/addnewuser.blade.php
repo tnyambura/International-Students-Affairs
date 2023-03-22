@@ -15,6 +15,12 @@
                         {{Session::get('New_Student_Added')}}
                         </div>
                         @endif
+                        @if(Session::has('New_User_Added') || Session::has('New_Student_Added'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('New_User_Added')}}
+                        {{Session::get('New_Student_Added')}}
+                        </div>
+                        @endif
                         @if(Session::has('New_User_failed') || Session::has('New_Student_failed'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('New_User_failed')}}

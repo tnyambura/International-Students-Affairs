@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Auth;
+use DB;
 
 class pages extends Controller
 {
@@ -13,6 +15,9 @@ class pages extends Controller
         return view('Layouts/superadminHome');
     }
     public function studentDash(){
-        return view('Layouts/studentDash');
+        $id = Auth::user()->id; 
+        $fetcher =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
+        
+        return view('Layouts/studentDash',['userDetails'=>$fetcher[0]]);
     }
 }

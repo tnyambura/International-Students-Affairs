@@ -4,7 +4,21 @@
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
                             <li class="breadcrumb-item active" style="color:white;"> List of all International students registered as Users.</li>
                         </ol>
-                       
+                        @if(Session::has('activation_failed'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('activation_failed')}}
+                        </div>
+                        @endif 
+                        @if(Session::has('user_update_success'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('user_update_success')}}
+                        </div>
+                        @endif 
+                        @if(Session::has('user_update_failed'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('user_update_failed')}}
+                        </div>
+                        @endif 
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
@@ -21,7 +35,6 @@
                                                 <th>email</th>
                                                 <th>Telephone No</th>
                                                 <th>Status</th>
-                                                <th>Role</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
@@ -33,13 +46,13 @@
                                                 <th>email</th>
                                                 <th>Telephone No</th>
                                                 <th>Status</th>
-                                                <th>Role</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </tfoot>
                                         <tbody>
                                         @foreach($users as $user)
                                             <tr>
+                                                <td>{{$user['user_id']}}</td>
                                                 <td>{{$user['surname']}}</td>
                                                 <td>{{$user['other_names']}}</td>
                                                 <td>{{$user['email']}}</td>
@@ -47,36 +60,99 @@
                                                 <td>{{$user['phone_number']}}</td>
                                                 <td>{{$user['status']}}</td>
                                                 @endif
-                                                <td>-</td>
-                                                <td>role</td>
 
                                                 <td>
-                                                <div>
-                                                    <span class="fas fa-eye view-app-btn mt-2 mb-2" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$user['user_id']}}" style=" color:blue"></span>
+                                                    <span data-toggle="modal" data-target="#Viewkppapp_{{$user['user_id']}}" class="fas fa-eye view-app-btn mt-2 mb-2" style=" color:blue"></span>
+                                                <!-- <div role='button' >
                                                     View User
-                                                <div>
-                                                <div class="modal fade modal-md w-100"  id="Viewkppapp_{{$user['user_id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                                                    aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
+                                                <div> -->
+                                                <div class="modal fade " id="Viewkppapp_{{$user['user_id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
                                                                 <div class="modal-header text-center">
                                                                     <h4 class="modal-title w-100 font-weight-bold">{{$user['surname'].' '.$user['other_names']}}</h4>
                                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                     <span aria-hidden="true">&times;</span>
                                                                     </button>
                                                                 </div>
-                                                                <div class="card mb-4">
+                                                                <div class="card">
                                                                     <div class="card-header">
                                                                         <i class="fas fa-table mr-1"></i>
-                                                                    My Student Pass Application View.
+                                                                    Student Details
                                                                     </div>
                                                                     <div class="card-body">
-                                                                        @if($user['status'] == 0)
-                                                                            <button>Activate User</button>
-                                                                        @else
-                                                                            <button>Deactivate User</button>
-                                                                        @endif
+
+                                                                        <form method="POST" action="{{route('add.editUserData')}}">
+                                                                            @csrf
+                                                                            <input type="hidden" name="cr_id" value="{{$user['user_id']}}">
+                                                                            <div class="form-group ">
+                                                                                <label for="id">Admission No:</label>
+                                                                                <input type="text" class="form-control" name="u_id" id="id" aria-describedby="idHelp" value="{{$user['user_id']}}">
+                                                                            </div>
+                                                                            <div class="form-group d-flex justify-content-between">
+                                                                                <div>
+                                                                                    <label for="surname">surname</label>
+                                                                                    <input type="text" class="form-control" name="sname" id="surname" value="{{$user['surname']}}">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="othernames">other_names</label>
+                                                                                    <input type="text" class="form-control" name="oname" id="othernames" value="{{$user['other_names']}}">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group  d-flex justify-content-between">
+                                                                                <div>
+                                                                                    <label for="email">email</label>
+                                                                                    <input type="text" class="form-control" name="email" id="email" value="{{$user['email']}}">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="phone_no">phone number</label>
+                                                                                    <input type="text" class="form-control" name="phone" id="phone_no" value="{{$user['phone_number']}}">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group ">
+                                                                                <label for="residence">Residence</label>
+                                                                                <input type="text" class="form-control" name="residence" id="residence" value="{{$user['residence']}}">
+                                                                            </div>
+                                                                            <div class="form-group  d-flex justify-content-between">
+                                                                                <div>
+                                                                                    <label for="faculty">faculty</label>
+                                                                                    <input type="text" class="form-control" name="faculty" id="faculty" value="{{$user['faculty']}}">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="course">course</label>
+                                                                                    <input type="text" class="form-control" name="course" id="course" value="{{$user['course']}}">
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group  d-flex justify-content-around">
+                                                                                <div>
+                                                                                    <label for="nationality">nationality</label>
+                                                                                    <input type="text" class="form-control" name="country" id="nationality" value="{{$user['nationality']}}">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="passport_no">passport Number</label>
+                                                                                    <input type="text" class="form-control" name="passNo" id="passport_no" value="{{$user['passport_number']}}">
+                                                                                </div>
+                                                                                <div>
+                                                                                    <label for="passport_ex">passport expire date</label>
+                                                                                    <input type="text" class="form-control" name="passEx" id="passport_ex" value="{{$user['passport_expire_date']}}">
+                                                                                </div>
+                                                                            </div>
+                                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                                        </form>
+                                                                        
                                                                     </div>
+                                                                    <form method="POST" action='{{route("add.activate")}}'>
+                                                                        @csrf
+                                                                        <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
+                                                                        @if($user['status'] == 0)
+                                                                            <input type="hidden" name="action" value='activate'/>
+                                                                            <button type='submit' class="btn btn-success w-100">Activate User</button>
+                                                                            @else
+                                                                            <input type="hidden" name="action" value='deactivate'/>
+                                                                            <button  type='submit' class="btn btn-danger w-100">Deactivate User</button>
+                                                                        @endif
+                                                                    </form>
                                                                 </div>
                                                                 <br/>
                                                             </div>

@@ -17,25 +17,25 @@
                                     <table class="table table-bordered" id="VisaTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
+                                                <th>application id</th>
+                                                <th>student id</th>
+                                                <th>student names</th>
                                                 <th>Passport Number</th>
                                                 <th>Date Requested</th>
-                                                <th>Email</th>
-                                                <th>Status</th>
-                                                <th>Nationality</th>
+                                                <th>NATIONALITY</th>
+                                                <th>status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tfoot>
-                                            <tr>                                               
-                                                <th>Id</th>
-                                                <th>Name</th>
+                                            <tr>
+                                                <th>application id</th>
+                                                <th>student id</th>
+                                                <th>student names</th>
                                                 <th>Passport Number</th>
                                                 <th>Date Requested</th>
-                                                <th>Email</th>
-                                                <th>Status</th>
-                                                <th>Nationality</th>
+                                                <th>NATIONALITY</th>
+                                                <th>status</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </tfoot>
@@ -47,6 +47,7 @@
                                                     <td> {{$visarequest['surname']}} {{$visarequest['other_names']}}</td>
                                                     <td> {{$visarequest['passport_number']}}</td>
                                                     <td> {{$visarequest['application_date']}}</td>
+                                                    <td> {{$visarequest['nationality']}}</td>
                                                     <td> {{$visarequest['application_status']}}</td>
                                                     
                                                     <td class="d-block">

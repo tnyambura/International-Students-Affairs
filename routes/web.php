@@ -56,6 +56,7 @@ Route::group(['middleware' => ['auth']], function(){
      /** Student Actions */
 
      Route::get('/fetchkppAppView',[studentactions::class,'FetchKppView'])->middleware('rule:student')->name('add.viewKppApp');
+     Route::get('/fetchExtensionAppView',[studentactions::class,'FetchExtensionAppView'])->middleware('rule:student')->name('add.viewExtApp');
      Route::get('/ApplyKpp', [studentactions::class, 'Newstudentpass'])->middleware('rule:student');
      Route::post('/ApplyKpps', [studentactions::class, 'Create_Newstudentpass'])->middleware('rule:student')->name('add.newkppapp');
      Route::get('/ApplyVisa', [studentactions::class, 'NewVisaextension'])->middleware('rule:student');
@@ -79,6 +80,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/MyvisaextApplications', [studentactions::class, 'visaExtensions'])->middleware('rule:student');
      
      Route::get('/MyIssuedKpp', [studentactions::class, 'issuedKpp'])->middleware('rule:student');
+     Route::get('/cancelextApp', [studentactions::class, 'cancelExtApp'])->middleware('rule:student');
      Route::get('/cancelKppApp', [studentactions::class, 'cancelKppApp'])->middleware('rule:student');
      Route::get('/cancelBuddy', [studentactions::class, 'cancelBuddy'])->middleware('rule:student');
      Route::get('/RequestBuddy', [studentactions::class, 'newBuddyRequest'])->middleware('rule:student');
@@ -92,6 +94,8 @@ Route::group(['middleware' => ['auth']], function(){
      
      
      /** Admin Actions */
+     Route::post('/editUserData', [adminactions::class, 'editUserData'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.editUserData');
+     Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.activate');
      Route::get('/kppRequestList', [adminactions::class, 'getAllkppApplications'])->middleware('rule:admin')->middleware('rule:super_admin');
      Route::get('/VisaRequestList', [adminactions::class, 'getAllvisaextensionrequests'])->middleware('rule:admin')->middleware('rule:super_admin');
      Route::get('/initiatedkpps', [adminactions::class, 'initiatedkppApps'])->middleware('rule:admin')->middleware('rule:super_admin');

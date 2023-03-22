@@ -61,8 +61,7 @@
                                                 <th>-</th>
                                                 <td class='d-flex flex-column justify-content-between align-items-center'>                                                                                           
 
-                                                    <span class="fas fa-edit view-app-btn mt-2 mb-2" role='button' data-action="{{ __('fetchkppAppView') }}" aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:blue"></span>
-                                                    <span class="fas fa-eye view-app-btn mt-2 mb-2" role='button' data-action="{{ __('fetchkppAppView') }}" aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:blue"></span>
+                                                    <span class="fas fa-eye view-app-btn mt-2 mb-2" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:blue"></span>
                                                 
                                                     <div class="modal fade modal-md w-100"  id="Viewkppapp_{{$appdata->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                                     aria-hidden="true">

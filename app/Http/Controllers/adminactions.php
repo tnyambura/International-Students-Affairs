@@ -132,19 +132,49 @@ class adminactions extends Controller
         }else{
 
              return back()->with('No_File','File Not Found');
+            }
+            
         }
-       
+    public function editUserData(Request $r){
+        
+        $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
+        $UpdateUsers = DB::table('users')->where('id',$r->cr_id)->update(['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email]);
+
+        $mesg = 'Update made on ';
+        if($UpdateUsers || $UpdateUsersDetails){
+            $mesg .= 'user tables successfully!';
+            return back()->with('user_update_success',$mesg);
+        }else{
+            $mesg .= 'could not be save. try later';
+            return back()->with('user_update_failed',$mesg);
+        }
+        
+    }
+    public function activate_user(Request $request){
+        $statusSet=0;
+        $Message='deactivate';
+        if(strtolower($request->action) === 'activate'){
+            $statusSet = 1;
+            $Message='activate';
+        }
+        $activateUser = DB::table('users')->where('id', $request->user_id)->update(['status'=>$statusSet]);
+        if($activateUser){
+            return back();
+        }else{
+            return back()->with('activation_failed','We couldn\'t '.$Message.' this account at the moment. Try later!'  );
+        }
     }
     public function getallusers(){
         $data=[];
         $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
         foreach ($GetUsers as $value) {
             $thisUser=[];
-            $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-            if(sizeOf($GetUsersDetails) > 0){
-                array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0]));
-            }else{
-                array_push($data,$value);
+            $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+            if(sizeOf($GetUsersRole) > 0 ){
+                $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                if(sizeOf($GetUsersDetails) > 0 && $GetUsersRole[0]->role === 'student'){
+                    array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0]));
+                }
             }
         }
         return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
@@ -156,9 +186,11 @@ class adminactions extends Controller
         $applicationStatus=[['pending','in progress','declined','approved']];
         
         foreach ($kppsDb as $application) {
+            $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
             $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
             array_push($applicationStatus,$application->application_status);
-            array_push($data,array_merge((array)$fetched[0],(array)$application));
+            $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+            array_push($data,array_merge((array)$uData,(array)$application));
         }
         
         return view('Layouts/AdminActions/listofkppsapplications')->with('data',$data)->with('applicationStatus',$applicationStatus);
@@ -264,9 +296,11 @@ class adminactions extends Controller
         $applicationStatus=[['pending','in progress','declined','approved']];
         
         foreach ($extDb as $application) {
+            $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
             $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
             array_push($applicationStatus,$application->application_status);
-            array_push($data,array_merge((array)$fetched[0],(array)$application));
+            $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+            array_push($data,array_merge((array)$uData,(array)$application));
         }
        return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
     }

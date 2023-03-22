@@ -60,6 +60,21 @@ class studentactions extends Controller
         }
         return [];
     }
+    public function FetchExtensionAppView( Request $req){
+        $id = $req->user()->id; 
+        $user =  DB::table('users')->select('surname','other_names','email')->where('id',$id)->limit(1)->get();
+        $userDetails =  DB::table('student_view_data')->where('student_id',$id)->limit(1)->get();
+        $extApp = DB::table('extension_application')->where('student_id',$id)->get();
+        
+        $data = [];
+        array_push($data,array_merge((array)$user[0],(array)$userDetails[0]));
+        if(sizeOf($extApp) > 0){
+            // array_push($data,$kppApp);
+            // return $data;
+            return $extApp;
+        }
+        return [];
+    }
     public function updateVISA( request $req ){
 
         $data = applyvisaextension::find($req->id);
@@ -352,21 +367,6 @@ class studentactions extends Controller
          return view('Layouts/studentActions/visaapplicationedit', compact('data'));
     }
 
-    public function visaExtensions(request $request){
-        $id = $request->user()->id;        
-        $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
-        $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
-
-        return view('Layouts/studentActions/studentvisaapplications')->with('userData',$userData[0])->with('data',$ext);
-
-    }
-    public function NewVisaAPPVIEW(Request $request){
-        $id = $request->user()->id;        
-        $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
-        $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
-        return view('Layouts/studentActions/VisaapplicationView')->with('userData',$userData[0])->with('data',$ext);
-    }
-
     
     public function Newstudentpass(Request $request){
         return view('Layouts/studentActions/RequestNewKPP')->with('getCountries',$this->getCountries())->with('getUserDetails',$this->userDetailsFetcher($request));
@@ -417,9 +417,17 @@ class studentactions extends Controller
         }
     }
     
+    Public function cancelExtApp(Request $request){
+        $id = $request->user()->id; 
+        $KppAppCancel = DB::table("extension_application")->where('student_id',$id)->where('application_status','pending')->delete();
+        if($KppAppCancel){
+            return back()->with('extApp_cancel_success','You have canceled your student pass request successfully. You can not re-activate your request, place a new request when needed.');
+        }
+        return back()->with('extApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
+    }
     Public function cancelKppApp(Request $request){
         $id = $request->user()->id; 
-        $KppAppCancel = DB::table("kpps_application")->where('student_id',$id)->delete();
+        $KppAppCancel = DB::table("kpps_application")->where('student_id',$id)->where('application_status','pending')->delete();
         if($KppAppCancel){
             return back()->with('kppApp_cancel_success','You have canceled your student pass request successfully. You can not re-activate your request, place a new request when needed.');
         }
@@ -519,6 +527,16 @@ class studentactions extends Controller
 
         return view('Layouts/studentActions/RequestNewVisa')->with('userData',$userData[0])->with('data',$ext)->with('getCountries',$this->getCountries());
     }
+    public function visaExtensions(Request $request){
+        $id = $request->user()->id;        
+        $userDetails = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
+        $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
+        $userData=[];
+        // array_push($userData,array_merge((array)$,(array)$))
+
+        $fecthData =$this->FetchExtensionAppView($request);
+        return view('Layouts/studentActions/studentvisaapplications')->with('userDetails',$userDetails[0])->with('data',$ext)->with('getDataView',$fecthData);
+    }
     public function Listofkpps(Request $request){  
         $id = $request->user()->id;        
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
@@ -538,25 +556,25 @@ class studentactions extends Controller
     
     }
 
-    public function AddNewSignup(request $request){
+    public function AddNewSignup(Request $request){
 
-        if($request->hasFile('suID','surNAME','firstNAME','lastNAME','suEMAIL','phoneNUMBER','Faculty','Course','Nationality','passportNUMBER','Residence','ParentNames','ParentEmail','ParentPhone'))
+        if($request->filled('suID','surNAME','firstNAME','lastNAME','suEMAIL','phoneNUMBER','Faculty','Course','Nationality','passportNUMBER','Residence','ParentNames','ParentEmail','ParentPhone'))
         {
-            $request->validate($request,[
-                'suID'=>'required',
+            $this->validate($request,[
+                'suID'=>'required|max:6',
                 'surNAME'=>'required',
                 'firstNAME'=>'required',
                 'lastNAME'=>'required',
-                'suEMAIL'=>'required|unique',
-                'phoneNUMBER'=>'required',
+                'suEMAIL'=>'required|email',
+                'phoneNUMBER'=>'required|min:10',
                 'Faculty'=>'required',
                 'Course'=>'required',
                 'Nationality'=>'required',
-                'passportNUMBER'=>'required|unique',
+                'passportNUMBER'=>'required',
                 'Residence'=>'required',
                 'ParentNames'=>'required',
-                'ParentEmail'=>'required|unique',
-                'ParentPhone'=>'required|unique'
+                'ParentEmail'=>'required',
+                'ParentPhone'=>'required'
 
                 ]
             );
@@ -600,10 +618,10 @@ class studentactions extends Controller
 
                 $postVerification->user_id = $request->suID;
                 $postVerification->status = $status;
-                $postVerification->verified_at = '2023-03-10 08:00:00';
+                $postVerification->verified_at = $this->CurrentDate();
                 $postVerification->remember_token = "";
-                $postVerification->created_at = '2023-03-10 08:00:00';
-                $postVerification->last_update = '2023-03-10 08:00:00';
+                $postVerification->created_at = $this->CurrentDate();
+                $postVerification->last_update = $this->CurrentDate();
 
                 $postRole->user_id = $request->suID;
                 $postRole->role = 'student';
@@ -613,18 +631,6 @@ class studentactions extends Controller
                 $postGuardian->timestamps = false;
                 $postVerification->timestamps = false;
                 $postRole->timestamps = false;
-                // $post->suID = $request->suID;
-                // $post->suEMAIL = $request->suEMAIL;
-                // $post->surNAME = $request->surNAME;
-                // $post->firstNAME = $request->firstNAME;
-                // $post->lastNAME = $request->lastNAME;
-                
-
-
-                // $post->ParentEmail = $request->ParentEmail;
-                // $post->ParentPhone = $request->ParentPhone;
-                // $post->ParentNames = $request->ParentNames;
-
 
                 
                 $post->save();
@@ -636,6 +642,8 @@ class studentactions extends Controller
             }else{
                 return back()->with('New_Student_failed','A student with Same Admission Number is already Registered, please write to studentpass@strathmore.edu for assistance!');
             }
+        }else{
+            return back()->with('New_Student_failed','some feilds are missing!');
         }
 
     }
