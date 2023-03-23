@@ -15,6 +15,7 @@ use App\Models\FetchBuddyRequests;
 use App\Models\FetchBuddies;
 use App\Models\FetchCountries;
 use App\Models\User;
+use App\Models\Role;
 use App\Models\buddies_allocation;
 use App\Models\AllocateBuddyModel;
 use App\Models\addNewBuddy;
@@ -110,7 +111,7 @@ class adminactions extends Controller
         $data= addNewStudent::find($dataID);
         return view('Layouts/AdminActions/StudentProfileView', compact('data'));
     }
-   Public Function download(Request $request, $file){   
+   public function download(Request $request, $file){   
    
     $path = 'storage/kpps/'.$file;
 
@@ -122,7 +123,7 @@ class adminactions extends Controller
     }
 
    }
-    Public Function visadownload(Request $request, $file){   
+    public function visadownload(Request $request, $file){   
 
         $path = 'storage/visaExtensionfiles/'.$file;
 
@@ -169,17 +170,20 @@ class adminactions extends Controller
         $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
         foreach ($GetUsers as $value) {
             $thisUser=[];
+            $isBuddy=false;
             $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+            $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+            if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
             if(sizeOf($GetUsersRole) > 0 ){
                 $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
                 if(sizeOf($GetUsersDetails) > 0 && $GetUsersRole[0]->role === 'student'){
-                    array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0]));
+                    array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy]));
                 }
             }
         }
         return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
     }
-    Public function getAllkppApplications(){
+    public function getAllkppApplications(){
         // $data= applyKpp::all('id','otherNAMES','passportNUMBER','updated_at','biodataPAGE','currentVISA','policeCLEARANCE','dateofENTRY','Nationality','created_at');
         $kppsDb = DB::table('kpps_application')->get();
         $data=[];
@@ -242,6 +246,32 @@ class adminactions extends Controller
     //     }
     //     return $data;
     // }
+    public function RegisterNewBuddy(Request $req){
+        $postRole=new Role();
+
+        $postRole->user_id = $req->user_id;
+        $postRole->role = 'buddy';
+
+        $postRole->timestamps = false;
+        $postRole->save();
+
+        return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
+    }
+    public function RemoveAsBuddy(Request $req){
+        if(DB::table('user_roles')->where('user_id',$req->bd_id)->where('role','buddy')->delete()){
+            $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
+
+            foreach ($allAllocatedUsers as $value) {
+                if(DB::table('buddy_request')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
+                    DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
+                }
+            }
+            return back()->with('Buddy_Removed_success','User successfully removed as buddy!');
+        }else{
+            return back()->with('Buddy_Removed_fail','We couldn\'t remove the user as buddy. Try later!');
+        }
+
+    }
     public function AllocateBuddy(Request $req){ // new allocation
         
         $generatedId = rand(1000,1000000);
@@ -290,7 +320,7 @@ class adminactions extends Controller
         // }
         
     }
-    Public function getAllvisaextensionrequests(){
+    public function getAllvisaextensionrequests(){
         $extDb = DB::table('extension_application')->get();
         $data=[];
         $applicationStatus=[['pending','in progress','declined','approved']];
@@ -349,7 +379,7 @@ class adminactions extends Controller
         }   
                    
     }
-    Public function generatestudentlist(){
+    public function generatestudentlist(){
             $list = addNewStudent::count();
             if($list > 0){
             $data= addNewStudent::all();         
@@ -365,7 +395,7 @@ class adminactions extends Controller
         $data= addNewStudent::all('id','suID','suEMAIL','firstNAME','lastNAME','Course','Nationality');
         return view('Layouts/AdminActions/StudentsListPDF',['students'=>$data]);
         }
-    Public function deletestudentrecord($id){
+    public function deletestudentrecord($id){
         $dataID= Crypt::decrypt($id);   
 
         DB::table('add_new_students')->where('id', $dataID)->delete();        
@@ -378,13 +408,13 @@ class adminactions extends Controller
         return view('Layouts/AdminActions/listofBuddyRequests',['buddiesRequests'=>$this->BuddiesRequestFecher()],['buddies'=>$this->BuddiesFecher()]);
     }
    
-   Public function StudentDetailsEdit($id){
+   public function StudentDetailsEdit($id){
     $dataID= Crypt::decrypt($id); 
     $data= addNewStudent::find($dataID);
     return view('Layouts/AdminActions/EditNewStudent', compact('data'));
         }
 
-    Public function StudentDetailsUpdate(request $req , $id){
+    public function StudentDetailsUpdate(request $req , $id){
         
         $data = addNewStudent::find($req->id);        
         

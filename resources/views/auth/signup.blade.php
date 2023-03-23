@@ -30,107 +30,101 @@
                         {{Session::get('New_Student_failed')}}
                         </div>
                         @endif
-                            <form method="POST" action="{{ __('signup')}}" class="border border-primary" style="padding:20px">
+                        <form method="POST"  class='new-student-form' action="{{route('Add.signup')}}">
                             @csrf
-                            <input type="hidden" name="status" value='not_active' />
-                            <h4>ADD YOUR DETAILS</h4><br/>
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="Surname">NOM (SURNAME)</label>
-                                    <input type="text" class="form-control" name ="surNAME" value="pass" id="surNAME" placeholder="Surname"
+                                    <input type="text" class="form-control" name ="surNAME" id="surNAME" placeholder="Surname"
                                          required>
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="fNAME">First Name</label>
-                                    <input type="text" class="form-control" name ="firstNAME" value="pass" id="firstNAME" placeholder="First Name"
+                                    <input type="text" class="form-control" name ="firstNAME" id="firstNAME" placeholder="First Name"
                                          required>                                    
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="lNAME">Last Name</label>
-                                    <input type="text" class="form-control" name ="lastNAME" value="pass" id="lastNAME" placeholder="Last Name"
+                                    <input type="text" class="form-control" name ="lastNAME" id="lastNAME" placeholder="Last Name"
                                          required>                                    
                                     </div>                                    
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="suID">Admission Number</label>
-                                    <input type="number" class="form-control" name ="suID" value="pass" id="suID" placeholder="Admission Number"
+                                    <input type="number" class="form-control" name ="suID" id="suID" placeholder="Admission Number"
                                          required>
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="Course">Course</label>
-                                    <input type="text" class="form-control" name ="Course" value="pass" id="Course" placeholder="Course of Study"
+                                    <input type="text" class="form-control" name ="Course" id="Course" placeholder="Course of Study"
                                          required>
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="Faculty">Faculty</label>
-                                    <input type="text" class="form-control"  name ="Faculty" value="pass" id="Faculty" placeholder="Faculty"
+                                    <input type="text" class="form-control"  name ="Faculty" id="Faculty" placeholder="Faculty"
                                          required>
                                     
                                     </div>
                                   
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-6 mb-3">
                                     <label for="email">Email Address</label>
-                                    <input type="text" class="form-control" name ="suEMAIL" value="pass" id="suEMAIL" placeholder="Email"
+                                    <input type="text" class="form-control" name ="suEMAIL" id="suEMAIL" placeholder="Email"
                                         required>
                                   </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-3 mb-3">
                                     <label for="Nationality">Nationality</label>
-                                    <input type="text" class="form-control"  name ="Nationality" value="pass" id="Nationality" placeholder="Nationality"
+                                    <input type="text" class="form-control"  name ="Nationality" id="Nationality" placeholder="Nationality"
                                         required>
                                     </div>
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-3 mb-3">
                                     <label for="validationServerUsername33">Passport Number</label>
-                                    <input type="text" class="form-control" id="validationServer023" name ="passportNUMBER" value="pass" placeholder="Passport Number"
+                                    <input type="text" class="form-control" id="validationServer023" name ="passportNUMBER" placeholder="Passport Number"
                                          required>
                                     </div>    
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col-md-6 mb-3">
                                     <label for="PhoneNumber">Kenyan Phone Number</label>
-                                    <input type="number" class="form-control" id="phoneNUMBER" name ="phoneNUMBER" value="700 000000" placeholder="(+254) 700 000000"
+                                    <input type="number" class="form-control" id="phoneNUMBER" name ="phoneNUMBER" placeholder="(+254) 700 000000"
                                         required>
                                     </div>    
                                     <div class="col-md-4 mb-3">
                                     <label for="Residence">Residence</label>
-                                    <input type="text" class="form-control" name ="Residence" value="pass" id="Residence" placeholder="Residence"
+                                    <input type="text" class="form-control" name ="Residence" id="Residence" placeholder="Residence"
                                          required>
-                                    </div>  
-                                                              
+                                    </div>                         
                                 </div><br>
+
                                 <div><h4>PARENTS DETAIL</h4></div>
                                 <div class="form-row">
                                    
                                     <div class="col-md-4 mb-3">
                                     <label for="ParentEmail">Parent Email</label>
-                                    <input type="text" class="form-control" name ="ParentEmail" value="pass@e.e" id="ParentEmail" placeholder="Parents Email"
+                                    <input type="text" class="form-control" name ="ParentEmail" id="ParentEmail" placeholder="Parents Email"
                                          required>
                                     </div>  
                                     
                                     <div class="col-md-4 mb-3">
                                     <label for="ParentPhone">Your parents Phone Number</label>
-                                    <input type="number" class="form-control" id="ParentPhone" name ="ParentPhone" value="99876488" placeholder="Parent Phone Number"
+                                    <input type="number" class="form-control" id="ParentPhone" name ="ParentPhone" placeholder="Parent Phone Number"
                                         required>
                                     </div>
                                     
                                     <div class="col-md-4 mb-3">
                                     <label for="ParentNames">Your parents Names</label>
-                                    <input type="text" class="form-control" id="ParentNames" name ="ParentNames" value="pass" placeholder="Full Names "
+                                    <input type="text" class="form-control" id="ParentNames" name ="ParentNames" placeholder="Full Names "
                                         required>
                                     </div>
                                 </div>
-                                                       
                                
-                                <button class="btn btn-primary" type="submit">Register</button>
-                                <a href="{{ route('login')}}" class="btn btn-success active" role="button" aria-pressed="true">Login</a>
-
-
-                                </form>   
+                                <input class="btn btn-success" value="Save details" type="submit" />
+                        </form>
                             </div>   
                </main>
 

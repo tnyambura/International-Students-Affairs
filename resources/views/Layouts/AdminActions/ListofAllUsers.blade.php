@@ -9,6 +9,11 @@
                         {{Session::get('activation_failed')}}
                         </div>
                         @endif 
+                        @if(Session::has('Buddy_Register_success'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('Buddy_Register_success')}}
+                        </div>
+                        @endif 
                         @if(Session::has('user_update_success'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('user_update_success')}}
@@ -56,9 +61,11 @@
                                                 <td>{{$user['surname']}}</td>
                                                 <td>{{$user['other_names']}}</td>
                                                 <td>{{$user['email']}}</td>
-                                                @if($user['phone_number'])
                                                 <td>{{$user['phone_number']}}</td>
-                                                <td>{{$user['status']}}</td>
+                                                @if($user['status'] === 1)
+                                                <td style="color:green">Activated</td>
+                                                @else
+                                                <td style="color:red">Deactivated</td>
                                                 @endif
 
                                                 <td>
@@ -142,6 +149,13 @@
                                                                         </form>
                                                                         
                                                                     </div>
+                                                                    @if($user['status'] === 1 && $user['isbuddy'] === false)
+                                                                        <form method="POST" action='{{route("add.makeBuddy")}}'>
+                                                                        @csrf
+                                                                            <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
+                                                                            <button type='submit' class="btn btn-success w-100 mb-2">Make a Buddy</button>
+                                                                        </form>
+                                                                    @endif
                                                                     <form method="POST" action='{{route("add.activate")}}'>
                                                                         @csrf
                                                                         <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>

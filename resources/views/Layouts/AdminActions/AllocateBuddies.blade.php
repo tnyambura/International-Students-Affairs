@@ -92,7 +92,7 @@
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('Buddy_Allocation_failed')}}
                         </div>
-                        @endif
+                        @endif  
   
 
                         <form method="POST" action="/BuddyAllocation" enctype="multipart/form-data" onSubmit="return validate();">

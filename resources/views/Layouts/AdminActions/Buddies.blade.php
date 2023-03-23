@@ -4,7 +4,7 @@
            
             
             <div class="row d-flex flex-fill">
-                            <div class="col-xl-3 col-md-6">
+                            <!-- <div class="col-xl-3 col-md-6">
                                 <div class="card bg-secondary text-white mb-4" data-toggle="modal" data-target="#RegisterBuddyModal">
                                     <div class="card-body">Register A New trained and qualified Buddy</div>
                                     <div class="card-footer d-flex align-items-center justify-content-between">
@@ -12,7 +12,7 @@
                                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-xl-3 col-md-6">
                                 <div class="card bg-success text-white mb-4" width='100'>
                                     <div class="card-body">View All Buddy Requests</div>
@@ -60,10 +60,7 @@
                                 <tr>
                                     <th>id</th>
                                     <th>Name</th>
-                                    <th>Passport Number</th>
-                                    <th>Date Requested</th>
-                                    <th>Entry Date</th>
-                                    <th>NATIONALITY</th>
+                                    <th>email</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -71,10 +68,7 @@
                                 <tr>
                                     <th>id</th>
                                     <th>Name</th>
-                                    <th>Passport Number</th>
-                                    <th>Date Requested</th>
-                                    <th>Entry Date</th>
-                                    <th>NATIONALITY</th>
+                                    <th>email</th>
                                     <th>Actions</th>
                                 </tr>
                             </tfoot>
@@ -85,9 +79,22 @@
                                         <td>{{$buddy->surname.' '.$buddy->other_names}}</td>
                                         <td>{{$buddy->email}}</td>
                                         <td>
-                                            <a href="#" target="blank">
-                                            <p><span class="fas fa-list-ul" aria-hidden="false"></span> Verify</p>
+                                            <form method="POST" action="{{route('add.dismissBd')}}">
+                                                @csrf
+                                                <input type="hidden" name="bd_id" value="{{$buddy->id}}"/>
+                                                <button type="submit" id="rmvBd_{{$buddy->id}}"><span class="fas fa-trash" aria-hidden="false"></span> Remove as Buddy</button>
+                                            </form>
                                         </td>
+                                        <!-- <script>
+                                            document.querySelector("#rmvBd_{{$buddy->id}}").addEventListener('click',function(e){
+                                                e.preventDefault()
+                                                if(confirm('Do you want to remove {{$buddy->surname.' '.$buddy->other_names}} as a buddy? All the allocated students will have a pending status in the request table')){
+                                                    // e.target.attr
+                                                    // e.submit()
+                                                    e.currentTarget.submit()
+                                                }
+                                            })
+                                        </script> -->
                                     </a>  
                                     </tr>
                                 @endforeach

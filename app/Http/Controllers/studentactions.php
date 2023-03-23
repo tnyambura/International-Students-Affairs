@@ -375,8 +375,29 @@ class studentactions extends Controller
     //BUDDIES MANAGEMENT SECTION//
     public function BuddyProgram(request $request){
         $id = $request->user()->id;        
-        $data = DB::table("buddy_request")->where('student_id','=',$id)->get();
-        return view('Layouts/studentActions/Buddyprogram', ['RequestsData'=>$data]);
+        $data=[];
+        $is_buddy=false;
+        $AllAssigned=[];
+        $IsABubby = DB::table("user_roles")->where('user_id',$id)->where('role','buddy')->get();
+        
+        if(sizeOf($IsABubby) < 1){
+            $BuddyReq = DB::table("buddy_request")->where('student_id','=',$id)->get();
+            if(sizeOf($BuddyReq) > 0){
+                foreach($BuddyReq as $Breq){
+                    array_push($data,(array) $Breq);
+                }
+            }
+        }else {
+            $is_buddy=true;
+            $All = DB::table("buddies_allocations")->where('buddy_id',$id)->get();
+            foreach ($All as $value) {
+                $UserAssigned = DB::table("users")->select('surname','other_names','email')->where('id',$value->student_id)->limit(1)->get();
+                $UserAssignedDetails = DB::table("student_details")->where('student_id',$value->student_id)->limit(1)->get();
+                array_push($AllAssigned,array_merge((array)$UserAssigned[0],(array)$UserAssignedDetails[0]));
+            }
+        }
+
+        return view('Layouts/studentActions/Buddyprogram',['RequestsData'=>$data,'allAllocated'=>$AllAssigned,'is_buddy'=>$is_buddy]);
     }
     public function MyBuddyRequest(request $request){
         $id = $request->user()->id;      
@@ -417,7 +438,7 @@ class studentactions extends Controller
         }
     }
     
-    Public function cancelExtApp(Request $request){
+    public function cancelExtApp(Request $request){
         $id = $request->user()->id; 
         $KppAppCancel = DB::table("extension_application")->where('student_id',$id)->where('application_status','pending')->delete();
         if($KppAppCancel){
@@ -425,7 +446,7 @@ class studentactions extends Controller
         }
         return back()->with('extApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
     }
-    Public function cancelKppApp(Request $request){
+    public function cancelKppApp(Request $request){
         $id = $request->user()->id; 
         $KppAppCancel = DB::table("kpps_application")->where('student_id',$id)->where('application_status','pending')->delete();
         if($KppAppCancel){
@@ -433,17 +454,19 @@ class studentactions extends Controller
         }
         return back()->with('kppApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
     }
-    Public function cancelBuddy(Request $request){
+    public function cancelBuddy(Request $request){
         $id = $request->user()->id; 
         $BuddyCancel = DB::table("buddy_request")->where('student_id',$id)->update(['status'=>'cancel']);
+
         if($BuddyCancel){
             return back()->with('buddy_cancel_success','You have canceled your buddy request successfully. You can not re-activate your request, place a new request when needed.');
         }
         return back()->with('buddy_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
     }
-    Public function MyBuddyAllocation(Request $request){
+    public function MyBuddyAllocation(Request $request){
         $id = $request->user()->id;        
         $data=[];
+
         $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id')->where('student_id',$id)->limit(1)->get();
         if(sizeOf($BuddyId) > 0){
             $BuddyUser = DB::table("users")->select('surname','other_names','email')->where('id',$BuddyId[0]->buddy_id)->limit(1)->get();
@@ -470,12 +493,29 @@ class studentactions extends Controller
          return view('Layouts/studentActions/kppapplicationedit', compact('data'));
     }
     
-    Public Function downloadVisaFile(Request $request, $file){   
+    // public function downloadVisaFile(Request $request, $file){   
                 
-        return response()->download(public_path('Storage/visaExtensionfiles/'.$file));    
+    //     return response()->download(public_path('Storage/visaExtensionfiles/'.$file));    
+    // }
+    public function downloadKpps(Request $request,$file){    
+        $file_path = public_path('Storage/kpps/'. $file);
+        if (file_exists($file_path)){
+            return Response::download($file_path, $file, [
+                'Content-Length: '. filesize($file_path)
+            ]);
+        }else{
+            return back()->with('download_fail','Requested file does not exist on our server!');
+        }   
     }
-    Public Function download(Request $request, $file){       
-        return response()->download(public_path('Storage/kpps/'.$file));    
+    public function downloadExtensions(Request $request,$file){    
+        $file_path = public_path('Storage/extension/'. $file);
+        if (file_exists($file_path)){
+            return Response::download($file_path, $file, [
+                'Content-Length: '. filesize($file_path)
+            ]);
+        }else{
+            return back()->with('download_fail','Requested file does not exist on our server!');
+        }   
     }
 
 

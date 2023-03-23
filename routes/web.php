@@ -40,6 +40,8 @@ Route::get('/home', 'App\Http\Controllers\DashboardController@home')->name('home
 Route::get('/passwordreset', [PasswordResetLinkController::class, 'create']);
 
 Route::post('/getBuddyDetails', [BuddyController::class, 'getBuddyDetails']);
+Route::get('/downloadKpps/{file}', [studentactions::class, 'downloadKpps']);
+Route::get('/downloadExtension/{file}', [studentactions::class, 'downloadExtensions']);
 
 Route::get('/csv', [CountryController::class, 'readFile']);
 Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
@@ -70,8 +72,7 @@ Route::group(['middleware' => ['auth']], function(){
 
 
      Route::get('/MyVisaRequestVIEW/{id}', [studentactions::class, 'NewVisaAPPVIEW'])->middleware('rule:student');
-     Route::get('/MyVisaRequestDownload/{file}/', [studentactions::class, 'downloadVisaFile'])->middleware('rule:student');
-     Route::get('/NewkppAPPFILEDOWNLOAD/{file}/', [studentactions::class, 'download'])->middleware('rule:student');
+     Route::get('/MyVisaRequestDownload/{file}', [studentactions::class, 'downloadVisaFile'])->middleware('rule:student');
 
 
      
@@ -127,8 +128,10 @@ Route::group(['middleware' => ['auth']], function(){
 
 
      Route::get('/ManageBuddies', [adminactions::class, 'BuddiesManagement'])->middleware('rule:admin')->middleware('rule:super_admin');
+     Route::post('/RegisterBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.makeBuddy');
+     Route::post('/dismissBudy', [adminactions::class, 'RemoveAsBuddy'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.dismissBd');
      Route::get('/AddNewBuddy', [adminactions::class, 'AddNewBuddy'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.AddNewBuddy');
-     Route::post('/EnrolNewBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.EnrolNewBuddy');
+    //  Route::post('/EnrolNewBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.EnrolNewBuddy');
      Route::get('/listofBuddies',[adminactions::class,'getAllBuddies'])->middleware('rule:admin')->middleware('rule:super_admin');
      Route::post('/EditAllocatedBuddy',[adminactions::class,'EditAllocatedBuddy'])->middleware('rule:admin')->middleware('rule:super_admin');
      Route::post('/AllocateBuddy',[adminactions::class,'AllocateBuddy'])->middleware('rule:admin')->middleware('rule:super_admin');

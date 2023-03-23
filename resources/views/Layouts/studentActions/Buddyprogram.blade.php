@@ -4,6 +4,7 @@
            
             
             <div class="row">
+                @if(!$is_buddy)
                             <div class="col-xl-4 col-md-6">
                                 <div class="card bg-info text-white mb-4">
                                     <div class="card-body">Request the Allocation of a Buddy</div>
@@ -101,6 +102,55 @@
                     </div>
                 </div>
             </div>
+            @endif
+            @if($is_buddy)
+
+                        <!-- allAllocated -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table mr-1"></i>
+                        List of Students Allocated. Total of ({{sizeOf($allAllocated)}})
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                    <th>Student Id</th>
+                                    <th>Student Name</th>
+                                    <th>Student Email</th>
+                                    <th>Student Telephone</th>
+                                    <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tfoot>
+                                    <tr>
+                                        <th>Student Id</th>
+                                        <th>Student Name</th>
+                                        <th>Student Email</th>
+                                        <th>Student Telephone</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </tfoot>
+                                <tbody>
+                                @foreach($allAllocated as $st)
+                                    <tr>
+                                        <td>{{$st['student_id']}}</td>
+                                        <td>{{$st['surname'].' '.$st['other_names']}}</td>
+                                        <td>{{$st['email']}}</td>
+                                        <td>{{$st['phone_number']}}</td>
+                                        <td>
+                                            <span class="fas fa-eye" aria-hidden="false"></span>
+                                            
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </div>
            
 @endsection

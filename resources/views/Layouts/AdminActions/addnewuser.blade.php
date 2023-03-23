@@ -8,13 +8,7 @@
                                 <label class="form-check-label" for="new_staff">A New Staff</label>
                             </div>
                             </li>
-                        </ol>   
-                        @if(Session::has('New_User_Added') || Session::has('New_Student_Added'))
-                        <div class="alert alert-success" role="alert">
-                        {{Session::get('New_User_Added')}}
-                        {{Session::get('New_Student_Added')}}
-                        </div>
-                        @endif
+                        </ol> 
                         @if(Session::has('New_User_Added') || Session::has('New_Student_Added'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('New_User_Added')}}
