@@ -35,12 +35,21 @@
       <li class="sidebar-brand">
         <a class="js-scroll-trigger" href="#page-top">Welcome</a>
       </li>
+      @if(!Auth::user())
       <li class="sidebar-nav-item">
         <a class="js-scroll-trigger" href="{{route('login')}}" target="_blank">Login</a>
       </li>
       <li class="sidebar-nav-item">
         <a class="js-scroll-trigger" href="{{ __('signup')}}" target="_blank">Register an International Student</a>
       </li>
+      @else
+      <li class="sidebar-nav-item">
+        <a class="js-scroll-trigger" href="{{ route('dashboard')}}" target="_blank">
+        <span>My Account</span>
+        <small>{{!Auth::user()->id}}</small>
+        </a>
+      </li>
+      @endif
     </ul>
   </nav>
   <!-- Header -->
