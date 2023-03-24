@@ -97,7 +97,7 @@ Route::group(['middleware' => ['auth']], function(){
      
      /** Admin Actions */
      Route::get('/verifyAcnt/{email}/{msg}', [MailController::class, 'index'])->middleware('rule:admin')->middleware('rule:super_admin')->name('emailsend');
-     Route::post('/editUserData', [adminactions::class, 'editUserData'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.editUserData');
+     Route::post('/editUserData', [adminactions::class, 'editUserData'])->name('add.editUserData');
      Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.activate');
      Route::get('/kppRequestList', [adminactions::class, 'getAllkppApplications'])->middleware('rule:admin')->middleware('rule:super_admin');
      Route::get('/VisaRequestList', [adminactions::class, 'getAllvisaextensionrequests'])->middleware('rule:admin')->middleware('rule:super_admin');

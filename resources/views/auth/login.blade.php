@@ -18,16 +18,15 @@
 </head>
  <body>  
     <div class="container">
-    <div class="row">
-        <div class="col-sm-6 col-md-4 col-md-offset-4">
-            <div class="account-wall">
-            <div class="mx-auto" style="width: 28rem; align:center;">
-            <img class="card-img-top" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
-        </div> 
-                <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
-                <form class="form-signin" method="POST" action="{{ route('login') }}">
-                @csrf
-                <!-- <x-auth-session-status class="mb-4" :status="session('user')" /> -->
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-md-offset-4">
+                <div class="account-wall">
+                <div class="mx-auto" style="width: 28rem; align:center;">
+                <img class="card-img-top" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
+            </div> 
+            <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+            <form class="form-signin" method="POST" action="{{ route('login') }}">
+            @csrf
                 <x-auth-validation-errors class="mb-4" :errors="$errors" />
                 <label>SUID or USERNAME </label><br/>
 
@@ -41,11 +40,11 @@
                     Remember me
                 </label>
                 <a href="{{route('password.request')}}" class="pull-right need-help">Forgotten Password? </a><span class="clearfix"></span>
-                </form>
-            </div>
-            <a href="#" class="text-center new-account">Create an account </a>
+            </form>
         </div>
+            <a href="#" class="text-center new-account">Create an account </a>
     </div>
-</div>
+    <!-- </div>
+</div> -->
  </body>
  </html>

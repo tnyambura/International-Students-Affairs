@@ -37,21 +37,23 @@
       </li>
       @if(!Auth::user())
       <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="{{route('login')}}" target="_blank">Login</a>
+        <!-- <span class="nav-link" style='color:#fff' role='button' data-toggle="modal" data-target="#loginModal">Login</span> -->
+        <a class="js-scroll-trigger" href="{{route('login')}}" >Login</a>
       </li>
       <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="{{ __('signup')}}" target="_blank">Register an International Student</a>
+        <a class="js-scroll-trigger" href="{{ __('signup')}}" >Register an International Student</a>
       </li>
       @else
       <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="{{ route('dashboard')}}" target="_blank">
+        <a class="js-scroll-trigger" href="{{ route('dashboard')}}" >
         <span>My Account</span>
-        <small>{{!Auth::user()->id}}</small>
+        <small class='text-muted'>{{Auth::user()->surname}}</small>
         </a>
       </li>
       @endif
     </ul>
   </nav>
+
   <!-- Header -->
   <header class="masthead d-flex" style="padding-top:20%">
     <div class="container text-center my-auto">

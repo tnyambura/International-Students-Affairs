@@ -15,9 +15,7 @@ class pages extends Controller
         return view('Layouts/superadminHome');
     }
     public function studentDash(){
-        $id = Auth::user()->id; 
-        $fetcher =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
         
-        return view('Layouts/studentDash',['userDetails'=>$fetcher[0]]);
+        return view('Layouts/studentDash',['user'=>$fetcher[0]]);
     }
 }
