@@ -154,13 +154,17 @@ class adminactions extends Controller
     public function activate_user(Request $request){
         $statusSet=0;
         $Message='deactivate';
+        $msg='Your account has been temporary deactivated. Reach out to the admin for reactivation. ';
         if(strtolower($request->action) === 'activate'){
             $statusSet = 1;
             $Message='activate';
+            $msg='Your account has been activated successfully. Your default password is 123456. Login and change it. ';
         }
         $activateUser = DB::table('users')->where('id', $request->user_id)->update(['status'=>$statusSet]);
         if($activateUser){
-            return back();
+            // 
+            return redirect()->route('emailsend',[$request->email,$msg]);
+            // return back();
         }else{
             return back()->with('activation_failed','We couldn\'t '.$Message.' this account at the moment. Try later!'  );
         }
@@ -258,14 +262,13 @@ class adminactions extends Controller
         return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
     }
     public function RemoveAsBuddy(Request $req){
-        if(DB::table('user_roles')->where('user_id',$req->bd_id)->where('role','buddy')->delete()){
-            $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
-
-            foreach ($allAllocatedUsers as $value) {
-                if(DB::table('buddy_request')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
-                    DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
-                }
+        $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
+        foreach ($allAllocatedUsers as $value) {
+            if(DB::table('buddy_request')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
+                DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
             }
+        }
+        if(DB::table('user_roles')->where('user_id',$req->bd_id)->where('role','buddy')->delete()){
             return back()->with('Buddy_Removed_success','User successfully removed as buddy!');
         }else{
             return back()->with('Buddy_Removed_fail','We couldn\'t remove the user as buddy. Try later!');

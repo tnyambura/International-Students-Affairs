@@ -9,6 +9,7 @@ use App\Http\Controllers\pages;
 use App\Http\Controllers\Actions;
 use App\Http\Controllers\studentactions;
 use App\Http\Controllers\UpdateVisaRecords;
+use App\Http\Controllers\MailController;
 use App\Http\Controllers\adminactions;
 use App\Http\Controllers\superadminactions;
 use App\Http\Controllers\BuddyController;
@@ -95,6 +96,7 @@ Route::group(['middleware' => ['auth']], function(){
      
      
      /** Admin Actions */
+     Route::get('/verifyAcnt/{email}/{msg}', [MailController::class, 'index'])->middleware('rule:admin')->middleware('rule:super_admin')->name('emailsend');
      Route::post('/editUserData', [adminactions::class, 'editUserData'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.editUserData');
      Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.activate');
      Route::get('/kppRequestList', [adminactions::class, 'getAllkppApplications'])->middleware('rule:admin')->middleware('rule:super_admin');

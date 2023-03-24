@@ -3,7 +3,7 @@
         <div class="container-fluid"><br/>
            
             
-            <div class="row d-flex flex-fill">
+            <div class="row">
                             <!-- <div class="col-xl-3 col-md-6">
                                 <div class="card bg-secondary text-white mb-4" data-toggle="modal" data-target="#RegisterBuddyModal">
                                     <div class="card-body">Register A New trained and qualified Buddy</div>
@@ -82,19 +82,17 @@
                                             <form method="POST" action="{{route('add.dismissBd')}}">
                                                 @csrf
                                                 <input type="hidden" name="bd_id" value="{{$buddy->id}}"/>
-                                                <button type="submit" id="rmvBd_{{$buddy->id}}"><span class="fas fa-trash" aria-hidden="false"></span> Remove as Buddy</button>
+                                                <div role='button' id="rmvBd_{{$buddy->id}}"><span class="fas fa-trash" aria-hidden="false"></span> Remove as Buddy</div>
                                             </form>
                                         </td>
-                                        <!-- <script>
+                                        <script>
                                             document.querySelector("#rmvBd_{{$buddy->id}}").addEventListener('click',function(e){
                                                 e.preventDefault()
                                                 if(confirm('Do you want to remove {{$buddy->surname.' '.$buddy->other_names}} as a buddy? All the allocated students will have a pending status in the request table')){
-                                                    // e.target.attr
-                                                    // e.submit()
-                                                    e.currentTarget.submit()
+                                                    this.parentNode.submit()
                                                 }
                                             })
-                                        </script> -->
+                                        </script>
                                     </a>  
                                     </tr>
                                 @endforeach

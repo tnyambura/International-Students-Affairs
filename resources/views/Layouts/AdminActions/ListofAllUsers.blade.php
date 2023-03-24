@@ -24,6 +24,16 @@
                         {{Session::get('user_update_failed')}}
                         </div>
                         @endif 
+                        @if(Session::has('email_send_success'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('email_send_success')}}
+                        </div>
+                        @endif 
+                        @if(Session::has('email_send_fail'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('email_send_fail')}}
+                        </div>
+                        @endif 
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
@@ -159,6 +169,7 @@
                                                                     <form method="POST" action='{{route("add.activate")}}'>
                                                                         @csrf
                                                                         <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
+                                                                        <input type="hidden" name="email" value='{{$user["email"]}}'/>
                                                                         @if($user['status'] == 0)
                                                                             <input type="hidden" name="action" value='activate'/>
                                                                             <button type='submit' class="btn btn-success w-100">Activate User</button>
