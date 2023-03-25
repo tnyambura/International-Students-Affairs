@@ -619,10 +619,11 @@ class studentactions extends Controller
                 ]
             );
             $id = $request->suID;        
+            $CheckPassport = DB::table("student_details")->where('passport_number',$request->passportNUMBER)->get();
             $data = DB::select("select * from users WHERE id= $id ");
             $status = 0;
 
-            if($data == false){        
+            if(sizeOf($data) <1 && sizeOf($CheckPassport) <1){        
                 $post = new addNewStudent();
                 $postDetails = new addStudentDetails();
                 $postGuardian = new studentGuardian();
@@ -680,7 +681,7 @@ class studentactions extends Controller
                 $postRole->save();
                 return back()->with('New_Student_Added','New International Student data has been added Successfully');
             }else{
-                return back()->with('New_Student_failed','A student with Same Admission Number is already Registered, please write to studentpass@strathmore.edu for assistance!');
+                return back()->with('New_Student_failed','A student with Same Admission No | Passport No is already Registered, please write to studentpass@strathmore.edu for assistance!');
             }
         }else{
             return back()->with('New_Student_failed','some feilds are missing!');

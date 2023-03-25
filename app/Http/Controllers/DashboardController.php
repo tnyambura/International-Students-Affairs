@@ -30,9 +30,11 @@ class DashboardController extends Controller
                 case 'student':
                     $userRoleVal = 'Layouts.studentDash';
                     $id = Auth::user()->id; 
-                    $user =  DB::table('users')->select('surname','other_names','email')->where('id',$id)->limit(1)->get();
-                    $userDetails =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
-                    array_push($fetcher, array_merge((array)$user[0],(array)$userDetails[0]));
+                    if($id){
+                        $user =  DB::table('users')->select('surname','other_names','email')->where('id',$id)->limit(1)->get();
+                        $userDetails =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
+                        array_push($fetcher, array_merge((array)$user[0],(array)$userDetails[0]));
+                    }
                     
                     break;
                 
@@ -43,8 +45,11 @@ class DashboardController extends Controller
         }else{
             redirect('/login');
         }
-
+        if(sizeOf($fetcher) > 0){
             return view($userRoleVal,['user'=>$fetcher[0]]);
+        }else{
+            return view($userRoleVal);
+        }
     // if(Auth::user()->hasRole('student')){
     //     return view('Layouts.studentDash');
     // }
