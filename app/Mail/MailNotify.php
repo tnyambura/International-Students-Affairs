@@ -29,6 +29,6 @@ class MailNotify extends Mailable
      */
     public function build()
     {
-        return $this->from('ishapa.given@strathmore.edu','Given M')->subject($this->data['subject'])->view('emails.index')->with('data',$this->data);
+        return $this->from('internationalstudents@strathmore.edu','International Students Affairs')->subject($this->data['subject'])->view('emails.index')->with('data',$this->data);
     }
 }

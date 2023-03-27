@@ -13,7 +13,7 @@
        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <h3>Account Confirm</h3>
+        <h3>Welcome to the International students Portal</h3>
         <p>{{$data['body']}}</p>
     </body>
 </html>
