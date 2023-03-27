@@ -154,11 +154,12 @@ class adminactions extends Controller
     public function activate_user(Request $request){
         $statusSet=0;
         $Message='deactivate';
-        $msg='Your account has been temporary deactivated. Reach out to the admin for reactivation. ';
+        $msg='Your account has temporarily been deactivated. Please reach out to the administrator via studentpass@strathmore.edu for assistance with reactivation. ';
         if(strtolower($request->action) === 'activate'){
             $statusSet = 1;
             $Message='activate';
-            $msg='Your account has been activated successfully. Your default password is 123456. Login and change it. ';
+            $msg='Your account has been activated successfully. 
+            Your default password is 123456. Kindly log in and reset the password. ';
         }
         $activateUser = DB::table('users')->where('id', $request->user_id)->update(['status'=>$statusSet]);
         if($activateUser){
