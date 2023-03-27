@@ -78,14 +78,16 @@
                                 </tr>
                             </tfoot>
                             <tbody>
-                                @if($RequestsData !== false)
+                                @if(sizeOf($RequestsData) >0)
                                     @foreach($RequestsData as $data)
                                     <tr>
-                                        <td>{{$data->buddy_request_id}}</td>
-                                        <td>{{$data->request_date}}</td>
-                                        <td>{{$data->status}}</td>
+                                        <td>{{$data['buddy_request_id']}}</td>
+                                        <td>{{$data['request_date']}}</td>
+                                        <td>{{$data['status']}}</td>
                                         <td>    
-                                            @if(strtolower($data->status) == 'pending') 
+                                            @if(strtolower($data['status']) == 'cancel')
+                                            <span class="fas fa-trash" aria-hidden="true" style="color:grey; cursor: default"></span> ------
+                                            @elseif(strtolower($data['status']) == 'pending') 
                                             <a href="{{__('cancelBuddy')}}" style="color:red">
                                                 <span class="fas fa-trash" rule="button" aria-hidden="true"></span> Cancel
                                             </a>

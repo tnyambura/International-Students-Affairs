@@ -39,6 +39,7 @@ Route::get('/signup', 'App\Http\Controllers\studentactions@NewSignup')->name('si
 Route::post('/signup', 'App\Http\Controllers\studentactions@AddNewSignup')->name('Add.signup');
 Route::get('/home', 'App\Http\Controllers\DashboardController@home')->name('home');
 Route::get('/passwordreset', [PasswordResetLinkController::class, 'create']);
+Route::post('/passwordreset', [PasswordResetLinkController::class, 'create'])->name('password.email');
 
 Route::post('/getBuddyDetails', [BuddyController::class, 'getBuddyDetails']);
 Route::get('/downloadKpps/{file}', [studentactions::class, 'downloadKpps']);

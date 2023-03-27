@@ -78,9 +78,13 @@
                                         required>
                                   </div>
                                     <div class="col-md-3 mb-3">
-                                    <label for="Nationality">Nationality</label>
-                                    <input type="text" class="form-control"  name ="Nationality" id="Nationality" placeholder="Nationality"
-                                        required>
+                                    <label for="Nationality">Country</label>
+                                    <select class='form-select' name ="Nationality" id="Nationality" required>
+                                        <option>--SELECT COUNTRY--</option>
+                                        @foreach($countries as country)
+                                            <option value='{{$country->country}}'>{{$country->country}}</option>
+                                        @endforeach
+                                    </select>
                                     </div>
                                     <div class="col-md-3 mb-3">
                                     <label for="validationServerUsername33">Passport Number</label>

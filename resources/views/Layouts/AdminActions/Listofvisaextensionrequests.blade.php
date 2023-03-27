@@ -4,8 +4,16 @@
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
                             <li class="breadcrumb-item active" style="color:white;">List Student Visa Extension Requests</li>
                         </ol>
-                       
-                        
+                        @if(Session::has('email_send_success') )
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('email_send_success')}}
+                        </div>
+                        @endif
+                        @if(Session::has('email_send_fail') )
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('email_send_fail')}}
+                        </div>
+                        @endif
                        
                         <div class="card mb-4">
                             <div class="card-header">
@@ -57,6 +65,7 @@
                                                         <form method="POST" action="{{route('add.extensionStatusUpdate')}}">
                                                         @csrf
                                                             <input type='hidden' value='{{$visarequest["id"]}}' name='app_id'/>
+                                                            <input type='hidden' value='{{$visarequest["email"]}}' name='applicant_email'/>
                                                             <select class="form-select form-select-lg mt-3 mb-3" id="application_status_select" width='100' name='status_select'>
                                                                 @foreach($applicationStatus[0] as $option)
                                                                     @if(strtolower($option) == strtolower($applicationStatus[1]))
@@ -94,7 +103,7 @@
                                                                     <div class="card mb-4">
                                                                         <div class="card-header">
                                                                             <i class="fas fa-table mr-1"></i>
-                                                                        My Student Pass Application View.
+                                                                        Visa extension Application View.
                                                                         </div>
                                                                         
                                                                         <div class="card-body">                                    

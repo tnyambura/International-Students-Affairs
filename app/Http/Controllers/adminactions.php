@@ -73,16 +73,19 @@ class adminactions extends Controller
     public function ExtensionStatusUpdate(Request $request){
          
         $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select]); 
+        $msg = 'Your Visa extention application is '.$request->status_select;
         if($updateStatus){
-            return back()->with('success','success');
+            return redirect()->route('emailsend',[$request->applicant_email,$msg]);
         }
         return back()->with('error','could not update data');
     }
     public function KppsStatusUpdate(Request $request){
          
         $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select]); 
+        $msg = 'Your Student Pass application is '.$request->status_select;
         if($updateStatus){
-            return back()->with('success','success');
+            return redirect()->route('emailsend',[$request->applicant_email,$msg]);
+            // return back()->with('success','success');
         }
         return back()->with('error','could not update data');
     }

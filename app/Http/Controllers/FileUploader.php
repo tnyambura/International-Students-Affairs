@@ -20,7 +20,7 @@ class FileUploader extends Controller
         $ext = end($fileNameParts);
 
         
-        $fileRename = $request->user()->id.'_'.$fieldname.'_'.time().'.'.$file->extension();
+        $fileRename = $request->user()->id.'_'.$fieldname.'.'.$file->extension();
 
         $file->move('storage/'.$path,$fileRename);
         

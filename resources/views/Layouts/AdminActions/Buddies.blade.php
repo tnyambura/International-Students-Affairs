@@ -88,7 +88,7 @@
                                         <script>
                                             document.querySelector("#rmvBd_{{$buddy->id}}").addEventListener('click',function(e){
                                                 e.preventDefault()
-                                                if(confirm('Do you want to remove {{$buddy->surname.' '.$buddy->other_names}} as a buddy? All the allocated students will have a pending status in the request table')){
+                                                if(confirm('Do you want to remove {{$buddy->surname.' '.$buddy->other_names}} as a buddy? All the allocated students will be deallocated.')){
                                                     this.parentNode.submit()
                                                 }
                                             })

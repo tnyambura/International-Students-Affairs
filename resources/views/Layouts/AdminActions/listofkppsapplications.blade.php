@@ -4,6 +4,11 @@
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
                             <li class="breadcrumb-item active" style="color:white;">List of Student pass Application Requests</li>
                         </ol>
+                        @if(Session::has('email_send_success') )
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('email_send_success')}}
+                        </div>
+                        @endif
                         @if(Session::has('download_success') )
                         <div class="alert alert-success" role="alert">
                         {{Session::get('download_success')}}
@@ -12,6 +17,11 @@
                         @if(Session::has('download_fail') )
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('download_fail')}}
+                        </div>
+                        @endif
+                        @if(Session::has('email_send_fail') )
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('email_send_fail')}}
                         </div>
                         @endif
                         
@@ -65,6 +75,7 @@
                                                         <form method="POST" action="{{route('add.kppsStatusUpdate')}}">
                                                         @csrf
                                                             <input type='hidden' value='{{$kpps["id"]}}' name='app_id'/>
+                                                            <input type='hidden' value='{{$kpps["email"]}}' name='applicant_email'/>
                                                             <select class="form-select form-select-lg" id="application_status_select" width='100' name='status_select'>
                                                                 @foreach($applicationStatus[0] as $option)
                                                                     @if(strtolower($option) == strtolower($applicationStatus[1]))
