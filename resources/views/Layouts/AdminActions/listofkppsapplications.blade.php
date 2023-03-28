@@ -102,7 +102,7 @@
                                                         </form>
                                                         <div class="modal fade modal-md w-100"  id="Viewkppapp_{{$kpps['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                                         aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
+                                                            <div class="modal-dialog modal-lg" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header text-center">
                                                                         <h4 class="modal-title w-100 font-weight-bold">{{$kpps['surname'].' '.$kpps['other_names']}}</h4>
@@ -116,75 +116,102 @@
                                                                         My Student Pass Application View.
                                                                         </div>
                                                                         
-                                                                        <div class="card-body">                                    
-                                                                            <div class="form-row">
+                                                                           <div class="card-body">                                    
+                                                                                    <div class="form-row " style="text-align:justify;">
 
-                                                                                <div class="col-md-4 mb-3">
-                                                                                <label for="Id Number">Strathmore ID:</label>&nbsp&nbsp {{$kpps['student_id']}} 
-                                                                                </div> 
-                                                                                <div class="col-md-4 mb-3">
-                                                                                    <label for="Surname">Surname:</label>&nbsp&nbsp{{$kpps['surname']}}                                  
-                                                                                </div>
-                                                                                <div class="col-md-4 mb-3">
-                                                                                    <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$kpps['other_names']}}                                                                      
-                                                                                </div>
-                                                                                <div class="col-md-4 mb-3">
-                                                                                    <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$kpps['passport_number']}}
-                                                                                </div>                            
-                                                                            </div>
-                                                                            <div class="form-row">
-                                                                                <div class="col-md-4 mb-3">
-                                                                                <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp ---------                                  
-                                                                                </div>                                   
-                                                                                <div class="col-md-4 mb-3">
-                                                                                <label for="Othernames">Date Requested:</label>&nbsp&nbsp {{$kpps['application_date']}}                                                                      
-                                                                                </div>
-                                                                            </div><br/>
-                                                                            <h4>uploaded Documents</h4><br/>
+                                                                                                <div class="col">
+                                                                                                    <div class="form-group">
+                                                                                                    <label for="usr">Strathmore ID:</label>
+                                                                                                    <input type="text" class="form-control" id="usr" value="{{$kpps['student_id']}}" disabled>
+                                                                                                    </div>
+                                                                                                </div> 
+                                                                                                <div class="col">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="usr">Surname:</label>
+                                                                                                    <input type="text" class="form-control" id="usr" value="{{$kpps['surname']}} " disabled>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col">
+                                                                                                <div class="form-group">
+                                                                                                    <label for="usr">Other Names:</label>
+                                                                                                    <input type="text" class="form-control" id="usr" value="{{$kpps['other_names']}}" disabled>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                    </div>
+
+                                                                                    <div class="form-row" style="text-align:justify;">
+                                                                                                <div class="col">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="usr">Passport Number:</label>
+                                                                                                        <input type="text" class="form-control" id="usr" value="{{$kpps['passport_number']}}  " disabled>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="usr">Date Of Entryr:</label>
+                                                                                                        <input type="text" class="form-control" id="usr" value="----" disabled>
+                                                                                                    </div>
+                                                                                                </div>
+                                                                                                <div class="col">
+                                                                                                    <div class="form-group">
+                                                                                                        <label for="usr">Date Requested:</label>
+                                                                                                        <input type="text" class="form-control" id="usr" value="{{$kpps['application_date']}}  " disabled>
+                                                                                                    </div>
+                                                                                                </div>                                                                                                                                                                                                                                     
+                                                                             </div><br/>    
+
+                                                                            <!-- Uploaded Documents -->        
+                                                                            <h4>Required Documents</h4><br/>
                                                                             <div class="container">
-                                                                                <div class="row">
-                                                                                <div class="col-sm-6">
-                                                                                <label>Passport Biodata Page:</label>&nbsp&nbsp
-                                                                                <a href="/downloadKpps/{{$kpps['passport_biodata']}}" style="color:green">
-                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                <label>Passport Visa Page:</label>&nbsp&nbsp
-                                                                                <a href="/downloadKpps/{{$kpps['current_visa']}}" style="color:green">
-                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                                </div>
-                                                                                </div></br>
-                                                                                <div class="row">
-                                                                                <div class="col-sm-6">
-                                                                                <label>Academic Transcripts:</label>&nbsp&nbsp
-                                                                                <a href="/downloadKpps/{{$kpps['accademic_transcript']}}" style="color:green">
-                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                <label>Parents ID/Biodata Page:</label>&nbsp&nbsp
-                                                                                <a href="/downloadKpps/{{$kpps['guardian_biodata']}}"style="color:green" >
-                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                                </div>
-                                                                                </div></br>
-                                                                                <div class="row">
-                                                                                <div class="col-sm-6">
-                                                                                <label>Commitment Letter:</label>&nbsp&nbsp
-                                                                                <a href="/downloadKpps/{{$kpps['commitment_letter']}}" style="color:green">
-                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                                </div>
-                                                                                <div class="col-sm-6">
-                                                                                <label>Police Clearance/Good Conduct:</label>&nbsp&nbsp
-                                                                                <a href="/downloadKpps/{{$kpps['police_clearance']}}" style="color:green">
-                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                                </div>
-                                                                                </div></br>
-                                                                                <div class="row">
-                                                                                <div class="col-sm-6">
-                                                                                <label>Most Recent Passport Pictures:</label>&nbsp&nbsp
-                                                                                <a href="/downloadKpps/{{$kpps['passport_picture']}}" style="color:green">
-                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                                </div>  
-                                                                            </div>
+                                                                              <div class="row">
+                                                                                   
+                                                                                <table class="table table-striped">
+                                                                                    <thead>
+                                                                                    <tr>
+                                                                                        <th>Passport Biodata</th>
+                                                                                        <th>Passport Visa Page:</th>
+                                                                                        <th>Academic Transcripts</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    <tr>
+                                                                                        <td > <a href="/downloadKpps/{{$kpps['passport_biodata']}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadKpps/{{$kpps['current_visa']}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadKpps/{{$kpps['accademic_transcript']}}" style="color:green"> Download</a></td>
+                                                                                    </tr>
+                                                                                  </tbody>
+
+                                                                                  <thead>
+                                                                                    <tr>
+                                                                                        <th>Commitment Letter</th>
+                                                                                        <th>Police Clearance:</th>
+                                                                                        <th>Parents ID/Biodata</th>
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    <tr>
+                                                                                        <td > <a href="/downloadKpps/{{$kpps['commitment_letter']}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadKpps/{{$kpps['police_clearance']}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadKpps/{{$kpps['guardian_biodata']}}" style="color:green"> Download</a></td>
+                                                                                    </tr>
+                                                                                  </tbody>
+
+                                                                                  <thead>
+                                                                                    <tr>
+                                                                                        <th>Most Recent Passport Picture</th>
+                                                                                        
+                                                                                    </tr>
+                                                                                    </thead>
+                                                                                    <tbody>
+                                                                                    <tr>
+                                                                                        <td > <a href="/downloadKpps/{{$kpps['passport_picture']}}" style="color:green"> Download</a></td>
+                                                                                       
+                                                                                    </tr>
+                                                                                  </tbody>
+                                                                                </table>
+                                                                         
+                                                                               
+                                                            </div>
                                                                         </div>
                                                                         <div class="card-footer">
                                                                             but
