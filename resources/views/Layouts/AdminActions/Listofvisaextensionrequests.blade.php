@@ -14,6 +14,11 @@
                         {{Session::get('email_send_fail')}}
                         </div>
                         @endif
+                        @if(Session::has('error') )
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('error')}}
+                        </div>
+                        @endif
                        
                         <div class="card mb-4">
                             <div class="card-header">
@@ -28,8 +33,6 @@
                                                 <th>application id</th>
                                                 <th>student id</th>
                                                 <th>student names</th>
-                                                <th>Passport Number</th>
-                                                <th>Date Requested</th>
                                                 <th>NATIONALITY</th>
                                                 <th>status</th>
                                                 <th>Actions</th>
@@ -40,8 +43,6 @@
                                                 <th>application id</th>
                                                 <th>student id</th>
                                                 <th>student names</th>
-                                                <th>Passport Number</th>
-                                                <th>Date Requested</th>
                                                 <th>NATIONALITY</th>
                                                 <th>status</th>
                                                 <th>Actions</th>
@@ -53,46 +54,18 @@
                                                     <td> {{$visarequest['id']}}</td>
                                                     <td> {{$visarequest['student_id']}}</td>
                                                     <td> {{$visarequest['surname']}} {{$visarequest['other_names']}}</td>
-                                                    <td> {{$visarequest['passport_number']}}</td>
-                                                    <td> {{$visarequest['application_date']}}</td>
                                                     <td> {{$visarequest['nationality']}}</td>
                                                     <td> {{$visarequest['application_status']}}</td>
                                                     
-                                                    <td class="d-block">
+                                                    <td class="d-flex justify-content-around">
                                                         @php $data= Crypt::encrypt($visarequest['student_id']); @endphp                                                                                            
 
-                                                        <span class="fas fa-eye view-app-btn mt-2 mb-2" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$visarequest['id']}}" style=" color:blue"></span>
-                                                        <form method="POST" action="{{route('add.extensionStatusUpdate')}}">
-                                                        @csrf
-                                                            <input type='hidden' value='{{$visarequest["id"]}}' name='app_id'/>
-                                                            <input type='hidden' value='{{$visarequest["email"]}}' name='applicant_email'/>
-                                                            <select class="form-select form-select-lg mt-3 mb-3" id="application_status_select" width='100' name='status_select'>
-                                                                @foreach($applicationStatus[0] as $option)
-                                                                    @if(strtolower($option) == strtolower($applicationStatus[1]))
-                                                                        <option selected value='{{$option}}' >{{$option}}</option>
-                                                                    @else
-                                                                        <option value='{{$option}}' >{{$option}}</option>
-                                                                    @endif
-                                                                @endforeach
-                                                            </select>
-                                                            <input class="btn btn-outline-info p-1 btn-block select-change-btn" id="application_status_submit" type="submit" value='save'/>
+                                                        <span class="fas fa-eye " role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$visarequest['id']}}" style=" color:blue"></span>
+                                                        <span class="fas fa-upload " role='button' aria-hidden="false" data-toggle="modal" data-target="#ChangeExtapp_{{$visarequest['id']}}" style=" color:blue"></span>
 
-                                                            <script>
-                                                                let currentSelected = '<?php echo strtolower($applicationStatus[1])?>'
-                                                                let selectBox = document.querySelector('#application_status_select')
-                                                                let statusBtn = document.querySelector('#application_status_submit')
-                                                                selectBox.addEventListener('change',function(e){
-                                                                    if(currentSelected !== e.target.value){
-                                                                        statusBtn.classList.add("active")
-                                                                    }else{
-                                                                        statusBtn.classList.remove("active")
-                                                                    }
-                                                                })
-                                                            </script>
-                                                        </form>
-                                                        <div class="modal fade modal-md w-100"  id="Viewkppapp_{{$visarequest['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                        <div class="modal fade"  id="Viewkppapp_{{$visarequest['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                                         aria-hidden="true">
-                                                            <div class="modal-dialog" role="document">
+                                                            <div class="modal-dialog modal-lg" role="document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header text-center">
                                                                         <h4 class="modal-title w-100 font-weight-bold">{{$visarequest['surname'].' '.$visarequest['other_names']}}</h4>
@@ -150,17 +123,103 @@
                                                                                 <a href="/downloadExtension/{{$visarequest['current_visa']}}" style="color:green">
                                                                                 <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
                                                                                 </div> 
+                                                                                <div class="col-sm-6">
+                                                                                <label>Response File:</label>&nbsp&nbsp
+                                                                                @if($visarequest['uploads'])
+                                                                                <a href="/downloadExtension/{{$visarequest['uploads']}}" style="color:green">
+                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> 
+                                                                                @else
+                                                                                <span class="fas fa-eye" aria-hidden="false" style="color:grey"></span> No file uploaded</a> 
+                                                                                @endif
+                                                                                </div> 
                                                                             </div>
-                                                                        </div>
-                                                                        <div class="card-footer">
-                                                                            but
                                                                         </div>
                                                                     </div>
                                                                     <br/>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                        
                                                     </td>
+                                                    <div class="modal fade"  id="ChangeExtapp_{{$visarequest['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                        aria-hidden="true">
+                                                            <div class="modal-dialog modal-lg" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header text-center">
+                                                                        <h4 class="modal-title w-100 font-weight-bold">{{$visarequest['surname'].' '.$visarequest['other_names']}}</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <div class="card mb-4">
+                                                                        <div class="card-header p-0 d-flex justify-content-between">
+                                                                            <div class='m-3'>
+                                                                                <i class="fas fa-table mr-1"></i>
+                                                                                Change Application Status
+                                                                            </div>
+                                                                            @if($visarequest['uploads'])
+                                                                            <span class='p-2 px-4 bg-info d-flex justify-content-center align-items-center'>{{$visarequest['uploads']}}</span>
+                                                                            
+                                                                            @endif
+                                                                        </div>
+                                                                        
+                                                                        <div class="card-body">                                    
+                                                                        <form method="POST" action="{{route('add.extensionStatusUpdate')}}" enctype="multipart/form-data">
+                                                                        @csrf
+                                                                            <div class='d-flex'>
+
+                                                                                <input type='hidden' value='{{$visarequest["id"]}}' name='app_id'/>
+                                                                                <input type='hidden' value='{{$visarequest["email"]}}' name='applicant_email'/>
+                                                                                <div class='d-flex flex-column flex-grow-1 mr-4'>
+                                                                                    <label for="application_status_select">Change Status</label>
+                                                                                    <select class="form-select form-select w-100 outline-none" id="application_status_select" width='100' name='status_select'>
+                                                                                        @foreach($applicationStatus[0] as $option)
+                                                                                            @if(strtolower($option) == strtolower($applicationStatus[1]))
+                                                                                                <option selected value='{{$option}}' >{{$option}}</option>
+                                                                                            @else
+                                                                                                <option value='{{$option}}' >{{$option}}</option>
+                                                                                            @endif
+                                                                                        @endforeach
+                                                                                    </select>
+                                                                                </div>
+                                                                                
+                                                                                <div class='d-flex flex-column'>
+                                                                                    <label for="file_upload">Upload File</label>
+                                                                                    <input type="file" id='file_upload' name='fileResponse'/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <input class="btn btn-outline-info p-2 select-change-btn w-100 mt-4" id="application_status_submit" type="submit" value='Save'/>
+                                                                            <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+                                                                            <script>
+                                                                                $(function(){
+                                                                                    
+                                                                                    let currentSelected = '<?php echo strtolower($applicationStatus[1])?>'
+                                                                                    let parentBox = $("#ChangeExtapp_{{$visarequest['id']}}")
+                                                                                    let selectBox = parentBox.find('#application_status_select')
+                                                                                    let statusBtn = parentBox.find('#application_status_submit')
+                                                                                    selectBox.on('change',function(e){
+                                                                                        // if(e.target.value.toLowerCase() !== 'in progress' || e.target.value.toLowerCase() !== 'approved'){
+                                                                                        //     document.querySelector("#ChangeExtapp_{{$visarequest['id']}}").child('#file_upload').disabled=true
+                                                                                        // }else{
+                                                                                        //     document.querySelector("#ChangeExtapp_{{$visarequest['id']}}").child('#file_upload').disabled=false
+                                                                                        // }
+
+                                                                                        if(currentSelected !== $(this).val()){
+                                                                                            statusBtn.addClass("active")
+                                                                                        }else{
+                                                                                            statusBtn.removeClass("active")
+                                                                                        }
+
+                                                                                    })
+                                                                                })
+                                                                            </script>
+                                                                        </form>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                 </tr>
                                             @endforeach
                                           </tbody>

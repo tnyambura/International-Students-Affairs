@@ -42,7 +42,7 @@
                 <a href="{{route('password.request')}}" class="pull-right need-help">Forgotten Password? </a><span class="clearfix"></span>
             </form>
         </div>
-            <a href="#" class="text-center new-account">Create an account </a>
+            <a href="/signup" class="text-center new-account">Create an account </a>
     </div>
     <!-- </div>
 </div> -->

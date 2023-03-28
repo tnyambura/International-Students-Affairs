@@ -49,6 +49,7 @@
                                                 <th>OtherNames.</th>
                                                 <th>email</th>
                                                 <th>Telephone No</th>
+                                                <th>Role</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -60,6 +61,7 @@
                                                 <th>OtherNames.</th>
                                                 <th>email</th>
                                                 <th>Telephone No</th>
+                                                <th>Role</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -72,6 +74,11 @@
                                                 <td>{{$user['other_names']}}</td>
                                                 <td>{{$user['email']}}</td>
                                                 <td>{{$user['phone_number']}}</td>
+                                                @if($user['isbuddy'])
+                                                <td>student/buddy</td>
+                                                @else
+                                                <td>{{$user['role']}}</td>
+                                                @endif
                                                 @if($user['status'] === 1)
                                                 <td style="color:green">Activated</td>
                                                 @else
@@ -79,11 +86,11 @@
                                                 @endif
 
                                                 <td>
-                                                    <span data-toggle="modal" data-target="#Viewkppapp_{{$user['user_id']}}" class="fas fa-eye view-app-btn mt-2 mb-2" style=" color:blue"></span>
+                                                    <span data-toggle="modal" role='button' data-target="#userDetails_{{$user['user_id']}}" class="fas fa-eye view-app-btn mt-2 mb-2" style=" color:blue"></span>
                                                 <!-- <div role='button' >
                                                     View User
                                                 <div> -->
-                                                <div class="modal fade " id="Viewkppapp_{{$user['user_id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                <div class="modal fade " id="userDetails_{{$user['user_id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                                 aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
@@ -159,7 +166,7 @@
                                                                         </form>
                                                                         
                                                                     </div>
-                                                                    @if($user['status'] === 1 && $user['isbuddy'] === false)
+                                                                    @if($user['status'] === 1 && $user['isbuddy'] === false && $user['role'] === 'student')
                                                                         <form method="POST" action='{{route("add.makeBuddy")}}'>
                                                                         @csrf
                                                                             <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>

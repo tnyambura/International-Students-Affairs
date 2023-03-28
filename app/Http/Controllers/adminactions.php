@@ -8,6 +8,7 @@ use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
 use App\Http\Controllers\Auth;
+use App\Http\Controllers\FileUploader;
 use Illuminate\Support\Facades\Storage;
 use App\Models\addNewStudent;
 use App\Models\Request_Buddy;
@@ -70,9 +71,28 @@ class adminactions extends Controller
         }
         
     }
+    public function deleteFiles($files){
+        if(File::delete($files)){
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    // public function cancelExtApp(Request $request){
+    //     $id = $request->user()->id; 
+    //     $FileDlt = DB::table("extension_application")->where('student_id',$id)->where('application_status','pending')->limit(1)->get();
+    //     $files = [public_path('Storage/extension/'.$FileDlt[0]->passport_biodata),public_path('Storage/extension/'.$FileDlt[0]->entry_visa),public_path('Storage/extension/'.$FileDlt[0]->current_visa)];
+    //     if($this->deleteFiles($files)){
+            
     public function ExtensionStatusUpdate(Request $request){
          
-        $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select]); 
+        $fileUpload = null;
+        if($request->fileResponse){
+            $fileUpload = FileUploader::fileupload($request,'fileResponse','ExtensionDoc'.$request->app_id,'extension/');
+        }
+
+        $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload]); 
         $msg = 'Your Visa extention application is '.$request->status_select;
         if($updateStatus){
             return redirect()->route('emailsend',[$request->applicant_email,$msg]);
@@ -173,8 +193,14 @@ class adminactions extends Controller
             return back()->with('activation_failed','We couldn\'t '.$Message.' this account at the moment. Try later!'  );
         }
     }
-    public function getallusers(){
+    public function applicationsResponse(){
+
+    }
+
+    public function getallusers(Request $req){
+        $id = $req->user()->id;
         $data=[];
+        $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
         $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
         foreach ($GetUsers as $value) {
             $thisUser=[];
@@ -184,8 +210,14 @@ class adminactions extends Controller
             if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
             if(sizeOf($GetUsersRole) > 0 ){
                 $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                if(sizeOf($GetUsersDetails) > 0 && $GetUsersRole[0]->role === 'student'){
-                    array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy]));
+                if($MyRole[0]->role !== 'super_admin'){
+                    if(sizeOf($GetUsersDetails) > 0 && $GetUsersRole[0]->role === 'student'){
+                        array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                    }
+                }else{
+                    if(sizeOf($GetUsersDetails) > 0){
+                        array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                    }
                 }
             }
         }

@@ -79,10 +79,10 @@
                                   </div>
                                     <div class="col-md-3 mb-3">
                                     <label for="Nationality">Country</label>
-                                    <select class='form-select' name ="Nationality" id="Nationality" required>
+                                    <select class='form-select select' name ="Nationality" id="Nationality" required>
                                         <option>--SELECT COUNTRY--</option>
-                                        @foreach($countries as country)
-                                            <option value='{{$country->country}}'>{{$country->country}}</option>
+                                        @foreach($countries as $country)
+                                            <option value='{{$country}}'>{{$country}}</option>
                                         @endforeach
                                     </select>
                                     </div>
@@ -129,6 +129,7 @@
                                
                                 <input class="btn btn-success" value="Save details" type="submit" />
                         </form>
+                        <a href="/login" class="text-center new-account">Login to my account </a>
                             </div>   
                </main>
 

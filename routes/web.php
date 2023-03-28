@@ -39,7 +39,7 @@ Route::get('/signup', 'App\Http\Controllers\studentactions@NewSignup')->name('si
 Route::post('/signup', 'App\Http\Controllers\studentactions@AddNewSignup')->name('Add.signup');
 Route::get('/home', 'App\Http\Controllers\DashboardController@home')->name('home');
 Route::get('/passwordreset', [PasswordResetLinkController::class, 'create']);
-Route::post('/passwordreset', [PasswordResetLinkController::class, 'create'])->name('password.email');
+// Route::post('/passwordreset', [PasswordResetLinkController::class, 'create'])->name('password.email');
 
 Route::post('/getBuddyDetails', [BuddyController::class, 'getBuddyDetails']);
 Route::get('/downloadKpps/{file}', [studentactions::class, 'downloadKpps']);
@@ -97,6 +97,7 @@ Route::group(['middleware' => ['auth']], function(){
      
      
      /** Admin Actions */
+     Route::post('/appStatus', [adminactions::class, 'applicationsResponse'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.applicationsResponse');
      Route::get('/verifyAcnt/{email}/{msg}', [MailController::class, 'index'])->middleware('rule:admin')->middleware('rule:super_admin')->name('emailsend');
      Route::post('/editUserData', [adminactions::class, 'editUserData'])->name('add.editUserData');
      Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('rule:admin')->middleware('rule:super_admin')->name('add.activate');
