@@ -60,7 +60,7 @@ class RegisteredUserController extends Controller
         $post->other_names = $request->otherNAMES;
         $post->email = $request->email;
         $post->password = Hash::make('123456');
-        $post->status = 0;
+        $post->status = 1;
 
         $postRole->user_id = $request->suID;
         $postRole->role = $request->user_role;

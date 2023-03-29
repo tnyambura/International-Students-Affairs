@@ -9,6 +9,16 @@
                         {{Session::get('Buddy_modification_success')}}
                         </div>
                         @endif
+                        @if(Session::has('dissmiss_student'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('dissmiss_student')}}
+                        </div>
+                        @endif
+                        @if(Session::has('dissmiss_student_fail'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('dissmiss_student_fail')}}
+                        </div>
+                        @endif
                        
                         <div class="card mb-4">
                             <div class="card-header">
@@ -56,7 +66,24 @@
                                                                             <span>{{$bdAlloc['id']}}</li>
                                                                             <span>{{$bdAlloc['surname'].' '.$bdAlloc['other_names']}}</li>
                                                                             <div class="flex-shrink-1">
-                                                                                <span data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}" style=" color:#CC0D0D" class="fas fa-edit" aria-hidden="true"></span>
+                                                                                <span data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}" style=" color:blue" class="fas fa-edit" aria-hidden="true"></span>
+                                                                                <form action="{{route('add.dismiss')}}" method='post'> @csrf
+                                                                                    <input type="hidden" name="user" value="{{$bdAlloc['id']}}">
+                                                                                    <button id="btn_{{$bdAlloc['id']}}" type='submit'>
+                                                                                        <span style=" color:#CC0D0D" class="fas fa-trash" aria-hidden="true"></span>
+                                                                                    </button>
+                                                                                </form>
+                                                                                <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+                                                                                <script defer>
+                                                                                    $(document).ready(function() {
+                                                                                        $('body').find("#btn_{{$bdAlloc['id']}}").on('click',function(e){
+                                                                                            e.preventDefault()
+                                                                                            if(confirm('Do you really want to remove this student?')){
+                                                                                                window.location = $(this).parent().submit()
+                                                                                            }
+                                                                                        })
+                                                                                    })
+                                                                                </script>
                                                                                 
 
                                                                                 <div class="modal fade " id="EditAllocation_{{$st_u->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"

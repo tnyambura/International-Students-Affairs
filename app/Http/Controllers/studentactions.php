@@ -140,13 +140,13 @@ class studentactions extends Controller
         $id = $request->user()->id; 
        
         // $validator = validator()->make(request()->all(), [
-        //     'passportPICTURE' => 'required|mimes:png,jpg,pdf',
-        //     'biodataPAGE' => 'mimes:png,jpg,pdf',
-        //     'currentVISA' => 'mimes:png,jpg,pdf',
-        //     'guardiansID' => 'mimes:png,jpg,pdf',
-        //     'commitmentLETTER' => 'mimes:png,jpg,pdf',
-        //     'academicTRANSCRIPTS' => 'mimes:png,jpg,pdf',
-        //     'policeCLEARANCE' => 'mimes:png,jpg,pdf'
+        //     'passportPICTURE' => 'required|mimes:png,jpg,jpeg,pdf',
+        //     'biodataPAGE' => 'mimes:png,jpg,jpeg,pdf',
+        //     'currentVISA' => 'mimes:png,jpg,jpeg,pdf',
+        //     'guardiansID' => 'mimes:png,jpg,jpeg,pdf',
+        //     'commitmentLETTER' => 'mimes:png,jpg,jpeg,pdf',
+        //     'academicTRANSCRIPTS' => 'mimes:png,jpg,jpeg,pdf',
+        //     'policeCLEARANCE' => 'mimes:png,jpg,jpeg,pdf'
         // ]);
         
         // if ($validator->fails())
@@ -160,13 +160,13 @@ class studentactions extends Controller
             
             $this->validate($request,[
             'dateofENTRY' => 'required|date',
-            'passportPICTURE' => 'required|mimes:png,jpg,pdf',
-            'biodataPAGE' => 'required|mimes:png,jpg,pdf',
-            'currentVISA' => 'required|mimes:png,jpg,pdf',
-            'guardiansID' => 'required|mimes:png,jpg,pdf',
-            'commitmentLETTER' => 'required|mimes:png,jpg,pdf',
-            'academicTRANSCRIPTS' => 'required|mimes:png,jpg,pdf',
-            'policeCLEARANCE' => 'required|mimes:png,jpg,pdf'
+            'passportPICTURE' => 'required|mimes:png,jpg,jpeg,pdf',
+            'biodataPAGE' => 'required|mimes:png,jpg,jpeg,pdf',
+            'currentVISA' => 'required|mimes:png,jpg,jpeg,pdf',
+            'guardiansID' => 'required|mimes:png,jpg,jpeg,pdf',
+            'commitmentLETTER' => 'required|mimes:png,jpg,jpeg,pdf',
+            'academicTRANSCRIPTS' => 'required|mimes:png,jpg,jpeg,pdf',
+            'policeCLEARANCE' => 'required|mimes:png,jpg,jpeg,pdf'
             ]
             );
 
@@ -288,9 +288,9 @@ class studentactions extends Controller
         if($request->hasFile('entryVISA','Biodata','visaPAGE'))
         {
             $this->validate($request,[
-                'entryVISA' => 'mimes:png,jpg,pdf',
-                'Biodata' => 'mimes:png,jpg,pdf',
-                'currentVISA' => 'mimes:png,jpg,pdf'
+                'entryVISA' => 'mimes:png,jpg,jpeg,pdf',
+                'Biodata' => 'mimes:png,jpg,jpeg,pdf',
+                'currentVISA' => 'mimes:png,jpg,jpeg,pdf'
             ]
         );
 
@@ -473,29 +473,45 @@ class studentactions extends Controller
         return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
     }
 
+    public function PushBuddyRq($id){
+        $post = new Request_Buddy();
+        $post->buddy_request_id = rand(1000,1000000);
+        $post->student_id = $id;
+        $post->status = 'pending';
+        $post->request_date = $this->CurrentDate();
+
+        $post->timestamps = false;
+
+        $post->save();
+        return true;
+    }
+
     public function RequestABuddy(Request $request){
 
         $id = $request->user()->id;             
-        $data = DB::table("buddy_request")->where('student_id','=',$id)->limit(1)->get();
-
+        $data = DB::table("buddy_request")->where('student_id','=',$id)->get();
+        $status = true;
+        
         if(sizeOf($data) < 1){
-            $post = new Request_Buddy();
-            $post->buddy_request_id = rand(1000,1000000);
-            $post->student_id = $id;
-            $post->status = 'pending';
-            $post->request_date = $this->CurrentDate();
-
-            $post->timestamps = false;
-
-            $post->save();
-            return redirect('/RequestBuddy')
-            ->with('Buddy_request_successful','Request submitted Successfully');
-        }
-        if(strtolower($data[0]->status) === 'pending'){
-            return back()->with('New_request_failed','Your Request for a buddy is already in Progress! Please be patient');
-        }
-        if(strtolower($data[0]->status) !== 'pending'){
-            return back()->with('New_request_assigned','You have already been assigned a buddy! We cannot initiate new request.');
+            if($this->PushBuddyRq($id)){
+                return redirect('/RequestBuddy')->with('Buddy_request_successful','Request submitted Successfully');
+            }
+        }else{
+            foreach ($data as $value) {
+                if(strtolower($value->status) === 'pending'){
+                    $status = false;
+                    return back()->with('New_request_failed','Your Request for a buddy is already in Progress! Please be patient');
+                }
+                if(strtolower($value->status) === 'approved'){
+                    $status = false;
+                    return back()->with('New_request_assigned','You have already been assigned a buddy! We cannot initiate new request.');
+                }
+            }
+            if($status){
+                if($this->PushBuddyRq($id)){
+                    return redirect('/RequestBuddy')->with('Buddy_request_successful','Request submitted Successfully');
+                }
+            }
         }
     }
 
@@ -531,9 +547,9 @@ class studentactions extends Controller
         }
         return back()->with('kppApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
     }
-    public function cancelBuddy(Request $request){
-        $id = $request->user()->id; 
-        $BuddyCancel = DB::table("buddy_request")->where('student_id',$id)->update(['status'=>'cancel']);
+    public function cancelBuddy(Request $request,$id){
+        // $id = $request->user()->id; 
+        $BuddyCancel = DB::table("buddy_request")->where('buddy_request_id',$id)->update(['status'=>'cancel']);
 
         if($BuddyCancel){
             return back()->with('buddy_cancel_success','You have canceled your buddy request successfully. You can not re-activate your request, place a new request when needed.');
@@ -654,6 +670,7 @@ class studentactions extends Controller
                 ]
             );
             $id = $request->suID;        
+            $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
             $CheckPassport = DB::table("student_details")->where('passport_number',$request->passportNUMBER)->get();
             $data = DB::select("select * from users WHERE id= $id ");
             $status = 0;
@@ -665,12 +682,14 @@ class studentactions extends Controller
                 $postVerification = new userVerification();
                 $postRole = new Role();
 
+                if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $status = 1;}
+
                 $post->id = $request->suID;
                 $post->surname = $request->surNAME;
                 $post->other_names = $request->firstNAME.' '.$request->lastNAME;
                 $post->email = $request->suEMAIL;
                 $post->password = Hash::make('123456');
-                $post->status = 0;
+                $post->status = $status;
 
                 $postDetails->student_id = $request->suID;
                 $postDetails->phone_number = $request->phoneNUMBER;
@@ -690,7 +709,7 @@ class studentactions extends Controller
                 $postGuardian->status = 'primary';
 
 
-                if($request->status === 'active'){ $status = 1;}
+                
 
                 $postVerification->user_id = $request->suID;
                 $postVerification->status = $status;

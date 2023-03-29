@@ -100,8 +100,11 @@ class adminactions extends Controller
         return back()->with('error','could not update data');
     }
     public function KppsStatusUpdate(Request $request){
-         
-        $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select]); 
+        $fileUpload = null;
+        if($request->fileResponse){
+            $fileUpload = FileUploader::fileupload($request,'fileResponse','StudentPassDoc'.$request->app_id,'kpps/');
+        }
+        $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload]); 
         $msg = 'Your Student Pass application is '.$request->status_select;
         if($updateStatus){
             return redirect()->route('emailsend',[$request->applicant_email,$msg]);
@@ -311,6 +314,20 @@ class adminactions extends Controller
         }
 
     }
+    public function dismissAllocation(Request $req){
+        $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user)->delete();
+
+        if($deleteAllocation){
+            $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->delete();
+            if($deleteFromRequest){
+                return back()->with('dissmiss_student','Student dissmissed');
+            }else{
+                return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user');
+            }
+        }else{
+            return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user from allocation');
+        }
+    }
     public function AllocateBuddy(Request $req){ // new allocation
         
         $generatedId = rand(1000,1000000);
@@ -324,12 +341,15 @@ class adminactions extends Controller
         $post = new AllocateBuddyModel;
         
         $post->id = $generatedId;
+        $post->request_id = $req->request_id;
         $post->student_id = $req->student_id;
         $post->buddy_id = $req->buddy_id;
         
         $post->timestamps = false;
 
         $post->save();
+        return back()->with('Buddy_Allocation_success','Allocation successful!');
+        
         // $allocatedQuery = ;
 
         // if($post->save()){
@@ -337,7 +357,6 @@ class adminactions extends Controller
         // }else{
             //     return back()->with('Buddy_Allocation_failed','User allocation failed!');
             // }
-        return back()->with('Buddy_Allocation_success','Allocation successful!');
             
             
         // }

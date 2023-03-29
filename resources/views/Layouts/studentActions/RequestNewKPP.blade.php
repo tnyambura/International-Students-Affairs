@@ -163,4 +163,17 @@
                                   <button class="btn btn-primary" id="btnSubmit" type="submit">Submit Request</button>
                                 </form>   
                             </div>   
+
+                            <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+                            <script defer>
+                                $(document).ready(function() {
+                                    $('[type="file"]').on ('change',function(e){
+                                        var fileExtension = ['png','jpg','jpeg','pdf']
+                                        if($.inArray($(this).val().split('.').pop().toLowerCase(),fileExtension) == -1){
+                                            alert("Only 'png','jpg','jpeg','pdf' files are accepted!")
+                                            $(this).val("")
+                                        }
+                                    })
+                                })
+                            </script>
               @endsection

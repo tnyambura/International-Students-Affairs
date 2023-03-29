@@ -74,12 +74,13 @@
                                                                 <div class="form-row w-100">
                                                                     <div class="col-lg-4 mb-3 ">   
                                                                         <p class="w-100 ">Allocate budy to student <strong>{{$student["id"]. ' - '. $student['surname'].' '.$student['other_names']}}</strong> </p> 
+                                                                        <input id="request_id" class="form-control" type="hidden" value={{$student["buddy_request_id"]}} name="request_id" required autofocus />
                                                                         <input id="student_id" class="form-control" type="hidden" value={{$student["id"]}} name="student_id" required autofocus />
                                                                         <label for="surNAME">Select Buddy</label> 
                                                                         <select class='form-select form-select-lg' name="buddy_id">
                                                                             <option disabled selected>--SELECT BUDDY--</option> 
                                                                             @foreach($buddies as $buddy)
-                                                                                <option value={{$buddy->id}}>{{$buddy->id.' - '. $buddy->surname. $buddy->other_names}}</option> 
+                                                                                <option value='{{$buddy->id}}'>{{$buddy->id.' - '. $buddy->surname. $buddy->other_names}}</option> 
                                                                             @endforeach
                                                                         </select> 
                                                                     </div></br>

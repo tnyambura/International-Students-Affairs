@@ -11,6 +11,6 @@ class AllocateBuddyModel extends Model
     protected $table = "buddies_allocations";
 
     protected $fillable = [
-		'id','student_id','buddy_id'
+		'request_id','student_id','buddy_id'
 	];
 }
