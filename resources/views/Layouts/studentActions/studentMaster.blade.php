@@ -22,9 +22,18 @@
             <!-- Navbar UserName-->
            <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0 text-uppercase" style="color:white;">{{ Auth::user()->surname }} </div>
             <!-- Navbar-->
-            <ul class="navbar-nav ml-auto ml-md-0">                
+            <!-- <ul class="navbar-nav ml-auto ml-md-0">                
              <a class="btn btn-success" href="{{ __('logout')}}">Logout</a> 
-          </ul>
+          </ul> -->
+          <div class="dropdown dropstart">
+            <div class="bg-info d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <img style="width:100%;" src="asset/img/logo.png" alt="" />
+            </div>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">My Account</a>
+                <a class="dropdown-item btn-danger" href="{{ __('logout')}}">Logout</a>
+            </div>
+        </div>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">

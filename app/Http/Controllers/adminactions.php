@@ -162,6 +162,21 @@ class adminactions extends Controller
             }
             
         }
+    public function editStaffData(Request $r){
+        
+        // $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
+        // $UpdateUsers = DB::table('users')->where('id',$r->cr_id)->update(['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email]);
+
+        $mesg = 'Not pushed yet ';
+        // if($UpdateUsers || $UpdateUsersDetails){
+        //     $mesg .= 'user tables successfully!';
+        //     return back()->with('user_update_success',$mesg);
+        // }else{
+        //     $mesg .= 'could not be save. try later';
+        // }
+        return back()->with('user_update_failed',$mesg);
+        
+    }
     public function editUserData(Request $r){
         
         $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
@@ -213,13 +228,14 @@ class adminactions extends Controller
             if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
             if(sizeOf($GetUsersRole) > 0 ){
                 $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                if($MyRole[0]->role !== 'super_admin'){
-                    if(sizeOf($GetUsersDetails) > 0 && $GetUsersRole[0]->role === 'student'){
-                        array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                if(sizeOf($GetUsersDetails) > 0){
+                    if($MyRole[0]->role === 'super_admin'){
+                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
                     }
-                }else{
-                    if(sizeOf($GetUsersDetails) > 0){
-                        array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                    if($MyRole[0]->role === 'admin'){
+                        if($GetUsersRole[0]->role === 'student'){
+                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                        }
                     }
                 }
             }
@@ -239,8 +255,22 @@ class adminactions extends Controller
             $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
             array_push($data,array_merge((array)$uData,(array)$application));
         }
+
+
+        $extDb = DB::table('extension_application')->get();
+        $ext_data=[];
+        $ext_applicationStatus=[['pending','in progress','declined','approved']];
         
-        return view('Layouts/AdminActions/listofkppsapplications')->with('data',$data)->with('applicationStatus',$applicationStatus);
+        foreach ($extDb as $application) {
+            $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
+            $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
+            array_push($ext_applicationStatus,$application->application_status);
+            $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+            array_push($ext_data,array_merge((array)$uData,(array)$application));
+        }
+    //    return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
+        
+        return view('Layouts/AdminActions/listofkppsapplications',['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus]);
     }
     public function BuddiesRequestFecher(){
         $u_request = DB::table('buddy_request')->select('student_id','buddy_request_id')->where('status','pending')->get();
@@ -399,7 +429,7 @@ class adminactions extends Controller
         return view('Layouts/AdminActions/Listofvisaextensionrequests');
     }
     public function BuddiesManagement(){
-        return view('Layouts/AdminActions/Buddies',['buddies'=>$this->BuddiesFecher()]);
+        return view('Layouts/AdminActions/Buddies',['buddies'=>$this->BuddiesFecher(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher()]);
     }
     public function BuddyAllocationsList(){
         return view('Layouts/AdminActions/listofBuddyAllocations',['BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher()]);

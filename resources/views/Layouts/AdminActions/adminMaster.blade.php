@@ -7,28 +7,53 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Dashboard || Dashboard</title>
-        <link href="../../asset/css/styles.css" rel="stylesheet"/>
+        <link href="asset/css/styles.css" rel="stylesheet"/>
         <link href="{{asset('css/app.css')}}" rel="stylesheet"/>
         <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> -->
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+        rel="stylesheet"
+        />
+        <link
+        href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
+        rel="stylesheet"
+        />
+
        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-            <a class="navbar-brand" href="{{ __('kppRequestList')}}">ADMIN HOME</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0 text-uppercase" style="color:white;">{{ Auth::user()->surname}}</div>
-            <ul class="navbar-nav ml-auto ml-md-0">                
+            <!-- <ul class="navbar-nav ml-auto ml-md-0">                
              <a class="btn btn-success" href="{{ __('logout')}}">Logout</a>                   
-            </ul>
+            </ul> -->
+            <div class="dropdown ">
+                <div class="dropbtn d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img style="width:100%;" src="asset/img/logo.png" />
+                </div>
+                <!-- <ul>
+                    <li class="sub-item">
+                    <span class="material-icons-outlined"> grid_view </span>
+                    <p>Dashboard</p>
+                    </li>
+                </ul> -->
+                <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#">My Account</a>
+                    <a class="dropdown-item btn-danger out" href="{{ __('logout')}}">Logout</a>
+                </div>
+            </div>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <nav class="sb-sidenav accordion sb-sidenav-dark pl-3" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Home</div>
+                            <div class="sb-sidenav-menu-heading">Admin</div>
                             <a class="nav-link" href="{{ __('dashboard')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
                                 Dashboard
@@ -48,19 +73,19 @@
                              <!-- Add a student list controller and view page-->
                              <a class="nav-link" href="{{ __('kppRequestList')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
-                                Kpp Application Requests
+                                Visa Applications
+                            </a>                            
+                             <!-- <a class="nav-link" href="{{ __('kppRequestList')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
+                                Kpp Requests
                             </a>                            
                             <a class="nav-link" href="{{ __('VisaRequestList')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
-                                Visa Extension Requests 
-                            </a>
+                                Extension Requests 
+                            </a> -->
                             
                            
                     </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        {{ Auth::user()->surname}}                   
-                          </div>
                           
                 </nav>
             </div>

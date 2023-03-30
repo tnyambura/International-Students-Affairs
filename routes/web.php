@@ -37,7 +37,6 @@ Route::get('/db',function(){
 Route::get('/BuddyRequest', 'App\Http\Controllers\studentactions@BuddyRequest')->name('BuddyRequest');
 Route::get('/signup', 'App\Http\Controllers\studentactions@NewSignup')->name('signup');
 Route::post('/signup', 'App\Http\Controllers\studentactions@AddNewSignup')->name('Add.signup');
-Route::get('/home', 'App\Http\Controllers\DashboardController@home')->name('home');
 Route::get('/passwordreset', [PasswordResetLinkController::class, 'create']);
 // Route::post('/passwordreset', [PasswordResetLinkController::class, 'create'])->name('password.email');
 
@@ -46,8 +45,9 @@ Route::get('/downloadKpps/{file}', [studentactions::class, 'downloadKpps']);
 Route::get('/downloadExtension/{file}', [studentactions::class, 'downloadExtensions']);
 
 Route::get('/csv', [CountryController::class, 'readFile']);
-Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->name('dashboard');
+Route::get('/dashboard', 'App\Http\Controllers\DashboardController@index')->middleware('rule:student')->middleware('rule:super_admin')->middleware('rule:admin')->name('dashboard');
 Route::group(['middleware' => ['auth']], function(){
+    Route::get('/home', 'App\Http\Controllers\DashboardController@home')->name('home');
     Route::get('/logout', 'App\Http\Controllers\Auth\AuthenticatedSessionController@destroy')->name('logout');
     
     

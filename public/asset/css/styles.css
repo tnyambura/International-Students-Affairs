@@ -10092,6 +10092,7 @@ body {
   }
 }
 .sb-nav-fixed .sb-topnav {
+  /* z-index: 5; */
   z-index: 1039;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav {
@@ -10100,6 +10101,7 @@ body {
   z-index: 1038;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav {
+  /* padding-top: 10px; */
   padding-top: 56px;
 }
 .sb-nav-fixed #layoutSidenav #layoutSidenav_nav .sb-sidenav .sb-sidenav-menu {
@@ -10155,6 +10157,7 @@ body {
   flex-direction: column;
   height: 100%;
   flex-wrap: nowrap;
+  border-right: 1px solid rgba(216, 217, 219)
 }
 .sb-sidenav .sb-sidenav-menu {
   flex-grow: 1;
@@ -10175,6 +10178,15 @@ body {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   position: relative;
+  /* font-size: 12px; */
+}
+.sb-sidenav .sb-sidenav-menu .nav-link.active {
+  color: #007bff;
+  /* background: rgba(100, 100, 100, 0.1); */
+  /* border-right: 2px solid #007bff;
+  border-radius: 10px 0 0 10px;
+  margin-left: 20px; */
+  
 }
 .sb-sidenav .sb-sidenav-menu .nav .nav-link .sb-nav-link-icon {
   font-size: 0.9rem;
@@ -10519,3 +10531,74 @@ th{
   letter-spacing: 2px;
 }
 
+
+.dropbtn {
+  /* background-color: #04AA6D;
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none; */
+}
+
+/* The container <div> - needed to position the dropdown content */
+/* .dropdown {
+  position: relative;
+  display: inline-block;
+} */
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  right: 10px;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1000;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.dropdown-content a.out{
+  background: rgba(220, 53, 69, 0.5);
+  color: var(--light)
+}
+.dropdown-content a{
+  font-size: 12px;
+  text-transform: capitalize;
+  letter-spacing: 2px;
+}
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+
+.profile-figure{
+  overflow: hidden;
+  object-fit: contain;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 1px solid rgba(110, 110, 110, 0.75);
+}
+.profile-figure img{
+  width: 100%;
+}
+.tab-nav{
+  border-bottom: 1px solid rgba(190, 190, 190, 0.75);
+  margin-top: 10px;
+  padding-inline: 5px;
+}
+.tab-link{
+  padding-inline: 20px;
+  padding-block: 10px;
+}
+.tab-link.active{
+  /* background: rgba(190, 190, 190, 0.75);
+  border-radius: 10px 10px 0 0; */
+  border-bottom: 2px solid var(--primary);
+}
+.buddy-contents:not(.buddy-contents.active){
+  display: none;
+}
+.buddy-contents.active{
+  display: block;
+}

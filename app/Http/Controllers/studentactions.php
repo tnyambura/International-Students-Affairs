@@ -670,19 +670,24 @@ class studentactions extends Controller
                 ]
             );
             $id = $request->suID;        
-            $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
+            $CheckRole = [];
             $CheckPassport = DB::table("student_details")->where('passport_number',$request->passportNUMBER)->get();
             $data = DB::select("select * from users WHERE id= $id ");
             $status = 0;
 
+            if($request->user()){
+                $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
+            }
             if(sizeOf($data) <1 && sizeOf($CheckPassport) <1){        
                 $post = new addNewStudent();
                 $postDetails = new addStudentDetails();
                 $postGuardian = new studentGuardian();
                 $postVerification = new userVerification();
                 $postRole = new Role();
-
-                if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $status = 1;}
+                $CheckPassport = DB::table("student_details")->where('passport_number',$request->passportNUMBER)->get();
+                if(sizeOf($CheckRole) >0){
+                    if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $status = 1;}
+                }
 
                 $post->id = $request->suID;
                 $post->surname = $request->surNAME;
