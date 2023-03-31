@@ -10559,7 +10559,7 @@ th{
   overflow: hidden;
 }
 .dropdown-content a.out{
-  background: rgba(220, 53, 69, 0.5);
+  background: var(--danger);
   color: var(--light)
 }
 .dropdown-content a{

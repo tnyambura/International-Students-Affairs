@@ -51,6 +51,41 @@
                 </div>
             </div>
         </div>
+
+        <div class="card p-3 mb-3 d-flex flex-row">
+            <div>
+                <figure class='profile-figure d-flex justify-centent-center align-items-center'>
+                    <img src="asset/img/logo.png" class="">
+                </figure>
+            </div>
+            <div class="d-flex flex-column flex-grow-1 pl-3" style='font-size:12px'>
+                <div class="container flex-grow-1" >
+                    <div class="row">
+                        <div class='col d-flex flex-column'>
+                            <label for="id">Identity No</label>
+                            <span class='font-weight-bold' id="id">{{Auth::user()->id}}</span>
+                        </div>
+                        <div class='col d-flex flex-column'>
+                            <label for="surname">Surname</label>
+                            <span class='font-weight-bold' id="surname">{{Auth::user()->surname}}</span>
+                        </div>
+                        <div class='col d-flex flex-column'>
+                            <label for="othernames">Other names</label>
+                            <span class='font-weight-bold' id="othernames">{{Auth::user()->other_names}}</span>
+                        </div>
+                        <div class='col d-flex flex-column'>
+                            <label for="email">Email</label>
+                            <span class='font-weight-bold' id="email">{{Auth::user()->email}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class='border-top'>
+                    <div class='py-2' role='button' data-toggle="modal" data-target="#Viewuser">
+                        <i class="fas fa-edit mr-1"></i> Modify Profile
+                    </div>
+                </div>
+            </div>
+        </div>
         
         
         <div class="card mb-4">
@@ -58,10 +93,6 @@
                 <div>
                     <i class="fas fa-table mr-1"></i>
                     My Details
-                </div>
-                <div role='button' data-toggle="modal" data-target="#Viewuser">
-                    <i class="fas fa-edit mr-1"></i>
-                    Edit
                 </div>
             </div>
             <div class="card-body">

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laratrust\Traits\LaratrustUserTrait;
+use Illuminate\Support\Facades\Auth;
+use DB;
 
 class User extends Authenticatable
 {
@@ -45,6 +47,11 @@ class User extends Authenticatable
 
     // }
 
+    public function hasRole($role){
+        $hasrole = DB::table('user_roles')->where('user_id',Auth::user()->id)->where('role',$role)->get();
+        if(sizeOf($hasrole) > 0){ return true;}
+        return false;
+    }
     
 
     public function isAdmin()

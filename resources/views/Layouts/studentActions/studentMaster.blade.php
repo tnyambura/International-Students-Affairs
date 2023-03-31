@@ -16,7 +16,7 @@
     </style>
     </head>
     <body class="sb-nav-fixed">
-          <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <a class="navbar-brand" href="{{ __('MykppApplications')}}">STUDENT DASHBOARD</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <!-- Navbar UserName-->
@@ -25,15 +25,16 @@
             <!-- <ul class="navbar-nav ml-auto ml-md-0">                
              <a class="btn btn-success" href="{{ __('logout')}}">Logout</a> 
           </ul> -->
-          <div class="dropdown dropstart">
-            <div class="bg-info d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img style="width:100%;" src="asset/img/logo.png" alt="" />
+                <div class="dropdown ">
+                    <div class="dropbtn d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img style="width:100%;" src="asset/img/logo.png" />
+                    </div>
+                    <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">My Account</a>
+                        <a class="dropdown-item btn-danger out" href="{{ __('logout')}}">Logout</a>
+                    </div>
+                </div>
             </div>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#">My Account</a>
-                <a class="dropdown-item btn-danger" href="{{ __('logout')}}">Logout</a>
-            </div>
-        </div>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">

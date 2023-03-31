@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\File;
-use App\Http\Controllers\Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileUploader;
 use Illuminate\Support\Facades\Storage;
 use App\Models\addNewStudent;
@@ -33,8 +33,8 @@ use DB;
 
 class adminactions extends Controller
 {
-    public function GetUserRole(Request $request){
-        $userID= $request->user()->id;
+    public function GetUserRole(){
+        $userID= Auth::user()->id;
         $data = DB::table("user_roles")->where('user_id','=',$userID)->limit(1)->get();
         
         return $data[0]->role;
@@ -130,13 +130,6 @@ class adminactions extends Controller
 //     }
     
 // }
-
-    public function NewStudentView($id){
-        $dataID= Crypt::decrypt($id);  
-
-        $data= addNewStudent::find($dataID);
-        return view('Layouts/AdminActions/StudentProfileView', compact('data'));
-    }
    public function download(Request $request, $file){   
    
     $path = 'storage/kpps/'.$file;
@@ -210,67 +203,68 @@ class adminactions extends Controller
         }else{
             return back()->with('activation_failed','We couldn\'t '.$Message.' this account at the moment. Try later!'  );
         }
+
     }
     public function applicationsResponse(){
 
     }
 
     public function getallusers(Request $req){
-        $id = $req->user()->id;
-        $data=[];
-        $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
-        $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
-        foreach ($GetUsers as $value) {
-            $thisUser=[];
-            $isBuddy=false;
-            $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
-            $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-            if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-            if(sizeOf($GetUsersRole) > 0 ){
-                $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                if(sizeOf($GetUsersDetails) > 0){
-                    if($MyRole[0]->role === 'super_admin'){
-                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                    }
-                    if($MyRole[0]->role === 'admin'){
-                        if($GetUsersRole[0]->role === 'student'){
-                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+            $id = $req->user()->id;
+            $data=[];
+            $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
+            $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
+            foreach ($GetUsers as $value) {
+                $thisUser=[];
+                $isBuddy=false;
+                $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+                $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                if(sizeOf($GetUsersRole) > 0 ){
+                    $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                    if(sizeOf($GetUsersDetails) > 0){
+                        if($MyRole[0]->role === 'super_admin'){
+                                array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                        }
+                        if($MyRole[0]->role === 'admin'){
+                            if($GetUsersRole[0]->role === 'student'){
+                                array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                            }
                         }
                     }
                 }
             }
-        }
-        return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
+            return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
     }
     public function getAllkppApplications(){
-        // $data= applyKpp::all('id','otherNAMES','passportNUMBER','updated_at','biodataPAGE','currentVISA','policeCLEARANCE','dateofENTRY','Nationality','created_at');
-        $kppsDb = DB::table('kpps_application')->get();
-        $data=[];
-        $applicationStatus=[['pending','in progress','declined','approved']];
-        
-        foreach ($kppsDb as $application) {
-            $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
-            $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
-            array_push($applicationStatus,$application->application_status);
-            $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
-            array_push($data,array_merge((array)$uData,(array)$application));
-        }
+            // $data= applyKpp::all('id','otherNAMES','passportNUMBER','updated_at','biodataPAGE','currentVISA','policeCLEARANCE','dateofENTRY','Nationality','created_at');
+            $kppsDb = DB::table('kpps_application')->get();
+            $data=[];
+            $applicationStatus=[['pending','in progress','declined','approved']];
+            
+            foreach ($kppsDb as $application) {
+                $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
+                $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
+                array_push($applicationStatus,$application->application_status);
+                $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+                array_push($data,array_merge((array)$uData,(array)$application));
+            }
 
 
-        $extDb = DB::table('extension_application')->get();
-        $ext_data=[];
-        $ext_applicationStatus=[['pending','in progress','declined','approved']];
-        
-        foreach ($extDb as $application) {
-            $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
-            $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
-            array_push($ext_applicationStatus,$application->application_status);
-            $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
-            array_push($ext_data,array_merge((array)$uData,(array)$application));
-        }
-    //    return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
-        
-        return view('Layouts/AdminActions/listofkppsapplications',['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus]);
+            $extDb = DB::table('extension_application')->get();
+            $ext_data=[];
+            $ext_applicationStatus=[['pending','in progress','declined','approved']];
+            
+            foreach ($extDb as $application) {
+                $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
+                $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
+                array_push($ext_applicationStatus,$application->application_status);
+                $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+                array_push($ext_data,array_merge((array)$uData,(array)$application));
+            }
+        //    return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
+            
+            return view('Layouts/AdminActions/listofkppsapplications',['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus]);
     }
     public function BuddiesRequestFecher(){
         $u_request = DB::table('buddy_request')->select('student_id','buddy_request_id')->where('status','pending')->get();
@@ -320,43 +314,43 @@ class adminactions extends Controller
     //     return $data;
     // }
     public function RegisterNewBuddy(Request $req){
-        $postRole=new Role();
+            $postRole=new Role();
 
-        $postRole->user_id = $req->user_id;
-        $postRole->role = 'buddy';
+            $postRole->user_id = $req->user_id;
+            $postRole->role = 'buddy';
 
-        $postRole->timestamps = false;
-        $postRole->save();
+            $postRole->timestamps = false;
+            $postRole->save();
 
-        return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
+            return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
     }
     public function RemoveAsBuddy(Request $req){
-        $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
-        foreach ($allAllocatedUsers as $value) {
-            if(DB::table('buddy_request')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
-                DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
+            $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
+            foreach ($allAllocatedUsers as $value) {
+                if(DB::table('buddy_request')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
+                    DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
+                }
             }
-        }
-        if(DB::table('user_roles')->where('user_id',$req->bd_id)->where('role','buddy')->delete()){
-            return back()->with('Buddy_Removed_success','User successfully removed as buddy!');
-        }else{
-            return back()->with('Buddy_Removed_fail','We couldn\'t remove the user as buddy. Try later!');
-        }
+            if(DB::table('user_roles')->where('user_id',$req->bd_id)->where('role','buddy')->delete()){
+                return back()->with('Buddy_Removed_success','User successfully removed as buddy!');
+            }else{
+                return back()->with('Buddy_Removed_fail','We couldn\'t remove the user as buddy. Try later!');
+            }
 
     }
     public function dismissAllocation(Request $req){
-        $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user)->delete();
+            $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user)->delete();
 
-        if($deleteAllocation){
-            $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->delete();
-            if($deleteFromRequest){
-                return back()->with('dissmiss_student','Student dissmissed');
+            if($deleteAllocation){
+                $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->delete();
+                if($deleteFromRequest){
+                    return back()->with('dissmiss_student','Student dissmissed');
+                }else{
+                    return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user');
+                }
             }else{
-                return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user');
+                return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user from allocation');
             }
-        }else{
-            return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user from allocation');
-        }
     }
     public function AllocateBuddy(Request $req){ // new allocation
         
