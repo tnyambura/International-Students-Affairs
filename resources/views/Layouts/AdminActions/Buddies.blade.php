@@ -29,20 +29,53 @@
                 </div>
             </div>
         </div> -->
-        <div class="tab-link active" role='button' data-load-target='#buddy_requests_list'>
+        <div class="tab-link active" role='button' data-load-target='#buddies_list'>
+            <div style='color:var(--primary)'>
+                <i class="fas fa-users mr-1"></i>
+                <span >All Buddies</span>
+            </div>
+        </div>
+        <div class="tab-link " role='button' data-load-target='#buddy_requests_list'>
             <div style='color:var(--danger)'>
-                <i class="fas fa-table mr-1"></i>
+                <i class="fas fa-user-clock mr-1"></i>
                 <span >Buddy requests</span>
             </div>
         </div>
         <div class="tab-link" role='button' data-load-target='#allocations_list'>
             <div style='color:var(--info)'>
-                <i class="fas fa-table mr-1"></i>
+                <i class="fas fa-user-friends mr-1"></i>
                 <span >Buddy Allocations</span>
             </div>
         </div>
     </div>
-    <div class="container-fluid buddy-contents active" id="buddy_requests_list"><br/>
+
+    @if(Session::has('New_User_Added'))
+    <div class="alert alert-success" role="alert">
+    {{Session::get('New_User_Added')}}
+    </div>
+    @endif
+    @if(Session::has('New_User_failed'))
+    <div class="alert alert-danger" role="alert">
+    {{Session::get('New_User_failed')}}
+    </div>
+    @endif
+    @if(Session::has('Buddy_modification_success'))
+    <div class="alert alert-success" role="alert">
+    {{Session::get('Buddy_modification_success')}}
+    </div>
+    @endif
+    @if(Session::has('dissmiss_student'))
+    <div class="alert alert-success" role="alert">
+    {{Session::get('dissmiss_student')}}
+    </div>
+    @endif
+    @if(Session::has('dissmiss_student_fail'))
+    <div class="alert alert-danger" role="alert">
+    {{Session::get('dissmiss_student_fail')}}
+    </div>
+    @endif
+
+    <div class="container-fluid buddy-contents active" id="buddies_list"><br/>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div>
@@ -52,18 +85,6 @@
                 <a class="btn btn-success" width='100' href="{{__('ListOfBuddies')}}" style="float:right"><span class="fa fa-spinner fa-spin fa-1x fa-fw" aria-hidden="true"></span>Generate Report</a>
             </div>
             <div class="card-body">
-
-            @if(Session::has('New_User_Added'))
-            <div class="alert alert-success" role="alert">
-            {{Session::get('New_User_Added')}}
-            </div>
-            @endif
-            @if(Session::has('New_User_failed'))
-            <div class="alert alert-danger" role="alert">
-            {{Session::get('New_User_failed')}}
-            </div>
-            @endif
-
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -112,60 +133,96 @@
             </div>
         </div>
     </div>
-    <div class="modal fade " id="RegisterBuddyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <h4 class="modal-title w-100 font-weight-bold">Register New Buddy</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                    </button>
+    <div class="container-fluid buddy-contents" id="buddy_requests_list"><br/>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+            <i class="fas fa-table mr-1"></i>
+                Buddy Requests.
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                            <th>Request Id</th>
+                                <th>user Id</th>
+                                <th>Names</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Request Id</th>
+                                <th>user Id</th>
+                                <th>Names</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                        @foreach($buddiesRequests as $student)
+                            <tr>
+                                <td>{{$student['buddy_request_id']}}</td>
+                                <td>{{$student['id']}}</td>
+                                <td>{{$student['surname'].' '.$student['other_names']}}</td>
+                                <td>{{$student['email']}}</td>
+
+                                <td>
+                                @php $studentID= Crypt::encrypt($student['id']); @endphp      
+                                <div class="d-flex alig-items-center justify-content-center" role='button' style="color:#CC0D0D" data-toggle="modal" data-target="#AllocateBuddyModal" >
+                                    <span > Allocate</span>
+                                    <span class="fas fa-marker ml-2"aria-hidden="false"></span>
+                                </div>
+                                
+                                <div class="modal fade " id="AllocateBuddyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header text-center">
+                                                <h4 class="modal-title w-100 font-weight-bold">Register New Buddy</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <form method="POST" action="{{ __('AllocateBuddy') }}" class='new-staff-form p-4'>
+                                                @csrf
+
+                                                <!-- surNAME -->
+                                                <div class="form-row w-100">
+                                                    <div class="col-lg-4 mb-3 ">   
+                                                        <p class="w-100 ">Allocate budy to student <strong>{{$student["id"]. ' - '. $student['surname'].' '.$student['other_names']}}</strong> </p> 
+                                                        <input id="request_id" class="form-control" type="hidden" value={{$student["buddy_request_id"]}} name="request_id" required autofocus />
+                                                        <input id="student_id" class="form-control" type="hidden" value={{$student["id"]}} name="student_id" required autofocus />
+                                                        <label for="surNAME">Select Buddy</label> 
+                                                        <select class='form-select form-select-lg' name="buddy_id" id='select_new_buddy'>
+                                                            <option disabled selected>--SELECT BUDDY--</option> 
+                                                            @foreach($buddies as $buddy)
+                                                                <option value='{{$buddy->id}}'>{{$buddy->id.' - '. $buddy->surname. $buddy->other_names}}</option> 
+                                                            @endforeach
+                                                        </select> 
+                                                    </div></br>
+                                                </div>
+                                                <br/>
+                                                <div class="form-row justify-content-center">
+
+                                                    <div class="flex items-center justify-end mt-4">
+                                                    <input class="btn btn-success" value="Allocate" id='allocate_a_buddy_btn' disabled type="submit" />
+                                                    
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <br/>
+                                        </div>
+                                    </div>
+                                </div>
+                                </td>
+                            </tr>
+                        @endforeach
+                            </tbody>
+                    </table>
                 </div>
-                <form method="POST" action="{{ __('AddUser') }}" class='new-staff-form p-4'>
-                    @csrf
-
-                    <!-- surNAME -->
-                    <div class="form-row">
-                        <div class="col-md-4 mb-3">   
-                            <label for="surNAME">Surname</label>  
-                            <input id="surNAME" class="form-control" type="text" name="surNAME" required autofocus />
-                        </div></br>
-                        <!-- otherNAMES -->
-                        <div class="col-md-4 mb-3">            
-                        <label for="otherNAMES">Other names</label>  
-                            <input id="otherNAMES" class="form-control" type="text" name="otherNAMES" required autofocus />
-                        </div></br>
-
-                        <!-- suID or Username -->
-                        <div class="col-md-4 mb-3">            
-                        <label for="suID">suID</label>  
-                            <input id="suID" class="form-control" type="number" name="suID" required autofocus />
-                        </div></br>
-
-                        <!-- Email Address -->
-                        <div class="col-md-4 mb-3">            
-                        <label for="email">Email</label>  
-                            <input id="email" class="form-control" type="text" name="email" required autofocus />
-                        </div>
-                        <div class="col-md-4 mb-3"> 
-                            <label for="role_id">Register as:</label>  
-                            <select name="user_role" id="role_id" class="form-control">
-                                <option value='buddy' selected > Buddy</option>
-                            </select>
-                        </div></br>
-                    
-                    </div>
-                    <br/>
-                    <div class="form-row justify-content-center">
-
-                        <div class="flex items-center justify-end mt-4">
-                        <input class="btn btn-success" value="Save details" type="submit" />
-                        
-                        </div>
-                    </div>
-                </form>
-                <br/>
             </div>
         </div>
     </div>
@@ -174,22 +231,6 @@
         <ol class="breadcrumb mb-4" style="background:#113C7A;">
             <li class="breadcrumb-item active" style="color:white;">List of all Buddy Allocations</li>
         </ol>
-        @if(Session::has('Buddy_modification_success'))
-        <div class="alert alert-success" role="alert">
-        {{Session::get('Buddy_modification_success')}}
-        </div>
-        @endif
-        @if(Session::has('dissmiss_student'))
-        <div class="alert alert-success" role="alert">
-        {{Session::get('dissmiss_student')}}
-        </div>
-        @endif
-        @if(Session::has('dissmiss_student_fail'))
-        <div class="alert alert-danger" role="alert">
-        {{Session::get('dissmiss_student_fail')}}
-        </div>
-        @endif
-        
         <div class="card mb-4">
             <div class="card-header">
             <a class="btn btn-success" href="{{__('/BuddyAllocationsPDF')}}" style="float:right"><span class="fa fa-spinner fa-spin fa-1x fa-fw" aria-hidden="true"></span>Generate Report</a>
@@ -321,6 +362,12 @@
     <script defer>
         $(document).ready(function() {
             
+            $('body').find('#select_new_buddy').on('change',function(e){
+                if($(this).val() !== ""){
+                    $('body').find('#allocate_a_buddy_btn').attr('disabled',false)
+
+                }
+            })
             $('body').find('.tab-link').on('click',function(e){
                 $(this).siblings().removeClass('active')
                 $(this).addClass('active')

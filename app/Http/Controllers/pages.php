@@ -16,6 +16,6 @@ class pages extends Controller
     }
     public function studentDash(){
         
-        return view('Layouts/studentDash',['user'=>$fetcher[0]]);
+        return view('Layouts/studentDash');
     }
 }

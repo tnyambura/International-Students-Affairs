@@ -344,12 +344,12 @@
                                         <span class="fas fa-eye " role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewextapp_{{$visarequest['id']}}" style=" color:blue"></span>
                                         <span class="fas fa-upload " role='button' aria-hidden="false" data-toggle="modal" data-target="#ChangeExtapp_{{$visarequest['id']}}" style=" color:blue"></span>
 
-                                        <div class="modal fade"  id="Viewextapp_{{$visarequest['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                        <div class="modal fade "  id="Viewextapp_{{$visarequest['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                         aria-hidden="true">
                                             <div class="modal-dialog modal-lg" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header text-center">
-                                                        <h4 class="modal-title w-100 font-weight-bold">{{$visarequest['surname'].' '.$visarequest['other_names']}}</h4>
+                                                        <h4 class="modal-title w-100 font-weight-bold">{{$kpps['surname'].' '.$kpps['other_names']}}</h4>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -357,65 +357,93 @@
                                                     <div class="card mb-4">
                                                         <div class="card-header">
                                                             <i class="fas fa-table mr-1"></i>
-                                                        Visa extension Application View.
+                                                        My Student Pass Application View.
                                                         </div>
                                                         
-                                                        <div class="card-body">                                    
-                                                            <div class="form-row">
+                                                            <div class="card-body">                                    
+                                                                    <div class="form-row " style="text-align:justify;">
 
-                                                                <div class="col-md-4 mb-3">
-                                                                <label for="Id Number">Strathmore ID:</label>&nbsp&nbsp {{$visarequest['student_id']}} 
-                                                                </div> 
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="Surname">Surname:</label>&nbsp&nbsp{{$visarequest['surname']}}                                  
-                                                                </div>
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="Othernames">Other Names:</label>&nbsp&nbsp{{$visarequest['other_names']}}                                                                      
-                                                                </div>
-                                                                <div class="col-md-4 mb-3">
-                                                                    <label for="PassportNumber">Passport Number:</label>&nbsp&nbsp{{$visarequest['passport_number']}}
-                                                                </div>                            
-                                                            </div>
-                                                            <div class="form-row">
-                                                                <div class="col-md-4 mb-3">
-                                                                <label for="dateofENTRY">Date Of Entry:</label>&nbsp&nbsp {{$visarequest['date_of_entry']}}                                
-                                                                </div>                                   
-                                                                <div class="col-md-4 mb-3">
-                                                                <label for="Othernames">Date Requested:</label>&nbsp&nbsp {{$visarequest['application_date']}}                                                                      
-                                                                </div>
-                                                            </div><br/>
-                                                            <h4>uploaded Documents</h4><br/>
+                                                                        <div class="col">
+                                                                            <div class="form-group">
+                                                                            <label for="usr">Strathmore ID:</label>
+                                                                            <input type="text" class="form-control" id="usr" value="{{$visarequest['student_id']}}" disabled>
+                                                                            </div>
+                                                                        </div> 
+                                                                        <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label for="usr">Surname:</label>
+                                                                            <input type="text" class="form-control" id="usr" value="{{$visarequest['surname']}} " disabled>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="col">
+                                                                        <div class="form-group">
+                                                                            <label for="usr">Other Names:</label>
+                                                                            <input type="text" class="form-control" id="usr" value="{{$visarequest['other_names']}}" disabled>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="form-row" style="text-align:justify;">
+                                                                                <div class="col">
+                                                                                    <div class="form-group">
+                                                                                        <label for="usr">Passport Number:</label>
+                                                                                        <input type="text" class="form-control" id="usr" value="{{$visarequest['passport_number']}}  " disabled>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col">
+                                                                                    <div class="form-group">
+                                                                                        <label for="usr">Date Of Entryr:</label>
+                                                                                        <input type="text" class="form-control" id="usr" value="----" disabled>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col">
+                                                                                    <div class="form-group">
+                                                                                        <label for="usr">Date Requested:</label>
+                                                                                        <input type="text" class="form-control" id="usr" value="{{$visarequest['application_date']}}  " disabled>
+                                                                                    </div>
+                                                                                </div>                                                                                                                                                                                                                                     
+                                                                </div><br/>    
+
+                                                            <!-- Uploaded Documents -->        
+                                                            <h4>Required Documents</h4><br/>
                                                             <div class="container">
                                                                 <div class="row">
-                                                                <div class="col-sm-6">
-                                                                <label>Passport Biodata Page:</label>&nbsp&nbsp
-                                                                <a href="/downloadExtension/{{$visarequest['passport_biodata']}}" style="color:green">
-                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a>
-                                                                </div>
-                                                                <div class="col-sm-6">
-                                                                <label>Entry Visa:</label>&nbsp&nbsp
-                                                                <a href="/downloadExtension/{{$visarequest['entry_visa']}}" style="color:green">
-                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                </div>
-                                                                </div></br>
-                                                                <div class="row">
-                                                                <div class="col-sm-6">
-                                                                <label>Current Visa:</label>&nbsp&nbsp
-                                                                <a href="/downloadExtension/{{$visarequest['current_visa']}}" style="color:green">
-                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> </li>
-                                                                </div> 
-                                                                <div class="col-sm-6">
-                                                                <label>Response File:</label>&nbsp&nbsp
-                                                                @if($visarequest['uploads'])
-                                                                <a href="/downloadExtension/{{$visarequest['uploads']}}" style="color:green">
-                                                                <span class="fas fa-eye" aria-hidden="false" style="color:green"></span> Download</a> 
-                                                                @else
-                                                                <span class="fas fa-eye" aria-hidden="false" style="color:grey"></span> No file uploaded</a> 
-                                                                @endif
-                                                                </div> 
-                                                            </div>
-                                                        </div>
+                                                                    
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Passport Biodata</th>
+                                                                        <th>Current Visa Page:</th>
+                                                                        <th>Entry Visa Page</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td > <a href="/downloadKpps/{{$visarequest['passport_biodata']}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/downloadKpps/{{$visarequest['current_visa']}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/downloadKpps/{{$visarequest['entry_visa']}}" style="color:green"> Download</a></td>
+                                                                    </tr>
+                                                                    </tbody>
+
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Application Response</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        @if($kpps['uploads'])
+                                                                        <td class='bg-info' style='color:white'> <a href="/downloadKpps/{{$visarequest['uploads']}}"> Download</a></td>
+                                                                        @else
+                                                                        <td > <span style="color:grey"> No File to Download</a></td>
+                                                                        @endif
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            
+                                                                
                                                     </div>
+                                                        
                                                     <br/>
                                                 </div>
                                             </div>

@@ -88,9 +88,12 @@
                                             @if(strtolower($data['status']) == 'cancel')
                                             <span class="fas fa-trash" aria-hidden="true" style="color:grey; cursor: default"></span> ------
                                             @elseif(strtolower($data['status']) == 'pending') 
-                                            <a href="{{__('cancelBuddy')}}" style="color:red">
-                                                <span class="fas fa-trash" rule="button" aria-hidden="true"></span> Cancel
-                                            </a>
+                                            <form action="{{route('add.cancelBuddy')}}" method='post'> @csrf
+                                                <input type="hidden" name='bd_rq_id' value="{{$data['buddy_request_id']}}">
+                                                <button class='btn border-none bg-transparent' type='submit'>
+                                                    <span class="fas fa-trash" aria-hidden="true" style="color:red"></span> Cancel
+                                                </button>
+                                            </form>
                                             @else
                                             <span class="fas fa-trash" aria-hidden="true" style="color:grey; cursor: default"></span> Cancel
                                             @endif

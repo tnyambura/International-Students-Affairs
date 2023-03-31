@@ -48,7 +48,11 @@ class DashboardController extends Controller
                 redirect('/login');
             }
             if(sizeOf($fetcher) > 0){
-                return view($userRoleVal,['user'=>$fetcher[0]]);
+                $is_buddy=false;
+                $IsABubby = DB::table("user_roles")->where('user_id',Auth::user()->id)->where('role','buddy')->get();
+                
+                if(sizeOf($IsABubby) > 0){ $is_buddy=true;}
+                return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy]);
             }else{
                 return view($userRoleVal);
             }

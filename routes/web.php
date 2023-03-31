@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/MyIssuedKpp', [studentactions::class, 'issuedKpp'])->middleware('isUser');
      Route::get('/cancelextApp', [studentactions::class, 'cancelExtApp'])->middleware('isUser');
      Route::get('/cancelKppApp', [studentactions::class, 'cancelKppApp'])->middleware('isUser');
-     Route::get('/cancelBuddy/{id}', [studentactions::class, 'cancelBuddy'])->middleware('isUser');
+     Route::post('/cancelBuddy', [studentactions::class, 'cancelBuddy'])->middleware('isUser')->name('add.cancelBuddy');
      Route::get('/RequestBuddy', [studentactions::class, 'newBuddyRequest'])->middleware('isUser');
      Route::post('/RequestABuddy', [studentactions::class, 'RequestABuddy'])->middleware('isUser')->name('add.requestabuddy');
      Route::get('/BuddyProgram', [studentactions::class, 'BuddyProgram'])->middleware('isUser');

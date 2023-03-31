@@ -53,7 +53,7 @@
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="suID">Admission Number</label>
-                                    <input type="number" class="form-control" name ="suID" id="suID" placeholder="Admission Number"
+                                    <input type="number" class="form-control" name ="id" id="suID" placeholder="Admission Number"
                                          required>
                                     
                                     </div>
@@ -74,7 +74,7 @@
                                 <div class="form-row">
                                     <div class="col-md-6 mb-3">
                                     <label for="email">Email Address</label>
-                                    <input type="text" class="form-control" name ="suEMAIL" id="suEMAIL" placeholder="Email"
+                                    <input type="text" class="form-control" name ="email" id="suEMAIL" placeholder="Email"
                                         required>
                                   </div>
                                     <div class="col-md-3 mb-3">
@@ -88,7 +88,7 @@
                                     </div>
                                     <div class="col-md-3 mb-3">
                                     <label for="validationServerUsername33">Passport Number</label>
-                                    <input type="text" class="form-control" id="validationServer023" name ="passportNUMBER" placeholder="Passport Number"
+                                    <input type="text" class="form-control" id="validationServer023" name ="passport_number" placeholder="Passport Number"
                                          required>
                                     </div>    
                                 </div>

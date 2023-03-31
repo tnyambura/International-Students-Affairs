@@ -282,7 +282,7 @@ class adminactions extends Controller
         return $allUsers;
     }
     public function BuddiesFecher(){
-        $roles = DB::table('user_roles')->select('user_id')->where('role','=','buddy')->get();
+        $roles = DB::table('user_roles')->select('user_id')->where('role','buddy')->get();
         $data=[];
         
         foreach ($roles as $user) {
@@ -320,9 +320,16 @@ class adminactions extends Controller
             $postRole->role = 'buddy';
 
             $postRole->timestamps = false;
-            $postRole->save();
 
-            return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
+            $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user_id)->delete();
+            $deleteRequest = DB::table('buddy_request')->where('student_id',$req->user_id)->delete();
+            if($deleteAllocation || $deleteRequest){
+                $postRole->save();
+                return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
+            }else{
+                return back()->with('Buddy_Register_fail','We couldn\'t make this user a Buddy. Try later');
+            }
+
     }
     public function RemoveAsBuddy(Request $req){
             $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
@@ -423,7 +430,7 @@ class adminactions extends Controller
         return view('Layouts/AdminActions/Listofvisaextensionrequests');
     }
     public function BuddiesManagement(){
-        return view('Layouts/AdminActions/Buddies',['buddies'=>$this->BuddiesFecher(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher()]);
+        return view('Layouts/AdminActions/Buddies',['buddies'=>$this->BuddiesFecher(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
     }
     public function BuddyAllocationsList(){
         return view('Layouts/AdminActions/listofBuddyAllocations',['BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher()]);

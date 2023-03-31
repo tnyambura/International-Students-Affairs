@@ -547,8 +547,8 @@ class studentactions extends Controller
         }
         return back()->with('kppApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
     }
-    public function cancelBuddy(Request $request,$id){
-        // $id = $request->user()->id; 
+    public function cancelBuddy(Request $request){
+        $id = $request->bd_rq_id; 
         $BuddyCancel = DB::table("buddy_request")->where('buddy_request_id',$id)->update(['status'=>'cancel']);
 
         if($BuddyCancel){
@@ -649,19 +649,19 @@ class studentactions extends Controller
 
     public function AddNewSignup(Request $request){
 
-        if($request->filled('suID','surNAME','firstNAME','lastNAME','suEMAIL','phoneNUMBER','Faculty','Course','Nationality','passportNUMBER','Residence','ParentNames','ParentEmail','ParentPhone'))
+        if($request->filled('id','surNAME','firstNAME','lastNAME','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence','ParentNames','ParentEmail','ParentPhone'))
         {
             $this->validate($request,[
-                'suID'=>'required|max:6',
+                'id'=>'required|max:6|unique:users',
                 'surNAME'=>'required',
                 'firstNAME'=>'required',
                 'lastNAME'=>'required',
-                'suEMAIL'=>'required|email',
+                'email'=>'required|email|unique:users',
                 'phoneNUMBER'=>'required|min:10',
                 'Faculty'=>'required',
                 'Course'=>'required',
                 'Nationality'=>'required',
-                'passportNUMBER'=>'required',
+                'passport_number'=>'required|unique:student_details',
                 'Residence'=>'required',
                 'ParentNames'=>'required',
                 'ParentEmail'=>'required',
@@ -669,7 +669,7 @@ class studentactions extends Controller
 
                 ]
             );
-            $id = $request->suID;        
+            $id = $request->id;        
             $CheckRole = [];
             $CheckPassport = DB::table("student_details")->where('passport_number',$request->passportNUMBER)->get();
             $data = DB::select("select * from users WHERE id= $id ");
@@ -678,7 +678,8 @@ class studentactions extends Controller
             if($request->user()){
                 $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
             }
-            if(sizeOf($data) <1 && sizeOf($CheckPassport) <1){        
+            // if(sizeOf($data) <1){        
+            // if(sizeOf($data) <1 && sizeOf($CheckPassport) <1){        
                 $post = new addNewStudent();
                 $postDetails = new addStudentDetails();
                 $postGuardian = new studentGuardian();
@@ -739,9 +740,9 @@ class studentactions extends Controller
                 $postVerification->save();
                 $postRole->save();
                 return back()->with('New_Student_Added','New International Student data has been added Successfully');
-            }else{
-                return back()->with('New_Student_failed','A student with Same Admission No | Passport No is already Registered, please write to studentpass@strathmore.edu for assistance!');
-            }
+            // }else{
+            //     return back()->with('New_Student_failed','A student with Same Admission No | Passport No is already Registered, please write to studentpass@strathmore.edu for assistance!');
+            // }
         }else{
             return back()->with('New_Student_failed','some feilds are missing!');
         }

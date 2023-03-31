@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CountryController;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\addNewStudent;
@@ -22,9 +23,20 @@ class RegisteredUserController extends Controller
      * @return \Illuminate\View\View
      */
     
+     public function getCountries(){
+        $get_data= CountryController::readFile();
+        $country = array();
+        foreach($get_data as $key => $data){
+            if($key > 0){
+                array_push($country , $data[0]);
+            }
+        }
+        return $country;
+    }
+
     Public function AddNewUser(){
         $roles = ['admin','super_admin','buddy'];
-        return view('Layouts/AdminActions/addnewuser', ['roles'=>$roles]);
+        return view('Layouts/AdminActions/addnewuser', ['roles'=>$roles,'countries'=>$this->getCountries()]);
     }
     Public function SuperAddNewUser(){
         return view('Layouts/SuperAdminActions/addnewuser');
