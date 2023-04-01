@@ -48,7 +48,6 @@
                                                 <th>SurName</th>
                                                 <th>OtherNames.</th>
                                                 <th>email</th>
-                                                <th>Telephone No</th>
                                                 <th>Role</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
@@ -60,7 +59,6 @@
                                                 <th>SurName</th>
                                                 <th>OtherNames.</th>
                                                 <th>email</th>
-                                                <th>Telephone No</th>
                                                 <th>Role</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
@@ -73,7 +71,6 @@
                                                 <td>{{$user['surname']}}</td>
                                                 <td>{{$user['other_names']}}</td>
                                                 <td>{{$user['email']}}</td>
-                                                <td>{{$user['phone_number']}}</td>
                                                 @if($user['isbuddy'])
                                                 <td>student/buddy</td>
                                                 @else
@@ -129,6 +126,7 @@
                                                                                     <label for="email">email</label>
                                                                                     <input type="text" class="form-control" name="email" id="email" value="{{$user['email']}}">
                                                                                 </div>
+                                                                                @if($user['role'] === 'student' || $user['role'] === 'buddy')
                                                                                 <div>
                                                                                     <label for="phone_no">phone number</label>
                                                                                     <input type="text" class="form-control" name="phone" id="phone_no" value="{{$user['phone_number']}}">
@@ -161,6 +159,7 @@
                                                                                     <label for="passport_ex">passport expire date</label>
                                                                                     <input type="text" class="form-control" name="passEx" id="passport_ex" value="{{$user['passport_expire_date']}}">
                                                                                 </div>
+                                                                            @endif
                                                                             </div>
                                                                             <button type="submit" class="btn btn-primary">Submit</button>
                                                                         </form>

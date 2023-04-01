@@ -9,15 +9,23 @@
                             </div>
                             </li>
                         </ol> 
-                        @if(Session::has('New_User_Added') || Session::has('New_Student_Added'))
+                        @if(Session::has('New_User_Added') )
                         <div class="alert alert-success" role="alert">
                         {{Session::get('New_User_Added')}}
+                        </div>
+                        @endif
+                        @if(Session::has('New_Student_Added'))
+                        <div class="alert alert-success" role="alert">
                         {{Session::get('New_Student_Added')}}
                         </div>
                         @endif
-                        @if(Session::has('New_User_failed') || Session::has('New_Student_failed'))
+                        @if(Session::has('New_User_failed'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('New_User_failed')}}
+                        </div>
+                        @endif
+                        @if(Session::has('New_Student_failed'))
+                        <div class="alert alert-danger" role="alert">
                         {{Session::get('New_Student_failed')}}
                         </div>
                         @endif
@@ -42,7 +50,7 @@
                             <!-- suID or Username -->
                             <div class="col-md-4 mb-3">            
                             <label for="suID">suID</label>  
-                                <input id="suID" class="form-control" type="number" name="suID" required autofocus />
+                                <input id="suID" class="form-control" type="number" name="id" required autofocus />
                             </div></br>
 
                             <!-- Email Address -->
@@ -148,8 +156,8 @@
                                   </div>
                                     <div class="col-md-3 mb-3">
                                     <label for="Nationality">Country</label>
-                                    <select class='form-select select' name ="Nationality" id="Nationality" required>
-                                        <option>--SELECT COUNTRY--</option>
+                                    <select class='form-control' name ="Nationality" id="Nationality" required>
+                                        <option>--Select--</option>
                                         @foreach($countries as $country)
                                             <option value='{{$country}}'>{{$country}}</option>
                                         @endforeach
@@ -158,6 +166,11 @@
                                     <div class="col-md-3 mb-3">
                                     <label for="validationServerUsername33">Passport Number</label>
                                     <input type="text" class="form-control" id="validationServer023" name ="passport_number" placeholder="Passport Number"
+                                         required>
+                                    </div>    
+                                    <div class="col-md-3 mb-3">
+                                    <label for="validationServerUsername33">Passport Expire</label>
+                                    <input type="date" class="form-control" id="validationServer023" name ="passport_expire" placeholder="Passport Expire Date"
                                          required>
                                     </div>    
                                 </div>

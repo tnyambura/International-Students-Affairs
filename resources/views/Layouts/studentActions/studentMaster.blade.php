@@ -29,10 +29,10 @@
                     <div class="dropbtn d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <img style="width:100%;" src="asset/img/logo.png" />
                     </div>
-                    <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
+                    <!-- <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="#">My Account</a>
                         <a class="dropdown-item btn-danger out" href="{{ __('logout')}}">Logout</a>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </nav>
@@ -40,39 +40,39 @@
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                     <div class="sb-sidenav-menu">
-                    <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Home</div>
-                            <a class="nav-link" href="{{ __('dashboard')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                                Dashboard
-                            </a>
-                            <!-- Add a student list controller and view page-->
-                            <a class="nav-link" href="{{ __('MykppApplications')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                My Student Pass Applications.
-                            </a>
-                            <a class="nav-link" href="{{ __('MyvisaextApplications')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                My Visa Extension Requests.
-                            </a>
-                            <a class="nav-link" href="{{ __('BuddyProgram')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
-                                Buddy Program
-                            </a> 
-                             <!-- Add a student list controller and view page-->
-                             <a class="nav-link" href="{{ __('ApplyKpp')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
-                                Initiate a student pass Application.
-                            </a>
-                            <a class="nav-link" href="{{ __('ApplyVisa')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
-                                Initiate a Visa Extension Application.
-                            </a>
-                    </div>
-                    <div class="sb-sidenav-footer">
-                        <div class="small">Logged in as:</div>
-                        {{ Auth::user()->surname }}                   
+                        <div class="nav">
+                                <div class="sb-sidenav-menu-heading">Home</div>
 
+                                <a class="nav-link" href="{{ __('dashboard')}}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                    Dashboard
+                                </a>
+                                <!-- Add a student list controller and view page-->
+                                <a class="nav-link" href="{{ __('MykppApplications')}}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+                                    My Student Pass Applications.
+                                </a>
+                                <a class="nav-link" href="{{ __('MyvisaextApplications')}}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
+                                    My Visa Extension Requests.
+                                </a>
+                                <a class="nav-link" href="{{ __('BuddyProgram')}}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                    Buddy Program
+                                </a> 
+                                <!-- Add a student list controller and view page-->
+                                <a class="nav-link" href="{{ __('ApplyKpp')}}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
+                                    Initiate a student pass Application.
+                                </a>
+                                <a class="nav-link" href="{{ __('ApplyVisa')}}">
+                                    <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
+                                    Initiate a Visa Extension Application.
+                                </a>
+                        </div>
+                        <div class="sb-sidenav-footer mb-4 bg-danger">
+                            <a class="out w-100" style='color:white' href="{{ __('logout')}}">Logout</a>
+                        </div>
                     </div>
                 </nav>
             </div>

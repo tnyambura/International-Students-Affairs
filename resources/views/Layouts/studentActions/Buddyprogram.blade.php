@@ -111,7 +111,7 @@
             @if($is_buddy)
 
                         <!-- allAllocated -->
-                <div class="card mb-4">
+                <div class="card mb-4 flex-grow-1">
                     <div class="card-header">
                         <i class="fas fa-table mr-1"></i>
                         List of Students Allocated. Total of ({{sizeOf($allAllocated)}})

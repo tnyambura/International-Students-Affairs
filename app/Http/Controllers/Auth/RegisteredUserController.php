@@ -51,15 +51,15 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {   
-        $id = $request -> suID;
-        $Student_data = DB::select("select * from users WHERE id= $id ");
+        $id = $request -> id;
+        $Student_data = DB::table("users")->where('id',$id)->get();
 
-        if($Student_data == false){
+        if(sizeOf($Student_data) <1){
 
         $request->validate([
             'otherNAMES' => 'required|string|max:255',
             'surNAME' => 'required|string|max:255',
-            'suID' => 'required|string|max:255',
+            'id' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'user_role' => 'required|string',
         ]);
@@ -67,14 +67,14 @@ class RegisteredUserController extends Controller
         $post = new addNewStudent();
         $postRole = new Role();
 
-        $post->id = $request->suID;
+        $post->id = $request->id;
         $post->surname = $request->surNAME;
         $post->other_names = $request->otherNAMES;
         $post->email = $request->email;
         $post->password = Hash::make('123456');
         $post->status = 1;
 
-        $postRole->user_id = $request->suID;
+        $postRole->user_id = $request->id;
         $postRole->role = $request->user_role;
 
         $post->timestamps = false;

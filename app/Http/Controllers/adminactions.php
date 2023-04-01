@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileUploader;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
 use App\Models\addNewStudent;
 use App\Models\Request_Buddy;
 use App\Models\FetchBuddyRequests;
@@ -171,11 +172,24 @@ class adminactions extends Controller
         
     }
     public function editUserData(Request $r){
+        $mesg = 'Update made successfully';
+        $userData = ['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email];
+//         old_pass
+// new_pass
+// conf_pass    
+        if($r->is_change_active !== "false"){
+            if($r->new_pass !== $r->conf_pass){
+                $mesg = 'Password do not match!';
+                return back()->with('user_update_failed',$mesg);
+            }else{
+                $userData = ['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email, 'password'=>Hash::make($r->new_pass)];
+            }
+        }
         
         $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
-        $UpdateUsers = DB::table('users')->where('id',$r->cr_id)->update(['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email]);
+        $UpdateUsers = DB::table('users')->where('id',$r->cr_id)->update($userData);
 
-        $mesg = 'Update made on ';
+        
         if($UpdateUsers || $UpdateUsersDetails){
             $mesg .= 'user tables successfully!';
             return back()->with('user_update_success',$mesg);
@@ -214,20 +228,41 @@ class adminactions extends Controller
             $data=[];
             $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
             $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
-            foreach ($GetUsers as $value) {
-                $thisUser=[];
-                $isBuddy=false;
-                $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
-                $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-                if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-                if(sizeOf($GetUsersRole) > 0 ){
-                    $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                    if(sizeOf($GetUsersDetails) > 0){
-                        if($MyRole[0]->role === 'super_admin'){
-                                array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+            $GetUsersRole = DB::table('user_roles')->get();
+            
+            if($MyRole[0]->role === 'super_admin'){
+                foreach ($GetUsers as $value) {
+                    if($value->user_id !== $id){
+                        $thisUser=[];
+                        $isBuddy=false;
+                        $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+                        $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                        if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                        if(sizeOf($GetUsersRole) > 0 ){
+                            $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                            if(sizeOf($GetUsersDetails) > 0){
+                                // if($GetUsersRole[0]->role === 'student'){
+                                    array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                                    // }
+                            }else{
+                                array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+    
+                            }
                         }
-                        if($MyRole[0]->role === 'admin'){
-                            if($GetUsersRole[0]->role === 'student'){
+                    }
+                }
+            }
+            if($MyRole[0]->role === 'admin'){
+                foreach ($GetUsers as $value) {
+                    if($value->user_id !== $id){
+                        $thisUser=[];
+                        $isBuddy=false;
+                        $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','student')->limit(1)->get();
+                        $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                        if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                        if(sizeOf($GetUsersRole) > 0 ){
+                            $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                            if(sizeOf($GetUsersDetails) > 0){
                                 array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
                             }
                         }

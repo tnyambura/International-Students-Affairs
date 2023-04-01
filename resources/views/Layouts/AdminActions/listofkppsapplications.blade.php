@@ -2,13 +2,13 @@
 @section('content')
     <div class="tab-nav d-flex mb-2 ">
         <div class="tab-link active" role='button' data-load-target='#kpp_requests'>
-            <div style='color:var(--danger)'>
+            <div style='color:var(--primary)'>
                 <i class="fas fa-table mr-1"></i>
                 <span >Kpps Application Requests</span>
             </div>
         </div>
         <div class="tab-link" role='button' data-load-target='#ext_requests'>
-            <div style='color:var(--info)'>
+            <div style='color:var(--success)'>
                 <i class="fas fa-table mr-1"></i>
                 <span >Visa Extension Requests</span>
             </div>
@@ -492,9 +492,9 @@
                                                                     </select>
                                                                 </div>
                                                                 
-                                                                <div class='d-flex flex-column'>
-                                                                    <label for="file_upload">Upload File</label>
-                                                                    <input type="file" id='file_upload' name='fileResponse'/>
+                                                                <div class="mb-3">
+                                                                    <label for="file_upload" class="form-label">Upload File</label>
+                                                                    <input class="form-control" type="file" id="file_upload" name='fileResponse'>
                                                                 </div>
                                                             </div>
                                                             <input class="btn btn-outline-info p-2 select-change-btn w-100 mt-4" id="application_status_submit" type="submit" value='Save'/>

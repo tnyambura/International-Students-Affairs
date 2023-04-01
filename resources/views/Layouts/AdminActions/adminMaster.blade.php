@@ -42,16 +42,13 @@
                     <p>Dashboard</p>
                     </li>
                 </ul> -->
-                <div class="dropdown-content" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#">My Account</a>
-                    <a class="dropdown-item btn-danger out" href="{{ __('logout')}}">Logout</a>
-                </div>
+                
             </div>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark pl-3" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
+                <nav class="sb-sidenav accordion sb-sidenav-dark " id="sidenavAccordion">
+                    <div class="sb-sidenav-menu d-flex flex-column justify-content-between">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Admin</div>
                             <a class="nav-link" href="{{ __('dashboard')}}">
@@ -85,6 +82,9 @@
                             </a> -->
                             
                            
+                    </div>
+                    <div class="sb-sidenav-footer mb-4 bg-danger">
+                        <a class="out w-100" style='color:white' href="{{ __('logout')}}">Logout</a>
                     </div>
                           
                 </nav>

@@ -649,19 +649,19 @@ class studentactions extends Controller
 
     public function AddNewSignup(Request $request){
 
-        if($request->filled('id','surNAME','firstNAME','lastNAME','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence','ParentNames','ParentEmail','ParentPhone'))
-        {
+        if($request->filled('id','surNAME','firstNAME','lastNAME','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence','ParentNames','ParentEmail','ParentPhone')){
             $this->validate($request,[
-                'id'=>'required|max:6|unique:users',
+                'id'=>'required|max:6',
                 'surNAME'=>'required',
                 'firstNAME'=>'required',
                 'lastNAME'=>'required',
-                'email'=>'required|email|unique:users',
+                'email'=>'required|email',
                 'phoneNUMBER'=>'required|min:10',
                 'Faculty'=>'required',
                 'Course'=>'required',
                 'Nationality'=>'required',
-                'passport_number'=>'required|unique:student_details',
+                'passport_number'=>'required',
+                'passport_expire'=>'required',
                 'Residence'=>'required',
                 'ParentNames'=>'required',
                 'ParentEmail'=>'required',
@@ -669,70 +669,69 @@ class studentactions extends Controller
 
                 ]
             );
-            $id = $request->id;        
-            $CheckRole = [];
-            $CheckPassport = DB::table("student_details")->where('passport_number',$request->passportNUMBER)->get();
-            $data = DB::select("select * from users WHERE id= $id ");
-            $status = 0;
 
-            if($request->user()){
-                $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
-            }
-            // if(sizeOf($data) <1){        
-            // if(sizeOf($data) <1 && sizeOf($CheckPassport) <1){        
+            $CheckId = DB::table("users")->where('id',$request->id)->get();
+            $CheckEmail = DB::table("users")->where('email',$request->email)->get();
+            $CheckPassport = DB::table("student_details")->where('passport_number',$request->passport_number)->get();
+            
+
+            if(sizeOf($CheckId) > 0 || sizeOf($CheckEmail) > 0 || sizeOf($CheckPassport) > 0){
+                return back()->with('New_Student_failed','User with the same data found. Try again');
+            }else{
+                if($request->user()){
+                    $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
+                }
+                         
                 $post = new addNewStudent();
                 $postDetails = new addStudentDetails();
                 $postGuardian = new studentGuardian();
                 $postVerification = new userVerification();
                 $postRole = new Role();
-                $CheckPassport = DB::table("student_details")->where('passport_number',$request->passportNUMBER)->get();
                 if(sizeOf($CheckRole) >0){
                     if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $status = 1;}
                 }
-
-                $post->id = $request->suID;
+    
+                $post->id = $request->id;
                 $post->surname = $request->surNAME;
                 $post->other_names = $request->firstNAME.' '.$request->lastNAME;
-                $post->email = $request->suEMAIL;
+                $post->email = $request->email;
                 $post->password = Hash::make('123456');
                 $post->status = $status;
-
-                $postDetails->student_id = $request->suID;
+    
+                $postDetails->student_id = $request->id;
                 $postDetails->phone_number = $request->phoneNUMBER;
                 $postDetails->faculty = $request->Faculty;
                 $postDetails->course = $request->Course;
                 $postDetails->nationality = $request->Nationality;
-                $postDetails->passport_number = $request->passportNUMBER;
-                $postDetails->passport_expire_date = '2023-03-10';
+                $postDetails->passport_number = strtoupper($request->passport_number);
+                $postDetails->passport_expire_date = $request->passport_expire;
                 $postDetails->passport_image = 'passport.jpg';
                 $postDetails->residence = $request->Residence;
-
-
-                $postGuardian->student_id = $request->suID;
+    
+    
+                $postGuardian->student_id = $request->id;
                 $postGuardian->full_name = $request->ParentNames;
                 $postGuardian->email = $request->ParentEmail;
                 $postGuardian->phone_number = $request->ParentPhone;
                 $postGuardian->status = 'primary';
-
-
                 
-
-                $postVerification->user_id = $request->suID;
+    
+                $postVerification->user_id = $request->id;
                 $postVerification->status = $status;
                 $postVerification->verified_at = $this->CurrentDate();
                 $postVerification->remember_token = "";
                 $postVerification->created_at = $this->CurrentDate();
                 $postVerification->last_update = $this->CurrentDate();
-
-                $postRole->user_id = $request->suID;
+    
+                $postRole->user_id = $request->id;
                 $postRole->role = 'student';
-
+    
                 $post->timestamps = false;
                 $postDetails->timestamps = false;
                 $postGuardian->timestamps = false;
                 $postVerification->timestamps = false;
                 $postRole->timestamps = false;
-
+    
                 
                 $post->save();
                 $postDetails->save();
@@ -740,9 +739,7 @@ class studentactions extends Controller
                 $postVerification->save();
                 $postRole->save();
                 return back()->with('New_Student_Added','New International Student data has been added Successfully');
-            // }else{
-            //     return back()->with('New_Student_failed','A student with Same Admission No | Passport No is already Registered, please write to studentpass@strathmore.edu for assistance!');
-            // }
+            }
         }else{
             return back()->with('New_Student_failed','some feilds are missing!');
         }
