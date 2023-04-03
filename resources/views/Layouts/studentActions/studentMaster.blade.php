@@ -119,7 +119,7 @@
                                 </div>
                                 <div class="card-body">
 
-                                    <form method="POST" action="{{route('add.editUserData')}}">
+                                    <form method="POST" action="{{route('add.editMyProfile')}}">
                                         @csrf
                                         <input type="hidden" name="cr_id" value="{{Auth::user()->id}}">
                                         <div class="form-group ">
@@ -176,7 +176,28 @@
                                             </div>
                                         @endif
                                         </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                        <span class='btn btn-info' id='change_pass' role='button'>Change Password</span>
+                                        <input type="hidden" name="is_change_active" id="is_change_active" value="false">
+                                        
+                                        <div class='pass-change-form'>
+                                            <div class='col'>
+                                                <label for="old_pass">Old Password</label>
+                                                <input type="password" class="form-control" name="old_pass" id="old_pass" disabled>
+                                            </div>
+                                            <div class="form-group  d-flex justify-content-between">
+
+                                                <div class='col'>
+                                                    <label for="new_pass">New Password</label>
+                                                    <input type="password" class="form-control" name="new_pass" id="new_pass" disabled>
+                                                </div>
+                                                <div class='col'>
+                                                    <label for="conf_pass">Confirm Password</label>
+                                                    <input type="password" class="form-control" name="conf_pass" id="conf_pass" disabled>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary" id='alterChanges'>Submit</button>
                                     </form>
                                     
                                 </div>
@@ -196,6 +217,45 @@
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
         <script src="../../asset/assets/demo/datatables-demo.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+        <script defer>
+            $(document).ready(function() {
+
+                $('body').find('#alterChanges').on('click',function(e){
+                    e.preventDefault()
+                    let status = false;
+                    if($('body').find('#change_pass').hasClass('active')){
+                        $('body').find('#change_pass').siblings('.pass-change-form').find('input').each(function(){
+                            if($(this).val() == ''){
+                                status = true
+                            }
+                        })
+                    }
+                    if(status){
+                        alert('Password fields are empty!')
+                    }else{
+                        $(this).parent().submit()
+                    }
+                })
+                
+                $('body').find('#change_pass').on('click',function(e){
+                    if($(this).hasClass('active')){
+                        $(this).removeClass('active')
+                        $(this).siblings('#is_change_active').val(false)
+                        $(this).siblings('.pass-change-form').find('input').attr('disabled',true)
+                        $(this).siblings('.pass-change-form').find('input').val('')
+                        $(this).text('Change Password').slow()
+                    }else{
+                        $(this).addClass('active')
+                        $(this).siblings('#is_change_active').val(true)
+                        $(this).siblings('.pass-change-form').find('input').attr('disabled',false)
+                        $(this).text('Discard Change').slow()
+                    }
+                })
+
+            })
+        </script>
     </body>
 </html>
 

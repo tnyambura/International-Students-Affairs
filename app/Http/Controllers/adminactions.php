@@ -171,21 +171,51 @@ class adminactions extends Controller
         return back()->with('user_update_failed',$mesg);
         
     }
-    public function editUserData(Request $r){
-        $mesg = 'Update made successfully';
+    public function editMyProfile(Request $r){
+        $mesg = 'Update made successfully! ';
         $userData = ['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email];
+        $UpdateUsersDetails=[];
+        $getCurrentPass = DB::table('users')->select('password')->where('id',$r->cr_id)->limit(1)->get()[0]->password;
 //         old_pass
 // new_pass
 // conf_pass    
         if($r->is_change_active !== "false"){
+
+            if(!Hash::check($r->old_pass, $getCurrentPass)){
+                $mesg = 'Old Password do not match!';
+                return back()->with('user_update_failed',$mesg);
+            }
+
             if($r->new_pass !== $r->conf_pass){
                 $mesg = 'Password do not match!';
                 return back()->with('user_update_failed',$mesg);
             }else{
-                $userData = ['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email, 'password'=>Hash::make($r->new_pass)];
+                if(Hash::check($r->new_pass, $getCurrentPass)){
+                    $mesg = 'The new password cannot match the old. Try again!';
+                    return back()->with('user_update_failed',$mesg);
+                }else{
+                    $userData = ['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email, 'password'=>Hash::make($r->new_pass)];
+                }
             }
         }
+        if(sizeOf(DB::table('student_details')->where('student_id',$r->cr_id)->get()) > 0){
+            $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
+        }
+        $UpdateUsers = DB::table('users')->where('id',$r->cr_id)->update($userData);
+
         
+        if($UpdateUsers || $UpdateUsersDetails){
+            $mesg .= ' Data has been modified!';
+            return back()->with('user_update_success',$mesg);
+        }else{
+            $mesg = 'Modification could not be saved. Try later';
+            return back()->with('user_update_failed',$mesg);
+        }
+    }
+    public function editUserData(Request $r){
+        $mesg = 'Update made successfully';
+        $userData = ['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email];
+
         $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
         $UpdateUsers = DB::table('users')->where('id',$r->cr_id)->update($userData);
 
@@ -356,13 +386,19 @@ class adminactions extends Controller
 
             $postRole->timestamps = false;
 
-            $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user_id)->delete();
-            $deleteRequest = DB::table('buddy_request')->where('student_id',$req->user_id)->delete();
-            if($deleteAllocation || $deleteRequest){
+            if(sizeOf(DB::table('buddies_allocations')->where('student_id',$req->user_id)->get()) > 0 || sizeOf(DB::table('buddy_request')->where('student_id',$req->user_id)->get()) > 0){
+
+                $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user_id)->delete();
+                $deleteRequest = DB::table('buddy_request')->where('student_id',$req->user_id)->delete();
+                if($deleteAllocation || $deleteRequest){
+                    $postRole->save();
+                    return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
+                }else{
+                    return back()->with('Buddy_Register_fail','We couldn\'t make this user a Buddy. Try later');
+                }
+            }else{
                 $postRole->save();
                 return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
-            }else{
-                return back()->with('Buddy_Register_fail','We couldn\'t make this user a Buddy. Try later');
             }
 
     }

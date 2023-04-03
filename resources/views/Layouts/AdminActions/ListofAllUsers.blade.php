@@ -14,6 +14,11 @@
                         {{Session::get('Buddy_Register_success')}}
                         </div>
                         @endif 
+                        @if(Session::has('Buddy_Register_fail'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('Buddy_Register_fail')}}
+                        </div>
+                        @endif 
                         @if(Session::has('user_update_success'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('user_update_success')}}

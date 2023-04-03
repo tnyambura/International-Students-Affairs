@@ -4,6 +4,16 @@
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
                             <li class="breadcrumb-item active" style="color:white;">Kenyan Visa Extension Request</li>
                         </ol>
+                        @if(Session::has('user_update_success'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('user_update_success')}}
+                        </div>
+                        @endif
+                        @if(Session::has('user_update_failed'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('user_update_failed')}}
+                        </div>
+                        @endif        
                         @if(Session::has('visa_request_added'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('visa_request_added')}}
@@ -26,7 +36,7 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="validationServerUsername33">Passport Number</label>
-                                    <input type="text" class="form-control" name="passportNUMBER" id="validationServer023" value="{{ $userData->passport_number}}">
+                                    <input type="text" class="form-control" name="passportNUMBER" disabled id="validationServer023" value="{{ $userData->passport_number}}">
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="AdmissionNo">Admission Number</label>
@@ -35,22 +45,12 @@
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="email">Email Address</label>
-                                    <input type="text" class="form-control" name="suEMAIL" id="email" value="{{ $userData->email}}" readonly="readonly"
-                                        />
-                                  </div>
-                                    <div class="col-md-4 mb-3">
-                                    <label for="Nationality">Nationality</label>
-                                    <select name="Nationality" id="Nationality" class="form-control">
-                                    <option selected="" disabled="">Select Country</option>
-                                    <?php
-                                    foreach($getCountries as $data){
-                                    ?>
-                                    <option value="{{$data}}">{{$data}}</option>
-                                    <?php
-                                    }
-                                    ?>
-                                    </select>                                   
-                                    </div>
+                                    <input type="text" class="form-control" name="suEMAIL" id="email" value="{{ $userData->email}}" readonly="readonly"/>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="Nationality">Nationality</label>                                  
+                                    <input type="text" class="form-control" name="Nationality" id="Nationality" value="{{ $userData->nationality}}" disabled readonly="readonly" />
+                                </div>
                                    </div>
                                     
                                 <div class="form-row">

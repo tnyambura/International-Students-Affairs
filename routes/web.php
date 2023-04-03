@@ -86,7 +86,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/cancelextApp', [studentactions::class, 'cancelExtApp'])->middleware('isUser');
      Route::get('/cancelKppApp', [studentactions::class, 'cancelKppApp'])->middleware('isUser');
      Route::post('/cancelBuddy', [studentactions::class, 'cancelBuddy'])->middleware('isUser')->name('add.cancelBuddy');
-     Route::get('/RequestBuddy', [studentactions::class, 'newBuddyRequest'])->middleware('isUser');
+    //  Route::get('/RequestBuddy', [studentactions::class, 'newBuddyRequest'])->middleware('isUser');
      Route::post('/RequestABuddy', [studentactions::class, 'RequestABuddy'])->middleware('isUser')->name('add.requestabuddy');
      Route::get('/BuddyProgram', [studentactions::class, 'BuddyProgram'])->middleware('isUser');
      Route::get('/MyBuddyRequest', [studentactions::class, 'MyBuddyRequest'])->middleware('isUser');
@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function(){
      /** Admin Actions */
      Route::post('/appStatus', [adminactions::class, 'applicationsResponse'])->middleware('isAdmin')->name('add.applicationsResponse');
      Route::get('/verifyAcnt/{email}/{msg}', [MailController::class, 'index'])->middleware('isAdmin')->name('emailsend');
+     Route::post('/editMyProfile', [adminactions::class, 'editMyProfile'])->name('add.editMyProfile');
      Route::post('/editUserData', [adminactions::class, 'editUserData'])->name('add.editUserData');
      Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('isAdmin')->name('add.activate');
      Route::get('/kppRequestList', [adminactions::class, 'getAllkppApplications'])->middleware('isAdmin');

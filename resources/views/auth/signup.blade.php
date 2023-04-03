@@ -160,5 +160,16 @@
   <script src="../../homeassets/js/stylish-portfolio.min.js"></script>
 
 </body>
+<!--  -->
+<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+        <script defer>
+            $(document).ready(function() {
+                setTimeout(function(){
+                    if("{{Session::has('New_Student_Added')}}"){
+                        window.location.href = '/login'
+                    }
+                },2500)
 
+            })
+        </script>
 </html>

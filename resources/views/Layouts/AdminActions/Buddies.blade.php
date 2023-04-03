@@ -11,6 +11,9 @@
             <div style='color:var(--danger)'>
                 <i class="fas fa-user-clock mr-1"></i>
                 <span >Buddy requests</span>
+                @if(sizeOf($buddiesRequests) > 0)
+                    <span class="badge badge-warning">{{sizeOf($buddiesRequests)}}</span>
+                @endif
             </div>
         </div>
         <div class="tab-link" role='button' data-load-target='#allocations_list'>

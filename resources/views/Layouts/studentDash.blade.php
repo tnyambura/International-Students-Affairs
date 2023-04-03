@@ -13,6 +13,16 @@
 
             </ul>
         </div>
+        @if(Session::has('user_update_success'))
+        <div class="alert alert-success" role="alert">
+        {{Session::get('user_update_success')}}
+        </div>
+        @endif
+        @if(Session::has('user_update_failed'))
+        <div class="alert alert-danger" role="alert">
+        {{Session::get('user_update_failed')}}
+        </div>
+        @endif
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-primary text-white mb-4">

@@ -489,7 +489,9 @@ class studentactions extends Controller
         $id = $request->user()->id;        
         $data = DB::table("student_details")->where('student_id',$id)->limit(1)->get();
         
+        // return back()->with('request_success','Your request was successful');
         return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
+        // return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
     }
 
     public function PushBuddyRq($id){
@@ -528,7 +530,7 @@ class studentactions extends Controller
             }
             if($status){
                 if($this->PushBuddyRq($id)){
-                    return redirect('/RequestBuddy')->with('Buddy_request_successful','Request submitted Successfully');
+                    return back()->with('Buddy_request_successful','Request submitted Successfully');
                 }
             }
         }
@@ -692,11 +694,12 @@ class studentactions extends Controller
             $CheckId = DB::table("users")->where('id',$request->id)->get();
             $CheckEmail = DB::table("users")->where('email',$request->email)->get();
             $CheckPassport = DB::table("student_details")->where('passport_number',$request->passport_number)->get();
-            
+            $status=0;
 
             if(sizeOf($CheckId) > 0 || sizeOf($CheckEmail) > 0 || sizeOf($CheckPassport) > 0){
                 return back()->with('New_Student_failed','User with the same data found. Try again');
             }else{
+                $CheckRole=[];
                 if($request->user()){
                     $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
                 }

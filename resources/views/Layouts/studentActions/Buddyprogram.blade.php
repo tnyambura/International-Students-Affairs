@@ -16,6 +16,26 @@
                 </div>
             </div>
         </div>
+        @if(Session::has('New_request_assigned'))
+        <div class="alert alert-success" role="alert">
+        {{Session::get('New_request_assigned')}}
+        </div>
+        @endif
+        @if(Session::has('user_update_success'))
+        <div class="alert alert-success" role="alert">
+        {{Session::get('user_update_success')}}
+        </div>
+        @endif
+        @if(Session::has('user_update_failed'))
+        <div class="alert alert-danger" role="alert">
+        {{Session::get('user_update_failed')}}
+        </div>
+        @endif
+        @if(Session::has('New_request_failed'))
+        <div class="alert alert-danger" role="alert">
+        {{Session::get('New_request_failed')}}
+        </div>
+        @endif
         @if(Session::has('buddy_cancel_success'))
         <div class="alert alert-success" role="alert">
         {{Session::get('buddy_cancel_success')}}
@@ -71,11 +91,11 @@
                                             <form action="{{route('add.cancelBuddy')}}" method='post'> @csrf
                                                 <input type="hidden" name='bd_rq_id' value="{{$data['buddy_request_id']}}">
                                                 <button class='btn border-none bg-transparent' type='submit'>
-                                                    <span class="fas fa-trash" aria-hidden="true" style="color:red"></span> Cancel
+                                                    <span class="fas fa-trash" style="color:red"></span> Cancel
                                                 </button>
                                             </form>
                                             @else
-                                            <span class="fas fa-trash" aria-hidden="true" style="color:grey; cursor: default"></span> Cancel
+                                            <span class="fas fa-trash" style="color:grey; cursor: default"></span> Cancel
                                             @endif
                                         </td>
                                     </tr>
@@ -88,50 +108,7 @@
                 </div>
             </div>
 
-            <div class="modal fade " id="request_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header text-center">
-                            <h4 class="modal-title w-100 font-weight-bold">{{Auth::user()->id}}</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <br/>
-                        <div class='card p-4'>
-                            <form method="POST" action="{{route('add.requestabuddy')}}" enctype="multipart/form-data" onSubmit="return validate();">
-                                @csrf
-                                    
-                                <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                    <label for="Residence">Year of Study</label>
-                                    <input type="text" name="YearOfStudy" class="form-control" id="YearOfStudy" placeholder="YearOfStudy"
-                                        required>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                        <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input is-valid" id="invalidCheck33" required>
-                                        <label class="custom-control-label" for="invalidCheck33">All the Information provided is to the best of my Knowledge</label>
-                                        <div class="valid-feedback">
-                                            You must agree before submitting.
-                                        </div>
-                                        </div>
-                                        <div class="invalid-feedback">
-                                        You must agree before submitting.
-                                        </div>
-                                </div>
-                                <button class="btn btn-primary" id="btnSubmit" type="submit">Submit Request</button>
-
-
-
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
         </div>
 
         <div class="container-fluid buddy-contents" id="my_buddy"><br/>                 
@@ -245,6 +222,58 @@
             </div>
         </div>
     @endif
+    <div class="modal fade " id="request_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <div>
+                                <i class="fas fa-table "></i> Request a buddy
+                            </div>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <br/>
+
+                        <div class="card border-0">
+                            
+                            <div class="card-body">
+
+                            <form method="POST" action="{{route('add.requestabuddy')}}" enctype="multipart/form-data" onSubmit="return validate();">
+                                @csrf
+                                    
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                    <label for="Residence">Year of Study</label>
+                                    <input type="text" name="YearOfStudy" class="form-control" id="YearOfStudy" placeholder="YearOfStudy"
+                                        required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input is-valid" id="invalidCheck33" required>
+                                        <label class="custom-control-label" for="invalidCheck33">All the Information provided is to the best of my Knowledge</label>
+                                        <div class="valid-feedback">
+                                            You must agree before submitting.
+                                        </div>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                        You must agree before submitting.
+                                        </div>
+                                </div>
+                                <button class="btn btn-primary" id="btnSubmit" type="submit">Submit Request</button>
+
+
+
+
+                            </form>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
     
     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <script defer>

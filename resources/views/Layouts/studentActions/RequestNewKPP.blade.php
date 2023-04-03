@@ -3,7 +3,17 @@
                 <div class="container-fluid"><br/>
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
                             <li class="breadcrumb-item active" style="color:white;">Kenyan Student Pass Application Request</li>
-                        </ol>             
+                        </ol> 
+                        @if(Session::has('user_update_success'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('user_update_success')}}
+                        </div>
+                        @endif
+                        @if(Session::has('user_update_failed'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('user_update_failed')}}
+                        </div>
+                        @endif            
                         @if(Session::has('kpp_updated_successfully'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('kpp_updated_successfully')}}
