@@ -1,59 +1,39 @@
-@extends('Layouts.studentActions.studentMaster')
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user])
 @section('content')
-        <div class="container-fluid"><br/>
-           
-            
-            <div class="row">
-                @if(!$is_buddy)
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card bg-info text-white mb-4">
-                                    <div class="card-body">Request the Allocation of a Buddy</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="{{ __('RequestBuddy')}}">Initiate a Request</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-xl-4 col-md-6">
-                                <div class="card bg-secondary text-white mb-4">
-                                    <div class="card-body">View My Buddy Allocation (completed)</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="{{__('MyBuddyAllocations')}}">View my Allocation</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- <div class="col-xl-4 col-md-6">
-                                <div class="card bg-success text-white mb-4">
-                                    <div class="card-body">View my Buddy Allocation Requests</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="{{ __('MyBuddyRequest')}}">View List</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div> -->
-                            <!-- <div class="col-xl-3 col-md-6">
-                                <div class="card bg-danger text-white mb-4">
-                                    <div class="card-body">Allocate New Buddies to New International Students</div>
-                                    <div class="card-footer d-flex align-items-center justify-content-between">
-                                        <a class="small text-white stretched-link" href="#">Allocate Buddies</a>
-                                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                                    </div>
-                                </div>
-                            </div> -->
-                        </div>
-            
+
+    @if(!$is_buddy)
+        <div class="tab-nav d-flex mb-2 w-100">
+            <div class="tab-link active" role='button' data-load-target='#my_bd_req'>
+                <div style='color:var(--primary)'>
+                    <i class="fas fa-user-plus mr-1"></i>
+                    <span >Request a Buddy</span>
+                </div>
+            </div>
+            <div class="tab-link" role='button' data-load-target='#my_buddy'>
+                <div style='color:var(--info)'>
+                    <i class="fas fa-user-friends mr-1"></i>
+                    <span >My Allocation</span>
+                </div>
+            </div>
+        </div>
+        @if(Session::has('buddy_cancel_success'))
+        <div class="alert alert-success" role="alert">
+        {{Session::get('buddy_cancel_success')}}
+        </div>
+        @endif
+        @if(Session::has('buddy_cancel_fail'))
+        <div class="alert alert-danger" role="alert">
+        {{Session::get('buddy_cancel_fail')}}
+        </div>
+        @endif
+
+        <div class="container-fluid buddy-contents active" id="my_bd_req" style='color:white' data-toggle="modal" data-target="#request_modal"><br/>
+            <ol class="breadcrumb mb-4 d-flex bg-info align-items-center" role='button'>
+                <i class="fas fa-user-plus mr-1"></i>
+                <span class='ml-2'>Place a Request</span><br/>
+            </ol> 
+             
             <div class="card mb-4">
-                @if(Session::has('buddy_cancel_success'))
-                <div class="alert alert-success" role="alert">
-                {{Session::get('buddy_cancel_success')}}
-                </div>
-                @endif
-                @if(Session::has('buddy_cancel_fail'))
-                <div class="alert alert-danger" role="alert">
-                {{Session::get('buddy_cancel_fail')}}
-                </div>
-                @endif
                 <div class="card-header">
                     <i class="fas fa-table mr-1"></i>
                     Buddy Allocation Request for {{ Auth::user()->otherNAMES}} <a href="{{__('MyBuddyAllocations')}}"></a>.
@@ -70,7 +50,7 @@
                                 </tr>
                             </thead>
                             <tfoot>
-                                 <tr>
+                                    <tr>
                                     <th>request id</th>
                                     <th>Date Requested</th>
                                     <th>status</th>
@@ -107,55 +87,178 @@
                     </div>
                 </div>
             </div>
-            @endif
-            @if($is_buddy)
 
-                        <!-- allAllocated -->
-                <div class="card mb-4 flex-grow-1">
-                    <div class="card-header">
-                        <i class="fas fa-table mr-1"></i>
-                        List of Students Allocated. Total of ({{sizeOf($allAllocated)}})
+            <div class="modal fade " id="request_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header text-center">
+                            <h4 class="modal-title w-100 font-weight-bold">{{Auth::user()->id}}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <br/>
+                        <div class='card p-4'>
+                            <form method="POST" action="{{route('add.requestabuddy')}}" enctype="multipart/form-data" onSubmit="return validate();">
+                                @csrf
+                                    
+                                <div class="form-row">
+                                    <div class="col-md-4 mb-3">
+                                    <label for="Residence">Year of Study</label>
+                                    <input type="text" name="YearOfStudy" class="form-control" id="YearOfStudy" placeholder="YearOfStudy"
+                                        required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input is-valid" id="invalidCheck33" required>
+                                        <label class="custom-control-label" for="invalidCheck33">All the Information provided is to the best of my Knowledge</label>
+                                        <div class="valid-feedback">
+                                            You must agree before submitting.
+                                        </div>
+                                        </div>
+                                        <div class="invalid-feedback">
+                                        You must agree before submitting.
+                                        </div>
+                                </div>
+                                <button class="btn btn-primary" id="btnSubmit" type="submit">Submit Request</button>
+
+
+
+
+                            </form>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid buddy-contents" id="my_buddy"><br/>                 
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table mr-1"></i>
+                    Completed Buddy Allocations.
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                <th>Allocation Id</th>
+                                <th>Buddy Id</th>
+                                <th>Buddy Name</th>
+                                <th>Buddy Email</th>
+                                <th>Buddy Telephone</th>
+                                <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>Allocation Id</th>
+                                    <th>Buddy Id</th>
+                                    <th>Buddy Name</th>
+                                    <th>Buddy Email</th>
+                                    <th>Buddy Telephone</th>
+                                    <th>Actions</th>
+
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach($allocationGetter as $Buddy)
+                                <tr>
+                                    <td>{{$Buddy['buddy_id']}}</td>
+                                    <td>{{$Buddy['allocation_id']}}</td>
+                                    <td>{{$Buddy['surname'].' '.$Buddy['other_names']}}</td>
+                                    <td>{{$Buddy['email']}}</td>
+                                    <td>-</td>
+
+
+                                    <td>
+                                    <a href="" target="blank">
+                                        <span class="fas fa-edit" aria-hidden="false"></span>
+                                        Request buddy change
+                                    </a>  
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    @else
+        <div class="tab-nav d-flex mb-2 w-100">
+            <div class="tab-link" role='button' data-load-target='#my__allocations'>
+                <div style='color:var(--info)'>
+                    <i class="fas fa-user-friends mr-1"></i>
+                    <span >My Allocations</span>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid buddy-contents active" id="my__allocations">
+            <div class="card mb-4 flex-grow-1">
+                <div class="card-header">
+                    <i class="fas fa-table mr-1"></i>
+                    List of Students Allocated. Total of ({{sizeOf($allAllocated)}})
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                <th>Student Id</th>
+                                <th>Student Name</th>
+                                <th>Student Email</th>
+                                <th>Student Telephone</th>
+                                <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
                                     <th>Student Id</th>
                                     <th>Student Name</th>
                                     <th>Student Email</th>
                                     <th>Student Telephone</th>
                                     <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>Student Id</th>
-                                        <th>Student Name</th>
-                                        <th>Student Email</th>
-                                        <th>Student Telephone</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                @foreach($allAllocated as $st)
-                                    <tr>
-                                        <td>{{$st['student_id']}}</td>
-                                        <td>{{$st['surname'].' '.$st['other_names']}}</td>
-                                        <td>{{$st['email']}}</td>
-                                        <td>{{$st['phone_number']}}</td>
-                                        <td>
-                                            <span class="fas fa-eye" aria-hidden="false"></span>
-                                            
-                                        </td>
-                                    </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            @foreach($allAllocated as $st)
+                                <tr>
+                                    <td>{{$st['student_id']}}</td>
+                                    <td>{{$st['surname'].' '.$st['other_names']}}</td>
+                                    <td>{{$st['email']}}</td>
+                                    <td>{{$st['phone_number']}}</td>
+                                    <td>
+                                        <span class="fas fa-eye" aria-hidden="false"></span>
+                                        
+                                    </td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
+    @endif
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script defer>
+        $(document).ready(function() {
+            
+            $('body').find('.tab-link').on('click',function(e){
+                $(this).siblings().removeClass('active')
+                $(this).addClass('active')
+                $('body').find($(this).attr('data-load-target')).siblings('.container-fluid').removeClass('active')
+                $('body').find($(this).attr('data-load-target')).addClass('active')
+                
+            })
+
+        })
+    </script>
            
 @endsection

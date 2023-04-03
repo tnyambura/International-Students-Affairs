@@ -1,34 +1,6 @@
 @extends('Layouts.AdminActions.adminMaster')
 @section('content')
     <div class="tab-nav d-flex mb-2 ">
-        <!-- <div class="col-xl-3 col-md-6">
-            <div class="card bg-secondary text-white mb-4" data-toggle="modal" data-target="#RegisterBuddyModal">
-                <div class="card-body">Register A New trained and qualified Buddy</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <span class="small text-white stretched-link" >Register A new Buddy</span>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div> -->
-        <!-- <div class="col col-md-6">
-            <div class="card bg-success text-white mb-4" width='100'>
-                <i class="fa-solid fa-code-pull-request"></i>
-                <div class="card-body">View All Buddy Requests</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ __('listofBuddyRequests')}}">View List</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div>
-        <div class="col col-md-6">
-            <div class="card bg-danger text-white mb-4">
-                <div class="card-body">List of completed Buddy Allocations</div>
-                <div class="card-footer d-flex align-items-center justify-content-between">
-                    <a class="small text-white stretched-link" href="{{ __('BuddyAllocationsList')}}">List of Allocations Completed</a>
-                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
-                </div>
-            </div>
-        </div> -->
         <div class="tab-link active" role='button' data-load-target='#buddies_list'>
             <div style='color:var(--primary)'>
                 <i class="fas fa-users mr-1"></i>

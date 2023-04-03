@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster')
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user])
 @section('content')      
       <div class="container-fluid"><br/>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -81,11 +81,6 @@
                         </div>
                     </div>
                 </div>
-                <div class='border-top'>
-                    <div class='py-2' role='button' data-toggle="modal" data-target="#Viewuser">
-                        <i class="fas fa-edit mr-1"></i> Modify Profile
-                    </div>
-                </div>
             </div>
         </div>
         
@@ -131,91 +126,12 @@
         </div>
     </div>
 
-    <div class="modal fade " id="Viewuser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                    <div class="modal-header text-center">
-                        <h4 class="modal-title w-100 font-weight-bold">{{$user['surname'].' '.$user['other_names']}}</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="card">
-                        <div class="card-header">
-                            <i class="fas fa-table mr-1"></i>
-                        Student Details
-                        </div>
-                        <div class="card-body">
-
-                            <form method="POST" action="{{route('add.editUserData')}}">
-                                @csrf
-                                <input type="hidden" name="cr_id" value="{{$user['student_id']}}">
-                                <div class="form-group ">
-                                    <label for="id">Admission No:</label>
-                                    <input type="text" class="form-control" name="u_id" id="id" aria-describedby="idHelp" value="{{$user['student_id']}}">
-                                </div>
-                                <div class="form-group d-flex justify-content-between">
-                                    <div>
-                                        <label for="surname">surname</label>
-                                        <input type="text" class="form-control" name="sname" id="surname" value="{{$user['surname']}}">
-                                    </div>
-                                    <div>
-                                        <label for="othernames">other_names</label>
-                                        <input type="text" class="form-control" name="oname" id="othernames" value="{{$user['other_names']}}">
-                                    </div>
-                                </div>
-                                <div class="form-group  d-flex justify-content-between">
-                                    <div>
-                                        <label for="email">email</label>
-                                        <input type="text" class="form-control" name="email" id="email" value="{{$user['email']}}">
-                                    </div>
-                                    <div>
-                                        <label for="phone_no">phone number</label>
-                                        <input type="text" class="form-control" name="phone" id="phone_no" value="{{$user['phone_number']}}">
-                                    </div>
-                                </div>
-                                <div class="form-group ">
-                                    <label for="residence">Residence</label>
-                                    <input type="text" class="form-control" name="residence" id="residence" value="{{$user['residence']}}">
-                                </div>
-                                <div class="form-group  d-flex justify-content-between">
-                                    <div>
-                                        <label for="faculty">faculty</label>
-                                        <input type="text" class="form-control" name="faculty" id="faculty" value="{{$user['faculty']}}">
-                                    </div>
-                                    <div>
-                                        <label for="course">course</label>
-                                        <input type="text" class="form-control" name="course" id="course" value="{{$user['course']}}">
-                                    </div>
-                                </div>
-                                <div class="form-group  d-flex justify-content-around">
-                                    <div>
-                                        <label for="nationality">nationality</label>
-                                        <input type="text" class="form-control" name="country" id="nationality" value="{{$user['nationality']}}">
-                                    </div>
-                                    <div>
-                                        <label for="passport_no">passport Number</label>
-                                        <input type="text" class="form-control" name="passNo" id="passport_no" value="{{$user['passport_number']}}">
-                                    </div>
-                                    <div>
-                                        <label for="passport_ex">passport expire date</label>
-                                        <input type="text" class="form-control" name="passEx" id="passport_ex" value="{{$user['passport_expire_date']}}">
-                                    </div>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Submit</button>
-                            </form>
-                            
-                        </div>
-                    </div>
-                    <br/>
-                </div>
-            </div>
-        </div> 
+    
         <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
         <script defer>
             $(document).ready(function() {
                 $('.alert').alert()
             })
         </script>
+
 @endsection

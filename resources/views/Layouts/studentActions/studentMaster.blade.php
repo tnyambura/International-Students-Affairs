@@ -20,7 +20,9 @@
             <a class="navbar-brand" href="{{ __('MykppApplications')}}">STUDENT DASHBOARD</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <!-- Navbar UserName-->
-           <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0 text-uppercase" style="color:white;">{{ Auth::user()->surname }} </div>
+           <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0 text-capitalize" data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style="color:white;">
+                My Profile 
+            </div>
             <!-- Navbar-->
             <!-- <ul class="navbar-nav ml-auto ml-md-0">                
              <a class="btn btn-success" href="{{ __('logout')}}">Logout</a> 
@@ -39,7 +41,7 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-                    <div class="sb-sidenav-menu">
+                    <div class="sb-sidenav-menu d-flex flex-column justify-content-between">
                         <div class="nav">
                                 <div class="sb-sidenav-menu-heading">Home</div>
 
@@ -76,6 +78,9 @@
                     </div>
                 </nav>
             </div>
+
+
+             
             
                <div id="layoutSidenav_content">
                 </main>
@@ -96,8 +101,93 @@
                 </footer>
             </div>
         </div>
+
+        <div class="modal fade " id="MyProfile_{{Auth::user()->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+            aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                            <div class="modal-header text-center">
+                                <h4 class="modal-title w-100 font-weight-bold">{{Auth::user()->surname.' '.Auth::user()->other_names}}</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="card">
+                                <div class="card-header">
+                                    <i class="fas fa-table mr-1"></i>
+                                Student Details
+                                </div>
+                                <div class="card-body">
+
+                                    <form method="POST" action="{{route('add.editUserData')}}">
+                                        @csrf
+                                        <input type="hidden" name="cr_id" value="{{Auth::user()->id}}">
+                                        <div class="form-group ">
+                                            <label for="id">Admission No:</label>
+                                            <input type="text" class="form-control" name="u_id" id="id" aria-describedby="idHelp" value="{{Auth::user()->id}}">
+                                        </div>
+                                        <div class="form-group d-flex justify-content-between">
+                                            <div>
+                                                <label for="surname">surname</label>
+                                                <input type="text" class="form-control" name="sname" id="surname" value="{{Auth::user()->surname}}">
+                                            </div>
+                                            <div>
+                                                <label for="othernames">other_names</label>
+                                                <input type="text" class="form-control" name="oname" id="othernames" value="{{Auth::user()->other_names}}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group  d-flex justify-content-between">
+                                            <div>
+                                                <label for="email">email</label>
+                                                <input type="text" class="form-control" name="email" id="email" value="{{Auth::user()->email}}">
+                                            </div>
+                                        @if($userData)
+                                            <div>
+                                                <label for="phone_no">phone number</label>
+                                                <input type="text" class="form-control" name="phone" id="phone_no" value="{{$userData['phone_number']}}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group ">
+                                            <label for="residence">Residence</label>
+                                            <input type="text" class="form-control" name="residence" id="residence" value="{{$userData['residence']}}">
+                                        </div>
+                                        <div class="form-group  d-flex justify-content-between">
+                                            <div>
+                                                <label for="faculty">faculty</label>
+                                                <input type="text" class="form-control" name="faculty" id="faculty" value="{{$userData['faculty']}}">
+                                            </div>
+                                            <div>
+                                                <label for="course">course</label>
+                                                <input type="text" class="form-control" name="course" id="course" value="{{$userData['course']}}">
+                                            </div>
+                                        </div>
+                                        <div class="form-group  d-flex justify-content-around">
+                                            <div>
+                                                <label for="nationality">nationality</label>
+                                                <input type="text" class="form-control" name="country" id="nationality" value="{{$userData['nationality']}}">
+                                            </div>
+                                            <div>
+                                                <label for="passport_no">passport Number</label>
+                                                <input type="text" class="form-control" name="passNo" id="passport_no" value="{{$userData['passport_number']}}">
+                                            </div>
+                                            <div>
+                                                <label for="passport_ex">passport expire date</label>
+                                                <input type="text" class="form-control" name="passEx" id="passport_ex" value="{{$userData['passport_expire_date']}}">
+                                            </div>
+                                        @endif
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Submit</button>
+                                    </form>
+                                    
+                                </div>
+                            </div>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
        
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="../../asset/js/scripts.js"></script>
         <script src="../../asset/js/script.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>

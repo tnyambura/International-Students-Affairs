@@ -42,6 +42,16 @@ class studentactions extends Controller
 
         return $CurrentDate;
     }
+    public function GetuserDetails(Request $request){
+        $id = $request->user()->id; 
+        $fetcher=[];
+        if($id){
+            $user =  DB::table('users')->select('surname','other_names','email')->where('id',$id)->limit(1)->get();
+            $userDetails =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
+            array_push($fetcher, array_merge((array)$user[0],(array)$userDetails[0]));
+        }
+        return $fetcher[0];
+    }
     public function userDetailsFetcher(Request $request){
         $id = $request->user()->id; 
         $fetcher =  DB::table('student_view_data')->where('student_id','=',$id)->limit(1)->get();
@@ -430,7 +440,7 @@ class studentactions extends Controller
 
     
     public function Newstudentpass(Request $request){
-        return view('Layouts/studentActions/RequestNewKPP')->with('getCountries',$this->getCountries())->with('getUserDetails',$this->userDetailsFetcher($request));
+        return view('Layouts/studentActions/RequestNewKPP',['getCountries'=>$this->getCountries(),'getUserDetails'=>$this->userDetailsFetcher($request),'user'=>$this->GetuserDetails($request)]);
     }
     
     //BUDDIES MANAGEMENT SECTION//
@@ -440,6 +450,15 @@ class studentactions extends Controller
         $is_buddy=false;
         $AllAssigned=[];
         $IsABubby = DB::table("user_roles")->where('user_id',$id)->where('role','buddy')->get();
+
+        $myallocation=[];
+
+        $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id')->where('student_id',$id)->limit(1)->get();
+        if(sizeOf($BuddyId) > 0){
+            $BuddyUser = DB::table("users")->select('surname','other_names','email')->where('id',$BuddyId[0]->buddy_id)->limit(1)->get();
+            // $BuddyDetails = DB::table("student_details")->select('phone_number')->where('student_id',$BuddyId[0]->buddy_id)->limit(1)->get();
+            array_push($myallocation,array_merge((array)$BuddyUser[0],(array)$BuddyId[0]));
+        }
         
         if(sizeOf($IsABubby) < 1){
             $BuddyReq = DB::table("buddy_request")->where('student_id',$id)->get();
@@ -458,7 +477,7 @@ class studentactions extends Controller
             }
         }
 
-        return view('Layouts/studentActions/Buddyprogram',['RequestsData'=>$data,'allAllocated'=>$AllAssigned,'is_buddy'=>$is_buddy]);
+        return view('Layouts/studentActions/Buddyprogram',['RequestsData'=>$data,'allAllocated'=>$AllAssigned,'is_buddy'=>$is_buddy,'user'=>$this->GetuserDetails($request),'allocationGetter'=>$myallocation]);
     }
     public function MyBuddyRequest(request $request){
         $id = $request->user()->id;      
@@ -616,7 +635,7 @@ class studentactions extends Controller
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
         $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
 
-        return view('Layouts/studentActions/RequestNewVisa')->with('userData',$userData[0])->with('data',$ext)->with('getCountries',$this->getCountries());
+        return view('Layouts/studentActions/RequestNewVisa',['userData'=>$userData[0],'data'=>$ext,'getCountries'=>$this->getCountries(),'user'=>$this->GetuserDetails($request)]);
     }
     public function visaExtensions(Request $request){
         $id = $request->user()->id;        
@@ -626,14 +645,14 @@ class studentactions extends Controller
         // array_push($userData,array_merge((array)$,(array)$))
 
         $fecthData =$this->FetchExtensionAppView($request);
-        return view('Layouts/studentActions/studentvisaapplications')->with('userDetails',$userDetails[0])->with('data',$ext)->with('getDataView',$fecthData);
+        return view('Layouts/studentActions/studentvisaapplications',['userDetails'=>$userDetails[0],'data'=>$ext,'getDataView'=>$fecthData,'user'=>$this->GetuserDetails($request)]);
     }
     public function Listofkpps(Request $request){  
         $id = $request->user()->id;        
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
         $data = DB::table("kpps_application")->where('student_id','=',$id)->get();
         $fecthData =$this->FetchKppView($request);
-        return view('Layouts/studentActions/studentkppapplications',['data'=>$data,'userDetails'=>$userData[0],'getDataView'=>$fecthData]);
+        return view('Layouts/studentActions/studentkppapplications',['data'=>$data,'userDetails'=>$userData[0],'getDataView'=>$fecthData,'user'=>$this->GetuserDetails($request)]);
     }
     public function issuedKpp(){
         return view('Layouts/studentActions/IssuedKpp');
