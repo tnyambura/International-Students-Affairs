@@ -304,8 +304,18 @@ class adminactions extends Controller
     public function getAllkppApplications(){
             // $data= applyKpp::all('id','otherNAMES','passportNUMBER','updated_at','biodataPAGE','currentVISA','policeCLEARANCE','dateofENTRY','Nationality','created_at');
             $kppsDb = DB::table('kpps_application')->get();
+            $extDb = DB::table('extension_application')->get();
+            $extDbApproved = DB::table('extension_application')->where('application_status','approved')->get();
+            $kppsDbApproved = DB::table('kpps_application')->where('application_status','approved')->get();
+            $extDbInProgress = DB::table('extension_application')->where('application_status','in progress')->get();
+            $kppsDbInProgress = DB::table('kpps_application')->where('application_status','in progress')->get();
+            $extDbDeclined = DB::table('extension_application')->where('application_status','declined')->get();
+            $kppsDbDeclined = DB::table('kpps_application')->where('application_status','declined')->get();
             $data=[];
+            
             $applicationStatus=[['pending','in progress','declined','approved']];
+            $ext_data=[];
+            $ext_applicationStatus=[['pending','in progress','declined','approved']];
             
             foreach ($kppsDb as $application) {
                 $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
@@ -314,11 +324,6 @@ class adminactions extends Controller
                 $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
                 array_push($data,array_merge((array)$uData,(array)$application));
             }
-
-
-            $extDb = DB::table('extension_application')->get();
-            $ext_data=[];
-            $ext_applicationStatus=[['pending','in progress','declined','approved']];
             
             foreach ($extDb as $application) {
                 $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
@@ -329,7 +334,8 @@ class adminactions extends Controller
             }
         //    return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
             
-            return view('Layouts/AdminActions/listofkppsapplications',['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus]);
+            return view('Layouts/AdminActions/listofkppsapplications',
+            ['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus,'extApproved'=>$extDbApproved,'extProgress'=>$extDbInProgress,'extDeclined'=>$extDbDeclined,'kppApproved'=>$kppsDbApproved,'kppProgress'=>$kppsDbInProgress,'kppDeclined'=>$kppsDbDeclined]);
     }
     public function BuddiesRequestFecher(){
         $u_request = DB::table('buddy_request')->select('student_id','buddy_request_id')->where('status','pending')->get();

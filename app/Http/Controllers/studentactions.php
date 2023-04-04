@@ -444,6 +444,7 @@ class studentactions extends Controller
     }
     
     //BUDDIES MANAGEMENT SECTION//
+    
     public function BuddyProgram(request $request){
         $id = $request->user()->id;        
         $data=[];
@@ -453,11 +454,11 @@ class studentactions extends Controller
 
         $myallocation=[];
 
-        $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id')->where('student_id',$id)->limit(1)->get();
+        $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id','request_id','request_change')->where('student_id',$id)->limit(1)->get();
         if(sizeOf($BuddyId) > 0){
             $BuddyUser = DB::table("users")->select('surname','other_names','email')->where('id',$BuddyId[0]->buddy_id)->limit(1)->get();
-            // $BuddyDetails = DB::table("student_details")->select('phone_number')->where('student_id',$BuddyId[0]->buddy_id)->limit(1)->get();
-            array_push($myallocation,array_merge((array)$BuddyUser[0],(array)$BuddyId[0]));
+            $BuddyDetails = DB::table("student_details")->select('phone_number')->where('student_id',$BuddyId[0]->buddy_id)->limit(1)->get();
+            array_push($myallocation,array_merge((array)$BuddyUser[0],(array)$BuddyId[0],(array)$BuddyDetails[0]));
         }
         
         if(sizeOf($IsABubby) < 1){
@@ -478,6 +479,19 @@ class studentactions extends Controller
         }
 
         return view('Layouts/studentActions/Buddyprogram',['RequestsData'=>$data,'allAllocated'=>$AllAssigned,'is_buddy'=>$is_buddy,'user'=>$this->GetuserDetails($request),'allocationGetter'=>$myallocation]);
+    }
+
+    public function requestBuddyChange(request $request){
+        $code = substr( "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" ,mt_rand( 0 ,50 ) ,2 ) .substr( md5( time() ), 1,15);
+        $checkRequest = DB::table("buddies_allocations")->where('request_id',$request->request_id)->get();
+
+        if($checkRequest[0]->request_change === null){
+            $data = DB::table("buddies_allocations")->where('request_id',$request->request_id)->update(['request_change'=>$code]);
+            if($data){ return back()->with('request_change_success','Request placed successfully!'); }
+            else{ return back()->with('request_change_fail','Failed to place a change request.  Try later!'); }
+        }else{
+            return back()->with('request_change_fail','Failed to place a new change request. One is still pending!');
+        }
     }
     public function MyBuddyRequest(request $request){
         $id = $request->user()->id;      
@@ -668,6 +682,11 @@ class studentactions extends Controller
     
     }
 
+    public function activate_user($email){
+        $msg='Your account has successfully created. Click the link below to get access. ';
+        return redirect()->route('emailsend',[$email,$msg]);
+    }
+
     public function AddNewSignup(Request $request){
 
         if($request->filled('id','surNAME','firstNAME','lastNAME','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence','ParentNames','ParentEmail','ParentPhone')){
@@ -760,7 +779,11 @@ class studentactions extends Controller
                 $postGuardian->save();
                 $postVerification->save();
                 $postRole->save();
-                return back()->with('New_Student_Added','New International Student data has been added Successfully');
+                if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
+                    $this->activate_user($request->email);
+                }else{
+                    return back()->with('New_Student_Added','New International Student data has been added Successfully');
+                }
             }
         }else{
             return back()->with('New_Student_failed','some feilds are missing!');

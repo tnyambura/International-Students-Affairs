@@ -27,26 +27,33 @@
     @if(Session::has('New_User_Added'))
     <div class="alert alert-success" role="alert">
     {{Session::get('New_User_Added')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     @endif
     @if(Session::has('New_User_failed'))
     <div class="alert alert-danger" role="alert">
     {{Session::get('New_User_failed')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     @endif
     @if(Session::has('Buddy_modification_success'))
     <div class="alert alert-success" role="alert">
     {{Session::get('Buddy_modification_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     @endif
     @if(Session::has('dissmiss_student'))
     <div class="alert alert-success" role="alert">
     {{Session::get('dissmiss_student')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     @endif
     @if(Session::has('dissmiss_student_fail'))
     <div class="alert alert-danger" role="alert">
     {{Session::get('dissmiss_student_fail')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
     </div>
     @endif
 
@@ -168,8 +175,8 @@
                                                 <div class="form-row w-100">
                                                     <div class="col-lg-4 mb-3 ">   
                                                         <p class="w-100 ">Allocate budy to student <strong>{{$student["id"]. ' - '. $student['surname'].' '.$student['other_names']}}</strong> </p> 
-                                                        <input id="request_id" class="form-control" type="hidden" value={{$student["buddy_request_id"]}} name="request_id" required autofocus />
-                                                        <input id="student_id" class="form-control" type="hidden" value={{$student["id"]}} name="student_id" required autofocus />
+                                                        <input id="request_id" class="form-control" type="hidden" value='{{$student["buddy_request_id"]}}' name="request_id" required autofocus />
+                                                        <input id="student_id" class="form-control" type="hidden" value='{{$student["id"]}}' name="student_id" required autofocus />
                                                         <label for="surNAME">Select Buddy</label> 
                                                         <select class='form-select form-select-lg' name="buddy_id" id='select_new_buddy'>
                                                             <option disabled selected>--SELECT BUDDY--</option> 
@@ -264,8 +271,9 @@
                                                                     $(document).ready(function() {
                                                                         $('body').find("#btn_{{$bdAlloc['id']}}").on('click',function(e){
                                                                             e.preventDefault()
+                                                                            let form = $(this).parent()
                                                                             if(confirm('Do you really want to remove this student?')){
-                                                                                window.location = $(this).parent().submit()
+                                                                                form.submit()
                                                                             }
                                                                         })
                                                                     })

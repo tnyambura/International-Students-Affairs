@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::post('/cancelBuddy', [studentactions::class, 'cancelBuddy'])->middleware('isUser')->name('add.cancelBuddy');
     //  Route::get('/RequestBuddy', [studentactions::class, 'newBuddyRequest'])->middleware('isUser');
      Route::post('/RequestABuddy', [studentactions::class, 'RequestABuddy'])->middleware('isUser')->name('add.requestabuddy');
+     Route::post('/requestBuddyChange', [studentactions::class, 'requestBuddyChange'])->middleware('isUser')->name('add.requestBuddyChange');
      Route::get('/BuddyProgram', [studentactions::class, 'BuddyProgram'])->middleware('isUser');
      Route::get('/MyBuddyRequest', [studentactions::class, 'MyBuddyRequest'])->middleware('isUser');
      Route::get('/MyBuddyAllocations', [studentactions::class, 'MyBuddyAllocation'])->middleware('isUser');

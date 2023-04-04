@@ -7,26 +7,31 @@
                         @if(Session::has('user_update_success'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('user_update_success')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
                         @if(Session::has('user_update_failed'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('user_update_failed')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
                         @if(Session::has('kpp_updated_successfully'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('kpp_updated_successfully')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif                       
                         @if(Session::has('kppApp_cancel_success'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('kppApp_cancel_success')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif                       
                         @if(Session::has('kppApp_cancel_fail'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('kppApp_cancel_fail')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif                       
                        
@@ -39,7 +44,7 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
-                                            <tr>
+                                            <tr class='sticky-top'>
                                                 <th>application Id</th>
                                                 <th>Full Name</th>
                                                 <th>Passport Number</th>
@@ -49,17 +54,6 @@
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>application Id</th>
-                                                <th>Full Name</th>
-                                                <th>Passport Number</th>
-                                                <th>Date Initiated</th>
-                                                <th>status</th>
-                                                <th>expire date</th>
-                                                <th>Actions</th>
-                                            </tr>
-                                        </tfoot>
                                         <tbody>
                                         @foreach($data as $appdata)
                                             <tr>

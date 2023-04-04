@@ -7,21 +7,25 @@
                         @if(Session::has('user_update_success'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('user_update_success')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
                         @if(Session::has('user_update_failed'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('user_update_failed')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
                         @if(Session::has('extApp_cancel_success'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('extApp_cancel_success')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif                       
                         @if(Session::has('extApp_cancel_fail'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('extApp_cancel_fail')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif 
                         <div class="card mb-4">
@@ -33,7 +37,7 @@
                                 <div class="table-responsive">
                                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                         <thead>
-                                            <tr>
+                                            <tr class='sticky-top'>
                                                 <th>application Id</th>
                                                 <th>entry date</th>
                                                 <th>application date</th>
@@ -42,16 +46,6 @@
                                                 <th>action</th>
                                             </tr>
                                         </thead>
-                                        <tfoot>
-                                            <tr>
-                                                <th>application Id</th>
-                                                <th>entry date</th>
-                                                <th>application date</th>
-                                                <th>application status</th>
-                                                <th>expire date</th>
-                                                <th>action</th>
-                                            </tr>
-                                        </tfoot>
                                         <tbody>
                                         @foreach($data as $appdata)
                                             <tr>

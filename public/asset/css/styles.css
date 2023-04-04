@@ -10596,9 +10596,12 @@ th{
   border-radius: 10px 10px 0 0; */
   border-bottom: 2px solid var(--primary);
 }
-.buddy-contents:not(.buddy-contents.active){
+.buddy-contents:not(.buddy-contents.active),.subTab-Content:not(.subTab-Content.active){
   display: none;
 }
 .buddy-contents.active{
+  display: block;
+}
+.subTab-Content.active{
   display: block;
 }

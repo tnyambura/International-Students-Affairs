@@ -19,36 +19,54 @@
         @if(Session::has('New_request_assigned'))
         <div class="alert alert-success" role="alert">
         {{Session::get('New_request_assigned')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif
         @if(Session::has('user_update_success'))
         <div class="alert alert-success" role="alert">
         {{Session::get('user_update_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif
         @if(Session::has('user_update_failed'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('user_update_failed')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        @endif
+        @if(Session::has('request_change_success'))
+        <div class="alert alert-success" role="alert">
+        {{Session::get('request_change_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        @endif
+        @if(Session::has('request_change_fail'))
+        <div class="alert alert-danger" role="alert">
+        {{Session::get('request_change_fail')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif
         @if(Session::has('New_request_failed'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('New_request_failed')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif
         @if(Session::has('buddy_cancel_success'))
         <div class="alert alert-success" role="alert">
         {{Session::get('buddy_cancel_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif
         @if(Session::has('buddy_cancel_fail'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('buddy_cancel_fail')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif
 
-        <div class="container-fluid buddy-contents active" id="my_bd_req" style='color:white' data-toggle="modal" data-target="#request_modal"><br/>
-            <ol class="breadcrumb mb-4 d-flex bg-info align-items-center" role='button'>
+        <div class="container-fluid buddy-contents active" id="my_bd_req" style='color:white' ><br/>
+            <ol class="breadcrumb mb-4 d-flex bg-info align-items-center" data-toggle="modal" data-target="#request_modal" role='button'>
                 <i class="fas fa-user-plus mr-1"></i>
                 <span class='ml-2'>Place a Request</span><br/>
             </ol> 
@@ -62,21 +80,13 @@
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                                <tr>
+                                <tr class='sticky-top'>
                                     <th>request id</th>
                                     <th>Date Requested</th>
                                     <th>status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                    <tr>
-                                    <th>request id</th>
-                                    <th>Date Requested</th>
-                                    <th>status</th>
-                                    <th>Action</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
                                 @if(sizeOf($RequestsData) >0)
                                     @foreach($RequestsData as $data)
@@ -120,7 +130,7 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                            <thead>
+                            <thead class='sticky-top'>
                                 <tr>
                                 <th>Allocation Id</th>
                                 <th>Buddy Id</th>
@@ -130,32 +140,31 @@
                                 <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Allocation Id</th>
-                                    <th>Buddy Id</th>
-                                    <th>Buddy Name</th>
-                                    <th>Buddy Email</th>
-                                    <th>Buddy Telephone</th>
-                                    <th>Actions</th>
-
-                                </tr>
-                            </tfoot>
                             <tbody>
                             @foreach($allocationGetter as $Buddy)
                                 <tr>
+                                    <td>{{$Buddy['request_id']}}</td>
                                     <td>{{$Buddy['buddy_id']}}</td>
-                                    <td>{{$Buddy['allocation_id']}}</td>
                                     <td>{{$Buddy['surname'].' '.$Buddy['other_names']}}</td>
                                     <td>{{$Buddy['email']}}</td>
-                                    <td>-</td>
+                                    <td>{{$Buddy['phone_number']}}</td>
 
 
                                     <td>
-                                    <a href="" target="blank">
-                                        <span class="fas fa-edit" aria-hidden="false"></span>
-                                        Request buddy change
-                                    </a>  
+                                    
+                                    <form method='post' action='{{route("add.requestBuddyChange")}}'> @csrf
+                                        <input type='hidden' name='request_id' value="{{$Buddy['request_id']}}"/>
+                                        @if($Buddy['request_change'] == '')
+                                        <button target="blank" type='submit' role='button' class='btn btn-info d-flex align-items-center'>
+                                            <span class="fas fa-edit mr-2" aria-hidden="false"></span>Request buddy change
+                                        </button>  
+                                        @else
+                                        <button target="blank" disabled class='btn btn-info d-flex align-items-center'>
+                                            <!-- <span class="badge badge-warning"></span> -->
+                                            <span class="fas fa-exclamation-circle mr-2" style='color:var(--warning)'></span>Request Pending
+                                        </button> 
+                                        @endif
+                                    </form>
                                     </td>
                                 </tr>
                             @endforeach

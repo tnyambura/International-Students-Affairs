@@ -12,23 +12,39 @@
                         @if(Session::has('New_User_Added') )
                         <div class="alert alert-success" role="alert">
                         {{Session::get('New_User_Added')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
                         @if(Session::has('New_Student_Added'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('New_Student_Added')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
                         @if(Session::has('New_User_failed'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('New_User_failed')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
                         @if(Session::has('New_Student_failed'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('New_Student_failed')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif
+                        @if(Session::has('email_send_success'))
+                        <div class="alert alert-success" role="alert">
+                        {{Session::get('email_send_success')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        @endif 
+                        @if(Session::has('email_send_fail'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('email_send_fail')}}
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        </div>
+                        @endif 
   
 
                         <form method="POST" action="{{ __('AddUser') }}" class='new-staff-form'>
