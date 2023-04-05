@@ -112,61 +112,61 @@
                                                                         <form method="POST" action="{{route('add.editUserData')}}">
                                                                             @csrf
                                                                             <input type="hidden" name="cr_id" value="{{$user['user_id']}}">
-                                                                            <div class="form-group ">
-                                                                                <label for="id">Admission No:</label>
-                                                                                <input type="text" class="form-control" name="u_id" id="id" aria-describedby="idHelp" value="{{$user['user_id']}}">
-                                                                            </div>
-                                                                            <div class="form-group d-flex justify-content-between">
-                                                                                <div>
+                                                                            <div class="row d-flex justify-content-between">
+                                                                                <div class="col">
+                                                                                    <label for="id">Admission No:</label>
+                                                                                    <input type="text" class="form-control" name="u_id" id="id" aria-describedby="idHelp" value="{{$user['user_id']}}">
+                                                                                </div>
+                                                                                <div class="col">
                                                                                     <label for="surname">surname</label>
                                                                                     <input type="text" class="form-control" name="sname" id="surname" value="{{$user['surname']}}">
                                                                                 </div>
-                                                                                <div>
+                                                                                <div class="col">
                                                                                     <label for="othernames">other_names</label>
                                                                                     <input type="text" class="form-control" name="oname" id="othernames" value="{{$user['other_names']}}">
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-group  d-flex justify-content-between">
-                                                                                <div>
+                                                                            <div class="row  d-flex justify-content-between">
+                                                                                <div class="col">
                                                                                     <label for="email">email</label>
                                                                                     <input type="text" class="form-control" name="email" id="email" value="{{$user['email']}}">
                                                                                 </div>
                                                                                 @if($user['role'] === 'student' || $user['role'] === 'buddy')
-                                                                                <div>
+                                                                                <div class="col">
                                                                                     <label for="phone_no">phone number</label>
                                                                                     <input type="text" class="form-control" name="phone" id="phone_no" value="{{$user['phone_number']}}">
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-group ">
-                                                                                <label for="residence">Residence</label>
-                                                                                <input type="text" class="form-control" name="residence" id="residence" value="{{$user['residence']}}">
-                                                                            </div>
-                                                                            <div class="form-group  d-flex justify-content-between">
-                                                                                <div>
+                                                                            <div class="row  d-flex justify-content-between">
+                                                                                <div class="col ">
+                                                                                    <label for="residence">Residence</label>
+                                                                                    <input type="text" class="form-control" name="residence" id="residence" value="{{$user['residence']}}">
+                                                                                </div>
+                                                                                <div class="col">
                                                                                     <label for="faculty">faculty</label>
                                                                                     <input type="text" class="form-control" name="faculty" id="faculty" value="{{$user['faculty']}}">
                                                                                 </div>
-                                                                                <div>
+                                                                                <div class="col">
                                                                                     <label for="course">course</label>
                                                                                     <input type="text" class="form-control" name="course" id="course" value="{{$user['course']}}">
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="form-group  d-flex justify-content-around">
-                                                                                <div>
+                                                                            <div class="row  d-flex justify-content-around">
+                                                                                <div class="col">
                                                                                     <label for="nationality">nationality</label>
                                                                                     <input type="text" class="form-control" name="country" id="nationality" value="{{$user['nationality']}}">
                                                                                 </div>
-                                                                                <div>
+                                                                                <div class="col">
                                                                                     <label for="passport_no">passport Number</label>
                                                                                     <input type="text" class="form-control" name="passNo" id="passport_no" value="{{$user['passport_number']}}">
                                                                                 </div>
-                                                                                <div>
+                                                                                <div class="col">
                                                                                     <label for="passport_ex">passport expire date</label>
                                                                                     <input type="text" class="form-control" name="passEx" id="passport_ex" value="{{$user['passport_expire_date']}}">
                                                                                 </div>
                                                                             @endif
                                                                             </div>
-                                                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                                                            <button type="submit" class="btn btn-primary w-50 mt-4">Submit</button>
                                                                         </form>
                                                                         
                                                                     </div>

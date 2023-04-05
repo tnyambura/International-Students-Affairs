@@ -10605,3 +10605,8 @@ th{
 .subTab-Content.active{
   display: block;
 }
+div label{
+  text-transform: capitalize;
+  font-weight: bold;
+  margin-top: 10px;
+}

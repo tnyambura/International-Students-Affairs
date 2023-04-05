@@ -50,8 +50,7 @@ class RegisteredUserController extends Controller
      * @throws \Illuminate\Validation\ValidationException
      */
     public function activate_user($email){
-        $msg='Your account has successfully created. Click the link below to get access. ';
-        return redirect()->route('emailsend',[$email,$msg]);
+        
     }
 
     public function store(Request $request)
@@ -85,9 +84,12 @@ class RegisteredUserController extends Controller
         $post->timestamps = false;
         $postRole->timestamps = false;
         
-        $post->save();
-        $postRole->save();
-        $this->activate_user($request->email);
+        // $post->save();
+        // $postRole->save();
+        if($post->save() && $postRole->save()){
+            $msg='Your account has successfully created. Click the link below to get access. ';
+            return redirect()->route('emailsend',[$request->email,$msg]);
+        }
         // return back()->with('New_User_Added','A New User has been Enrolled Successfully');
         }else{
             return back()->with('New_User_failed','A user with Same suID is already Registered');    
