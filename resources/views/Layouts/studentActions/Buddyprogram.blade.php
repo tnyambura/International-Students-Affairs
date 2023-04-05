@@ -249,7 +249,7 @@
                             
                             <div class="card-body">
 
-                            <form method="POST" action="{{route('add.requestabuddy')}}" enctype="multipart/form-data" onSubmit="return validate();">
+                            <form method="POST" action="{{route('add.requestabuddy')}}" >
                                 @csrf
                                     
                                 <div class="form-row">

@@ -1,8 +1,14 @@
 @extends('Layouts.AdminActions.adminMaster')
 @section('content')   
                     <div class="container-fluid"><br/>
-                        <ol class="breadcrumb mb-4" style="background:#286DE7;">
-                            <li class="breadcrumb-item active" style="color:white;"> List of all International students registered as Users.</li>
+                        <ol class="breadcrumb mb-4 border-2" >
+                            <li class="breadcrumb-item active d-flex justify-content-between w-100" style="color:white;"> 
+                                <span style='color:black;' >List of all International students registered as Users.</span>
+                                <div>
+                                    <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                                </div>
+                            </li>
                         </ol>
                         @if(Session::has('activation_failed'))
                         <div class="alert alert-danger" role="alert">
@@ -41,6 +47,7 @@
                         @endif 
                         <div class="card mb-4">
                             <div class="card-header">
+
                                 <i class="fas fa-table mr-1"></i>
                                List of all International students registered as Users.
                             </div>

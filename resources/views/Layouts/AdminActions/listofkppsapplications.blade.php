@@ -276,12 +276,18 @@
             <div style='color:var(--primary)'>
                 <i class="far fa-address-card mr-1"></i>
                 <span >Kpps Application Requests</span>
+                @if(sizeOf($data) > 0)
+                    <span class="badge badge-warning ml-3">{{sizeOf($data)}}</span>
+                @endif
             </div>
         </div>
         <div class="tab-link main-tab" role='button' data-load-target='#ext_requests'>
             <div class='d-flex align-items-center' style='color:var(--success)'>
                 <i class="material-icons mr-2" style="color:var(--success)">extension</i>
                 <span >Visa Extension Requests</span>
+                @if(sizeOf($visarequests) > 0)
+                    <span class="badge badge-warning ml-3">{{sizeOf($visarequests)}}</span>
+                @endif
             </div>
         </div>
         <div class="tab-link main-tab" role='button' data-load-target='#visa_responses'>
@@ -598,6 +604,7 @@
                         </tfoot>
                         <tbody>
                             @foreach($visarequests as $val)
+                            @if($val['application_status'] === 'pending')
                                 <tr>
                                     <td> {{$val['id']}}</td>
                                     <td> {{$val['student_id']}}</td>
@@ -797,6 +804,7 @@
                                             </div>
                                         </div>
                                 </tr>
+                            @endif
                             @endforeach
                             </tbody>
                     </table>

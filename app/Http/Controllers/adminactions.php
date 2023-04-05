@@ -254,52 +254,52 @@ class adminactions extends Controller
     }
 
     public function getallusers(Request $req){
-            $id = $req->user()->id;
-            $data=[];
-            $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
-            $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
-            $GetUsersRole = DB::table('user_roles')->get();
-            
-            if($MyRole[0]->role === 'super_admin'){
-                foreach ($GetUsers as $value) {
-                    if($value->user_id !== $id){
-                        $thisUser=[];
-                        $isBuddy=false;
-                        $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
-                        $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-                        if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-                        if(sizeOf($GetUsersRole) > 0 ){
-                            $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                            if(sizeOf($GetUsersDetails) > 0){
-                                // if($GetUsersRole[0]->role === 'student'){
-                                    array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                                    // }
-                            }else{
-                                array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-    
-                            }
-                        }
-                    }
-                }
-            }
-            if($MyRole[0]->role === 'admin'){
-                foreach ($GetUsers as $value) {
-                    if($value->user_id !== $id){
-                        $thisUser=[];
-                        $isBuddy=false;
-                        $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','student')->limit(1)->get();
-                        $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-                        if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-                        if(sizeOf($GetUsersRole) > 0 ){
-                            $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                            if(sizeOf($GetUsersDetails) > 0){
+        $id = $req->user()->id;
+        $data=[];
+        $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
+        $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
+        $GetUsersRole = DB::table('user_roles')->get();
+        
+        if($MyRole[0]->role === 'super_admin'){
+            foreach ($GetUsers as $value) {
+                if($value->user_id !== $id){
+                    $thisUser=[];
+                    $isBuddy=false;
+                    $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+                    $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                    if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                    if(sizeOf($GetUsersRole) > 0 ){
+                        $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                        if(sizeOf($GetUsersDetails) > 0){
+                            // if($GetUsersRole[0]->role === 'student'){
                                 array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                            }
+                                // }
+                        }else{
+                            array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+
                         }
                     }
                 }
             }
-            return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
+        }
+        if($MyRole[0]->role === 'admin'){
+            foreach ($GetUsers as $value) {
+                if($value->user_id !== $id){
+                    $thisUser=[];
+                    $isBuddy=false;
+                    $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','student')->limit(1)->get();
+                    $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                    if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                    if(sizeOf($GetUsersRole) > 0 ){
+                        $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                        if(sizeOf($GetUsersDetails) > 0){
+                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                        }
+                    }
+                }
+            }
+        }
+        return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
     }
     public function getVisaData($table,$status){
         $tableGetter = DB::table($table)->where('application_status',$status)->get();
@@ -319,7 +319,7 @@ class adminactions extends Controller
     public function getAllkppApplications(){
             // $data= applyKpp::all('id','otherNAMES','passportNUMBER','updated_at','biodataPAGE','currentVISA','policeCLEARANCE','dateofENTRY','Nationality','created_at');
             $kppsDb = DB::table('kpps_application')->where('application_status','pending')->get();
-            $extDb = DB::table('extension_application')->get();
+            $extDb = DB::table('extension_application')->where('application_status','pending')->get();
             $data=[];
             
             $applicationStatus=[['pending','in progress','declined','approved']];

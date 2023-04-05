@@ -211,7 +211,7 @@
 
     <div class="container-fluid buddy-contents" id="allocations_list"><br/>
         <ol class="breadcrumb mb-4" style="background:#113C7A;">
-            <li class="breadcrumb-item active" style="color:white;">List of all Buddy Allocations</li>
+            <li class="breadcrumb-item active" style="color:white;">List of all Buddy Allocations {{sizeOf($BuddiesAllocations)}}</li>
         </ol>
         <div class="card mb-4">
             <div class="card-header">

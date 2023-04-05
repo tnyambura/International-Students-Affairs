@@ -19,6 +19,11 @@
                         {{Session::get('visa_request_added')}}
                         </div>
                         @endif
+                        @if(Session::has('visa_request_ongoing'))
+                        <div class="alert alert-warning" role="alert">
+                        {{Session::get('visa_request_ongoing')}}
+                        </div>
+                        @endif
                             <form method="POST" action="{{route('add.newvisaextension')}}" enctype="multipart/form-data">
                             @csrf
                                 <div class="form-row">

@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Hash;
+
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 // use Illuminate\Support\Facades\File;
-use App\Http\Controllers\Auth;
+// use App\Http\Controllers\Auth;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\FileUploader;
 // use Auth;
@@ -302,40 +304,69 @@ class studentactions extends Controller
                 'Biodata' => 'mimes:png,jpg,jpeg,pdf',
                 'currentVISA' => 'mimes:png,jpg,jpeg,pdf'
             ]
-        );
+            );
 
+            
             // $allowedFileTypes = config('app.allowedFieTypes');
             // $maxFileSize = config('app.maxFileSize');
             // $rules = [
-            //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
-            // ];
-            
-            // $this->validate( $request,$rules);
-            $appId = rand(1000,1000000);
-
-            if(sizeOf(DB::table('extension_application')->where('id',$appId)->get()) > 0){
-                Create_Newvisaextension($request);
-            }else{
-                $passportBio = FileUploader::fileupload($request,'Biodata','PassportBioData_'.$appId,'extension/');
-                $entryV = FileUploader::fileupload($request,'entryVISA','entryPage_'.$appId,'extension/');
-                $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa_'.$appId,'extension/');
-    
-                $post = new applyvisaextension();
+                //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
+                // ];
                 
-                $post->id = $appId;
-                $post->student_id = $request->suID;
-                $post->passport_biodata = $passportBio;
-                $post->entry_visa = $entryV;
-                $post->current_visa = $currentV;
-                $post->date_of_entry = '2023-03-19';
-                $post->application_date = '2023-03-16';
-                $post->application_status = 'pending';
-    
-    
-                $post->timestamps = false;
-                $post->save();
+                // $this->validate( $request,$rules);
+                $appId = rand(1000,1000000);
+                
+                if(sizeOf(DB::table('extension_application')->where('id',$appId)->get()) > 0){
+                    Create_Newvisaextension($request);
+                }else{
+                $on_going_request = DB::table('extension_application')->where("student_id",Auth::user()->id)->limit(1)->get();
+                if(sizeOf($on_going_request) > 0){
+                    if($on_going_request[0]->application_status === 'pending' || $on_going_request[0]->application_status === 'in progress' ){
+                        return back()->with('visa_request_ongoing','An extension request with ID No "'.$on_going_request[0]->id.'" has a status of "'.$on_going_request[0]->application_status.'". We cannot initiate a new application.');
+                    }else{
+                        $passportBio = FileUploader::fileupload($request,'Biodata','PassportBioData_'.$appId,'extension/');
+                        $entryV = FileUploader::fileupload($request,'entryVISA','entryPage_'.$appId,'extension/');
+                        $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa_'.$appId,'extension/');
+            
+                        $post = new applyvisaextension();
+                        
+                        $post->id = $appId;
+                        $post->student_id = $request->suID;
+                        $post->passport_biodata = $passportBio;
+                        $post->entry_visa = $entryV;
+                        $post->current_visa = $currentV;
+                        $post->date_of_entry = '2023-03-19';
+                        $post->application_date = '2023-03-16';
+                        $post->application_status = 'pending';
+            
+            
+                        $post->timestamps = false;
+                        $post->save();
+                
+                        return back()->with('visa_request_added','Your visa extension request has been submitted successfully');
+                    }
+                }else{
+                    $passportBio = FileUploader::fileupload($request,'Biodata','PassportBioData_'.$appId,'extension/');
+                    $entryV = FileUploader::fileupload($request,'entryVISA','entryPage_'.$appId,'extension/');
+                    $currentV = FileUploader::fileupload($request,'currentVISA','CurrentVisa_'.$appId,'extension/');
         
-                return back()->with('visa_request_added','Your visa extension request has been submitted successfully');
+                    $post = new applyvisaextension();
+                    
+                    $post->id = $appId;
+                    $post->student_id = $request->suID;
+                    $post->passport_biodata = $passportBio;
+                    $post->entry_visa = $entryV;
+                    $post->current_visa = $currentV;
+                    $post->date_of_entry = '2023-03-19';
+                    $post->application_date = '2023-03-16';
+                    $post->application_status = 'pending';
+        
+        
+                    $post->timestamps = false;
+                    $post->save();
+            
+                    return back()->with('visa_request_added','Your visa extension request has been submitted successfully');
+                }
             }
         }
     }
@@ -529,7 +560,7 @@ class studentactions extends Controller
         
         if(sizeOf($data) < 1){
             if($this->PushBuddyRq($id)){
-                return redirect('/RequestBuddy')->with('Buddy_request_successful','Request submitted Successfully');
+                return back()->with('New_request_assigned','Request submitted Successfully');
             }
         }else{
             foreach ($data as $value) {
@@ -539,12 +570,12 @@ class studentactions extends Controller
                 }
                 if(strtolower($value->status) === 'approved'){
                     $status = false;
-                    return back()->with('New_request_assigned','You have already been assigned a buddy! We cannot initiate new request.');
+                    return back()->with('New_request_failed','You have already been assigned a buddy! We cannot initiate new request.');
                 }
             }
             if($status){
                 if($this->PushBuddyRq($id)){
-                    return back()->with('Buddy_request_successful','Request submitted Successfully');
+                    return back()->with('New_request_assigned','Request submitted Successfully');
                 }
             }
         }
