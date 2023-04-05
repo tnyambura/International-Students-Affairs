@@ -111,7 +111,7 @@ class adminactions extends Controller
             return redirect()->route('emailsend',[$request->applicant_email,$msg]);
             // return back()->with('success','success');
         }
-        return back()->with('error','could not update data');
+        return back()->with('error','could not update data ->'.$request->fileResponse.' -> '.$request->applicant_email.' -> '.$request->app_id);
     }
 
 // public function changeVisastatus(Request $request, $id)
@@ -301,16 +301,25 @@ class adminactions extends Controller
             }
             return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
     }
+    public function getVisaData($table,$status){
+        $tableGetter = DB::table($table)->where('application_status',$status)->get();
+        $applicationStatus = [];
+        $data = [];
+        if(sizeOf($tableGetter) > 0){
+            foreach ($tableGetter as $application) {
+                $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
+                $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
+                array_push($applicationStatus,$application->application_status);
+                $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+                array_push($data,array_merge((array)$uData,(array)$application));
+            }
+        }
+        return $data;
+    }
     public function getAllkppApplications(){
             // $data= applyKpp::all('id','otherNAMES','passportNUMBER','updated_at','biodataPAGE','currentVISA','policeCLEARANCE','dateofENTRY','Nationality','created_at');
-            $kppsDb = DB::table('kpps_application')->get();
+            $kppsDb = DB::table('kpps_application')->where('application_status','pending')->get();
             $extDb = DB::table('extension_application')->get();
-            $extDbApproved = DB::table('extension_application')->where('application_status','approved')->get();
-            $kppsDbApproved = DB::table('kpps_application')->where('application_status','approved')->get();
-            $extDbInProgress = DB::table('extension_application')->where('application_status','in progress')->get();
-            $kppsDbInProgress = DB::table('kpps_application')->where('application_status','in progress')->get();
-            $extDbDeclined = DB::table('extension_application')->where('application_status','declined')->get();
-            $kppsDbDeclined = DB::table('kpps_application')->where('application_status','declined')->get();
             $data=[];
             
             $applicationStatus=[['pending','in progress','declined','approved']];
@@ -335,7 +344,7 @@ class adminactions extends Controller
         //    return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
             
             return view('Layouts/AdminActions/listofkppsapplications',
-            ['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus,'extApproved'=>$extDbApproved,'extProgress'=>$extDbInProgress,'extDeclined'=>$extDbDeclined,'kppApproved'=>$kppsDbApproved,'kppProgress'=>$kppsDbInProgress,'kppDeclined'=>$kppsDbDeclined]);
+            ['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus,'extApproved'=>$this->getVisaData('extension_application','approved'),'extProgress'=>$this->getVisaData('extension_application','in progress'),'extDeclined'=>$this->getVisaData('extension_application','declined'),'kppApproved'=>$this->getVisaData('kpps_application','approved'),'kppProgress'=>$this->getVisaData('kpps_application','in progress'),'kppDeclined'=>$this->getVisaData('kpps_application','declined')]);
     }
     public function BuddiesRequestFecher(){
         $u_request = DB::table('buddy_request')->select('student_id','buddy_request_id')->where('status','pending')->get();

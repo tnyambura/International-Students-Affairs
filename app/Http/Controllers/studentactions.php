@@ -682,11 +682,6 @@ class studentactions extends Controller
     
     }
 
-    public function activate_user($email){
-        $msg='Your account has successfully created. Click the link below to get access. ';
-        return redirect()->route('emailsend',[$email,$msg]);
-    }
-
     public function AddNewSignup(Request $request){
 
         if($request->filled('id','surNAME','firstNAME','lastNAME','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence','ParentNames','ParentEmail','ParentPhone')){
@@ -780,7 +775,8 @@ class studentactions extends Controller
                 $postVerification->save();
                 $postRole->save();
                 if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
-                    $this->activate_user($request->email);
+                    $msg='Your account has successfully created. Click the link below to get access. ';
+                    return redirect()->route('emailsend',[$request->email,$msg]);
                 }else{
                     return back()->with('New_Student_Added','New International Student data has been added Successfully');
                 }
