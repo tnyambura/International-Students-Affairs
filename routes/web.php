@@ -130,6 +130,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/EditstudentDetails/{id}', [adminactions::class, 'StudentDetailsEdit'])->middleware('isAdmin');
      Route::post('/EditstudentDetails/{id}', [adminactions::class, 'StudentDetailsUpdate'])->middleware('isAdmin');
      Route::get('/listsofISPDF', [adminactions::class, 'studentslistgenerateReport'])->middleware('isAdmin');
+     Route::post('/generate-file', [adminactions::class, 'GeneratePDF'])->middleware('isAdmin')->name('add.GeneratePDF');
      Route::get('/PDF', [adminactions::class, 'generatestudentlist'])->middleware('isAdmin');
      Route::get('/BuddyAllocationsPDF', [adminactions::class, 'generateBuddyAllocationList'])->middleware('isAdmin');
 

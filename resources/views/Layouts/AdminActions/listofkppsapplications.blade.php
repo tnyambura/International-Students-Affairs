@@ -612,7 +612,7 @@
                                     <td> {{$val['nationality']}}</td>
                                     <td> {{$val['application_status']}}</td>
                                     
-                                    <td class="d-flex justify-content-around">
+                                    <td >
                                         @php $data= Crypt::encrypt($val['student_id']); @endphp                                                                                            
 
                                         <span class="fas fa-eye " role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewextapp_{{$val['id']}}" style=" color:blue"></span>

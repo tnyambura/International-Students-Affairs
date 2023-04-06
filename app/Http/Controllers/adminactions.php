@@ -378,7 +378,7 @@ class adminactions extends Controller
         foreach ($bdAllocations as $allocation) {
             $StudentData = DB::table('users')->select('id','surname','other_names','email')->where('id',$allocation->student_id)->limit(1)->get();
             $buddyData = DB::table('users')->select('id as bd_id','surname as bd_srnm','other_names as bd_onm','email as bd_eml')->where('id',$allocation->buddy_id)->limit(1)->get();
-                array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0]));
+                array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0],['change_req'=>$allocation->request_change]));
         }
         return $data;
     }
@@ -554,16 +554,56 @@ class adminactions extends Controller
         }   
                    
     }
-    public function generatestudentlist(){
-            $list = addNewStudent::count();
-            if($list > 0){
-            $data= addNewStudent::all();         
-            $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView('Layouts/AdminActions/StudentsListPDF',['students'=>$data]);  
-            return $pdf->download('Listofstudents.pdf'); 
-            }else{
-                return back()->with('data_not_available','There is no data available, kindly add the students to generate report');
-            }   
-                   
+    // 'Layouts/AdminActions/StudentsListPDF'
+    public function ExportToPDF($table,$cols,$loadView,$fileName){
+        $list = DB::table($table)->select($cols)->get();
+        $data =[];
+        if(sizeOf($list) > 0){ 
+            foreach ($list as $value) {
+                // $GetUsersDetails = DB::table('student_details')->where('student_id',$value->student_id)->limit(1)->get();        
+                // array_push($data,(array)$GetUsersDetails);
+                $thisUser=[];
+                $isBuddy=false;
+                $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+                $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                if(sizeOf($GetUsersRole) > 0 ){
+                    $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                    if(sizeOf($GetUsersDetails) > 0){
+                        // if($GetUsersRole[0]->role === 'student'){
+                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                            // }
+                    }else{
+                        array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+    
+                    }
+                }
+            }
+
+
+            $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['users'=>$data]);
+            return $pdf->download($fileName.'.pdf');
+        }else{
+            return back()->with('data_not_available','There is no data available to generate a report.');
+        }   
+    }
+    public function ExportToEXCEL($table,$cols,$loadView,$fileName){
+        $list = DB::table($table)->select($cols)->get();
+        if(sizeOf($list) > 0){         
+            $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['students'=>$list]);
+            return $pdf->download($fileName.'.pdf');
+        }else{
+            return back()->with('data_not_available','There is no data available to generate a report.');
+        }   
+    }
+
+    public function GeneratePDF(Request $request){
+        $table = 'users';
+        $cols = ['id as user_id','surname','other_names','email','status'];
+        $loadView = 'Layouts/AdminActions/ListofAllUsers';
+        $fileName = 'All_users_file';
+
+        return $this->ExportToPDF($table,$cols,$loadView,$fileName);
     }
 
     public function studentslistgenerateReport(){

@@ -233,10 +233,10 @@
                         </thead>
                         <tfoot>
                             <tr>
-                            <th>Buddy ID</th>
-                                <th>Buddy Name</th>
-                                <th>List of Allocation</th>
-                                <th>Number of allocations</th>
+                                <th >Buddy ID</th>
+                                <th class='w-25'>Buddy Name</th>
+                                <th class='w-100'>List of Allocation</th>
+                                <th >Number of allocations</th>
                                 <!-- <th>Actions</th> -->
                             </tr>
                         </tfoot>
@@ -249,16 +249,25 @@
                                 <td>{{$Buddy->surname.' '.$Buddy->other_names}}</td>
                                 
                                 <td class='flex-grow-1'>
-                                    <ul class="d-flex flex-fill ">
+                                    <ul style="max-height:100px; overflow:auto;">
                                         @foreach($BuddiesAllocations as $bdAlloc)
                                             @foreach($stUsers as $st_u)
                                                 @if($st_u->id == $bdAlloc['id'] && $bdAlloc['bd_id'] == $Buddy->id)
                                                     @php(array_push($count,$st_u->id))
-                                                    <li>
-                                                        <div class="d-flex ">
-                                                            <span>{{$bdAlloc['id']}}</li>
-                                                            <span>{{$bdAlloc['surname'].' '.$bdAlloc['other_names']}}</li>
-                                                            <div class="flex-shrink-1">
+
+                                                    @if($bdAlloc['change_req'] == '')
+                                                    <li class="mb-2 py-2 border-bottom position-relative">
+                                                    @else
+                                                    <li class="mb-2 border-bottom position-relative">
+                                                        <div class="row w-100 position-absolute" style="z-index:2">
+                                                            <span class='col-8 btn-warning' role='button' data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}">Change Requested</span>
+                                                            <span class='col btn-danger' role='button'>Dissmiss</span>
+                                                        </div>
+                                                    @endif
+                                                        <div class="row ">
+                                                            <span class="col">{{$bdAlloc['id']}}</span>
+                                                            <span class="col-6">{{$bdAlloc['surname'].' '.$bdAlloc['other_names']}}</span>
+                                                            <div class="col d-flex justify-content-around align-items-center">
                                                                 <span data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}" style=" color:blue" class="fas fa-edit" aria-hidden="true"></span>
                                                                 <form action="{{route('add.dismiss')}}" method='post'> @csrf
                                                                     <input type="hidden" name="user" value="{{$bdAlloc['id']}}">

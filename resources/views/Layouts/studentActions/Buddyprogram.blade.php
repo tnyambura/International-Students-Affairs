@@ -247,16 +247,36 @@
 
                         <div class="card border-0">
                             
-                            <div class="card-body">
+                            <div class="card-body m-0">
 
                             <form method="POST" action="{{route('add.requestabuddy')}}" >
                                 @csrf
                                     
+                                <div class="row">
+                                    <div class="col">
+                                    <label for="Residence">Surname</label>
+                                    <input type="text" value="{{Auth::user()->surname}}" class="form-control" disabled>
+                                    </div>
+                                    <div class="col">
+                                    <label for="Residence">Other names</label>
+                                    <input type="text" value="{{Auth::user()->other_names}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                    <label for="Residence">Admission No</label>
+                                    <input type="text" value="{{Auth::user()->id}}" class="form-control" disabled>
+                                    </div>
+                                    <div class="col">
+                                    <label for="Residence">Email</label>
+                                    <input type="text" value="{{Auth::user()->email}}" class="form-control" disabled>
+                                    </div>
+                                </div>
+                                
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="Residence">Year of Study</label>
-                                    <input type="text" name="YearOfStudy" class="form-control" id="YearOfStudy" placeholder="YearOfStudy"
-                                        required>
+                                    <input type="text" name="YearOfStudy" class="form-control" id="YearOfStudy" required>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -271,7 +291,7 @@
                                         You must agree before submitting.
                                         </div>
                                 </div>
-                                <button class="btn btn-primary" id="btnSubmit" type="submit">Submit Request</button>
+                                <button class="btn btn-info w-100 text-capitalize" id="btnSubmit" type="submit">Submit Request</button>
 
 
 

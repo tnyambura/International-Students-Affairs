@@ -5,11 +5,20 @@
                             <li class="breadcrumb-item active d-flex justify-content-between w-100" style="color:white;"> 
                                 <span style='color:black;' >List of all International students registered as Users.</span>
                                 <div>
-                                    <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                                    <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                                        <button type='submit'>
+                                        <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                                        </button>
+                                    </form>
                                     <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
                                 </div>
                             </li>
                         </ol>
+                        @if(Session::has('data_not_available'))
+                        <div class="alert alert-danger" role="alert">
+                        {{Session::get('data_not_available')}}
+                        </div>
+                        @endif 
                         @if(Session::has('activation_failed'))
                         <div class="alert alert-danger" role="alert">
                         {{Session::get('activation_failed')}}

@@ -63,9 +63,16 @@
                                                 <td>{{$appdata->application_date}} </td>
                                                 <td>{{$appdata->application_status}} </td>
                                                 <th>-</th>
-                                                <td class='d-flex flex-column justify-content-between align-items-center'>                                                                                           
-
-                                                    <span class="fas fa-eye view-app-btn mt-2 mb-2" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:blue"></span>
+                                                <td>                                                                                           
+                                                    <div class='d-flex align-items-center justify-content-around'>
+                                                        <span class="fas fa-eye view-app-btn mt-2 mb-2" title="View Application" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:blue"></span>
+                                                        @if($appdata->application_status === 'pending')
+                                                        <a role="button" href='{{__("cancelKppApp")}}' class="cancelkpp-btn" style=" color:#CC0D0D" title="Cancel Application">
+                                                            <span class="fas fa-trash " role='button' data-action="" aria-hidden="false" data-toggle="modal" data-target="#" data-target-focus=""></span>
+                                                        </a>
+                                                        @endif
+                                                    </div>
+                                                    
                                                 
                                                     <div class="modal fade modal-md w-100"  id="Viewkppapp_{{$appdata->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                                     aria-hidden="true">
@@ -195,14 +202,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    
-                                                    @if($appdata->application_status === 'pending')
-                                                    <a role="button" href='{{__("cancelKppApp")}}' class="cancelkpp-btn" style=" color:#CC0D0D">
-                                                        <span class="fas fa-trash " role='button' data-action="" aria-hidden="false" data-toggle="modal" data-target="#" data-target-focus=""></span>
-                                                        Cancel application
-                                                    </a>
-                                                    @endif
                                                 </td>
                                             </tr>
                                             @endforeach

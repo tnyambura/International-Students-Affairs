@@ -54,19 +54,16 @@
                                                 <td>{{$appdata->application_date}} </td>
                                                 <td>{{$appdata->application_status}} </td>
                                                 <th>-</th>
-                                                <td class='d-flex flex-column '>                                                                                           
-
-                                                    <span class="fas fa-eye mt-2 mb-2" role='button' data-toggle="modal" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>
-                                                
-                                                    
-                                                    @if($appdata->application_status === 'pending')
-                                                    <a role="button" href='{{__("cancelextApp")}}' class="cancelext-btn" style=" color:#CC0D0D">
-                                                        <span class="fas fa-trash " role='button' ></span>
-                                                        Cancel application
-                                                    </a>
-                                                    @endif
-                                                </td>
-                                                <div class="modal fade modal-md w-100"  id="Viewkppapp_{{$appdata->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                <td>  
+                                                    <div class='d-flex align-items-center justify-content-around'>
+                                                        <span class="fas fa-eye" role='button' data-toggle="modal" title="View Application" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>
+                                                        @if($appdata->application_status === 'pending')
+                                                        <a role="button" href='{{__("cancelextApp")}}' title="Cancel Application" class="cancelext-btn" style=" color:#CC0D0D">
+                                                            <span class="fas fa-trash " role='button' ></span>
+                                                        </a>
+                                                        @endif
+                                                    </div> 
+                                                    <div class="modal fade modal-md w-100"  id="Viewextapp_{{$appdata->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                                     aria-hidden="true">
                                                         <div class="modal-dialog modal-lg" role="document">
                                                             <div class="modal-content">
@@ -84,7 +81,7 @@
                                                                     
                                                                     <div class="card-body">                                    
                                                                         <div class="form-row " style="text-align:justify;">
-
+    
                                                                             <div class="col">
                                                                                 <div class="form-group">
                                                                                 <label for="usr">Strathmore ID:</label>
@@ -104,7 +101,7 @@
                                                                                 </div>
                                                                             </div>
                                                                             </div>
-
+    
                                                                             <div class="form-row" style="text-align:justify;">
                                                                             <div class="col">
                                                                                 <div class="form-group">
@@ -142,12 +139,12 @@
                                                                                     </thead>
                                                                                     <tbody>
                                                                                     <tr>
-                                                                                        <td > <a href="/downloadKpps/{{$v->passport_biodata}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadKpps/{{$v->current_visa}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadKpps/{{$v->entry_visa}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadExtension/{{$v->passport_biodata}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadExtension/{{$v->current_visa}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadExtension/{{$v->entry_visa}}" style="color:green"> Download</a></td>
                                                                                     </tr>
                                                                                     </tbody>
-
+    
                                                                                     <thead>
                                                                                     <tr>
                                                                                         <th>Commitment Letter</th>
@@ -162,7 +159,7 @@
                                                                                         <td > <a href="/downloadKpps/{{$v->entry_visa}}" style="color:green"> Download</a></td>
                                                                                     </tr>
                                                                                     </tbody>
-
+    
                                                                                     <thead>
                                                                                     <tr>
                                                                                         <th>Most Recent Passport Picture</th>
@@ -194,6 +191,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </td>
                                             </tr>
                                         @endforeach
                                         </tbody>
