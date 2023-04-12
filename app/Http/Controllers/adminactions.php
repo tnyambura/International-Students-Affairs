@@ -18,6 +18,7 @@ use App\Models\FetchBuddies;
 use App\Models\FetchCountries;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\MySchedule;
 use App\Models\buddies_allocation;
 use App\Models\AllocateBuddyModel;
 use App\Models\addNewBuddy;
@@ -301,6 +302,71 @@ class adminactions extends Controller
         }
         return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
     }
+
+    public function getallAllocationsReport(){
+
+        $tableGetter = DB::table('buddies_allocations')->get();
+        $data = [];
+        
+        foreach ($tableGetter as $value) {
+            $student = DB::table('student_view_data')->select('student_id','surname','other_names','email','phone_number')->where('student_id',$value->student_id)->limit(1)->get()[0];
+            $buddy = DB::table('student_view_data')->select('student_id as bd_id','surname as bd_srnm','other_names as bd_onm','email as bd_eml','phone_number as bd_phn')->where('student_id',$value->buddy_id)->limit(1)->get()[0];
+            
+            array_push($data,array_merge((array)$student,(array)$buddy));
+        }
+        $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView('Layouts/AdminActions/allAllocationsReport',['allocations'=>$data]);
+        return $pdf->download('Buddy-allocation-list_'.date("Y-m-d").'.pdf');
+        // return view(,['allocations'=>$data]);
+    }
+
+    public function getallusersReport(Request $req){
+        $id = $req->user()->id;
+        $data=[];
+        $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
+        $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
+        $GetUsersRole = DB::table('user_roles')->get();
+        
+        if($MyRole[0]->role === 'super_admin'){
+            foreach ($GetUsers as $value) {
+                if($value->user_id !== $id){
+                    $thisUser=[];
+                    $isBuddy=false;
+                    $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+                    $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                    if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                    if(sizeOf($GetUsersRole) > 0 ){
+                        $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                        if(sizeOf($GetUsersDetails) > 0){
+                            // if($GetUsersRole[0]->role === 'student'){
+                                array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                                // }
+                        }else{
+                            array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+
+                        }
+                    }
+                }
+            }
+        }
+        if($MyRole[0]->role === 'admin'){
+            foreach ($GetUsers as $value) {
+                if($value->user_id !== $id){
+                    $thisUser=[];
+                    $isBuddy=false;
+                    $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','student')->limit(1)->get();
+                    $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                    if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                    if(sizeOf($GetUsersRole) > 0 ){
+                        $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                        if(sizeOf($GetUsersDetails) > 0){
+                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                        }
+                    }
+                }
+            }
+        }
+        return view('Layouts/AdminActions/allUsersReport',['users'=>$data]);
+    }
     public function getVisaData($table,$status){
         $tableGetter = DB::table($table)->where('application_status',$status)->get();
         $applicationStatus = [];
@@ -448,32 +514,35 @@ class adminactions extends Controller
     public function AllocateBuddy(Request $req){ // new allocation
         
         $generatedId = rand(1000,1000000);
-        // if($req->hasFile('student_id','buddy_id')){
+        // if($req->hasFile('studentId','buddy_id')){
 
-        $this->validate($req,[
-            'student_id'=>'required',
-            'buddy_id'=>'required',
-            ]
-        );
-        $post = new AllocateBuddyModel;
-        
-        $post->id = $generatedId;
-        $post->request_id = $req->request_id;
-        $post->student_id = $req->student_id;
-        $post->buddy_id = $req->buddy_id;
-        
-        $post->timestamps = false;
+            $this->validate($req,[
+                'studentId'=>'required',
+                'buddy_id'=>'required',
+                ]
+            );
+            $post = new AllocateBuddyModel;
+            
+            $post->id = $generatedId;
+            $post->request_id = $req->request_id;
+            $post->student_id = $req->studentId;
+            $post->buddy_id = $req->buddy_id;
+            
+            $post->timestamps = false;
 
-        $post->save();
-        return back()->with('Buddy_Allocation_success','Allocation successful!');
-        
-        // $allocatedQuery = ;
+            if($post->save()){
+                return back()->with('Buddy_Allocation_success','Allocation successful!');
+            }else{
+                return back()->with('Buddy_Allocation_fail','Allocation failed! Try later.');
+            }
+            
+            // $allocatedQuery = ;
 
-        // if($post->save()){
-        //     return back()->with('Buddy_Allocation_success','Allocation successful!');
+            // if($post->save()){
+            //     return back()->with('Buddy_Allocation_success','Allocation successful!');
         // }else{
-            //     return back()->with('Buddy_Allocation_failed','User allocation failed!');
-            // }
+        //     return back()->with('Buddy_Allocation_failed','Some fields are missing');
+        // }
             
             
         // }
@@ -555,8 +624,17 @@ class adminactions extends Controller
                    
     }
     // 'Layouts/AdminActions/StudentsListPDF'
-    public function ExportToPDF($table,$cols,$loadView,$fileName){
-        $list = DB::table($table)->select($cols)->get();
+    public function getAllStudentsReport(){
+        $table = 'users';
+        $cols = ['id as user_id','surname','other_names','email','status'];
+        $loadView = 'Layouts/AdminActions/allUsersReport';
+        $fileName = 'All_users_file';
+
+        if(sizeOf($cols) > 0){
+            $list = DB::table($table)->select($cols)->get();
+        }else{
+            $list = DB::table($table)->get();
+        }
         $data =[];
         if(sizeOf($list) > 0){ 
             foreach ($list as $value) {
@@ -595,15 +673,13 @@ class adminactions extends Controller
         }else{
             return back()->with('data_not_available','There is no data available to generate a report.');
         }   
+        
     }
 
     public function GeneratePDF(Request $request){
-        $table = 'users';
-        $cols = ['id as user_id','surname','other_names','email','status'];
-        $loadView = 'Layouts/AdminActions/ListofAllUsers';
-        $fileName = 'All_users_file';
-
-        return $this->ExportToPDF($table,$cols,$loadView,$fileName);
+        $function = $request->function;
+        
+        return $this->$function();
     }
 
     public function studentslistgenerateReport(){
@@ -621,6 +697,33 @@ class adminactions extends Controller
     public function getBuddyRequests(){
 
         return view('Layouts/AdminActions/listofBuddyRequests',['buddiesRequests'=>$this->BuddiesRequestFecher()],['buddies'=>$this->BuddiesFecher()]);
+    }
+    public function myScheduleView(){
+        $t = MySchedule::select('my_schedule')->where('user_id',Auth::user()->id)->get()[0]->my_schedule;
+        $bookingRequests = DB::table('bookingList')->where('admin_id',Auth::user()->id)->where('status','pending')->get();
+        
+        return view('Layouts/AdminActions/MySchedule',['schedule_list'=>json_decode($t),'bookingRequests'=>$bookingRequests]);
+    }
+    public function SaveMySchedule(Request $req){
+        $post = new MySchedule();
+
+        $checkSchedule = DB::table('scheduleTime')->where('user_id',Auth::user()->id)->get();
+        
+        if(sizeOf($checkSchedule) > 0){
+            if(DB::table('scheduleTime')->where('user_id',Auth::user()->id)->update(['my_schedule'=>$req->selected_date_data]))
+                return back()->with('success_schedule_save','Schedule Availability has been successfully updated.');
+
+        }else{
+            $post->user_id = Auth::user()->id;
+            $post->my_schedule = $req->selected_date_data;
+    
+            $post->timestamps=false;
+    
+            $post->save();
+    
+            return back()->with('success_schedule_save','Schedule Availability has been successfully saved.');
+        }
+
     }
    
    public function StudentDetailsEdit($id){

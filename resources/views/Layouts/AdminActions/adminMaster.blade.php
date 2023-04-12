@@ -60,6 +60,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                 Manage Buddies
                             </a>                        
+                            <a class="nav-link" href="{{ __('myschedule')}}">
+                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                My Schedule
+                            </a>                        
                             <a class="nav-link" href="{{ __('AddUser')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
                                 Add New User

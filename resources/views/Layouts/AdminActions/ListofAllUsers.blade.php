@@ -4,8 +4,9 @@
                         <ol class="breadcrumb mb-4 border-2" >
                             <li class="breadcrumb-item active d-flex justify-content-between w-100" style="color:white;"> 
                                 <span style='color:black;' >List of all International students registered as Users.</span>
-                                <div>
+                                <div class='d-flex align-items-center'>
                                     <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                                        <input type="hidden" name="function" value='getAllStudentsReport'>
                                         <button type='submit'>
                                         <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
                                         </button>

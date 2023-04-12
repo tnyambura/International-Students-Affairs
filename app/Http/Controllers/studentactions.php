@@ -18,6 +18,8 @@ use App\Http\Controllers\FileUploader;
 // use Auth;
 use App\Models\addNewStudent;
 use App\Models\addStudentDetails;
+use App\Models\MySchedule;
+use App\Models\BookingList;
 use App\Models\studentGuardian;
 use App\Models\userVerification;
 use App\Models\Role;
@@ -298,6 +300,10 @@ class studentactions extends Controller
     }
 
         /* Update Kpp Application */
+    public function AvailabilityGetter(){
+        $availability = MySchedule::select('user_id','my_schedule')->get();
+        return $availability;
+    }
 
     public function updateKPP(request $req , $id){
 
@@ -637,6 +643,35 @@ class studentactions extends Controller
     public function NewSignup(){
         return view('auth/signup',['countries'=>$this->getCountries()]);
     
+    }
+
+    public function GetAllbookedMeeting(){
+        $data = BookingList::where('student_id',Auth::user()->id)->get();
+        return $data;
+    }
+    public function bookMeeting(Request $req){
+        $bookData = json_decode($req->selected_date_data);
+        $inserted = false;
+
+        foreach ($bookData as $value) {
+            
+            $post = new BookingList();
+    
+            $post->admin_id = '66753';
+            // $post->admin_id = $value[0];
+            $post->student_id = Auth::user()->id;
+            $post->booked_date_time = json_encode($value);
+            $post->status = 'pending';
+
+            $post->timestamps = false;
+
+            if($post->save()){ $inserted = true; }
+        }
+        if($inserted){
+            return back()->with('booking-success','You have successfully placed an appointment');
+        }else{
+            return back()->with('booking-error','Your Appointment could\'nt be placed at the moment. Try later ');
+        }
     }
 
     public function AddNewSignup(Request $request){

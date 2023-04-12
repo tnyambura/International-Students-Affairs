@@ -1,6 +1,7 @@
 @extends('Layouts.AdminActions.adminMaster')
 @section('content')
         <div class="container-fluid"><br/>
+        
         @if(Session::has('user_update_success') )
         <div class="alert alert-success" role="alert">
         {{Session::get('user_update_success')}}

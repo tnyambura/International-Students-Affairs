@@ -75,7 +75,7 @@ Route::group(['middleware' => ['auth']], function(){
 
      Route::get('/MyVisaRequestVIEW/{id}', [studentactions::class, 'NewVisaAPPVIEW'])->middleware('isUser');
      Route::get('/MyVisaRequestDownload/{file}', [studentactions::class, 'downloadVisaFile'])->middleware('isUser');
-
+     Route::post('/save-booking', [studentactions::class, 'bookMeeting'])->middleware('isUser')->name('add.bookMeeting');
 
      
      Route::post('/Applyvisaext', [studentactions::class, 'Create_Newvisaextension'])->middleware('isUser')->name('add.newvisaextension');
@@ -106,6 +106,8 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/kppRequestList', [adminactions::class, 'getAllkppApplications'])->middleware('isAdmin');
      Route::get('/VisaRequestList', [adminactions::class, 'getAllvisaextensionrequests'])->middleware('isAdmin');
      Route::get('/initiatedkpps', [adminactions::class, 'initiatedkppApps'])->middleware('isAdmin');
+     Route::get('/allocations-report', [adminactions::class, 'getallAllocationsReport'])->middleware('isAdmin');
+     Route::get('/users-report', [adminactions::class, 'getallusersReport'])->middleware('isAdmin');
      //  Route::get('/AddNewStudent', [adminactions::class, 'AddNewStudent']);
      Route::get('/AddUser', [RegisteredUserController::class, 'AddNewUser'])->middleware('isAdmin');
      Route::post('/AddUser', [RegisteredUserController::class, 'store'])->middleware('isAdmin');
@@ -121,6 +123,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/visaRequestDoc/{file}/', [adminactions::class, 'visadownload'])->middleware('isAdmin');
 
 
+     Route::get('/myschedule', [adminactions::class, 'myScheduleView'])->middleware('isAdmin');
      Route::get('/listsofAllusers', [adminactions::class, 'getallusers'])->middleware('isAdmin');
 
      Route::get('/AddNewInternationalStudent', [adminactions::class, 'AddNewStudent'])->middleware('isAdmin');
@@ -131,6 +134,8 @@ Route::group(['middleware' => ['auth']], function(){
      Route::post('/EditstudentDetails/{id}', [adminactions::class, 'StudentDetailsUpdate'])->middleware('isAdmin');
      Route::get('/listsofISPDF', [adminactions::class, 'studentslistgenerateReport'])->middleware('isAdmin');
      Route::post('/generate-file', [adminactions::class, 'GeneratePDF'])->middleware('isAdmin')->name('add.GeneratePDF');
+     Route::post('/save-schedule', [adminactions::class, 'SaveMySchedule'])->middleware('isAdmin')->name('add.saveSchedule');
+     
      Route::get('/PDF', [adminactions::class, 'generatestudentlist'])->middleware('isAdmin');
      Route::get('/BuddyAllocationsPDF', [adminactions::class, 'generateBuddyAllocationList'])->middleware('isAdmin');
 
@@ -143,7 +148,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/listofBuddies',[adminactions::class,'getAllBuddies'])->middleware('isAdmin');
      Route::post('/dismissAllocation',[adminactions::class,'dismissAllocation'])->middleware('isAdmin')->name('add.dismiss');
      Route::post('/EditAllocatedBuddy',[adminactions::class,'EditAllocatedBuddy'])->middleware('isAdmin');
-     Route::post('/AllocateBuddy',[adminactions::class,'AllocateBuddy'])->middleware('isAdmin');
+     Route::post('/AllocateBuddy',[adminactions::class,'AllocateBuddy'])->middleware('isAdmin')->name('add.allocate');
      Route::post('/BuddyAllocation',[adminactions::class,'BuddyAllocations'])->middleware('isAdmin');
      Route::get('/BuddyAllocationsList',[adminactions::class,'BuddyAllocationsList'])->middleware('isAdmin');
      Route::get('/ListOfBuddies',[adminactions::class,'generateBuddieslist'])->middleware('isAdmin'); // Pdf

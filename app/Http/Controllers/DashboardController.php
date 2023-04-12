@@ -7,11 +7,30 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\addNewStudent;
 use App\Models\applykpp;
+use App\Models\BookingList;
+use App\Models\MySchedule;
 use DB;
 
 
 class DashboardController extends Controller
 {
+    public function AvailabilityGetter(){
+        $availability = DB::table('all_availability')->get();
+        $data = [];
+        foreach ($availability as $value) {
+            $userData = [];
+            array_push($userData,$value->surname.' '.$value->other_names);
+            array_push($userData,$value->user_id);
+            array_push($userData,json_decode($value->my_schedule));
+
+            array_push($data,$userData);
+        }
+        return $data;
+    }
+    public function GetAllbookedMeeting(){
+        $data = DB::table('all_bookings')->where('u_id',Auth::user()->id)->get();
+        return $data;
+    }
     public function index(Request $request){
         if(!Auth::user()){
             return redirect('/login');
@@ -52,7 +71,7 @@ class DashboardController extends Controller
                 $IsABubby = DB::table("user_roles")->where('user_id',Auth::user()->id)->where('role','buddy')->get();
                 
                 if(sizeOf($IsABubby) > 0){ $is_buddy=true;}
-                return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy]);
+                return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy, 'availability'=>$this->AvailabilityGetter(), 'myAppointments'=>$this->GetAllbookedMeeting()]);
             }else{
                 return view($userRoleVal);
             }

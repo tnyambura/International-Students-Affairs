@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user])
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability])
 @section('content')      
       <div class="container-fluid"><br/>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -15,12 +15,26 @@
         </div>
         @if(Session::has('user_update_success'))
         <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         {{Session::get('user_update_success')}}
         </div>
         @endif
         @if(Session::has('user_update_failed'))
         <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         {{Session::get('user_update_failed')}}
+        </div>
+        @endif
+        @if(Session::has('booking-success'))
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{Session::get('booking-success')}}
+        </div>
+        @endif
+        @if(Session::has('booking-error'))
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{Session::get('booking-error')}}
         </div>
         @endif
         <div class="row">
@@ -99,7 +113,7 @@
             <div class="card-header d-flex justify-content-between">
                 <div>
                     <i class="fas fa-table mr-1"></i>
-                    My Details
+                    My Appointments
                 </div>
             </div>
             <div class="card-body">
@@ -107,27 +121,27 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Student ID</th>
-                                <th>Surname</th>
-                                <th>Othernames</th>
-                                <th>Email</th>
+                                <th>id</th>
+                                <th>Appointment On</th>
+                                <th>Status</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Student ID</th>
-                                <th>Surname</th>
-                                <th>Othernames</th>
-                                <th>Email</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
-                            <tr>
-                                <td>{{Auth::user()->id}}</td>
-                                <td>{{Auth::user()->surname}}</td>
-                                <td>{{Auth::user()->other_names}}</td>
-                                <td>{{Auth::user()->email}}</td>
-                            </tr>
+                            @if(sizeOf($myAppointments) > 0)
+                                @foreach($myAppointments as $val)
+                                @php $aptmnt = json_decode($val->booked_date_time); @endphp
+                                    <tr>
+                                        <td>{{$val->id}}</td>
+                                        <td>{{str_replace('_','-',$aptmnt[0])}}</td>
+                                        <td>{{$val->status}}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5">No Appointment Found</td>
+                                </tr>
+                            @endif
+
                             
                         </tbody>
                     </table>

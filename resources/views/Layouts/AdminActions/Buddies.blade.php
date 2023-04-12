@@ -42,6 +42,18 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     @endif
+    @if(Session::has('Buddy_Allocation_success'))
+    <div class="alert alert-success" role="alert">
+    {{Session::get('Buddy_Allocation_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    @endif
+    @if(Session::has('Buddy_Allocation_fail'))
+    <div class="alert alert-danger" role="alert">
+    {{Session::get('Buddy_Allocation_fail')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    </div>
+    @endif
     @if(Session::has('dissmiss_student'))
     <div class="alert alert-success" role="alert">
     {{Session::get('dissmiss_student')}}
@@ -101,7 +113,7 @@
                                     <script>
                                         document.querySelector("#rmvBd_{{$buddy->id}}").addEventListener('click',function(e){
                                             e.preventDefault()
-                                            if(confirm('Do you want to remove {{$buddy->surname.' '.$buddy->other_names}} as a buddy? All the allocated students will be deallocated.')){
+                                            if(confirm('Do you want to remove {{$buddy->surname." ".$buddy->other_names}} as a buddy? All the allocated students will be deallocated.')){
                                                 this.parentNode.submit()
                                             }
                                         })
@@ -144,42 +156,60 @@
                             </tr>
                         </tfoot>
                         <tbody>
-                        @foreach($buddiesRequests as $student)
+                        @foreach($buddiesRequests as $std)
                             <tr>
-                                <td>{{$student['buddy_request_id']}}</td>
-                                <td>{{$student['id']}}</td>
-                                <td>{{$student['surname'].' '.$student['other_names']}}</td>
-                                <td>{{$student['email']}}</td>
+                                <td>{{$std['buddy_request_id']}}</td>
+                                <td>{{$std['id']}}</td>
+                                <td>{{$std['surname'].' '.$std['other_names']}}</td>
+                                <td>{{$std['email']}}</td>
 
                                 <td>
-                                @php $studentID= Crypt::encrypt($student['id']); @endphp      
-                                <div class="d-flex alig-items-center justify-content-center" role='button' style="color:#CC0D0D" data-toggle="modal" data-target="#AllocateBuddyModal" >
+
+                                <div class="d-flex alig-items-center justify-content-center" role='button' style="color:#CC0D0D" data-toggle="modal" data-target="#AllocateBuddyModal_{{$std['id']}}" >
                                     <span > Allocate</span>
                                     <span class="fas fa-marker ml-2"aria-hidden="false"></span>
                                 </div>
                                 
-                                <div class="modal fade " id="AllocateBuddyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                <div class="modal fade " id="AllocateBuddyModal_{{$std['id']}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
                                 aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header text-center">
-                                                <h4 class="modal-title w-100 font-weight-bold">Register New Buddy</h4>
+                                                <h4 class="modal-title w-100 font-weight-bold">Assign New Buddy To:</h4>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                                 </button>
                                             </div>
-                                            <form method="POST" action="{{ __('AllocateBuddy') }}" class='new-staff-form p-4'>
+                                            <form method="POST" action="{{ route('add.allocate') }}" class='new-staff-form p-4'>
                                                 @csrf
-
+                                                <div class="row">
+                                                    <div class="col">
+                                                    <label for="Residence">Surname</label>
+                                                    <input type="text" value="{{$std['surname']}}" class="form-control" disabled>
+                                                    </div>
+                                                    <div class="col">
+                                                    <label for="Residence">Other names</label>
+                                                    <input type="text" value="{{$std['other_names']}}" class="form-control" disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                    <label for="Residence">Admission No</label>
+                                                    <input type="text" value="{{$std['id']}}" class="form-control" disabled>
+                                                    </div>
+                                                    <div class="col">
+                                                    <label for="Residence">Email</label>
+                                                    <input type="text" value="{{$std['email']}}" class="form-control" disabled>
+                                                    </div>
+                                                </div>
                                                 <!-- surNAME -->
-                                                <div class="form-row w-100">
-                                                    <div class="col-lg-4 mb-3 ">   
-                                                        <p class="w-100 ">Allocate budy to student <strong>{{$student["id"]. ' - '. $student['surname'].' '.$student['other_names']}}</strong> </p> 
-                                                        <input id="request_id" class="form-control" type="hidden" value='{{$student["buddy_request_id"]}}' name="request_id" required autofocus />
-                                                        <input id="student_id" class="form-control" type="hidden" value='{{$student["id"]}}' name="student_id" required autofocus />
+                                                <div class="row mt-3 mb-3">
+                                                    <div class="col ">
+                                                        <input type="hidden" name="request_id" value="{{$std['buddy_request_id']}}">
+                                                        <input type="hidden" name='studentId' value="{{$std['id']}}">
                                                         <label for="surNAME">Select Buddy</label> 
-                                                        <select class='form-select form-select-lg' name="buddy_id" id='select_new_buddy'>
-                                                            <option disabled selected>--SELECT BUDDY--</option> 
+                                                        <select class='form-control select_new_buddy' name="buddy_id" id=''>
+                                                            <option disabled selected >--SELECT BUDDY--</option> 
                                                             @foreach($buddies as $buddy)
                                                                 <option value='{{$buddy->id}}'>{{$buddy->id.' - '. $buddy->surname. $buddy->other_names}}</option> 
                                                             @endforeach
@@ -187,8 +217,8 @@
                                                     </div></br>
                                                 </div>
                                                 <br/>
-                                                <div class="form-row justify-content-center">
-
+                                                <div class="form-row justify-content-center sbmt-btn">
+    
                                                     <div class="flex items-center justify-end mt-4">
                                                     <input class="btn btn-success" value="Allocate" id='allocate_a_buddy_btn' disabled type="submit" />
                                                     
@@ -199,7 +229,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                </td>
+                            </td>
                             </tr>
                         @endforeach
                             </tbody>
@@ -215,7 +245,16 @@
         </ol>
         <div class="card mb-4">
             <div class="card-header">
-            <a class="btn btn-success" href="{{__('/BuddyAllocationsPDF')}}" style="float:right"><span class="fa fa-spinner fa-spin fa-1x fa-fw" aria-hidden="true"></span>Generate Report</a>
+            <div class='d-flex align-items-center'>
+
+                <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                    <input type="hidden" name="function" value='getallAllocationsReport'>
+                    <button type='submit'>
+                    <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                    </button>
+                </form>
+                <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+            </div>
             <i class="fas fa-table mr-1"></i>
                 Buddies Allocation.
             </div>
@@ -354,10 +393,9 @@
     <script defer>
         $(document).ready(function() {
             
-            $('body').find('#select_new_buddy').on('change',function(e){
+            $('body').find('.select_new_buddy').on('change',function(e){
                 if($(this).val() !== ""){
-                    $('body').find('#allocate_a_buddy_btn').attr('disabled',false)
-
+                    $(this).parent().parent().siblings('.sbmt-btn').find('#allocate_a_buddy_btn').attr('disabled',false)
                 }
             })
             $('body').find('.tab-link').on('click',function(e){

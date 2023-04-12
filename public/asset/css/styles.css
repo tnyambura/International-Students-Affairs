@@ -10610,3 +10610,20 @@ div label{
   font-weight: bold;
   margin-top: 10px;
 }
+.day-btn:hover{
+  background: var(--secondary);
+  color: #fff
+}
+.day-btn.active{
+  background: var(--info);
+  color: #fff
+}
+.day-btn.day-disabled{
+  background: rgb(222 222 222 / 32%);
+  color: #c4c4c4;
+  cursor: default;
+}
+.sched-time{
+  bottom:5px;
+  right:8px;
+}
