@@ -699,10 +699,14 @@ class adminactions extends Controller
         return view('Layouts/AdminActions/listofBuddyRequests',['buddiesRequests'=>$this->BuddiesRequestFecher()],['buddies'=>$this->BuddiesFecher()]);
     }
     public function myScheduleView(){
-        $t = MySchedule::select('my_schedule')->where('user_id',Auth::user()->id)->get()[0]->my_schedule;
-        $bookingRequests = DB::table('bookingList')->where('admin_id',Auth::user()->id)->where('status','pending')->get();
-        
+        $t = MySchedule::select('my_schedule')->where('user_id',Auth::user()->id)->get();
+        $bookingRequests = [];
+        if(sizeOf($t) > 0){
+            $t = $t[0]->my_schedule;
+            $bookingRequests = DB::table('bookingList')->where('admin_id',Auth::user()->id)->where('status','pending')->get();
+        }
         return view('Layouts/AdminActions/MySchedule',['schedule_list'=>json_decode($t),'bookingRequests'=>$bookingRequests]);
+        
     }
     public function SaveMySchedule(Request $req){
         $post = new MySchedule();
