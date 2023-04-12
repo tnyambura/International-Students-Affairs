@@ -246,6 +246,19 @@ class studentactions extends Controller
        
 
     }
+    public function AvailabilityGetter(){
+        $availability = DB::table('all_availability')->get();
+        $data = [];
+        foreach ($availability as $value) {
+            $userData = [];
+            array_push($userData,$value->surname.' '.$value->other_names);
+            array_push($userData,$value->user_id);
+            array_push($userData,json_decode($value->my_schedule));
+
+            array_push($data,$userData);
+        }
+        return $data;
+    }
     public function Create_Newvisaextension(request $request){
 
         if($request->hasFile('entryVISA','Biodata','visaPAGE'))
@@ -300,10 +313,10 @@ class studentactions extends Controller
     }
 
         /* Update Kpp Application */
-    public function AvailabilityGetter(){
-        $availability = MySchedule::select('user_id','my_schedule')->get();
-        return $availability;
-    }
+    // public function AvailabilityGetter(){
+    //     $availability = MySchedule::select('user_id','my_schedule')->get();
+    //     return $availability;
+    // }
 
     public function updateKPP(request $req , $id){
 
@@ -403,7 +416,7 @@ class studentactions extends Controller
 
     
     public function Newstudentpass(Request $request){
-        return view('Layouts/studentActions/RequestNewKPP',['getCountries'=>$this->getCountries(),'getUserDetails'=>$this->userDetailsFetcher($request),'user'=>$this->GetuserDetails($request)]);
+        return view('Layouts/studentActions/RequestNewKPP',['getCountries'=>$this->getCountries(),'getUserDetails'=>$this->userDetailsFetcher($request),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter()]);
     }
     
     //BUDDIES MANAGEMENT SECTION//
@@ -441,7 +454,7 @@ class studentactions extends Controller
             }
         }
 
-        return view('Layouts/studentActions/Buddyprogram',['RequestsData'=>$data,'allAllocated'=>$AllAssigned,'is_buddy'=>$is_buddy,'user'=>$this->GetuserDetails($request),'allocationGetter'=>$myallocation]);
+        return view('Layouts/studentActions/Buddyprogram',['RequestsData'=>$data,'allAllocated'=>$AllAssigned,'is_buddy'=>$is_buddy,'user'=>$this->GetuserDetails($request),'allocationGetter'=>$myallocation, 'availability'=>$this->AvailabilityGetter()]);
     }
 
     public function requestBuddyChange(request $request){
@@ -459,7 +472,7 @@ class studentactions extends Controller
     public function MyBuddyRequest(request $request){
         $id = $request->user()->id;      
         $data = DB::table("buddy_request")->where('student_id','=',$id)->where('status','pending')-limit(1)->get();
-        return view('Layouts/studentActions/RequestedBuddies', ['data'=>$data[0]]);
+        return view('Layouts/studentActions/RequestedBuddies', ['data'=>$data[0], 'availability'=>$this->AvailabilityGetter()]);
     }
 
     public function newBuddyRequest(request $request){
@@ -467,7 +480,7 @@ class studentactions extends Controller
         $data = DB::table("student_details")->where('student_id',$id)->limit(1)->get();
         
         // return back()->with('request_success','Your request was successful');
-        return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
+        return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0], 'availability'=>$this->AvailabilityGetter()]);
         // return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
     }
 
@@ -565,7 +578,7 @@ class studentactions extends Controller
             array_push($data,array_merge((array)$BuddyUser[0],(array)$BuddyId[0]));
         }
 
-        return view('Layouts/studentActions/AllocatedBuddies',['allocationGetter'=>$data]);
+        return view('Layouts/studentActions/AllocatedBuddies',['allocationGetter'=>$data, 'availability'=>$this->AvailabilityGetter()]);
     }
 
     
@@ -614,7 +627,7 @@ class studentactions extends Controller
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
         $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
 
-        return view('Layouts/studentActions/RequestNewVisa',['userData'=>$userData[0],'data'=>$ext,'getCountries'=>$this->getCountries(),'user'=>$this->GetuserDetails($request)]);
+        return view('Layouts/studentActions/RequestNewVisa',['userData'=>$userData[0],'data'=>$ext,'getCountries'=>$this->getCountries(),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter()]);
     }
     public function visaExtensions(Request $request){
         $id = $request->user()->id;        
@@ -624,14 +637,14 @@ class studentactions extends Controller
         // array_push($userData,array_merge((array)$,(array)$))
 
         $fecthData =$this->FetchExtensionAppView($request);
-        return view('Layouts/studentActions/studentvisaapplications',['userDetails'=>$userDetails[0],'data'=>$ext,'getDataView'=>$fecthData,'user'=>$this->GetuserDetails($request)]);
+        return view('Layouts/studentActions/studentvisaapplications',['userDetails'=>$userDetails[0],'data'=>$ext,'getDataView'=>$fecthData,'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter()]);
     }
     public function Listofkpps(Request $request){  
         $id = $request->user()->id;        
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
         $data = DB::table("kpps_application")->where('student_id','=',$id)->get();
         $fecthData =$this->FetchKppView($request);
-        return view('Layouts/studentActions/studentkppapplications',['data'=>$data,'userDetails'=>$userData[0],'getDataView'=>$fecthData,'user'=>$this->GetuserDetails($request)]);
+        return view('Layouts/studentActions/studentkppapplications',['data'=>$data,'userDetails'=>$userData[0],'getDataView'=>$fecthData,'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter()]);
     }
     public function issuedKpp(){
         return view('Layouts/studentActions/IssuedKpp');

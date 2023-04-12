@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>[]])
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability])
 @section('content')
 
     @if(!$is_buddy)
