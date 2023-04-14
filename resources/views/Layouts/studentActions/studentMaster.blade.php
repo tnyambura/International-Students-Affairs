@@ -16,7 +16,7 @@
     </style>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark " style='background:rgb(58,93,174);'>
             <a class="navbar-brand" href="{{ __('MykppApplications')}}">STUDENT DASHBOARD</a>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <!-- Navbar UserName-->
@@ -40,7 +40,7 @@
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
                     <div class="sb-sidenav-menu d-flex flex-column justify-content-between">
                         <div class="nav">
                                 <div class="sb-sidenav-menu-heading">Home</div>
@@ -422,11 +422,17 @@
                                 SaveScheduleBtn()
                             }
                             function SaveScheduleBtn(){
-                                if(JSON.parse(document.querySelector('#selected_date_data').value).length < 1){
-                                    document.querySelector('#save_schedule').disabled = true
-                                }else{
-                                    document.querySelector('#save_schedule').disabled = false
-                                }
+                                // let TimeSelect = document.querySelector('#save_schedule').previousElementSibling.previousElementSibling.querySelector('select')
+                                // if(TimeSelect){
+                                    if(JSON.parse(document.querySelector('#selected_date_data').value).length < 1 ){
+                                        document.querySelector('#save_schedule').disabled = true
+                                    }
+                                    else{
+                                        document.querySelector('#save_schedule').disabled = false
+                                    }
+                                // }else{
+                                //     document.querySelector('#save_schedule').disabled = true
+                                // }
                             }
 
                             renderCalendar();
@@ -469,44 +475,75 @@
                                     <div class="row row-cols-auto">`
                                     
                                     if(bookedDays[i][1].length > 0){
+                                        item += `<select class="form-control" name="time_selected" required>`
+                                        item += `<option value=''>select time</option>`
                                         for(let x of bookedDays[i][1]){
-                                            item += `<small class="col">${x}</small>`
+                                            item += `<option value="${x}">${x}</option>`
                                         }
+                                        item += `</select>`
                                     }
                                     item += `</div></div>`
                                     SelectedResult += item
                                 }
                                 allSelectedContainer.innerHTML=SelectedResult
-                                allSelectedInput.value= JSON.stringify(bookedDays)
+                                allSelectedInput.value= bookedDays[0][0]
                                 SaveScheduleBtn()
                             }
                             function GetClickedDay(e,item){
                                 if(e.target === item){
-                                    if(item.classList.contains('active')){
-                                        item.querySelector('.dropdown').style.display='none'
-                                        item.classList.remove('active')
-                                        bookedDays.splice(CheckExistance(bookedDays,item.getAttribute('data-day')),1)
-                                    }else{
+                                    // if(item.classList.contains('active')){
+                                    //     item.querySelector('.dropdown').style.display='none'
+                                    //     item.classList.remove('active')
+                                    //     bookedDays.splice(CheckExistance(bookedDays,item.getAttribute('data-day')),1)
+                                    // }else{
+                                        bookedDays=[];
+                                        bookedDays.push([item.getAttribute('data-day'),JSON.parse(item.getAttribute('data-time'))])
                                         item.classList.add('active')
                                         item.querySelector('.dropdown').style.display='block'
-                                        if(bookedDays.indexOf(item.getAttribute('data-day')) < 0){
-                                            bookedDays.push([item.getAttribute('data-day'),[]])
-                                        }
-                                    }
+                                        // if(bookedDays[0].indexOf(item.getAttribute('data-day')) == -1){
+                                        //     // if(bookedDays.indexOf(item.getAttribute('data-day')) < 0){
+                                        //     // }
+                                        // }else{
+                                        //     item.classList.remove('active')
+                                        // }
+                                    // }
                                 }
                                 DisplaySelected()
                                 
-                                // console.log(availableDays);
+                                console.log(bookedDays);
                             }
 
                             $(document).ready(function() {
-                                console.log(availableDays);
+                                // console.log(availableDays);
 
+                                
+                                // selectedTime.on('change',function(){
+                                    //     if($(this).val()==''){
+                                        //         $('#save_schedule').prop('disabled',true)
+                                        //     }else{
+                                            //         $('#save_schedule').prop('disabled',false)
+                                            //     }
+                                // })
+                                
+                                
                                 setInterval(() => {
+                                    let selectedTime = $('#save_schedule').siblings('.get-selected-dates').find('select')
+                                    
+                                    if(selectedTime.length > 0){
+                                        if(selectedTime.find(':selected').val() == ""){
+                                            $('#save_schedule').attr('disabled',true)
+                                        }else{
+                                            $('#save_schedule').attr('disabled',false)
+                                        }
+                                        
+                                    }else{
+                                        $('#save_schedule').attr('disabled',false)
+                                    }
                                     if(availableDays.length > 0){
                                         for(let n in availableDays){
                                             for(let x in availableDays[n][2]){
                                                 $('body').find(`[data-day='${availableDays[n][2][x][0]}']`).removeClass('day-disabled')
+                                                $('body').find(`[data-day='${availableDays[n][2][x][0]}']`).attr('data-time',JSON.stringify(availableDays[n][2][x][1]))
                                                 // $('body').find(`[data-day='${availableDays[n][2][x][0]}']`).removeClass('day-disabled')
                                                 // $('body').find(`[data-day='${availableDays[n][2][x][0]}']`).addClass('active')
                                                 // $('body').find(`[data-day='${availableDays[x][0]}']`).addClass('active')

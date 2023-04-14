@@ -15,7 +15,7 @@ use DB;
 class DashboardController extends Controller
 {
     public function AvailabilityGetter(){
-        $availability = DB::table('all_availability')->get();
+        $availability = DB::table('all_availability')->limit(1)->get();
         $data = [];
         foreach ($availability as $value) {
             $userData = [];
@@ -29,7 +29,11 @@ class DashboardController extends Controller
     }
     public function GetAllbookedMeeting(){
         $data = DB::table('all_bookings')->where('u_id',Auth::user()->id)->get();
-        return $data;
+        $res = [];
+        if(sizeOf($data) > 0){
+            $res = $data;
+        }
+        return $res;
     }
     public function index(Request $request){
         if(!Auth::user()){

@@ -16,7 +16,7 @@
                 <div class="date-picker">
                     <div class="row">
                         <button class="col prev"><i class="fas fa-angle-left"></i></button>
-                        <div class="col-6 month">April</div>
+                        <div class="col-6 month d-flex justify-content-center fw-bold">April</div>
                         <div class="col year">2023</div>
                         <button class="col next"><i class="fas fa-angle-right"></i></button>
                     </div>
@@ -328,11 +328,24 @@
                                 @if(sizeOf($bookingRequests) > 0)
                                     @foreach($bookingRequests as $bookRq)
                                         <tr>
-                                            <td>{{$bookRq->id}}</td>
+                                            <td title="Given Masheka">{{$bookRq->id}}</td>
                                             <td>{{$bookRq->student_id}}</td>
-                                            <td>{{$bookRq->booked_date_time}}</td>
+                                            <td>
+                                                @php $aptmnt = json_decode($bookRq->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
+                                                <div class="d-flex justify-content-between">
+                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                    {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                    </span>
+                                                    <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                        <i class="fa fa-clock"></i>
+                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                    </div>
+                                                </div>
+                                            </td>
                                             <td>{{$bookRq->status}}</td>
-                                            <td><i class="fa fa-eye"></i></td>
+                                            <td><a href="/meeting-done/{{$bookRq->id}}" style='color:green' >
+                                                <i class="fa fa-check"></i>
+                                            </a></td>
                                         </tr>
                                     @endforeach
                                 @else

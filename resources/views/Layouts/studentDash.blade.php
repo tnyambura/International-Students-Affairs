@@ -129,10 +129,20 @@
                         <tbody>
                             @if(sizeOf($myAppointments) > 0)
                                 @foreach($myAppointments as $val)
-                                @php $aptmnt = json_decode($val->booked_date_time); @endphp
+                                @php $aptmnt = json_decode($val->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
                                     <tr>
                                         <td>{{$val->id}}</td>
-                                        <td>{{str_replace('_','-',$aptmnt[0])}}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between">
+                                                <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                </span>
+                                                <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                    <i class="fa fa-clock"></i>
+                                                    <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
                                         <td>{{$val->status}}</td>
                                     </tr>
                                 @endforeach

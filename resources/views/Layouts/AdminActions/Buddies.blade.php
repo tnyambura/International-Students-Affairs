@@ -70,18 +70,31 @@
     @endif
 
     <div class="container-fluid buddy-contents active" id="buddies_list"><br/>
+        <div class="breadcrumb mb-4 d-flex justify-content-between align-items-center" style="background:#113C7A;">
+            <span class="breadcrumb-item active" style="color:white;">Number of all buddies </span>
+            <span class="badge badge-warning">{{sizeOf($buddies)}}</span>
+        </div>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <div>
                     <i class="fas fa-table mr-1"></i>
                     List of Trained Buddies.
                 </div>
-                <a class="btn btn-success" width='100' href="{{__('ListOfBuddies')}}" style="float:right"><span class="fa fa-spinner fa-spin fa-1x fa-fw" aria-hidden="true"></span>Generate Report</a>
+                <div class='d-flex align-items-center'>
+    
+                    <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                        <input type="hidden" name="function" value='getallAllBuddiesReport'>
+                        <button type='submit'>
+                        <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                        </button>
+                    </form>
+                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead-dark">
                             <tr>
                                 <th>id</th>
                                 <th>Name</th>
@@ -89,15 +102,12 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>id</th>
-                                <th>Name</th>
-                                <th>email</th>
-                                <th>Actions</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
+                            @if(sizeOf($buddies) === 0)
+                            <tr>
+                                <td colspan="4">No Buddy found</td>
+                            </tr>
+                            @endif
                             @foreach($buddies as $buddy)
                                 <tr>
                                     <td>{{$buddy->id}}</td>
@@ -128,7 +138,10 @@
         </div>
     </div>
     <div class="container-fluid buddy-contents" id="buddy_requests_list"><br/>
-        
+        <div class="breadcrumb mb-4 d-flex justify-content-between align-items-center" style="background:#113C7A;">
+            <span class="breadcrumb-item active" style="color:white;">Number of all requests </span>
+            <span class="badge badge-warning">{{sizeOf($buddiesRequests)}}</span>
+        </div>
         <div class="card mb-4">
             <div class="card-header">
             <i class="fas fa-table mr-1"></i>
@@ -136,8 +149,8 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
                             <tr>
                             <th>Request Id</th>
                                 <th>user Id</th>
@@ -146,16 +159,12 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Request Id</th>
-                                <th>user Id</th>
-                                <th>Names</th>
-                                <th>Email</th>
-                                <th>Actions</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
+                        @if(sizeOf($buddiesRequests) === 0)
+                            <tr>
+                                <td colspan="5">No Request found</td>
+                            </tr>
+                        @endif
                         @foreach($buddiesRequests as $std)
                             <tr>
                                 <td>{{$std['buddy_request_id']}}</td>
@@ -240,46 +249,45 @@
     </div>
 
     <div class="container-fluid buddy-contents" id="allocations_list"><br/>
-        <ol class="breadcrumb mb-4" style="background:#113C7A;">
-            <li class="breadcrumb-item active" style="color:white;">List of all Buddy Allocations {{sizeOf($BuddiesAllocations)}}</li>
-        </ol>
+        <div class="breadcrumb mb-4 d-flex justify-content-between align-items-center" style="background:#113C7A;">
+            <span class="breadcrumb-item active" style="color:white;">Number of all Allocations </span>
+            <span class="badge badge-warning">{{sizeOf($BuddiesAllocations)}}</span>
+        </div>
         <div class="card mb-4">
-            <div class="card-header">
-            <div class='d-flex align-items-center'>
-
-                <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
-                    <input type="hidden" name="function" value='getallAllocationsReport'>
-                    <button type='submit'>
-                    <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
-                    </button>
-                </form>
-                <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
-            </div>
-            <i class="fas fa-table mr-1"></i>
-                Buddies Allocation.
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <div>
+                    <i class="fas fa-table mr-1"></i>
+                    Buddies Allocation.
+                </div>
+                <div class='d-flex align-items-center'>
+    
+                    <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                        <input type="hidden" name="function" value='getallAllocationsReport'>
+                        <button type='submit'>
+                        <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                        </button>
+                    </form>
+                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Buddy ID</th>
                                 <th>Buddy Name</th>
                                 <th>List of Allocation</th>
-                                <th>Number of allocations</th>
+                                <th>No</th>
                                 <!-- <th>Actions</th> -->
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th >Buddy ID</th>
-                                <th class='w-25'>Buddy Name</th>
-                                <th class='w-100'>List of Allocation</th>
-                                <th >Number of allocations</th>
-                                <!-- <th>Actions</th> -->
-                            </tr>
-                        </tfoot>
                         <tbody>
+                            @if(sizeOf($allbuddies) === 0)
+                                <tr>
+                                    <td colspan="4">No Buddy found</td>
+                                </tr>
+                            @endif
                             @foreach($allbuddies as $Buddy)
                             <?php $count=0; ?>
                             @php($count=[])

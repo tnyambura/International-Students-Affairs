@@ -24,6 +24,7 @@ use App\Models\AllocateBuddyModel;
 use App\Models\addNewBuddy;
 use App\Models\applyKpp;
 use App\Models\applyvisaextension;
+use App\Models\BookingList;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use PDF;
@@ -703,9 +704,14 @@ class adminactions extends Controller
         $bookingRequests = [];
         if(sizeOf($t) > 0){
             $t = $t[0]->my_schedule;
-            $bookingRequests = DB::table('bookingList')->where('admin_id',Auth::user()->id)->where('status','pending')->get();
+            $bookingRequests = DB::table('bookingList')->where('status','pending')->get();
         }
         return view('Layouts/AdminActions/MySchedule',['schedule_list'=>json_decode($t),'bookingRequests'=>$bookingRequests]);
+        
+    }
+    public function MeetingDone($id){
+        $t = DB::table('bookingList')->where('id',$id)->update(['status'=>'met']);
+        return back();
         
     }
     public function SaveMySchedule(Request $req){

@@ -139,36 +139,21 @@
                                                                                     </thead>
                                                                                     <tbody>
                                                                                     <tr>
-                                                                                        <td > <a href="/downloadExtension/{{$v->passport_biodata}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadExtension/{{$v->current_visa}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadExtension/{{$v->entry_visa}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/file-view/extension/{{Crypt::encrypt($v->passport_biodata)}}" style="color:green"> Download</a></td>
+                                                                                        <!-- <td > <a href="/downloadExtension/{{$v->passport_biodata}}" style="color:green"> Download</a></td> -->
+                                                                                        <td > <a href="/file-view/extension/{{Crypt::encrypt($v->current_visa)}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/file-view/extension/{{$v->entry_visa}}" style="color:green"> View</a></td>
+                                                                                        <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($v->entry_visa)}}" style="color:green"> Download</a></td> -->
                                                                                     </tr>
                                                                                     </tbody>
     
-                                                                                    <thead>
+                  
                                                                                     <tr>
-                                                                                        <th>Commitment Letter</th>
-                                                                                        <th>Police Clearance:</th>
-                                                                                        <th>Parents ID/Biodata</th>
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                    <tr>
-                                                                                        <td > <a href="/downloadKpps/{{$v->entry_visa}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadKpps/{{$v->entry_visa}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadKpps/{{$v->entry_visa}}" style="color:green"> Download</a></td>
-                                                                                    </tr>
-                                                                                    </tbody>
-    
-                                                                                    <thead>
-                                                                                    <tr>
-                                                                                        <th>Most Recent Passport Picture</th>
                                                                                         <th>Application Response</th>
                                                                                     </tr>
                                                                                     </thead>
                                                                                     <tbody>
                                                                                     <tr>
-                                                                                        <td > <a href="/downloadKpps/{{$v->entry_visa}}" style="color:green"> Download</a></td>
                                                                                         @if($v->uploads)
                                                                                         <td class='bg-info' style='color:white'> <a href="/downloadKpps/{{$v->uploads}}"> Download</a></td>
                                                                                         @else

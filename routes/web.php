@@ -34,6 +34,7 @@ Route::get('/db',function(){
     return view('dbCheck');
 });
 
+Route::get('/file-view/{path}/{file}', 'App\Http\Controllers\studentactions@PDFFileView')->name('PDFFileView');
 Route::get('/BuddyRequest', 'App\Http\Controllers\studentactions@BuddyRequest')->name('BuddyRequest');
 Route::get('/signup', 'App\Http\Controllers\studentactions@NewSignup')->name('signup');
 Route::post('/signup', 'App\Http\Controllers\studentactions@AddNewSignup')->name('Add.signup');
@@ -121,6 +122,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/NewStudentView/{id}', [adminactions::class, 'NewStudentView'])->middleware('isAdmin');
      Route::get('/NewAPPFILEDOWNLOAD/{file}/', [adminactions::class, 'download'])->middleware('isAdmin');
      Route::get('/visaRequestDoc/{file}/', [adminactions::class, 'visadownload'])->middleware('isAdmin');
+     Route::get('/meeting-done/{id}/', [adminactions::class, 'MeetingDone'])->middleware('isAdmin');
 
 
      Route::get('/myschedule', [adminactions::class, 'myScheduleView'])->middleware('isAdmin');

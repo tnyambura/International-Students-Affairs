@@ -407,6 +407,12 @@ class studentactions extends Controller
     
 
     /* Update Visa Application */
+    public function PDFFileView($path,$file ){
+        $thisFile= $file;   
+        // $thisFile= Crypt::decrypt($file);   
+
+         return view('Layouts/PdfView', ['file'=>$path.'/'.$thisFile]);
+    }
     public function NewVISAAPPEDIT($id ){
         $dataID= Crypt::decrypt($id);   
 
@@ -660,31 +666,35 @@ class studentactions extends Controller
 
     public function GetAllbookedMeeting(){
         $data = BookingList::where('student_id',Auth::user()->id)->get();
-        return $data;
+        $res = [];
+        if(sizeOf($data) > 0){
+            $res = $data;
+        }
+        return $res;
     }
     public function bookMeeting(Request $req){
-        $bookData = json_decode($req->selected_date_data);
-        $inserted = false;
+        $data = [$req->selected_date_data,$req->time_selected];
 
-        foreach ($bookData as $value) {
-            
+        if(sizeOf(BookingList::where('student_id',Auth::user()->id)->where('status','pending')->get()) < 1){
             $post = new BookingList();
     
-            $post->admin_id = '66753';
+            // $post->admin_id = '66753';
             // $post->admin_id = $value[0];
             $post->student_id = Auth::user()->id;
-            $post->booked_date_time = json_encode($value);
+            $post->booked_date_time = json_encode($data);
             $post->status = 'pending';
-
+    
             $post->timestamps = false;
-
-            if($post->save()){ $inserted = true; }
-        }
-        if($inserted){
-            return back()->with('booking-success','You have successfully placed an appointment');
+    
+            if($post->save()){
+                return back()->with('booking-success','You have successfully placed an appointment');
+            }else{
+                return back()->with('booking-error','Your Appointment could\'nt be placed at the moment. Try later ');
+            }
         }else{
-            return back()->with('booking-error','Your Appointment could\'nt be placed at the moment. Try later ');
+            return back()->with('booking-error','You have already placed an Appointment kindly be patient.');
         }
+
     }
 
     public function AddNewSignup(Request $request){

@@ -27,7 +27,7 @@
        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark " style='background:rgb(58,93,174);'>
             <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
             <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0 text-uppercase" style="color:white;">{{ Auth::user()->surname}}</div>
             <!-- <ul class="navbar-nav ml-auto ml-md-0">                
@@ -48,7 +48,7 @@
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-dark " id="sidenavAccordion">
+                <nav class="sb-sidenav accordion sb-sidenav-light " id="sidenavAccordion">
                     <div class="sb-sidenav-menu d-flex flex-column justify-content-between">
                         <div class="nav">
                             <div class="sb-sidenav-menu-heading">Admin</div>
