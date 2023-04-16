@@ -27,33 +27,25 @@
        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark " style='background:rgb(58,93,174);'>
-            <button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
-            <div class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0 text-uppercase" style="color:white;">{{ Auth::user()->surname}}</div>
-            <!-- <ul class="navbar-nav ml-auto ml-md-0">                
-             <a class="btn btn-success" href="{{ __('logout')}}">Logout</a>                   
-            </ul> -->
-            <div class="dropdown ">
-                <div class="dropbtn d-flex align-items-center justify-content-center" style="width:50px; height:50px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <img style="width:100%;" src="asset/img/logo.png" />
-                </div>
-                <!-- <ul>
-                    <li class="sub-item">
-                    <span class="material-icons-outlined"> grid_view </span>
-                    <p>Dashboard</p>
-                    </li>
-                </ul> -->
-                
-            </div>
+        <nav class="sb-topnav navbar navbar-expand navbar-dark position-relative d-flex justify-content-end">
+            <button class="btn btn-link btn-sm order-1 bg-light" id="sidebarToggle" href="#"><i class="fas fa-bars"  style='color:rgb(58,93,174);'></i></button>
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light " id="sidenavAccordion">
-                    <div class="sb-sidenav-menu d-flex flex-column justify-content-between">
+                    <div class="d-flex mt-6">
+                        <div class="dropbtn d-flex align-items-center justify-content-center mx-2" style="border:1px solid rgba(110,110,110,.6); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <img style="width:100%;" src="asset/img/logo.png" />
+                        </div>
+                        <div class=' d-flex flex-column justify-content-center'>
+                            <span style='font-weight:bolder;'>{{Auth::user()->surname.' '.substr(Auth::user()->other_names, 0, 1).'.'}}</span>
+                            <small class='mt-2 border-bottom py-2' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(110,110,110,.5)'>My profile</small>
+                        </div>
+                    </div>    
+                    <div class="sb-sidenav-menu d-flex flex-column justify-content-between pt-4">
                         <div class="nav">
-                            <div class="sb-sidenav-menu-heading">Admin</div>
                             <a class="nav-link" href="{{ __('dashboard')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-chart-bar"></i></div>
                                 Dashboard
                             </a>   
                             <a class="nav-link" href="{{ __('ManageBuddies')}}">
@@ -61,11 +53,11 @@
                                 Manage Buddies
                             </a>                        
                             <a class="nav-link" href="{{ __('myschedule')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
+                                <div class="sb-nav-link-icon"><i class="far fa-calendar-times"></i></div>
                                 My Schedule
                             </a>                        
                             <a class="nav-link" href="{{ __('AddUser')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-plus"></i></div>
                                 Add New User
                             </a>
                             <a class="nav-link" href="{{ __('listsofAllusers')}}">
@@ -74,7 +66,7 @@
                             </a>
                              <!-- Add a student list controller and view page-->
                              <a class="nav-link" href="{{ __('kppRequestList')}}">
-                                <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
+                                <div class="sb-nav-link-icon"><i class="fab fa-cc-visa"></i></div>
                                 Visa Applications
                             </a>                            
                              <!-- <a class="nav-link" href="{{ __('kppRequestList')}}">
@@ -88,13 +80,83 @@
                             
                            
                     </div>
-                    <div class="sb-sidenav-footer mb-4 bg-danger">
-                        <a class="out w-100" style='color:white' href="{{ __('logout')}}">Logout</a>
-                    </div>
+                    <a class="sb-sidenav-footer bg-danger out w-100" style='color:white' href="{{ __('logout')}}">Logout</a>
                           
                 </nav>
             </div>
        <div id="layoutSidenav_content">
+
+       <div class="modal fade " id="MyProfile_{{Auth::user()->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center">
+                        <h4 class="modal-title w-100 font-weight-bold">{{Auth::user()->surname.' '.Auth::user()->other_names}}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <i class="fas fa-table mr-1"></i>
+                        Student Details
+                        </div>
+                        <div class="card-body">
+
+                            <form method="POST" action="{{route('add.editMyProfile')}}">
+                                @csrf
+                                <input type="hidden" name="cr_id" value="{{Auth::user()->id}}">
+                                
+                                <div class="row">
+                                    <div class='col'>
+                                        <label for="surname">surname</label>
+                                        <input type="text" class="form-control" name="sname" id="surname" value="{{Auth::user()->surname}}">
+                                    </div>
+                                    <div class='col'>
+                                        <label for="othernames">other_names</label>
+                                        <input type="text" class="form-control" name="oname" id="othernames" value="{{Auth::user()->other_names}}">
+                                    </div>
+                                    <div class='col'>
+                                        <label for="email">email</label>
+                                        <input type="text" class="form-control" name="email" id="email" value="{{Auth::user()->email}}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="id">Admission No:</label>
+                                        <input type="text" class="form-control" name="u_id" id="id" aria-describedby="idHelp" value="{{Auth::user()->id}}">
+                                    </div>
+                                </div>
+                                <span class='btn btn-warning mt-4' id='change_pass' role='button'>Change Password</span>
+                                <input type="hidden" name="is_change_active" id="is_change_active" value="false">
+                                
+                                <div class='pass-change-form mb-3'>
+                                    <div class='col'>
+                                        <label for="old_pass">Old Password</label>
+                                        <input type="password" class="form-control" name="old_pass" id="old_pass" disabled>
+                                    </div>
+                                    <div class="row  d-flex justify-content-between">
+
+                                        <div class='col'>
+                                            <label for="new_pass">New Password</label>
+                                            <input type="password" class="form-control" name="new_pass" id="new_pass" disabled>
+                                        </div>
+                                        <div class='col'>
+                                            <label for="conf_pass">Confirm Password</label>
+                                            <input type="password" class="form-control" name="conf_pass" id="conf_pass" disabled>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info w-100" id='alterChanges'>Submit</button>
+                            </form>
+                            
+                        </div>
+                    </div>
+                    <br/>
+                </div>
+            </div>
+        </div>
 
     <main>
            @yield('content')
@@ -128,7 +190,45 @@
                 });
                 }
 
-        </script>      
+        </script>
+        <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+        <script defer>
+            $(document).ready(function() {
+
+                $('body').find('#alterChanges').on('click',function(e){
+                    e.preventDefault()
+                    let status = false;
+                    if($('body').find('#change_pass').hasClass('active')){
+                        $('body').find('#change_pass').siblings('.pass-change-form').find('input').each(function(){
+                            if($(this).val() == ''){
+                                status = true
+                            }
+                        })
+                    }
+                    if(status){
+                        alert('Password fields are empty!')
+                    }else{
+                        $(this).parent().submit()
+                    }
+                })
+                
+                $('body').find('#change_pass').on('click',function(e){
+                    if($(this).hasClass('active')){
+                        $(this).removeClass('active')
+                        $(this).siblings('#is_change_active').val(false)
+                        $(this).siblings('.pass-change-form').find('input').attr('disabled',true)
+                        $(this).siblings('.pass-change-form').find('input').val('')
+                        $(this).text('Change Password').slow()
+                    }else{
+                        $(this).addClass('active')
+                        $(this).siblings('#is_change_active').val(true)
+                        $(this).siblings('.pass-change-form').find('input').attr('disabled',false)
+                        $(this).text('Discard Change').slow()
+                    }
+                })
+
+            })
+        </script>    
         <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
         <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script> -->
         <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script> -->

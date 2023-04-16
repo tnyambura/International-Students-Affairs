@@ -7,7 +7,7 @@
             {{Session::get('success_schedule_save')}}
             </div>
             @endif
-            <div class="schedule-btn-toggle d-flex align-items-center btn border rounded mb-3" role='button' onclick="ToggleScheduleView(this)">
+            <div class="schedule-btn-toggle d-flex align-items-center btn border rounded mb-3" role='button' onclick="ToggleScheduleView(this)" style="background: #113C7A; color:#fff;">
                 <i class="material-icons" id='btn_schd_icon' style='color:var(--danger)'>remove</i>
                 <span class='ml-2 fw-bold' id='sched_title'> Hide Schedule</span>
             </div>
@@ -314,8 +314,8 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
+                        <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                            <thead class="thead-dark">
                                 <tr>
                                     <th>Id</th>
                                     <th>Booked By</th>

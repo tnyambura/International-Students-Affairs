@@ -40,6 +40,7 @@
 <body style='display:flex; flex-direction:column; justify-content:space-between;'>
     <div>
         <div style="text-align: center;">
+            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:300px; height:200px;">
             <h2>Strathmore University International Students Affairs</h2>
             <h3>Office of the Dean of Students</h3>    
         </div>
@@ -56,8 +57,6 @@
                         <th>SurName</th>
                         <th>OtherNames.</th>
                         <th>email</th>
-                        <th>Role</th>
-                        <th>Status</th>
                     </tr>
                 </thead>
                 @foreach($users as $user)
@@ -66,16 +65,6 @@
                         <td>{{$user['surname']}}</td>
                         <td>{{$user['other_names']}}</td>
                         <td>{{$user['email']}}</td>
-                        @if($user['isbuddy'])
-                        <td>student/buddy</td>
-                        @else
-                        <td>{{$user['role']}}</td>
-                        @endif
-                        @if($user['status'] === 1)
-                        <td style="color:green">Activated</td>
-                        @else
-                        <td style="color:red">Deactivated</td>
-                        @endif
                     </tr>
                 @endforeach
                     </tbody>

@@ -274,9 +274,14 @@
                                 </div>
                                 
                                 <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                    <label for="Residence">Year of Study</label>
-                                    <input type="text" name="YearOfStudy" class="form-control" id="YearOfStudy" required>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="Residence">Year of Study</label>
+                                        <select class='form-control px-4' name="YearOfStudy" required id="">
+                                            <option value="1">First Year</option>
+                                            <option value="2">Second Year</option>
+                                            <option value="3">Third Year</option>
+                                            <option value="4">Fourth Year</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group">

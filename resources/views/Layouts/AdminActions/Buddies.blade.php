@@ -70,9 +70,9 @@
     @endif
 
     <div class="container-fluid buddy-contents active" id="buddies_list"><br/>
-        <div class="breadcrumb mb-4 d-flex justify-content-between align-items-center" style="background:#113C7A;">
+        <div class="breadcrumb mb-4 d-flex  align-items-center" style="background:#113C7A;">
             <span class="breadcrumb-item active" style="color:white;">Number of all buddies </span>
-            <span class="badge badge-warning">{{sizeOf($buddies)}}</span>
+            <span class="ml-4 badge badge-warning">{{sizeOf($buddies)}}</span>
         </div>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -94,7 +94,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
-                    <thead class="thead-dark">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>id</th>
                                 <th>Name</th>
@@ -138,9 +138,9 @@
         </div>
     </div>
     <div class="container-fluid buddy-contents" id="buddy_requests_list"><br/>
-        <div class="breadcrumb mb-4 d-flex justify-content-between align-items-center" style="background:#113C7A;">
+        <div class="breadcrumb mb-4 d-flex align-items-center" style="background:#113C7A;">
             <span class="breadcrumb-item active" style="color:white;">Number of all requests </span>
-            <span class="badge badge-warning">{{sizeOf($buddiesRequests)}}</span>
+            <span class="ml-4 badge badge-warning">{{sizeOf($buddiesRequests)}}</span>
         </div>
         <div class="card mb-4">
             <div class="card-header">
@@ -247,11 +247,10 @@
             </div>
         </div>
     </div>
-
     <div class="container-fluid buddy-contents" id="allocations_list"><br/>
-        <div class="breadcrumb mb-4 d-flex justify-content-between align-items-center" style="background:#113C7A;">
+        <div class="breadcrumb mb-4 d-flex align-items-center" style="background:#113C7A;">
             <span class="breadcrumb-item active" style="color:white;">Number of all Allocations </span>
-            <span class="badge badge-warning">{{sizeOf($BuddiesAllocations)}}</span>
+            <span class="ml-4 badge badge-warning">{{sizeOf($BuddiesAllocations)}}</span>
         </div>
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -317,6 +316,7 @@
                                                             <div class="col d-flex justify-content-around align-items-center">
                                                                 <span data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}" style=" color:blue" class="fas fa-edit" aria-hidden="true"></span>
                                                                 <form action="{{route('add.dismiss')}}" method='post'> @csrf
+                                                                    <input type="hidden" name="req_id" value="{{$bdAlloc['req_id']}}">
                                                                     <input type="hidden" name="user" value="{{$bdAlloc['id']}}">
                                                                     <button id="btn_{{$bdAlloc['id']}}" type='submit'>
                                                                         <span style=" color:#CC0D0D" class="fas fa-trash" aria-hidden="true"></span>

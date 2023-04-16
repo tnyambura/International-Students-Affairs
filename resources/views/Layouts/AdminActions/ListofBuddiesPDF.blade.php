@@ -41,9 +41,10 @@
 </head>
 <body>
    
-    <div style="text-align: center;">
-    <h2>Strathmore University International Students Affairs</h2>
-    <h3>Office of the Dean of Students</h3>    
+    <div class='d-flex flex-column justify-content-center' style="text-align: center;">
+        <img src="/asset/img/logo.png'" style="width:300px; height:200px;">
+        <h2>Strathmore University International Students Affairs</h2>
+        <h3>Office of the Dean of Students</h3>    
     </div>
     <div style="text-align: center;">
     <i class="fas fa-table mr-1" style="text:underline"></i><u>

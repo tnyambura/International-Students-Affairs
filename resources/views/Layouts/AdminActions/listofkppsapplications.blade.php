@@ -327,8 +327,8 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>application id</th>
                                 <th>student id</th>
@@ -338,16 +338,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>application id</th>
-                                <th>student id</th>
-                                <th>student names</th>
-                                <th>NATIONALITY</th>
-                                <th>status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             @foreach($data as $kpps)
                             @php $folder='kpps' @endphp
@@ -575,8 +565,8 @@
         <div class="card mb-4">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="VisaTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>application id</th>
                                 <th>student id</th>
@@ -586,16 +576,6 @@
                                 <th>Actions</th>
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <th>application id</th>
-                                <th>student id</th>
-                                <th>student names</th>
-                                <th>NATIONALITY</th>
-                                <th>status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </tfoot>
                         <tbody>
                             @foreach($visarequests as $val)
                             @if($val['application_status'] === 'pending')
@@ -831,8 +811,8 @@
         <div class="card subTab-Content mb-4 active" id='approved_visas'>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="VisaTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Icon</th>
                                 <th>application id</th>
@@ -858,8 +838,8 @@
         <div class="card subTab-Content mb-4 " id='in_progress_visas'>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="VisaTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Icon</th>
                                 <th>application id</th>
@@ -885,8 +865,8 @@
         <div class="card subTab-Content mb-4 " id='declined_visas'>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="VisaTable" width="100%" cellspacing="0">
-                        <thead>
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                        <thead class="thead-dark">
                             <tr>
                                 <th>Icon</th>
                                 <th>application id</th>

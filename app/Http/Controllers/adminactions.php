@@ -304,6 +304,12 @@ class adminactions extends Controller
         return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
     }
 
+    public function getallAllBuddiesReport(){
+
+        $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('Layouts/AdminActions/buddiesListReport',['buddies'=>$this->BuddiesFecher(),'img'=>public_path('logo.png')]);
+        return $pdf->download('All_Buddies_'.date("Y-m-d").'.pdf');
+        // return view('Layouts/AdminActions/buddiesListReport',['buddies'=>$this->BuddiesFecher(),'img'=>public_path('logo.png')]);
+    }
     public function getallAllocationsReport(){
 
         $tableGetter = DB::table('buddies_allocations')->get();
@@ -327,29 +333,29 @@ class adminactions extends Controller
         $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
         $GetUsersRole = DB::table('user_roles')->get();
         
-        if($MyRole[0]->role === 'super_admin'){
-            foreach ($GetUsers as $value) {
-                if($value->user_id !== $id){
-                    $thisUser=[];
-                    $isBuddy=false;
-                    $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
-                    $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-                    if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-                    if(sizeOf($GetUsersRole) > 0 ){
-                        $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                        if(sizeOf($GetUsersDetails) > 0){
-                            // if($GetUsersRole[0]->role === 'student'){
-                                array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                                // }
-                        }else{
-                            array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+        // if($MyRole[0]->role === 'super_admin'){
+        //     foreach ($GetUsers as $value) {
+        //         if($value->user_id !== $id){
+        //             $thisUser=[];
+        //             $isBuddy=false;
+        //             $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+        //             $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+        //             if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+        //             if(sizeOf($GetUsersRole) > 0 ){
+        //                 $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+        //                 if(sizeOf($GetUsersDetails) > 0){
+        //                     // if($GetUsersRole[0]->role === 'student'){
+        //                         array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+        //                         // }
+        //                 }else{
+        //                     array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
 
-                        }
-                    }
-                }
-            }
-        }
-        if($MyRole[0]->role === 'admin'){
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // if($MyRole[0]->role === 'admin'){
             foreach ($GetUsers as $value) {
                 if($value->user_id !== $id){
                     $thisUser=[];
@@ -365,7 +371,7 @@ class adminactions extends Controller
                     }
                 }
             }
-        }
+        // }
         return view('Layouts/AdminActions/allUsersReport',['users'=>$data]);
     }
     public function getVisaData($table,$status){
@@ -445,7 +451,7 @@ class adminactions extends Controller
         foreach ($bdAllocations as $allocation) {
             $StudentData = DB::table('users')->select('id','surname','other_names','email')->where('id',$allocation->student_id)->limit(1)->get();
             $buddyData = DB::table('users')->select('id as bd_id','surname as bd_srnm','other_names as bd_onm','email as bd_eml')->where('id',$allocation->buddy_id)->limit(1)->get();
-                array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0],['change_req'=>$allocation->request_change]));
+                array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0],['req_id'=>$allocation->request_id,'change_req'=>$allocation->request_change]));
         }
         return $data;
     }
@@ -487,7 +493,7 @@ class adminactions extends Controller
     public function RemoveAsBuddy(Request $req){
             $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
             foreach ($allAllocatedUsers as $value) {
-                if(DB::table('buddy_request')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
+                if(DB::table('buddy_request')->where('status','approved')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
                     DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
                 }
             }
@@ -502,7 +508,7 @@ class adminactions extends Controller
             $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user)->delete();
 
             if($deleteAllocation){
-                $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->delete();
+                $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->where('request_id',$req->req_id)->delete();
                 if($deleteFromRequest){
                     return back()->with('dissmiss_student','Student dissmissed');
                 }else{
@@ -637,34 +643,35 @@ class adminactions extends Controller
             $list = DB::table($table)->get();
         }
         $data =[];
-        if(sizeOf($list) > 0){ 
-            foreach ($list as $value) {
-                // $GetUsersDetails = DB::table('student_details')->where('student_id',$value->student_id)->limit(1)->get();        
-                // array_push($data,(array)$GetUsersDetails);
-                $thisUser=[];
-                $isBuddy=false;
-                $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
-                $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-                if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-                if(sizeOf($GetUsersRole) > 0 ){
-                    $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                    if(sizeOf($GetUsersDetails) > 0){
-                        // if($GetUsersRole[0]->role === 'student'){
-                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                            // }
-                    }else{
-                        array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-    
-                    }
+        foreach ($list as $value) {
+            // $GetUsersDetails = DB::table('student_details')->where('student_id',$value->student_id)->limit(1)->get();        
+            // array_push($data,(array)$GetUsersDetails);
+            $thisUser=[];
+            $isBuddy=false;
+            $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
+            $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+            if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+            if(sizeOf($GetUsersRole) > 0 ){
+                $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                if(sizeOf($GetUsersDetails) > 0){
+                    // if($GetUsersRole[0]->role === 'student'){
+                        array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+                        // }
+                }else{
+                    array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
+
                 }
             }
+        }
+        $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['users'=>$data]);
+        return $pdf->download($fileName.'.pdf');
+        // return view($loadView,['users'=>$data]);
+        // if(sizeOf($list) > 0){ 
 
 
-            $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['users'=>$data]);
-            return $pdf->download($fileName.'.pdf');
-        }else{
-            return back()->with('data_not_available','There is no data available to generate a report.');
-        }   
+        // }else{
+        //     return back()->with('data_not_available','There is no data available to generate a report.');
+        // }   
     }
     public function ExportToEXCEL($table,$cols,$loadView,$fileName){
         $list = DB::table($table)->select($cols)->get();

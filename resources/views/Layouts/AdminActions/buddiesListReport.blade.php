@@ -40,38 +40,41 @@
 <body style='display:flex; flex-direction:column; justify-content:space-between;'>
     <div>
         <div class='d-flex flex-column justify-content-center' style="text-align: center;">
-            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:300px; height:200px;">    
+            <!-- <img src="logo.png" style="width:300px; height:200px;"> -->
+            <img src="data:image/png;base64,{{base64_encode(file_get_contents($img))}}" style="width:300px; height:200px;">
+            <!-- <p>{{$img}}</p> -->
             <h2>Strathmore University International Students Affairs</h2>
             <h3>Office of the Dean of Students</h3>    
         </div>
         <div style="text-align: center;">
             <i class="fas fa-table mr-1" style="text-decoration:underline"></i><u>
-                List of all Registered Students.</u>
+                List of all Registered Buddies.</u>
         </div><br/>    
         <div class="row">             
             <div class="table table-bordered"  >
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Student</th>
-                        <th>email</th>
-                        <th>Phone</th>
-                        <th>Buddy</th>
-                        <th>email</th>
-                        <th>Phone</th>
-                    </tr>
-                </thead>
-                @foreach($allocations as $allocation)
-                    <tr>
-                        <td>{{$allocation['surname'].' '.$allocation['other_names']}}</td>
-                        <td>{{$allocation['email']}}</td>
-                        <td>{{$allocation['phone_number']}}</td>
-                        <td>{{$allocation['bd_srnm'].' '.$allocation['bd_onm']}}</td>
-                        <td>{{$allocation['bd_eml']}}</td>
-                        <td>{{$allocation['bd_phn']}}</td>
-                    </tr>
-                @endforeach
-                    </tbody>
+                <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>id</th>
+                            <th>Name</th>
+                            <th>email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if(sizeOf($buddies) === 0)
+                        <tr>
+                            <td colspan="4">No Buddy found</td>
+                        </tr>
+                        @endif
+                        @foreach($buddies as $buddy)
+                            <tr>
+                                <td>{{$buddy->id}}</td>
+                                <td>{{$buddy->surname.' '.$buddy->other_names}}</td>
+                                <td>{{$buddy->email}}</td>
+                            </a>  
+                            </tr>
+                        @endforeach
+                        </tbody>
                 </table>
     
                 
