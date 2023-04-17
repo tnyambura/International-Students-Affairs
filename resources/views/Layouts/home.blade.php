@@ -24,49 +24,54 @@
 
 </head>
 
-<body id="page-top">
+<body id="page-top" style="width: 100vw; height:100: 100vh">
 
-  <!-- Navigation -->
-  <a class="menu-toggle rounded" href="#">
-    <i class="fas fa-bars"></i>
-  </a>
-  <nav id="sidebar-wrapper" style="background-color:#00447D">
-    <ul class="sidebar-nav">
-      <li class="sidebar-brand">
-        <a class="js-scroll-trigger" href="#page-top">Welcome</a>
-      </li>
-      @if(!Auth::user())
-      <li class="sidebar-nav-item">
-        <!-- <span class="nav-link" style='color:#fff' role='button' data-toggle="modal" data-target="#loginModal">Login</span> -->
-        <a class="js-scroll-trigger" href="{{route('login')}}" >Login</a>
-      </li>
-      <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="{{ __('signup')}}" >Register an International Student</a>
-      </li>
-      @else
-      <li class="sidebar-nav-item">
-        <a class="js-scroll-trigger" href="{{ route('dashboard')}}" >
-        <span>My Account</span>
-        <small class='text-muted'>{{Auth::user()->surname}}</small>
-        </a>
-      </li>
-      @endif
-    </ul>
-  </nav>
+  <main class="row w-100 h-100">
+    <header class="col-8 masthead d-flex " style="position:relative; padding-top: 10px">
+      <div class="container text-center my-auto h-100 w-100 " style='position:absolute; top:0; left:0; background: rgba(58,93,174,.4);'>
+            <div class="">
+                <div class="account-wall">
+                <div class="mx-auto" style="width: 20rem; align:center;">
+                <img class="card-img-top" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
+            </div>
+        <h2 class="mb-5" style="color:white; font-size:60px;">
+          International Students affairs <span style="color:#E9292F">Portal</span>
+        </h2>
+        <a class="btn btn-primary btn-xl js-scroll-trigger p-2" href="https://susa.strathmore.edu/our-services/international-students/" target="_blank">Find Out More</a>
+        <p class="h6" style="color:#ffffff; padding-top:15%;">International Students Affairs © <?php echo Date('Y');?>. All right Reserved.<a class="text-green ml-2" href="#" target="_blank" style="color:#E9292F"></a></p>
 
-  <!-- Header -->
-  <header class="masthead d-flex" style="padding-top:20%">
-    <div class="container text-center my-auto">
-      <h2 class="mb-5" style="color:white; font-size:60px;">
-        International Students affairs <span style="color:#E9292F">Portal</span>
-      </h2>
-      <a class="btn btn-primary btn-xl js-scroll-trigger" href="https://susa.strathmore.edu/our-services/international-students/" target="_blank">Find Out More</a>
-      <p class="h6" style="color:#ffffff; padding-top:15%;">International Students Affairs © <?php echo Date('Y');?>. All right Reserved.<a class="text-green ml-2" href="#" target="_blank" style="color:#E9292F"></a></p>
+      
+      </div>   
 
-    
-    </div>   
+    </header>
+    <div class="col py-5 px-4">
+        <div class="">
+          <h2 class="mb-5" style="color:#000; text-align:center; font-size:30px;">
+            Login
+          </h2>
+          <x-auth-validation-errors class="mb-4" :errors="$errors" />
+            <form class="form-signin w-100" method="POST" action="{{ route('login') }}">
+            @csrf
+                <label>SUID or USERNAME </label><br/>
 
-  </header>
+                <input type="text" class="form-control" placeholder="suID" name="suID" required autofocus><br/>
+                <label>PASSWORD</label><br/>
+                <input type="password" class="form-control" placeholder="Password" name="password" required><br/>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">
+                    Sign in</button><br/>
+                <label class="checkbox pull-left">
+                    <input type="checkbox" value="remember-me">
+                    Remember me
+                </label>
+                <a href="{{route('password.request')}}" class="pull-right need-help">Forgotten Password? </a><span class="clearfix"></span>
+            </form>
+        </div>
+            <a href="/signup" class="text-center new-account">Create an account </a>
+    </div>
+  </main>
+
+  
+  
  
   <!-- Scroll to Top Button-->
   <a class="scroll-to-top rounded js-scroll-trigger" href="#page-top">
