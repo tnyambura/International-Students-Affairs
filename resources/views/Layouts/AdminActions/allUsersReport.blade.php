@@ -39,10 +39,9 @@
 </head>
 <body style='display:flex; flex-direction:column; justify-content:space-between;'>
     <div>
-        <div style="text-align: center;">
-            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:300px; height:200px;">
+        <div style="text-align: center; display:flex; ">
+            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:200px; height:200px;">
             <h2>Strathmore University International Students Affairs</h2>
-            <h3>Office of the Dean of Students</h3>    
         </div>
         <div style="text-align: center;">
             <i class="fas fa-table mr-1" style="text-decoration:underline"></i><u>

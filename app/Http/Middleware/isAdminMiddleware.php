@@ -17,9 +17,9 @@ class isAdminMiddleware
             if(strtolower($userRole) === 'admin' || strtolower($userRole) === 'super_admin'){
                 return $next($request);
             }else{
-                return redirect('login');
+                return redirect('/');
             }
         }
-        return redirect('login');
+        return redirect('/');
     }
 }

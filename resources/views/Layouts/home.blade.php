@@ -27,8 +27,8 @@
 <body id="page-top" style="width: 100vw; height:100: 100vh">
 
   <main class="row w-100 h-100">
-    <header class="col-8 masthead d-flex " style="position:relative; padding-top: 10px">
-      <div class="container text-center my-auto h-100 w-100 " style='position:absolute; top:0; left:0; background: rgba(58,93,174,.4);'>
+    <header class="col masthead d-flex " style="position:relative; padding-top: 10px">
+      <div class="container text-center my-auto h-100 " style='width: auto; position:absolute; top:0; left:0; right:0; background: rgba(58,93,174,.4);'>
             <div class="">
                 <div class="account-wall">
                 <div class="mx-auto" style="width: 20rem; align:center;">
@@ -50,7 +50,7 @@
             Login
           </h2>
           <x-auth-validation-errors class="mb-4" :errors="$errors" />
-            <form class="form-signin w-100" method="POST" action="{{ route('login') }}">
+            <form style="margin-left:50px; margin-right:50px;" class=" w-100" method="POST" action="{{ route('login') }}">
             @csrf
                 <label>SUID or USERNAME </label><br/>
 

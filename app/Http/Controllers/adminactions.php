@@ -508,7 +508,7 @@ class adminactions extends Controller
             $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user)->delete();
 
             if($deleteAllocation){
-                $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->where('request_id',$req->req_id)->delete();
+                $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->delete();
                 if($deleteFromRequest){
                     return back()->with('dissmiss_student','Student dissmissed');
                 }else{
@@ -631,6 +631,31 @@ class adminactions extends Controller
                    
     }
     // 'Layouts/AdminActions/StudentsListPDF'
+    
+    public function getAllApprovedVisaReport(){
+        $loadView = 'Layouts/AdminActions/allApprovedVisaReport';
+        $fileName = 'ApprovedVisaList_'.date("Y_m_d");
+        
+        $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]);
+        return $pdf->download($fileName.'.pdf');
+        // return view($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]); 
+    }
+    public function getAllInProgressVisaReport(){
+        $loadView = 'Layouts/AdminActions/allInProgressVisaReport';
+        $fileName = 'In_ProgressVisaList_'.date("Y_m_d");
+        
+        $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['exVisas'=>$this->getVisaData('extension_application','in progress'),'kppVisas'=>$this->getVisaData('kpps_application','in progress')]);
+        return $pdf->download($fileName.'.pdf');
+        // return view($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]); 
+    }
+    public function getAllDeclinedVisaReport(){
+        $loadView = 'Layouts/AdminActions/allDeclinedVisaReport';
+        $fileName = 'DeclinedVisaList_'.date("Y_m_d");
+        
+        $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['exVisas'=>$this->getVisaData('extension_application','declined'),'kppVisas'=>$this->getVisaData('kpps_application','declined')]);
+        return $pdf->download($fileName.'.pdf');
+        // return view($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]); 
+    }
     public function getAllStudentsReport(){
         $table = 'users';
         $cols = ['id as user_id','surname','other_names','email','status'];
@@ -711,7 +736,7 @@ class adminactions extends Controller
         $bookingRequests = [];
         if(sizeOf($t) > 0){
             $t = $t[0]->my_schedule;
-            $bookingRequests = DB::table('bookingList')->where('status','pending')->get();
+            $bookingRequests = DB::table('bookingList')->get();
         }
         return view('Layouts/AdminActions/MySchedule',['schedule_list'=>json_decode($t),'bookingRequests'=>$bookingRequests]);
         

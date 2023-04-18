@@ -17,9 +17,9 @@ class isBuddyMiddleware
             if(strtolower($userRole) === 'buddy'){
                 return $next($request);
             }else{
-                return redirect('login');
+                return redirect('/');
             }
         }
-        return redirect('login');
+        return redirect('/');
     }
 }

@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability])
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking])
 @section('content')
 
     @if(!$is_buddy)
@@ -16,6 +16,18 @@
                 </div>
             </div>
         </div>
+        @if(Session::has('booking-success'))
+        <div class="alert alert-success" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{Session::get('booking-success')}}
+        </div>
+        @endif
+        @if(Session::has('booking-error'))
+        <div class="alert alert-danger" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        {{Session::get('booking-error')}}
+        </div>
+        @endif
         @if(Session::has('New_request_assigned'))
         <div class="alert alert-success" role="alert">
         {{Session::get('New_request_assigned')}}

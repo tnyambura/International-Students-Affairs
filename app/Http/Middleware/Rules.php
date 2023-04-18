@@ -31,7 +31,7 @@ class Rules
             if($user->hasRole($role)){
                 return $next($request);
             }else{
-                return redirect('login');
+                return redirect('/');
             }
             // if($role === 'admin' || $role === 'super_admin')
             // {
@@ -67,6 +67,6 @@ class Rules
         //     return $next($request);
         // }
 
-        return redirect('login');
+        return redirect('/');
     }
 }

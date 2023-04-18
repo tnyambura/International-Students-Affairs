@@ -809,6 +809,22 @@
             </div>
         </div>
         <div class="card subTab-Content mb-4 active" id='approved_visas'>
+            <div class="card-header d-flex justify-content-between align-items-center" style="background:#113C7A;">
+                <div style="color:#fff;">
+                    <i class="fas fa-table mr-1"></i>
+                    List of Approved Visa
+                </div>
+                <div class='d-flex align-items-center'>
+    
+                    <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                        <input type="hidden" name="function" value='getAllApprovedVisaReport'>
+                        <button type='submit'>
+                        <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                        </button>
+                    </form>
+                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
@@ -836,6 +852,22 @@
             </div>
         </div>
         <div class="card subTab-Content mb-4 " id='in_progress_visas'>
+            <div class="card-header d-flex justify-content-between align-items-center" style="background:#113C7A;">
+                <div style="color:#fff;">
+                    <i class="fas fa-table mr-1"></i>
+                    List of Visa in Progress
+                </div>
+                <div class='d-flex align-items-center'>
+    
+                    <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                        <input type="hidden" name="function" value='getAllInProgressVisaReport'>
+                        <button type='submit'>
+                        <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                        </button>
+                    </form>
+                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
@@ -863,6 +895,22 @@
             </div>
         </div>
         <div class="card subTab-Content mb-4 " id='declined_visas'>
+            <div class="card-header d-flex justify-content-between align-items-center" style="background:#113C7A;">
+                <div style="color:#fff;">
+                    <i class="fas fa-table mr-1"></i>
+                    List of Declied Visa
+                </div>
+                <div class='d-flex align-items-center'>
+    
+                    <form action='{{route("add.GeneratePDF")}}' method='post'>@csrf
+                        <input type="hidden" name="function" value='getAllDeclinedVisaReport'>
+                        <button type='submit'>
+                        <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                        </button>
+                    </form>
+                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                </div>
+            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">

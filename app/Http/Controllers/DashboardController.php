@@ -35,9 +35,20 @@ class DashboardController extends Controller
         }
         return $res;
     }
+    public function getStatistics($year){
+        $allStd = DB::table("user_roles")->where('role','student')->get();
+        $kppsReq = DB::table("kpps_application")->where('application_date','LIKE',$year.'%')->get();
+        $ExtReq = DB::table("extension_application")->where('application_date','LIKE',$year.'%')->get();
+        $BdReq = DB::table("buddy_request")->where('request_date','LIKE',$year.'%')->get();
+        $AppointmentReq = DB::table("bookingList")->where('requested_at','LIKE',$year.'%')->get();
+
+        $data = ['kpps'=>$kppsReq, 'ex'=>$ExtReq, 'bd'=>$BdReq, 'meet'=>$AppointmentReq];
+
+        return $data;
+    }
     public function index(Request $request){
         if(!Auth::user()){
-            return redirect('/login');
+            return redirect('/');
         }else{
             $userRoleGetter = DB::table('user_roles')->where('user_id', '=',Auth::user()->id)->limit(1)->get();
             $fetcher =[];
@@ -64,11 +75,11 @@ class DashboardController extends Controller
                         break;
                     
                     default:
-                        redirect('/login');
+                        redirect('/');
                         break;
                 }
             }else{
-                redirect('/login');
+                redirect('/');
             }
             if(sizeOf($fetcher) > 0){
                 $is_buddy=false;
@@ -77,9 +88,15 @@ class DashboardController extends Controller
                 if(sizeOf($IsABubby) > 0){ $is_buddy=true;}
                 return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy, 'availability'=>$this->AvailabilityGetter(), 'myAppointments'=>$this->GetAllbookedMeeting()]);
             }else{
-                return view($userRoleVal);
+                $allStd = DB::table("user_roles")->where('role','student')->get();
+                $kppsReq = DB::table("kpps_application")->get();
+                $ExtReq = DB::table("extension_application")->get();
+                $BdReq = DB::table("buddy_request")->get();
+                $AppointmentReq = DB::table("bookingList")->get();
+                return view($userRoleVal,['NoStudents'=>sizeOf($allStd),'KppStatistics'=>$kppsReq,'ExtStatistics'=>$ExtReq,'BuddyStatistics'=>$BdReq,'MeetingStatistics'=>$AppointmentReq]);
             }
         }
+        
     // if(Auth::user()->hasRole('student')){
     //     return view('Layouts.studentDash');
     // }

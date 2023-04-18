@@ -17,9 +17,9 @@ class isUserMiddleware
             if(strtolower($userRole) === 'student'){
                 return $next($request);
             }else{
-                return redirect('login');
+                return redirect('/');
             }
         }
-        return redirect('login');
+        return redirect('/');
     }
 }

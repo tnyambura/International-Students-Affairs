@@ -8,6 +8,8 @@
         <meta name="author" content="" />
         <title>Dashboard || Dashboard</title>
         <link href="asset/css/styles.css" rel="stylesheet"/>
+        <link href="asset/css/progress.css" rel="stylesheet"/>
+        <link href="asset/css/custom_select.css" rel="stylesheet"/>
         <link href="{{asset('css/app.css')}}" rel="stylesheet"/>
         <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous"> -->
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
@@ -33,13 +35,13 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light " id="sidenavAccordion">
-                    <div class="d-flex mt-6">
-                        <div class="dropbtn d-flex align-items-center justify-content-center mx-2" style="border:1px solid rgba(110,110,110,.6); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="d-flex flex-column mt-6">
+                        <div class="dropbtn d-flex align-self-center justify-content-center mx-2" style="border:1px solid rgba(110,110,110,.6); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img style="width:100%;" src="asset/img/logo.png" />
                         </div>
-                        <div class=' d-flex flex-column justify-content-center'>
-                            <span style='font-weight:bolder;'>{{Auth::user()->surname.' '.substr(Auth::user()->other_names, 0, 1).'.'}}</span>
-                            <small class='mt-2 border-bottom py-2' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(110,110,110,.5)'>My profile</small>
+                        <div class=' d-flex flex-column'>
+                            <span class="pt-2" style='font-weight:bolder; text-align:center;'>{{Auth::user()->surname.' '.explode(' ',Auth::user()->other_names)[0]}}</span>
+                            <small class='mt-2 border-bottom py-2 px-3' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(110,110,110,.5)'>View profile</small>
                         </div>
                     </div>    
                     <div class="sb-sidenav-menu d-flex flex-column justify-content-between pt-4">

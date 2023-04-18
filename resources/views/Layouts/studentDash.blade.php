@@ -1,6 +1,19 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability])
+<?php
+$AppReq = 0;
+
+if(sizeOf($myAppointments) > 0){
+    foreach($myAppointments as $val){
+        if($val->status == 'pending'){
+            $AppReq = $AppReq+1;
+        }
+    }
+}
+?>
+
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$AppReq])
 @section('content')      
-      <div class="container-fluid"><br/>
+
+<div class="container-fluid"><br/>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -130,6 +143,23 @@
                             @if(sizeOf($myAppointments) > 0)
                                 @foreach($myAppointments as $val)
                                 @php $aptmnt = json_decode($val->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
+                                    @if($val->status !== 'pending')
+                                    <tr>
+                                        <td>{{$val->id}}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between">
+                                                <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                </span>
+                                                <div class='badge badge-success d-flex justify-content-center align-items-center'>
+                                                    <i class="fa fa-clock"></i>
+                                                    <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style='text-transform:capitalize;'>{{$val->status}}</td>
+                                    </tr>
+                                    @else
                                     <tr>
                                         <td>{{$val->id}}</td>
                                         <td>
@@ -143,8 +173,9 @@
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{{$val->status}}</td>
+                                        <td style='text-transform:capitalize;'>{{$val->status}}</td>
                                     </tr>
+                                    @endif
                                 @endforeach
                             @else
                                 <tr>

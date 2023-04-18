@@ -1,9 +1,22 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability])
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking])
 @section('content')
                     <div class="container-fluid"><br/>
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
                             <li class="breadcrumb-item active" style="color:white;">List of my Visa Extension Requests</li>
                         </ol>
+
+                        @if(Session::has('booking-success'))
+                        <div class="alert alert-success" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{Session::get('booking-success')}}
+                        </div>
+                        @endif
+                        @if(Session::has('booking-error'))
+                        <div class="alert alert-danger" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        {{Session::get('booking-error')}}
+                        </div>
+                        @endif
                         @if(Session::has('user_update_success'))
                         <div class="alert alert-success" role="alert">
                         {{Session::get('user_update_success')}}

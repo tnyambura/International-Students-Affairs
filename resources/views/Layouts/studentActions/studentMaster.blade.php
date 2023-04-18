@@ -22,18 +22,17 @@
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
-                    <div class="d-flex mt-6">
-                        <div class="dropbtn d-flex align-items-center justify-content-center mx-2" style="border:1px solid rgba(110,110,110,.6); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <div class="d-flex flex-column mt-6">
+                        <div class="dropbtn d-flex align-self-center justify-content-center mx-2" style="border:1px solid rgba(110,110,110,.6); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img style="width:100%;" src="asset/img/logo.png" />
                         </div>
-                        <div class=' d-flex flex-column justify-content-center'>
-                            <span style='font-weight:bolder;'>{{Auth::user()->surname.' '.substr(Auth::user()->other_names, 0, 1).'.'}}</span>
-                            <small class='mt-2 border-bottom py-2' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(110,110,110,.5)'>My profile</small>
+                        <div class=' d-flex flex-column'>
+                            <span class="pt-2" style='font-weight:bolder; text-align:center;'>{{Auth::user()->surname.' '.explode(' ',Auth::user()->other_names)[0]}}</span>
+                            <small class='mt-2 border-bottom py-2 px-3' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(110,110,110,.5)'>View profile</small>
                         </div>
                     </div> 
                     <div class="sb-sidenav-menu d-flex flex-column justify-content-between">
                         <div class="nav">
-                                <div class="sb-sidenav-menu-heading">Home</div>
 
                                 <a class="nav-link" href="{{ __('dashboard')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
@@ -65,6 +64,9 @@
                                 <div class="nav-link" role='button' data-toggle="modal" data-target="#BookMeeting_{{Auth::user()->id}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
                                     Book Meeting
+                                    @if($NoBooking > 0)
+                                        <span class="badge badge-warning ml-2">{{$NoBooking}}</span>
+                                    @endif
                                 </div>
                         </div>
                         <a class="sb-sidenav-footer bg-danger out w-100" style='color:white' href="{{ __('logout')}}">Logout</a>

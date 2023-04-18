@@ -67,9 +67,9 @@
                         <thead class="thead-dark">
                             <tr>
                                 <th>Id</th>
-                                <th>SurName</th>
-                                <th>OtherNames.</th>
+                                <th>Name</th>
                                 <th>email</th>
+                                <th>Country</th>
                                 <th>Role</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -77,11 +77,14 @@
                         </thead>
                         <tbody>
                         @foreach($users as $user)
+                        @php $key= 'nationality'; @endphp
                             <tr>
                                 <td>{{$user['user_id']}}</td>
-                                <td>{{$user['surname']}}</td>
-                                <td>{{$user['other_names']}}</td>
+                                <td>{{$user['surname'].' '.$user['other_names']}}</td>
                                 <td>{{$user['email']}}</td>
+                                <td>{{
+                                    array_key_exists($key, $user) ? $user[$key] : null
+                                    }}</td>
                                 @if($user['isbuddy'])
                                 <td>student/buddy</td>
                                 @else

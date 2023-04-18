@@ -310,7 +310,7 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table mr-1"></i>
-                    Booking Requests List
+                    Appointment Requests List
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -327,26 +327,77 @@
                             <tbody>
                                 @if(sizeOf($bookingRequests) > 0)
                                     @foreach($bookingRequests as $bookRq)
-                                        <tr>
-                                            <td title="Given Masheka">{{$bookRq->id}}</td>
-                                            <td>{{$bookRq->student_id}}</td>
-                                            <td>
-                                                @php $aptmnt = json_decode($bookRq->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
-                                                <div class="d-flex justify-content-between">
-                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                    {{$date[1].' '.$date[2].' '.$date[0]}}
-                                                    </span>
-                                                    <div class='badge badge-warning d-flex justify-content-center align-items-center'>
-                                                        <i class="fa fa-clock"></i>
-                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                        @if($bookRq->status === 'pending')
+                                            <tr>
+                                                <td title="Given Masheka">{{$bookRq->id}}</td>
+                                                <td>{{$bookRq->student_id}}</td>
+                                                <td>
+                                                    @php $aptmnt = json_decode($bookRq->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
+                                                    <div class="d-flex justify-content-between">
+                                                        <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                        {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                        </span>
+                                                        <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                            <i class="fa fa-clock"></i>
+                                                            <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td>{{$bookRq->status}}</td>
-                                            <td><a href="/meeting-done/{{$bookRq->id}}" style='color:green' >
-                                                <i class="fa fa-check"></i>
-                                            </a></td>
-                                        </tr>
+                                                </td>
+                                                <td>{{$bookRq->status}}</td>
+                                                <td><a href="/meeting-done/{{$bookRq->id}}" style='color:green' >
+                                                    <i class="fa fa-check"></i>
+                                                </a></td>
+                                            </tr>
+                                        @endif
+                                    @endforeach
+                                @else
+                                    <tr>
+                                        <td colspan="5">No Booking Found</td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table mr-1"></i>
+                    Past Meeting List
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Booked By</th>
+                                    <th>Appointment On</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(sizeOf($bookingRequests) > 0)
+                                    @foreach($bookingRequests as $bookRq)
+                                        @if($bookRq->status !== 'pending')
+                                            <tr>
+                                                <td title="Given Masheka">{{$bookRq->id}}</td>
+                                                <td>{{$bookRq->student_id}}</td>
+                                                <td>
+                                                    @php $aptmnt = json_decode($bookRq->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
+                                                    <div class="d-flex justify-content-between">
+                                                        <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                        {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                        </span>
+                                                        <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                            <i class="fa fa-clock"></i>
+                                                            <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>{{$bookRq->status}}</td>
+                                            </tr>
+                                        @endif
                                     @endforeach
                                 @else
                                     <tr>

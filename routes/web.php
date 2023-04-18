@@ -26,9 +26,9 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 |
 */
 
-Route::get('/', function () {
+Route::get('/',function () {
     return view('Layouts.home');
-});
+})->middleware('guest');
 
 Route::get('/db',function(){
     return view('dbCheck');
@@ -36,7 +36,7 @@ Route::get('/db',function(){
 
 Route::get('/file-view/{path}/{file}', 'App\Http\Controllers\studentactions@PDFFileView')->name('PDFFileView');
 Route::get('/BuddyRequest', 'App\Http\Controllers\studentactions@BuddyRequest')->name('BuddyRequest');
-Route::get('/signup', 'App\Http\Controllers\studentactions@NewSignup')->name('signup');
+Route::get('/signup', 'App\Http\Controllers\studentactions@NewSignup')->middleware('guest')->name('signup');
 Route::post('/signup', 'App\Http\Controllers\studentactions@AddNewSignup')->name('Add.signup');
 Route::get('/passwordreset', [PasswordResetLinkController::class, 'create']);
 // Route::post('/passwordreset', [PasswordResetLinkController::class, 'create'])->name('password.email');
@@ -165,6 +165,10 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/listofBuddyRequests',[adminactions::class,'getBuddyRequests'])->middleware('isAdmin');
      Route::get('/changeStatus/{id}', [adminactions::class,'changeStatus'])->middleware('isAdmin')->name('changeStatus');
      Route::get('/changeVisastatus/{id}', [adminactions::class,'changeVisastatus'])->middleware('isAdmin')->name('changeVisastatus');
+
+
+     Route::get('/viewVisaReport', [adminactions::class,'getAllApprovedVisaReport'])->middleware('isAdmin');
+     Route::get('/statistics-filter/{year}', [DashboardController::class,'getStatistics'])->middleware('isAdmin');
 
 
 
