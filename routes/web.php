@@ -168,6 +168,8 @@ Route::group(['middleware' => ['auth']], function(){
 
 
      Route::get('/viewVisaReport', [adminactions::class,'getAllApprovedVisaReport'])->middleware('isAdmin');
+     Route::post('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin')->name('add.statistics');
+    //  Route::get('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin');
      Route::get('/statistics-filter/{year}', [DashboardController::class,'getStatistics'])->middleware('isAdmin');
 
 

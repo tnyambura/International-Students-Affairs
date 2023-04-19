@@ -9,6 +9,9 @@ use App\Models\addNewStudent;
 use App\Models\applykpp;
 use App\Models\BookingList;
 use App\Models\MySchedule;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PDF;
 use DB;
 
 
@@ -36,7 +39,7 @@ class DashboardController extends Controller
         return $res;
     }
     public function getStatistics($year){
-        $allStd = DB::table("user_roles")->where('role','student')->get();
+        
         $kppsReq = DB::table("kpps_application")->where('application_date','LIKE',$year.'%')->get();
         $ExtReq = DB::table("extension_application")->where('application_date','LIKE',$year.'%')->get();
         $BdReq = DB::table("buddy_request")->where('request_date','LIKE',$year.'%')->get();
@@ -46,6 +49,17 @@ class DashboardController extends Controller
 
         return $data;
     }
+
+    public function statisticsReport(Request $req){
+        $getYear = $req->year;
+        $allStd = DB::table("user_roles")->where('role','student')->get();
+
+        $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($getYear),'year'=>$getYear]);
+        return $pdf->download($getYear.'_Statistics.pdf');
+
+        // return view('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($getYear),'year'=>$getYear]);
+    }
+
     public function index(Request $request){
         if(!Auth::user()){
             return redirect('/');

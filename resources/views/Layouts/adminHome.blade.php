@@ -4,7 +4,7 @@
         <div class="row d-flex justify-content-center">
             <div class="col-xl-12">
                 <div class="card proj-progress-card">
-                    <div class="card-header py-4 px-2 d-flex ">
+                    <div class="card-header py-2 px-2 d-flex ">
                         <div class="select-dropdown pl-2">
                             <button href="#" role="button" data-value="" class="select-dropdown__button">
                                 <input type='hidden' id='selected_val' />
@@ -17,14 +17,13 @@
                                 <li data-value="2026" class="select-dropdown__list-item">2026</li>
                             </ul>
                         </div>
-                        <!-- <select class='year-selection form-select' 
-                        style='background: transparent; border:0; outline:none;
-                        appearance: none; -webkit-appearance: none; -moz-appearance:none;'>
-                            <option value='2023'>2023</option>
-                            <option value='2024'>2024</option>
-                            <option value='2025'>2025</option>
-                        </select> -->
-                        <span class="pl-4"> Total Registered Students {{$NoStudents}}</span>
+                        <form action='{{route("add.statistics")}}' method='post'>@csrf
+                            <input type="hidden" name="year" id='getStatisticsYear' value='{{date("Y")}}'>
+                            <button type='submit' id='iids'>
+                            <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                            </button>
+                        </form>
+                        <p class="pl-4 d-flex align-items-center" style='font-size:20px; color: rgba(110,110,110,.4);'> Total Registered Students <strong class='pl-2'>{{$NoStudents}}</strong> </p>
                     </div>
                     <div class="card-block statistics-display">
                         <div class="row">
@@ -111,7 +110,7 @@
             $('.select-dropdown__button > span').on('DOMSubtreeModified',function(e){
                 if($(this).html() !== ""){
                     let value = $(this).siblings('input').val()
-                    
+                    $('#getStatisticsYear').val(value)
                     $.ajax({
                         type: "get",
                         url: `/statistics-filter/${value}`,

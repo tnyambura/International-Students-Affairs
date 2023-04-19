@@ -10629,6 +10629,10 @@ div label{
   background: var(--info);
   color: #fff
 }
+.day-btn.past-day-active{
+  background: #cadfe3;
+  color: #fff
+}
 .day-btn.day-disabled{
   background: rgb(222 222 222 / 32%);
   color: #c4c4c4;

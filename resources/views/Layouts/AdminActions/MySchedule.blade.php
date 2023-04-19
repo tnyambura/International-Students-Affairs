@@ -96,6 +96,13 @@
                 D.innerHTML= a
                 days_title.appendChild(D)
             }
+            function CheckExistance(availableDays,item){
+                for(let i=0; i<availableDays.length; i++){
+                    if(availableDays[i][0] === item){
+                        return i
+                    }
+                }
+            }
 
             function renderCalendar() {
                 let firstDayOfMonth = new Date(currentDate.getFullYear(), currentDate.getMonth(), 1);
@@ -186,9 +193,17 @@
                         }
                         
                         if(TodayDate.getMonth() <= monthNames.indexOf(month.textContent) && TodayDate.getYear()<=currentDate.getYear()){
-                            parseInt(m)>0 ? this_day.setAttribute('onClick',"GetClickedDay(event,this)") :''
-                            parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${m}`) :''
-                            parseInt(m)>0 ? this_day.setAttribute('role','button') :''
+                            if(TodayDate.getMonth() === monthNames.indexOf(month.textContent) && TodayDate.getDate() > parseInt(m)){
+                                if(CheckExistance(availableDays,`${currentDate.getFullYear()}_${monthNames[TodayDate.getMonth()]}_${m}`) === undefined){
+                                    this_day.classList.add('day-disabled')
+                                }else{
+                                    this_day.classList.add('past-day-active')
+                                }
+                            }else{
+                                parseInt(m)>0 ? this_day.setAttribute('onClick',"GetClickedDay(event,this)") :''
+                                parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${m}`) :''
+                                parseInt(m)>0 ? this_day.setAttribute('role','button') :''
+                            }
                         }else{
                             this_day.classList.add('day-disabled')
                         }
@@ -216,13 +231,7 @@
         
             
 
-            function CheckExistance(availableDays,item){
-                for(let i=0; i<availableDays.length; i++){
-                    if(availableDays[i][0] === item){
-                        return i
-                    }
-                }
-            }
+            
             function TimeCheck(e,item){
                 if(e.target === item){
                     if(item.classList.contains('active')){
@@ -268,6 +277,7 @@
                     }else{
                         item.classList.add('active')
                         item.querySelector('.dropdown').style.display='block'
+                        item.querySelector('.dropdown').style.color='green'
                         if(availableDays.indexOf(item.getAttribute('data-day')) < 0){
                             availableDays.push([item.getAttribute('data-day'),[]])
                         }
@@ -281,12 +291,25 @@
             $(document).ready(function() {
                 setInterval(() => {
                     for(let x in availableDays){
-                        $('body').find(`[data-day='${availableDays[x][0]}']`).addClass('active')
-                        $('body').find(`[data-day='${availableDays[x][0]}']`).find('.dropdown').css('display','block')
-                        
-                        for(let i of availableDays[x][1]){
-                            $('body').find(`[data-time-check='time_${i}_${availableDays[x][0]}']`).attr('checked',true)
-                            $('body').find(`[data-time-check='time_${i}_${availableDays[x][0]}']`).find('[value="i"]').addClass('active')
+                        let daySelect = parseInt(availableDays[x][0].split('_')[1])
+                        if(TodayDate.getDate() > daySelect){
+                            $('body').find(`[data-day='${availableDays[x][0]}']`).removeClass('day-disabled')
+                            $('body').find(`[data-day='${availableDays[x][0]}']`).addClass('active','pastDate')
+                            $('body').find(`[data-day='${availableDays[x][0]}']`).find('.dropdown').css('display','block')
+                            
+                            for(let i of availableDays[x][1]){
+                                $('body').find(`[data-time-check='time_${i}_${availableDays[x][0]}']`).attr('checked',true)
+                                $('body').find(`[data-time-check='time_${i}_${availableDays[x][0]}']`).prop('disabled',true)
+                                $('body').find(`[data-time-check='time_${i}_${availableDays[x][0]}']`).find('[value="i"]').addClass('active','pastTime')
+                            }
+                        }else{
+                            $('body').find(`[data-day='${availableDays[x][0]}']`).addClass('active')
+                            $('body').find(`[data-day='${availableDays[x][0]}']`).find('.dropdown').css('display','block')
+                            
+                            for(let i of availableDays[x][1]){
+                                $('body').find(`[data-time-check='time_${i}_${availableDays[x][0]}']`).attr('checked',true)
+                                $('body').find(`[data-time-check='time_${i}_${availableDays[x][0]}']`).find('[value="i"]').addClass('active')
+                            }
                         }
                     }
                 },1000);
@@ -431,7 +454,36 @@
                         $(this).parent().submit()
                     }
                 })
-                
+                let ItemNoChecked = []
+                setInterval(()=>{
+                    $('body').find('.dropdown-menu').each(function(e){
+                        if($(this).parent().parent().hasClass('active')){
+                            if($(this).find('input[type="checkbox"]:checked').length > 0){
+                                $(this).parent().css({color:'green'})
+
+                                if(ItemNoChecked.indexOf($(this).parent().parent().attr('data-day')) > -1){
+                                    ItemNoChecked.splice(ItemNoChecked.indexOf($(this).parent().parent().attr('data-day')),1)
+                                }
+                            }
+                            else{
+                                $(this).parent().css({color:'#fff'})
+                                if(!ItemNoChecked.includes($(this).parent().parent().attr('data-day'))){
+                                    ItemNoChecked.push($(this).parent().parent().attr('data-day'))
+                                }
+                            }
+                        }else{
+                            if(ItemNoChecked.indexOf($(this).parent().parent().attr('data-day')) > -1){
+                                ItemNoChecked.splice(ItemNoChecked.indexOf($(this).parent().parent().attr('data-day')),1)
+                            }
+                        }
+                    })
+
+                    if(ItemNoChecked.length > 0){
+                        $('#save_schedule').prop('disabled',true)
+                    }else{
+                        $('#save_schedule').prop('disabled',false)
+                    }
+                })
                 $('body').find('#change_pass').on('click',function(e){
                     if($(this).hasClass('active')){
                         $(this).removeClass('active')
