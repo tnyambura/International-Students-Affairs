@@ -179,78 +179,90 @@ h6 {
         </div><br/> 
     </div>
     <div class="card-block statistics-display">
-        <div class="row" style='padding: 10px 20px'>
-            <div class="col-xl-3 col-md-6 mt-4 mb-1">
-                <h6>No of Kpp Request</h6>
-                <div class="m-t-30 progresss">
-                    <div class="progress-bar bg-c-red" data-progress='{{round(sizeOf(json_decode($data["kpps"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["kpps"]))*100/$NoStudents}}%"></div>
-                </div>
-                <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["kpps"]))}}</h5>
+        <table>
+            <tr>
+                <td>
+                    <div class="col-xl-3 col-md-6 mt-4 mb-1">
+                        <h6>No of Kpp Request</h6>
+                        <div class="m-t-30 progresss">
+                            <div class="progress-bar bg-c-red" data-progress='{{round(sizeOf(json_decode($data["kpps"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["kpps"]))*100/$NoStudents}}%"></div>
+                        </div>
+                        <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["kpps"]))}}</h5>
 
-                <div class='bg-c-red p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
-                    <h6 class='pb-3 pt-1'>No of Kpps Approved</h6>
-                    @php $kppCount = 0; @endphp
-                    @foreach(json_decode($data["kpps"]) as $v)
-                        @if($v->application_status === 'approved')
-                            @php $kppCount = $kppCount + 1; @endphp
-                        @endif
-                    @endforeach
-                    <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$kppCount}} <small style="font-size: 13px;">{{round($kppCount*100/sizeOf(json_decode($data["kpps"])),1)}} %</small></h5>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mt-4 mb-1">
-                <h6>No of Visa Extension Request</h6>
-                <div class="m-t-30 progresss">
-                    <div class="progress-bar bg-c-blue"  data-progress='{{round(sizeOf(json_decode($data["ex"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["ex"]))*100/$NoStudents}}%"></div>
-                </div>
-                <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["ex"]))}}</h5>
-                <div class='bg-c-blue p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
-                    <h6 class='pb-3 pt-1'>No of Extensions Approved</h6>
+                        <div class='bg-c-red p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
+                            <h6 class='pb-3 pt-1'>No of Kpps Approved</h6>
+                            @php $kppCount = 0; @endphp
+                            @foreach(json_decode($data["kpps"]) as $v)
+                                @if($v->application_status === 'approved')
+                                    @php $kppCount = $kppCount + 1; @endphp
+                                @endif
+                            @endforeach
+                            <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$kppCount}} <small style="font-size: 13px;">{{round($kppCount*100/sizeOf(json_decode($data["kpps"])),1)}} %</small></h5>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xl-3 col-md-6 mt-4 mb-1">
+                        <h6>No of Visa Extension Request</h6>
+                        <div class="m-t-30 progresss">
+                            <div class="progress-bar bg-c-blue"  data-progress='{{round(sizeOf(json_decode($data["ex"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["ex"]))*100/$NoStudents}}%"></div>
+                        </div>
+                        <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["ex"]))}}</h5>
+                        <div class='bg-c-blue p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
+                            <h6 class='pb-3 pt-1'>No of Extensions Approved</h6>
 
-                    @php $extCount = 0; @endphp
-                    @foreach(json_decode($data["ex"]) as $v)
-                        @if($v->application_status === 'approved')
-                            @php $extCount = $extCount + 1; @endphp
-                        @endif
-                    @endforeach
-                    <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$extCount}} <small style="font-size: 13px;">{{round($extCount*100/sizeOf(json_decode($data["ex"])),1)}} %</small></h5>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mt-4 mb-1">
-                <h6>No of Buddy Request</h6>
-                <div class="m-t-30 progresss">
-                    <div class="progress-bar bg-c-green"  data-progress='{{round(sizeOf(json_decode($data["bd"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["bd"]))*100/$NoStudents}}%"></div>
-                </div>
-                <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["bd"]))}}</h5>
-                <div class='bg-c-green p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
-                    <h6 class='pb-3 pt-1'>No of Allocations</h6>
-                    @php $bdCount = 0; @endphp
-                    @foreach(json_decode($data["bd"]) as $v)
-                        @if($v->status === 'approved')
-                            @php $bdCount = $bdCount + 1; @endphp
-                        @endif
-                    @endforeach
-                    <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$bdCount}} <small style="font-size: 13px;">{{round($bdCount*100/sizeOf(json_decode($data["bd"])),1)}} %</small></h5>
-                </div>
-            </div>
-            <div class="col-xl-3 col-md-6 mt-4 mb-1">
-                <h6>No of Meeting Request</h6>
-                <div class="m-t-30 progresss">
-                    <div class="progress-bar bg-c-yellow"  data-progress='{{round(sizeOf(json_decode($data["meet"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["meet"]))*100/$NoStudents}}%"></div>
-                </div>
-                <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["meet"]))}}</h5>
-                <div class='bg-c-yellow p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
-                    <h6 class='pb-3 pt-1'>No of Meetings Approved</h6>
-                    @php $meetCount = 0; @endphp
-                    @foreach(json_decode($data["meet"]) as $v)
-                        @if($v->status === 'approved')
-                            @php $meetCount = $meetCount + 1; @endphp
-                        @endif
-                    @endforeach
-                    <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$meetCount}} <small style="font-size: 13px;">{{round($meetCount*100/sizeOf(json_decode($data["meet"])),1)}} %</small></h5>
-                </div>
-            </div>
-        </div>
+                            @php $extCount = 0; @endphp
+                            @foreach(json_decode($data["ex"]) as $v)
+                                @if($v->application_status === 'approved')
+                                    @php $extCount = $extCount + 1; @endphp
+                                @endif
+                            @endforeach
+                            <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$extCount}} <small style="font-size: 13px;">{{round($extCount*100/sizeOf(json_decode($data["ex"])),1)}} %</small></h5>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="col-xl-3 col-md-6 mt-4 mb-1">
+                        <h6>No of Buddy Request</h6>
+                        <div class="m-t-30 progresss">
+                            <div class="progress-bar bg-c-green"  data-progress='{{round(sizeOf(json_decode($data["bd"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["bd"]))*100/$NoStudents}}%"></div>
+                        </div>
+                        <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["bd"]))}}</h5>
+                        <div class='bg-c-green p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
+                            <h6 class='pb-3 pt-1'>No of Allocations</h6>
+                            @php $bdCount = 0; @endphp
+                            @foreach(json_decode($data["bd"]) as $v)
+                                @if($v->status === 'approved')
+                                    @php $bdCount = $bdCount + 1; @endphp
+                                @endif
+                            @endforeach
+                            <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$bdCount}} <small style="font-size: 13px;">{{round($bdCount*100/sizeOf(json_decode($data["bd"])),1)}} %</small></h5>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="col-xl-3 col-md-6 mt-4 mb-1">
+                        <h6>No of Meeting Request</h6>
+                        <div class="m-t-30 progresss">
+                            <div class="progress-bar bg-c-yellow"  data-progress='{{round(sizeOf(json_decode($data["meet"]))*100/$NoStudents,1)}}%' style="width:{{sizeOf(json_decode($data["meet"]))*100/$NoStudents}}%"></div>
+                        </div>
+                        <h5 class="f-w-700 progress-label pb-2">{{sizeOf(json_decode($data["meet"]))}}</h5>
+                        <div class='bg-c-yellow p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
+                            <h6 class='pb-3 pt-1'>No of Meetings Approved</h6>
+                            @php $meetCount = 0; @endphp
+                            @foreach(json_decode($data["meet"]) as $v)
+                                @if($v->status === 'approved')
+                                    @php $meetCount = $meetCount + 1; @endphp
+                                @endif
+                            @endforeach
+                            <h5 class="f-w-700 progress-label pb-2 d-flex justify-content-between align-items-center" style='color: rgba(240,240,240)'>{{$meetCount}} <small style="font-size: 13px;">{{round($meetCount*100/sizeOf(json_decode($data["meet"])),1)}} %</small></h5>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
     </div>
     <div style='border-top: 1px solid rgba(110,110,110,.75); '>
         <small class="mb-0"><strong>Report Generated on</strong>: <?php echo date('d.m.Y'); ?></small><br>

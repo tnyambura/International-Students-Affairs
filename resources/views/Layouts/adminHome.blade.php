@@ -4,26 +4,28 @@
         <div class="row d-flex justify-content-center">
             <div class="col-xl-12">
                 <div class="card proj-progress-card">
-                    <div class="card-header py-2 px-2 d-flex ">
-                        <div class="select-dropdown pl-2">
-                            <button href="#" role="button" data-value="" class="select-dropdown__button">
-                                <input type='hidden' id='selected_val' />
-                                <span>2023</span>
-                            </button>
-                            <ul class="select-dropdown__list">
-                                <li data-value="2023" class="select-dropdown__list-item">2023</li>
-                                <li data-value="2024" class="select-dropdown__list-item">2024</li>
-                                <li data-value="2025" class="select-dropdown__list-item">2025</li>
-                                <li data-value="2026" class="select-dropdown__list-item">2026</li>
-                            </ul>
+                    <div class="card-header py-2 px-2 d-flex justify-content-between align-items-center">
+                        <div class='d-flex'>
+                            <div class="select-dropdown pl-2">
+                                <button href="#" role="button" data-value="" class="select-dropdown__button">
+                                    <input type='hidden' id='selected_val' />
+                                    <span>2023</span>
+                                </button>
+                                <ul class="select-dropdown__list">
+                                    <li data-value="2023" class="select-dropdown__list-item">2023</li>
+                                    <li data-value="2024" class="select-dropdown__list-item">2024</li>
+                                    <li data-value="2025" class="select-dropdown__list-item">2025</li>
+                                    <li data-value="2026" class="select-dropdown__list-item">2026</li>
+                                </ul>
+                            </div>
+                            <p class="pl-4 d-flex align-items-center" style='font-size:20px; color: rgba(110,110,110,.4);'> Total Registered Students <strong class='pl-2'>{{$NoStudents}}</strong> </p>
                         </div>
                         <form action='{{route("add.statistics")}}' method='post'>@csrf
                             <input type="hidden" name="year" id='getStatisticsYear' value='{{date("Y")}}'>
                             <button type='submit' id='iids'>
-                            <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
+                            <i role='button' style='color: rgba(110,110,110,.4); font-size:20px;' class='far fa-file-pdf'></i>
                             </button>
                         </form>
-                        <p class="pl-4 d-flex align-items-center" style='font-size:20px; color: rgba(110,110,110,.4);'> Total Registered Students <strong class='pl-2'>{{$NoStudents}}</strong> </p>
                     </div>
                     <div class="card-block statistics-display">
                         <div class="row">
