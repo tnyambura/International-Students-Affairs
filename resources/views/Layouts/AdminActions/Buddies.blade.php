@@ -350,6 +350,29 @@
                                                                                 @csrf
 
                                                                                 <!-- surNAME -->
+
+                                                                                <div class="modal-header text-center">
+                        
+                                                                                <div class="row">
+                                                                                    <div class="col">
+                                                                                    <label for="Residence">Surname</label>
+                                                                                    <input type="text" value="{{Auth::user()->surname}}" class="form-control" disabled>
+                                                                                    </div>
+                                                                                    <div class="col">
+                                                                                    <label for="Residence">Other names</label>
+                                                                                    <input type="text" value="{{Auth::user()->other_names}}" class="form-control" disabled>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="row">
+                                                                                    <div class="col">
+                                                                                    <label for="Residence">Admission No</label>
+                                                                                    <input type="text" value="{{Auth::user()->id}}" class="form-control" disabled>
+                                                                                    </div>
+                                                                                    <div class="col">
+                                                                                    <label for="Residence">Email</label>
+                                                                                    <input type="text" value="{{Auth::user()->email}}" class="form-control" disabled>
+                                                                                    </div>
+                                                                                </div>
                                                                                 <div class="form-row w-100">
                                                                                     <div class="col-lg-4 mb-3 ">   
                                                                                         <p class="w-100 ">Modify Student Allocation <strong>{{$st_u->id. ' - '. $st_u->surname.' '.$st_u->other_names}}</strong> </p> 

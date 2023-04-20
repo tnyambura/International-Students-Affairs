@@ -128,20 +128,14 @@
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="Surname">NOM (SURNAME)</label>
-                                    <input type="text" maxlength="50" class="form-control" name ="surNAME" id="surNAME" placeholder="Surname"
-                                         required>
+                                    <input type="text" maxlength="50" class="form-control" name ="surNAME" id="surNAME" placeholder="Surname" autofocus required>
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
-                                    <label for="fNAME">First Name</label>
-                                    <input type="text" maxlength="50" class="form-control" name ="firstNAME" id="firstNAME" placeholder="First Name"
+                                    <label for="oNAME">First Name</label>
+                                    <input type="text" maxlength="50" class="form-control" name ="otherNAMES" id="oNAME" placeholder="Other Names"
                                          required>                                    
-                                    </div>
-                                    <div class="col-md-4 mb-3">
-                                    <label for="lNAME">Last Name</label>
-                                    <input type="text" maxlength="50" class="form-control" name ="lastNAME" id="lastNAME" placeholder="Last Name"
-                                         required>                                    
-                                    </div>                                    
+                                    </div>                                   
                                 </div>
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
@@ -203,8 +197,16 @@
                                     </div>                         
                                 </div><br>
 
-                                <div><h4>PARENTS DETAIL</h4></div>
-                                <div class="form-row">
+                                <div>
+                                    <h4>PARENTS DETAIL</h4>
+                                    <div class="form-check d-flex mb-4">
+                                        <input class="form-check-input me-2" type="checkbox" value="Applicable" id="notApplicable" />
+                                        <label class="form-check-label" for="notApplicable">
+                                            Not Applicable
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-row parent-details">
                                    
                                     <div class="col-md-4 mb-3">
                                     <label for="ParentEmail">Parent Email</label>
@@ -288,4 +290,19 @@
                         </script>
 
                     </div>   
+
+                    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+                <script defer>
+                    $(document).ready(function() {
+                        $('#notApplicable').on('click',function(){
+                            if($(this).is(':checked')){
+                                $(this).val('notApplicable')
+                                $('.parent-details').find('input').prop('disabled',true)
+                            }else{
+                                $(this).val('Applicable')
+                                $('.parent-details').find('input').prop('disabled',false)
+                            }
+                        })
+                    })
+                </script>
               @endsection

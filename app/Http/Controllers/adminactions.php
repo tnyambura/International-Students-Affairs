@@ -332,30 +332,6 @@ class adminactions extends Controller
         $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
         $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
         $GetUsersRole = DB::table('user_roles')->get();
-        
-        // if($MyRole[0]->role === 'super_admin'){
-        //     foreach ($GetUsers as $value) {
-        //         if($value->user_id !== $id){
-        //             $thisUser=[];
-        //             $isBuddy=false;
-        //             $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
-        //             $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-        //             if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-        //             if(sizeOf($GetUsersRole) > 0 ){
-        //                 $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-        //                 if(sizeOf($GetUsersDetails) > 0){
-        //                     // if($GetUsersRole[0]->role === 'student'){
-        //                         array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-        //                         // }
-        //                 }else{
-        //                     array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-        // if($MyRole[0]->role === 'admin'){
             foreach ($GetUsers as $value) {
                 if($value->user_id !== $id){
                     $thisUser=[];

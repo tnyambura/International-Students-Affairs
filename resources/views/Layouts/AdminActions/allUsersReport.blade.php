@@ -4,7 +4,7 @@
     <title>List of all students</title>
     <style>
        table{
-        border-collapse: collapse;
+        /* border-collapse: collapse; */
        }
         
         th {
@@ -22,9 +22,10 @@
         }
         
         td {
-            border: 1px solid #000;
-            text-align: center;
-            padding: 2px;
+            border-color: #959594;
+            border-style: solid;
+            border-width: 1px;
+            font-size: x-small;
             /* font-size: x-small; */
         }
         
@@ -49,24 +50,41 @@
         </div><br/>    
         <div class="row">             
             <div class="table table-bordered"  >
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                <thead>
+                <table id="dataTable" width="100%" >
+                    <thead>
+                        <tr> 
+                            <th>No</th>
+                            <th>SU Id</th>
+                            <th> Surname Name</th>
+                            <th> Other Names</th>
+                            <th> Su Email</th>
+                            <th> Course</th>
+                            <th> Country<th>               
+                        </tr>
+                    </thead>
+                    @php $count=1; @endphp
+                    @foreach($users as $user)
                     <tr>
-                        <th>Id</th>
-                        <th>SurName</th>
-                        <th>OtherNames.</th>
-                        <th>email</th>
-                    </tr>
-                </thead>
-                @foreach($users as $user)
-                    <tr>
+                        <td>{{$count}}</td>
                         <td>{{$user['user_id']}}</td>
                         <td>{{$user['surname']}}</td>
                         <td>{{$user['other_names']}}</td>
                         <td>{{$user['email']}}</td>
+                        @if(array_key_exists('course',$user))
+                            <td>{{$user['course']}}</td>
+                        @else
+                            <td>-</td>
+                        @endif
+                        @if(array_key_exists('nationality',$user))
+                            <td>{{$user['nationality']}}</td>
+                        @else
+                            <td>-</td>
+                        @endif
+
                     </tr>
-                @endforeach
-                    </tbody>
+                    @php $count= $count+1; @endphp
+                    @endforeach
+                        </tbody>
                 </table>
     
                 

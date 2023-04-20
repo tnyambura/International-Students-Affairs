@@ -55,11 +55,9 @@
                     document.querySelector('#btn_schd_icon').style.color = 'var(--success)'
                 }
             }
-            const monthNames = ["January", "February", "March", "April", "May", "June",
-            "July", "August", "September", "October", "November", "December"
-            ];
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             const Days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
-            const Time = ["8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm"];
+            const Time = ["8:00 am","9:00 am","10:00 am","11:00 am","12:00 pm","1:00 pm","2:00 pm","3:00 pm","4:00 pm","5:00 pm"];
 
             const datePicker = document.querySelector('.date-picker');
             const prevBtn = datePicker.querySelector('.prev');
@@ -355,10 +353,10 @@
                                                 <td title="Given Masheka">{{$bookRq->id}}</td>
                                                 <td>{{$bookRq->student_id}}</td>
                                                 <td>
-                                                    @php $aptmnt = json_decode($bookRq->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
+                                                @php $aptmnt = explode(" ",$bookRq->booked_date_time);@endphp
                                                     <div class="d-flex justify-content-between">
                                                         <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                        {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                        {{$aptmnt[0]}}
                                                         </span>
                                                         <div class='badge badge-warning d-flex justify-content-center align-items-center'>
                                                             <i class="fa fa-clock"></i>
@@ -407,10 +405,10 @@
                                                 <td title="Given Masheka">{{$bookRq->id}}</td>
                                                 <td>{{$bookRq->student_id}}</td>
                                                 <td>
-                                                    @php $aptmnt = json_decode($bookRq->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
+                                                @php $aptmnt = explode(" ",$bookRq->booked_date_time);@endphp
                                                     <div class="d-flex justify-content-between">
                                                         <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                        {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                        {{$aptmnt[0]}}
                                                         </span>
                                                         <div class='badge badge-warning d-flex justify-content-center align-items-center'>
                                                             <i class="fa fa-clock"></i>

@@ -26,7 +26,7 @@
 
 <body id="page-top" style="width: 100vw; height:100: 100vh">
 
-  <main class="row w-100 h-100">
+  <!-- <main class="row w-100 h-100">
     <header class="col masthead d-flex " style="position:relative; padding-top: 10px">
       <div class="container text-center my-auto h-100 " style='width: auto; position:absolute; top:0; left:0; right:0; background: rgba(58,93,174,.4);'>
             <div class="">
@@ -68,8 +68,94 @@
         </div>
             <a href="/signup" class="text-center new-account">Create an account </a>
     </div>
-  </main>
+  </main> -->
 
+
+  <!-- Section: Design Block -->
+<section class="text-center" style='background: rgb(58,93,174)'>
+  <!-- Background image -->
+  <div class="p-5 bg-image" style="
+        background-image: url('homeassets/img/bg-masthead.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-origin: content-box;
+        height: 300px;
+        "></div>
+  <!-- Background image -->
+
+  <div class="row row-cols-auto mx-4 shadow-5-strong align-items-center justify-content-center" style="
+        margin-top: -100px;
+        background: hsla(0, 0%, 100%, 0.8);
+        backdrop-filter: blur(30px);
+        min-height: calc(100vh - 200px);
+        border-radius: 10px 10px 0 0;
+        ">
+    <div class="col-md-6 d-flex flex-column align-items-center">
+      <img class="card-img-top" style="max-width: 28rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
+      <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+    </div>
+    <div class="col py-5 px-md-5">
+          <h2 class="fw-bold mb-5">Login</h2>
+          <form method="POST" action="{{ route('login') }}">
+            @csrf
+              <x-auth-validation-errors class="breadcrumb py-0 mb-4 d-flex align-items-center bg-danger" style="color:#fff; text-align:left;" :errors="$errors" />
+            <!-- 2 column grid layout with text inputs for the first and last names -->
+            <div class="row row-cols-auto">
+              <div class="col-lg-6 mb-4">
+                <div class="form-outline">
+                  <input type="text" name="suID" required autofocus class="form-control" />
+                  <label class="form-label" for="form3Example1">SU Id (Email)</label>
+                </div>
+              </div>
+              <div class="col-lg-6 mb-4">
+                <div class="form-outline">
+                  <input type="password" name="password" required class="form-control" />
+                  <label class="form-label" for="form3Example2">Password</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Checkbox -->
+            <!-- <div class="form-check d-flex justify-content-center mb-4">
+              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
+              <label class="form-check-label" for="form2Example33">
+                Subscribe to our newsletter
+              </label>
+            </div> -->
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">
+              Next
+            </button>
+
+            <!-- Register buttons -->
+            <div class="text-center">
+              <p>More links:</p>
+              <a href="/" class="btn btn-link btn-floating mx-1 my-2">
+                About Us</a>
+
+              <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+                Forgot Password
+              </button>
+
+              <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+                AMS
+              </button>
+
+              <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+                <i class="fab fa-github"></i> E-Learning
+              </button>
+              <a href="/signup" class="btn btn-link btn-floating mx-1 my-2">
+                <i class="fab fa-github"></i> Sign Up
+              </a>
+            </div>
+          </form>
+        <!-- </div>
+      </div> -->
+    </div>
+  </div>
+</section>
+<!-- Section: Design Block -->
   
   
  

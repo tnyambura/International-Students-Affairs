@@ -1,15 +1,3 @@
-
-<script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-        <script defer>
-            $(document).ready(function() {
-                setTimeout(function(){
-                    if("{{Session::has('New_Student_Added')}}"){
-                        window.location.href = '/login'
-                    }
-                },2500)
-
-            })
-        </script>
 </html>
 
 <!DOCTYPE html>
@@ -37,92 +25,105 @@
 
 </head>
 
-<body id="page-top" style="width: 100vw; height: 100vh; overflow:hidden;">
+<body id="page-top" style="width: 100vw; height:100: 100vh">
 
-  <main class="row m-0 w-100 h-100">
-    <header class="col-6 masthead d-flex " style="position:relative; padding-top: 10px">
-        <div class="container text-center my-auto h-100 w-100 " style='position:absolute; top:0; left:0; background: rgba(58,93,174,.4);'>
-            <div style=''>
-                <div class="">
-                    <div class="account-wall">
-                    <div class="mx-auto" style="width: 20rem; align:center;">
-                    <img class="card-img-top" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
-                </div>
-                <h2 class="mb-5" style="color:white; font-size:60px;">
-                International Students affairs <span style="color:#E9292F">Portal</span>
-                </h2>
-                <a class="btn btn-primary btn-xl js-scroll-trigger p-2" href="https://susa.strathmore.edu/our-services/international-students/" target="_blank">Find Out More</a>
-                <p class="h6" style="color:#ffffff; padding-top:15%;">International Students Affairs © <?php echo Date('Y');?>. All right Reserved.<a class="text-green ml-2" href="#" target="_blank" style="color:#E9292F"></a></p>
 
-                
-            </div>   
-        </div>   
+  <!-- Section: Design Block -->
+<section class="text-center" style='background: rgb(58,93,174)'>
+  <!-- Background image -->
+  <div class="p-5 bg-image" style="
+        background-image: url('homeassets/img/bg-masthead.jpg');
+        background-position: center;
+        background-repeat: no-repeat;
+        background-origin: content-box;
+        height: 300px;
+        "></div>
+  <!-- Background image -->
 
-    </header>
-    <div class="col mb-2 px-4 h-100 pb-4" style="overflow: auto;">
-        
-        <h2 class="mb-2" style="color:#000; text-align:center; font-size:30px;">
-            Sign Up
-        </h2>
-        <div class="container-fluid h-100"><br/>
-            @if(Session::has('New_Student_Added'))
+  <div class="row row-cols-auto mx-4 shadow-5-strong justify-content-center" style="
+        margin-top: -100px;
+        background: hsla(0, 0%, 100%, 0.8);
+        backdrop-filter: blur(30px);
+        min-height: calc(100vh - 200px);
+        border-radius: 10px 10px 0 0;
+        ">
+    <div class="col-md-6 d-flex flex-column align-items-center">
+      <img class="card-img-top" style="max-width: 28rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
+      <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+    </div>
+    <div class="col py-5 px-md-5">
+          <h2 class="fw-bold mb-5">Sign Up</h2>
+          <x-auth-validation-errors class="breadcrumb py-0 mb-4 d-flex align-items-center" style="color:#fff; background:#113C7A;" :errors="$errors" />
+
+          @if(Session::has('New_Student_Added'))
             <div class="alert alert-success" role="alert">
             {{Session::get('New_Student_Added')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             @endif
             @if(Session::has('New_Student_failed'))
             <div class="alert alert-danger" role="alert">
             {{Session::get('New_Student_failed')}}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             @endif
-            <form method="POST"  class='new-student-form mb-4' action="{{route('Add.signup')}}" style='overflow:auto; '>
+            <form method="POST"  action="{{route('Add.signup')}}" style='overflow:auto; '>
                 @csrf
                 <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                    <label for="Surname">NOM(SURNAME)</label>
-                    <input type="text" maxlength="50" class="form-control" name ="surNAME" id="surNAME" placeholder="Surname"
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="Surname">NOM(SURNAME)</label>
+                            <input type="text" maxlength="50" class="form-control" name ="surNAME" id="surNAME" placeholder="Surname"
                             required>
+                        </div>
                     
                     </div>
-                    <div class="col-md-4 mb-3">
-                    <label for="fNAME">First Name</label>
-                    <input type="text" maxlength="50" class="form-control" name ="firstNAME" id="firstNAME" placeholder="First Name"
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="oNAME">Other Names</label>
+                            <input type="text" maxlength="50" class="form-control" name ="otherNAMES" id="oNAME" placeholder="Other Names"
                             required>                                    
+                        </div>
                     </div>
-                    <div class="col-md-4 mb-3">
-                    <label for="lNAME">Last Name</label>
-                    <input type="text" maxlength="50" class="form-control" name ="lastNAME" id="lastNAME" placeholder="Last Name"
-                            required>                                    
-                    </div>                                    
                 </div>
                 <div class="form-row">
-                    <div class="col-md-4 mb-3">
-                    <label for="suID">SU Id</label>
-                    <input type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="form-control" name ="id" id="suID" placeholder="Admission Number"
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="suID">SU Id</label>
+                            <input type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="form-control" name ="id" id="suID" placeholder="Admission Number"
                             required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="suEMAIL">SU Email Address</label>
+                            <input type="text" class="form-control" name ="email" id="suEMAIL" placeholder="Email"
+                            required>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-row">
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="Course">Course</label>
+                            <input type="text" maxlength="50" class="form-control" name ="Course" id="Course" placeholder="Course of Study"
+                            required>
+                        </div>
                     
                     </div>
-                    <div class="col-md-4 mb-3">
-                    <label for="Course">Course</label>
-                    <input type="text" maxlength="50" class="form-control" name ="Course" id="Course" placeholder="Course of Study"
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="Faculty">Faculty</label>
+                            <input type="text" maxlength="50" class="form-control"  name ="Faculty" id="Faculty" placeholder="Faculty"
                             required>
-                    
-                    </div>
-                    <div class="col-md-4 mb-3">
-                    <label for="Faculty">Faculty</label>
-                    <input type="text" maxlength="50" class="form-control"  name ="Faculty" id="Faculty" placeholder="Faculty"
-                            required>
+                        </div>
                     
                     </div>
                     
                 </div>
                 <div class="form-row">
-                    <div class="col-md-6 mb-3">
-                    <label for="email">Email Address</label>
-                    <input type="text" class="form-control" name ="email" id="suEMAIL" placeholder="Email"
-                        required>
-                    </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col mb-3">
                     <label for="Nationality">Country</label>
                     <select class='form-control' name ="Nationality" id="Nationality" required>
                         <option>--Select--</option>
@@ -131,7 +132,7 @@
                         @endforeach
                     </select>
                     </div>
-                    <div class="col-md-3 mb-3">
+                    <div class="col mb-3">
                     <label for="validationServerUsername33">Passport No</label>
                     <input type="text" class="form-control" maxlength='15' id="validationServer023" name ="passport_number" placeholder="Passport Number"
                             required>
@@ -143,50 +144,118 @@
                     </div>    
                 </div>
                 <div class="form-row">
-                    <div class="col-md-6 mb-3">
-                    <label for="PhoneNumber">Kenyan Phone Number</label>
-                    <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="phoneNUMBER" name ="phoneNUMBER" placeholder="(+254) 700 000000"
-                        required>
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="PhoneNumber">Kenyan Phone Number</label>
+                            <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="phoneNUMBER" name ="phoneNUMBER" placeholder="(+254) 700 000000"
+                                required>
+                        </div>
                     </div>    
-                    <div class="col-md-4 mb-3">
-                    <label for="Residence">Residence</label>
-                    <input type="text" class="form-control" maxlength="100" name ="Residence" id="Residence" placeholder="Residence"
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="Residence">Residence</label>
+                            <input type="text" class="form-control" maxlength="100" name ="Residence" id="Residence" placeholder="Residence"
                             required>
+                        </div>
                     </div>                         
                 </div><br>
 
-                <div><h4>PARENTS DETAIL</h4></div>
-                <div class="form-row">
-                    
-                    <div class="col-md-4 mb-3">
-                    <label for="ParentNames">Your parents Names</label>
-                    <input type="text" class="form-control" id="ParentNames" name ="ParentNames" placeholder="Full Names "
-                        required>
+                <div>
+                    <h4>PARENTS DETAIL</h4>
+                    <!-- Checkbox -->
+                    <div class="form-check d-flex mb-4">
+                        <input class="form-check-input me-2" type="checkbox" value="Applicable" id="notApplicable" />
+                        <label class="form-check-label" for="notApplicable">
+                            Not Applicable
+                        </label>
                     </div>
-                    <div class="col-md-4 mb-3">
-                    <label for="ParentEmail">Email</label>
-                    <input type="text" class="form-control" name ="ParentEmail" id="ParentEmail" placeholder="Parents Email"
+                </div>
+                <div class="form-row parent-details">
+                    
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="ParentNames">Your parents Names</label>
+                            <input type="text" class="form-control" id="ParentNames" name ="ParentNames" placeholder="Full Names "
                             required>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="ParentEmail">Email</label>
+                            <input type="text" class="form-control" name ="ParentEmail" id="ParentEmail" placeholder="Parents Email"
+                            required>
+                        </div>
                     </div>  
                     
-                    <div class="col-md-4 mb-3">
-                    <label for="ParentPhone">Phone No</label>
-                    <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="ParentPhone" name ="ParentPhone" placeholder="Parent Phone Number"
-                        required>
+                    <div class="col-lg-6 mb-4">
+                        <div class="form-outline">
+                            <label for="ParentPhone">Phone No</label>
+                            <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="ParentPhone" name ="ParentPhone" placeholder="Parent Phone Number"
+                            required>
+                        </div>
                     </div>
                     
                 </div>
+
+                <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+                <script defer>
+                    $(document).ready(function() {
+                        setTimeout(function(){
+                            if("{{Session::has('New_Student_Added')}}"){
+                                window.location.href = '/'
+                            }
+                        },2500)
+
+                        $('#notApplicable').on('click',function(){
+                            if($(this).is(':checked')){
+                                $(this).val('notApplicable')
+                                $('.parent-details').find('input').prop('disabled',true)
+                            }else{
+                                $(this).val('Applicable')
+                                $('.parent-details').find('input').prop('disabled',false)
+                            }
+                        })
+
+                    })
+                </script>
                 
-                <div class="row">
+                <!-- <div class="row">
                     <input class="col btn btn-success" value="Save details" type="submit" />
                     <a href="/" class="col-6 text-center new-account ml-5">Login to my account </a>
+                </div> -->
+
+                <button type="submit" class="btn btn-primary btn-block mb-4">
+              Next
+            </button>
+
+            <!-- Register buttons -->
+                <div class="text-center">
+                    <p>More links:</p>
+                    <a href="/" class="btn btn-link btn-floating mx-1 my-2">
+                        About Us</a>
+
+                    <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+                        Forgot Password
+                    </button>
+
+                    <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+                        AMS
+                    </button>
+
+                    <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+                        <i class="fab fa-github"></i> E-Learning
+                    </button>
+                    <a href="/" class="btn btn-link btn-floating mx-1 my-2">
+                        <i class="fab fa-github"></i> Login
+                    </a>
                 </div>
             </form>
-        </div>
-            <!-- <a href="/signup" class="text-center new-account">Create an account </a> -->
+        <!-- </div>
+      </div> -->
     </div>
-  </main>
-
+  </div>
+</section>
+<!-- Section: Design Block -->
   
   
  
@@ -208,3 +277,4 @@
 </body>
 
 </html>
+

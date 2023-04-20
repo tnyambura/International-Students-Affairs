@@ -142,16 +142,32 @@ if(sizeOf($myAppointments) > 0){
                         <tbody>
                             @if(sizeOf($myAppointments) > 0)
                                 @foreach($myAppointments as $val)
-                                @php $aptmnt = json_decode($val->booked_date_time); $date = explode(' ',str_replace('_',' ',$aptmnt[0]))@endphp
-                                    @if($val->status !== 'pending')
+                                @php $aptmnt = explode(" ",$val->booked_date_time);@endphp
+                                    @if($val->status === 'pending')
                                     <tr>
                                         <td>{{$val->id}}</td>
                                         <td>
                                             <div class="d-flex justify-content-between">
                                                 <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                {{date('Y-M-d',strtotime($aptmnt[0]))}}
                                                 </span>
-                                                <div class='badge badge-success d-flex justify-content-center align-items-center'>
+                                                <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                    <i class="fa fa-clock"></i>
+                                                    <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td style='text-transform:capitalize;'>{{$val->status}}</td>
+                                    </tr>
+                                    @elseif($val->status == 'past')
+                                    <tr>
+                                        <td>{{$val->id}}</td>
+                                        <td>
+                                            <div class="d-flex justify-content-between">
+                                                <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                {{date('Y-M-d',strtotime($aptmnt[0]))}}
+                                                </span>
+                                                <div class='badge badge-secondary d-flex justify-content-center align-items-center'>
                                                     <i class="fa fa-clock"></i>
                                                     <span class='ml-2'>{{$aptmnt[1]}}</span>
                                                 </div>
@@ -165,9 +181,9 @@ if(sizeOf($myAppointments) > 0){
                                         <td>
                                             <div class="d-flex justify-content-between">
                                                 <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                {{$date[1].' '.$date[2].' '.$date[0]}}
+                                                {{date('Y-M-d',strtotime($aptmnt[0]))}}
                                                 </span>
-                                                <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                <div class='badge badge-success d-flex justify-content-center align-items-center'>
                                                     <i class="fa fa-clock"></i>
                                                     <span class='ml-2'>{{$aptmnt[1]}}</span>
                                                 </div>

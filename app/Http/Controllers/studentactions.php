@@ -190,7 +190,8 @@ class studentactions extends Controller
             if(sizeOf(DB::table('kpps_application')->where('id',$appId)->get()) > 0){
                 Create_Newvisaextension($request);
             }else{
-                $on_going_request = DB::table('kpps_application')->where("student_id",Auth::user()->id)->where('application_status','pending')->orWhere('application_status','in progress')->limit(1)->get();
+                $on_going_request = DB::select('select * from kpps_application where student_id ='.Auth::user()->id.' and (application_status = "pending" or application_status = "in progress") LIMIT 1');
+                
                 if(sizeOf($on_going_request) > 0){
                     return back()->with('kpp_request_ongoing','Student pass application with ID No "'.$on_going_request[0]->id.'" has a status of "'.$on_going_request[0]->application_status.'". We cannot initiate a new application.');
                 }
@@ -279,12 +280,12 @@ class studentactions extends Controller
                 // ];
                 
                 // $this->validate( $request,$rules);
-                $appId = rand(1000,1000000);
-                
-                if(sizeOf(DB::table('extension_application')->where('id',$appId)->get()) > 0){
-                    Create_Newvisaextension($request);
-                }else{
-                $on_going_request = DB::table('extension_application')->where("student_id",Auth::user()->id)->where('application_status','pending')->orWhere('application_status','in progress')->limit(1)->get();
+            $appId = rand(1000,1000000);
+            
+            if(sizeOf(DB::table('extension_application')->where('id',$appId)->get()) > 0){
+                Create_Newvisaextension($request);
+            }else{
+                $on_going_request = DB::select('select * from extension_application where student_id ='.Auth::user()->id.' and (application_status = "pending" or application_status = "in progress") LIMIT 1');
                 if(sizeOf($on_going_request) > 0){
                     return back()->with('visa_request_ongoing','An extension request with ID No "'.$on_going_request[0]->id.'" has a status of "'.$on_going_request[0]->application_status.'". We cannot initiate a new application.');
                 }else{
@@ -621,8 +622,8 @@ class studentactions extends Controller
     public function NewVisaextension(Request $request){
         $id = $request->user()->id;        
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
-        $ext = DB::table("extension_application")->where('student_id','=',$id)->get();
-
+        $ext = DB::table("extension_application")->where('student_id',$id)->get();
+        
         return view('Layouts/studentActions/RequestNewVisa',['userData'=>$userData[0],'data'=>$ext,'getCountries'=>$this->getCountries(),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting()]);
     }
     public function visaExtensions(Request $request){
@@ -664,13 +665,16 @@ class studentactions extends Controller
 
         if(sizeOf(BookingList::where('student_id',Auth::user()->id)->where('status','pending')->get()) < 1){
             $post = new BookingList();
+
+            $tm = date("Y-m-d h:i",strtotime(str_replace('_','-',$data[0].' '.$data[1])));
     
             // $post->admin_id = '66753';
             // $post->admin_id = $value[0];
             $post->student_id = Auth::user()->id;
-            $post->booked_date_time = json_encode($data);
+            $post->booked_date_time = $tm;
+            // $post->booked_date_time = json_encode($data);
             $post->status = 'pending';
-            $post->requested_at = date("Y-m-d h:i:s");
+            // $post->requested_at = date("Y-m-d h:i:s");
     
             $post->timestamps = false;
     
@@ -687,12 +691,11 @@ class studentactions extends Controller
 
     public function AddNewSignup(Request $request){
 
-        if($request->filled('id','surNAME','firstNAME','lastNAME','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence','ParentNames','ParentEmail','ParentPhone')){
+        if($request->filled('id','surNAME','otherNAMES','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence')){
             $this->validate($request,[
                 'id'=>'required|max:6',
                 'surNAME'=>'required',
-                'firstNAME'=>'required',
-                'lastNAME'=>'required',
+                'otherNAMES'=>'required',
                 'email'=>'required|email',
                 'phoneNUMBER'=>'required|min:10',
                 'Faculty'=>'required',
@@ -700,13 +703,20 @@ class studentactions extends Controller
                 'Nationality'=>'required',
                 'passport_number'=>'required',
                 'passport_expire'=>'required',
-                'Residence'=>'required',
-                'ParentNames'=>'required',
-                'ParentEmail'=>'required',
-                'ParentPhone'=>'required'
+                'Residence'=>'required'
 
                 ]
             );
+
+            if($request->notApplicable === 'Applicable'){
+                $this->validate($request,[
+                    'ParentNames'=>'required',
+                    'ParentEmail'=>'required',
+                    'ParentPhone'=>'required'
+                    ]
+                );
+            }
+            
 
             $CheckId = DB::table("users")->where('id',$request->id)->get();
             $CheckEmail = DB::table("users")->where('email',$request->email)->get();
@@ -732,7 +742,7 @@ class studentactions extends Controller
     
                 $post->id = $request->id;
                 $post->surname = $request->surNAME;
-                $post->other_names = $request->firstNAME.' '.$request->lastNAME;
+                $post->other_names = $request->otherNAMES;
                 $post->email = $request->email;
                 $post->password = Hash::make('123456');
                 $post->status = $status;
@@ -748,11 +758,19 @@ class studentactions extends Controller
                 $postDetails->residence = $request->Residence;
     
     
-                $postGuardian->student_id = $request->id;
-                $postGuardian->full_name = $request->ParentNames;
-                $postGuardian->email = $request->ParentEmail;
-                $postGuardian->phone_number = $request->ParentPhone;
-                $postGuardian->status = 'primary';
+                if($request->notApplicable === 'Applicable'){
+                    $postGuardian->student_id = $request->id;
+                    $postGuardian->full_name = $request->ParentNames;
+                    $postGuardian->email = $request->ParentEmail;
+                    $postGuardian->phone_number = $request->ParentPhone;
+                    $postGuardian->status = 'primary';
+                }else{
+                    $postGuardian->student_id = $request->id;
+                    $postGuardian->full_name = 'Not Applicable';
+                    $postGuardian->email ='Not Applicable';
+                    $postGuardian->phone_number = 'Not Applicable';
+                    $postGuardian->status = 'notApplicable';
+                }
                 
     
                 $postVerification->user_id = $request->id;
@@ -777,11 +795,13 @@ class studentactions extends Controller
                 $postGuardian->save();
                 $postVerification->save();
                 $postRole->save();
-                if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
-                    $msg='Your account has successfully created. Click the link below to get access. ';
-                    return redirect()->route('emailsend',[$request->email,$msg]);
+                if(sizeOf($CheckRole) > 0){
+                    if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
+                        $msg='Your account has successfully created. Click the link below to get access. ';
+                        return redirect()->route('emailsend',[$request->email,$msg]);
+                    }
                 }else{
-                    return back()->with('New_Student_Added','New International Student data has been added Successfully');
+                    return back()->with('New_Student_Added','Your account has been added Successfully');
                 }
             }
         }else{

@@ -14,6 +14,6 @@ class BookingList extends Model
     protected $table = "bookingList";
 
     protected $fillable = [
-      'student_id', 'booked_date_time', 'status','requested_at'
+      'student_id', 'booked_date_time', 'status'
 	];
 }

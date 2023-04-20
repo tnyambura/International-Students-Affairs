@@ -84,9 +84,9 @@
             </ol> 
              
             <div class="card mb-4">
-                <div class="card-header">
+                <div class="card-header" style='color:#000'>
                     <i class="fas fa-table mr-1"></i>
-                    Buddy Allocation Request for {{ Auth::user()->otherNAMES}} <a href="{{__('MyBuddyAllocations')}}"></a>.
+                    Buddy Allocation Request for {{ Auth::user()->other_names}} <a href="{{__('MyBuddyAllocations')}}"></a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">

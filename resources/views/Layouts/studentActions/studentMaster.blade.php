@@ -259,9 +259,7 @@
                                     document.querySelector('#btn_schd_icon').style.color = 'var(--success)'
                                 }
                             }
-                            const monthNames = ["January", "February", "March", "April", "May", "June",
-                            "July", "August", "September", "October", "November", "December"
-                            ];
+                            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun","Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                             const Days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri","Sat"];
                             const Time = ["8am","9am","10am","11am","12pm","1pm","2pm","3pm","4pm","5pm"];
 
@@ -395,9 +393,13 @@
                                         }
                                         
                                         if(TodayDate.getMonth() <= monthNames.indexOf(month.textContent) && TodayDate.getYear()<=currentDate.getYear()){
-                                            parseInt(m)>0 ? this_day.setAttribute('onClick',"GetClickedDay(event,this)") :''
-                                            parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${m}`) :''
-                                            parseInt(m)>0 ? this_day.setAttribute('role','button') :''
+                                            if(TodayDate.getMonth() === monthNames.indexOf(month.textContent) && TodayDate.getDate() > parseInt(m)){
+                                                this_day.classList.add('day-disabled')
+                                            }else{
+                                                parseInt(m)>0 ? this_day.setAttribute('onClick',"GetClickedDay(event,this)") :''
+                                                parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${m}`) :''
+                                                parseInt(m)>0 ? this_day.setAttribute('role','button') :''
+                                            }
                                         }else{
                                             this_day.classList.add('day-disabled')
                                         }
@@ -469,6 +471,7 @@
                                         item += `<select class="form-control" name="time_selected" required>`
                                         item += `<option value=''>select time</option>`
                                         for(let x of bookedDays[i][1]){
+                                            // if()
                                             item += `<option value="${x}">${x}</option>`
                                         }
                                         item += `</select>`
