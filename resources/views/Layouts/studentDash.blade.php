@@ -10,10 +10,85 @@ if(sizeOf($myAppointments) > 0){
 }
 ?>
 
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$AppReq])
-@section('content')      
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$AppReq,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
+@section('content')   
+
+<style>
+    .progress{
+        width: 0%;
+        height: 8px;
+        position: relative;
+        overflow: visible !important;
+    }
+    .progress.active{
+        background: red;
+        /* background: rgba(10,210,90,.3); */
+        animation: 4s progressBarAnim infinite alternate;
+    }
+    .icon{
+        position: absolute;
+        top: -15px;
+        right: 0;
+        font-size: 25px;
+        width: 150px;
+        color: rgba(110,110,110);
+        text-align: center;
+        padding: 2px,5px;
+        animation: 5s ColorPendingAnim infinite alternate;
+    }
+    .progress.complete{
+        background: rgba(144,238,144,.7);
+    }
+    .progress-bar{
+        box-shadow: 0 0 10px rgba(110, 110, 110,.9);
+        background: rgba(255, 255, 255,.9);
+        color: rgba(110, 110, 110,.5);
+        /* background: rgba(24, 39, 74,.9); */
+    }
+    .progress-bar,.progress{
+        border-radius: 10px
+    }
+    @keyframes progressBarAnim {
+        to {width: 100%;}
+    }
+    @keyframes ColorPendingAnim {
+        0% {color: rgba(110,110,110);}
+        80% {color: rgba(90,220,255,.7);}
+        100% {color: rgba(90,190,255,.7);}
+    }
+</style>
+<?php
+function findObjectById($item,$array){
+
+foreach ( $array as $element ) {
+    if ( isset( $array[$id] ) ) {
+        return $array[$id];
+    }
+}
+
+return false;
+}
+?>
 
 <div class="container-fluid"><br/>
+    <div class=" pb-4 row ">
+        <div class="progress-bar col p-0 mx-2">
+            <span class='pb-2'>Pending</span>
+            <!-- ExtData   kppsData -->
+            @if($ExtData)
+            <div class="progress active" style='background: rgba(200,200,200,.8);'>
+                <i class='icon fab fa-cc-visa'></i>
+            </div>
+        </div>
+        <div class="progress-bar col p-0 mx-2">
+            <span class='pb-2'>In Progress</span>
+            <div class="progress " style='background: rgba(90,220,25590);'></div>
+        </div>
+        <div class="progress-bar col p-0 mx-2">
+            <span class='pb-2'>Declined | Approved</span>
+            <div class="progress " style='background: red;'></div>
+        </div>
+    </div>
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -213,6 +288,14 @@ if(sizeOf($myAppointments) > 0){
             $(document).ready(function() {
                 $('.alert').alert()
             })
+            // const progress = document.querySelector('.progress');
+
+            // function updateProgress(percent) {
+            // progress.style.width = percent + '%';
+            // }
+
+            // updateProgress(50); // updates the progress to 50%
+
         </script>
 
 @endsection

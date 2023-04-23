@@ -42,10 +42,16 @@
                                 <a class="nav-link" href="{{ __('MykppApplications')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                                     My Student Pass Applications.
+                                    @if($NoKpps > 0)
+                                        <span class="badge badge-warning ml-2">{{$NoKpps}}</span>
+                                    @endif
                                 </a>
                                 <a class="nav-link" href="{{ __('MyvisaextApplications')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
                                     My Visa Extension Requests.
+                                    @if($NoExt > 0)
+                                        <span class="badge badge-warning ml-2">{{$NoExt}}</span>
+                                    @endif
                                 </a>
                                 <a class="nav-link" href="{{ __('BuddyProgram')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>

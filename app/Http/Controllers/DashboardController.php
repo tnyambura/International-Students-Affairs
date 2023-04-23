@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\studentactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\addNewStudent;
@@ -43,21 +44,29 @@ class DashboardController extends Controller
         $kppsReq = DB::table("kpps_application")->where('application_date','LIKE',$year.'%')->get();
         $ExtReq = DB::table("extension_application")->where('application_date','LIKE',$year.'%')->get();
         $BdReq = DB::table("buddy_request")->where('request_date','LIKE',$year.'%')->get();
-        $AppointmentReq = DB::table("bookingList")->where('requested_at','LIKE',$year.'%')->get();
+        $AppointmentReq = DB::table("bookingList")->where('booked_date_time','LIKE',$year.'%')->get();
 
         $data = ['kpps'=>$kppsReq, 'ex'=>$ExtReq, 'bd'=>$BdReq, 'meet'=>$AppointmentReq];
 
         return $data;
     }
 
+    public function statReport(Request $req){
+        $allStd = DB::table("user_roles")->where('role','student')->get();
+        $year = $req->year;
+
+        $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($year),'year'=>$year]);
+
+        return $pdf->download($req->year.'_Statistics.pdf');
+    }
     public function statisticsReport(Request $req){
         $getYear = $req->year;
         $allStd = DB::table("user_roles")->where('role','student')->get();
 
-        $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($getYear),'year'=>$getYear]);
-        return $pdf->download($getYear.'_Statistics.pdf');
+        // $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($getYear),'year'=>$getYear]);
+        // return $pdf->download($getYear.'_Statistics.pdf');
 
-        // return view('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($getYear),'year'=>$getYear]);
+        return view('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($getYear),'year'=>$getYear]);
     }
 
     public function index(Request $request){
@@ -100,7 +109,7 @@ class DashboardController extends Controller
                 $IsABubby = DB::table("user_roles")->where('user_id',Auth::user()->id)->where('role','buddy')->get();
                 
                 if(sizeOf($IsABubby) > 0){ $is_buddy=true;}
-                return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy, 'availability'=>$this->AvailabilityGetter(), 'myAppointments'=>$this->GetAllbookedMeeting()]);
+                return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy, 'availability'=>$this->AvailabilityGetter(), 'myAppointments'=>$this->GetAllbookedMeeting(),'NoExt'=>studentactions::NotOpenedExt(),'NoKpps'=>studentactions::NotOpenedKpps(),'ExtData'=>studentactions::FetchExtensionAppView(),'kppsData'=>studentactions::FetchKppView()]);
             }else{
                 $allStd = DB::table("user_roles")->where('role','student')->get();
                 $kppsReq = DB::table("kpps_application")->get();

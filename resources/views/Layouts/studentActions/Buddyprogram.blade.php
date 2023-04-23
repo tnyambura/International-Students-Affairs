@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking])
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
 
     @if(!$is_buddy)
@@ -153,6 +153,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            @if(sizeOf($allocationGetter) > 0)
                             @foreach($allocationGetter as $Buddy)
                                 <tr>
                                     <td>{{$Buddy['request_id']}}</td>
@@ -180,6 +181,11 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                                <tr>
+                                    <td colspan='6'>No Allocation Found</td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     </div>
@@ -224,6 +230,7 @@
                                 </tr>
                             </tfoot>
                             <tbody>
+                            @if(sizeOf($allAllocated) > 0)
                             @foreach($allAllocated as $st)
                                 <tr>
                                     <td>{{$st['student_id']}}</td>
@@ -236,6 +243,12 @@
                                     </td>
                                 </tr>
                             @endforeach
+                            @else
+                                <tr>
+                                    <td colspan='5'>No Allocation Found</td>
+                                </tr>
+                            @endif
+                            
                             </tbody>
                         </table>
                     </div>

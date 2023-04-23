@@ -348,19 +348,14 @@
                                                                             </div>
                                                                             <form method="POST" action="{{ __('EditAllocatedBuddy') }}" class='new-staff-form p-4'>
                                                                                 @csrf
-
-                                                                                <!-- surNAME -->
-
-                                                                                <div class="modal-header text-center">
-                        
                                                                                 <div class="row">
                                                                                     <div class="col">
-                                                                                    <label for="Residence">Surname</label>
-                                                                                    <input type="text" value="{{Auth::user()->surname}}" class="form-control" disabled>
+                                                                                        <label for="Residence">Surname</label>
+                                                                                        <input type="text" value="{{Auth::user()->surname}}" class="form-control" disabled>
                                                                                     </div>
                                                                                     <div class="col">
-                                                                                    <label for="Residence">Other names</label>
-                                                                                    <input type="text" value="{{Auth::user()->other_names}}" class="form-control" disabled>
+                                                                                        <label for="Residence">Other names</label>
+                                                                                        <input type="text" value="{{Auth::user()->other_names}}" class="form-control" disabled>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="row">
@@ -373,10 +368,10 @@
                                                                                     <input type="text" value="{{Auth::user()->email}}" class="form-control" disabled>
                                                                                     </div>
                                                                                 </div>
-                                                                                <div class="form-row w-100">
-                                                                                    <div class="col-lg-4 mb-3 ">   
-                                                                                        <p class="w-100 ">Modify Student Allocation <strong>{{$st_u->id. ' - '. $st_u->surname.' '.$st_u->other_names}}</strong> </p> 
-                                                                                        <input id="student_id" class="form-control" type="hidden" value={{$st_u->id}} name="student_id" required autofocus />
+                                                                                <div class="row">
+                                                                                    <div class="col d-flex flex-column my-4 ">   
+                                                                                        
+                                                                                        <input id="student_id" type="hidden" value='{{$st_u->id}}' name="student_id" required autofocus />
                                                                                         <label for="surNAME">Select Buddy</label> 
                                                                                         <select class='form-select form-select-lg' name="buddy_id">
                                                                                             <option disabled selected>--SELECT BUDDY--</option> 
@@ -391,12 +386,8 @@
                                                                                     </div></br>
                                                                                 </div>
                                                                                 <br/>
-                                                                                <div class="form-row justify-content-center">
-
-                                                                                    <div class="flex items-center justify-end mt-4">
-                                                                                    <input class="btn btn-success" value="Allocate" type="submit" />
-                                                                                    
-                                                                                    </div>
+                                                                                <div class="">
+                                                                                    <input class="btn btn-success w-50" value="Allocate" type="submit" />
                                                                                 </div>
                                                                             </form>
                                                                             <br/>

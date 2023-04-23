@@ -95,7 +95,7 @@ class adminactions extends Controller
             $fileUpload = FileUploader::fileupload($request,'fileResponse','ExtensionDoc'.$request->app_id,'extension/');
         }
 
-        $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload]); 
+        $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new aproved']); 
         $msg = 'Your Visa extention application is '.$request->status_select;
         if($updateStatus){
             return redirect()->route('emailsend',[$request->applicant_email,$msg]);
@@ -107,7 +107,7 @@ class adminactions extends Controller
         if($request->fileResponse){
             $fileUpload = FileUploader::fileupload($request,'fileResponse','StudentPassDoc'.$request->app_id,'kpps/');
         }
-        $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload]); 
+        $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new aproved']); 
         $msg = 'Your Student Pass application is '.$request->status_select;
         if($updateStatus){
             return redirect()->route('emailsend',[$request->applicant_email,$msg]);
@@ -303,7 +303,6 @@ class adminactions extends Controller
         }
         return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
     }
-
     public function getallAllBuddiesReport(){
 
         $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('Layouts/AdminActions/buddiesListReport',['buddies'=>$this->BuddiesFecher(),'img'=>public_path('logo.png')]);
@@ -743,6 +742,7 @@ class adminactions extends Controller
         }
 
     }
+    
    
    public function StudentDetailsEdit($id){
     $dataID= Crypt::decrypt($id); 
@@ -774,8 +774,14 @@ class adminactions extends Controller
         // return back()->with('Record_Updated','Record has been Updated Successfully');
         return redirect('/listofIS')->with('Record_Updated','Record has been Updated Successfully');        
 
-        }
+    }
 
+    public function getStatReport(){
+
+        // $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('welcome',['buddies'=>$this->BuddiesFecher(),'img'=>public_path('logo.png')]);
+        // return $pdf->download('sta'.date("Y-m-d").'.pdf');
+        // return view('Layouts/AdminActions/buddiesListReport',['buddies'=>$this->BuddiesFecher(),'img'=>public_path('logo.png')]);
+    }
        
 
 }

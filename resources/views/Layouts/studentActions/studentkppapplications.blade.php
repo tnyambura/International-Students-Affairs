@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking])
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
                     <div class="container-fluid"><br/>
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
@@ -69,13 +69,17 @@
                                         </thead>
                                         <tbody>
                                         @foreach($data as $appdata)
+                                        @if($appdata->first_open !== null)
+                                            <tr style='background: green'>
+                                        @else
                                             <tr>
-                                                <td>{{$appdata->id}} </td>
+                                        @endif
+                                                <td>{{$appdata->first_open}} </td>
                                                 <td>{{$userDetails->surname.' '.$userDetails->other_names}} </td>
                                                 <td>{{$userDetails->passport_number}} </td>
                                                 <td>{{$appdata->application_date}} </td>
                                                 <td>{{$appdata->application_status}} </td>
-                                                <th>-</th>
+                                                <th>{{$appdata->expiry_date}}</th>
                                                 <td>                                                                                           
                                                     <div class='d-flex align-items-center justify-content-around'>
                                                         <span class="fas fa-eye view-app-btn mt-2 mb-2" title="View Application" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:blue"></span>

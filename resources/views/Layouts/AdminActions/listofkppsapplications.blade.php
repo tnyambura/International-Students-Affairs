@@ -16,9 +16,9 @@
                 <td> {{$val['student_id']}}</td>
                 <td> {{$val['surname']}} {{$val['other_names']}}</td>
                 <td> {{$val['nationality']}}</td>
-                <td> {{$val['application_status']}}</td>
+                <td style='font-size: 12px;'> {{$val['expiry_date']}}</td>
                 
-                <td>
+                <td class="d-flex justify-content-around">
                     @php $data= Crypt::encrypt($val['student_id']); @endphp                                                                                            
         
                     <span class="fas fa-eye " role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewextapp_{{$val['id'].'_'.str_replace(' ','_',$val['application_status'])}}" style=" color:blue"></span>
@@ -219,6 +219,7 @@
 
                                         <input type='hidden' value='{{$val["id"]}}' name='app_id'/>
                                         <input type='hidden' value='{{$val["email"]}}' name='applicant_email'/>
+                                        
                                         <div class='d-flex flex-column flex-grow-1 mr-4'>
                                             <label for="application_status_select">Change Status</label>
                                             <select class="form-select form-select w-100 outline-none" id="application_status_select" width='100' name='status_select'>
@@ -228,15 +229,21 @@
                                             </select>
                                         </div>
                                         
+                                        <div class='d-flex flex-column mr-3 expire'>
+                                            <label for="expiry_date">Expiry Date</label>
+                                            <input type="date" class='pb-1' disabled style="border:0; border-bottom: 1px solid grey; " min='{{date("Y-m-d")}}' id="expiry_date" name ="expiry_date" required />
+                                        </div>
                                         <div class='d-flex flex-column'>
                                             <label for="file_upload">Upload File</label>
-                                            <input type="file" id='file_upload' name='fileResponse'/>
+                                            <input type="file" id='file_upload' name='fileResponse' required/>
                                         </div>
                                     </div>
                                     <input class="btn btn-outline-info p-2 select-change-btn w-100 mt-4" id="application_status_submit" type="submit" value='Save'/>
                                     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
                                     <script>
                                         $(function(){
+
+                                            // $('#expiry_date').attr('disabled')
                                             
                                             let currentSelected = 'in progress'
                                             let parentBox = $("#ChangeKpptapp_{{$val['id'].'_'.str_replace(' ','_',$val['application_status'])}}")
@@ -248,6 +255,11 @@
                                                     statusBtn.addClass("active")
                                                 }else{
                                                     statusBtn.removeClass("active")
+                                                }
+                                                if($(this).val() === 'approved'){
+                                                    $(this).parent().siblings('.expire').find('input').prop('disabled',false)
+                                                }else{
+                                                    $(this).parent().siblings('.expire').find('input').prop('disabled',true)
                                                 }
 
                                             })
@@ -586,7 +598,7 @@
                                     <td> {{$val['nationality']}}</td>
                                     <td> {{$val['application_status']}}</td>
                                     
-                                    <td >
+                                    <td class="d-flex justify-content-around">
                                         @php $data= Crypt::encrypt($val['student_id']); @endphp                                                                                            
 
                                         <span class="fas fa-eye " role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewextapp_{{$val['id']}}" style=" color:blue"></span>
@@ -835,7 +847,7 @@
                                 <th>student id</th>
                                 <th>student names</th>
                                 <th>NATIONALITY</th>
-                                <th>status</th>
+                                <th>Expiry Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>

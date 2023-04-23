@@ -180,8 +180,7 @@
                                     </div>    
                                     <div class="col-md-3 mb-3">
                                     <label for="validationServerUsername33">Passport Expiry Date</label>
-                                    <input type="date" class="form-control" min='{{date("Y-m-d",strtotime("+1 year"))}}' id="validationServer023" name ="passport_expire" placeholder="Passport Expire Date"
-                                         required>
+                                    <input type="date" class="form-control" min='{{date("Y-m-d",strtotime("+1 year"))}}' id="validationServer023" name ="passport_expire" placeholder="Passport Expire Date"required />
                                     </div>    
                                 </div>
                                 <div class="form-row">

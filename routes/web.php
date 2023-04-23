@@ -30,9 +30,9 @@ Route::get('/',function () {
     return view('Layouts.home');
 })->middleware('guest');
 
-Route::get('/db',function(){
-    return view('dbCheck');
-});
+// Route::get('/wl',[adminactions::class , 'getStatReport']);
+// Route::get('/wl',function(){return view('welcome');});
+Route::get('/stat/{img}',function($img){return view('welcome',['dt'=>$img]);});
 
 Route::get('/file-view/{path}/{file}', 'App\Http\Controllers\studentactions@PDFFileView')->name('PDFFileView');
 Route::get('/BuddyRequest', 'App\Http\Controllers\studentactions@BuddyRequest')->name('BuddyRequest');
@@ -169,6 +169,7 @@ Route::group(['middleware' => ['auth']], function(){
 
      Route::get('/viewVisaReport', [adminactions::class,'getAllApprovedVisaReport'])->middleware('isAdmin');
      Route::post('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin')->name('add.statistics');
+     Route::post('/StatReport', [DashboardController::class,'statReport'])->middleware('isAdmin')->name('add.stat');
     //  Route::get('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin');
      Route::get('/statistics-filter/{year}', [DashboardController::class,'getStatistics'])->middleware('isAdmin');
 

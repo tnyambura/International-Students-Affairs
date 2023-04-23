@@ -12,12 +12,11 @@
             color: #fff;
             border: 1px solid #000;
             text-align: left;
-            font-size: 12px;
-            padding: 4px;
-            text-transform: uppercase;
+            /* font-size: 12px; */
+            padding: 2px;
+            text-transform: capitalize;
             font-weight: bold;
             letter-spacing: 2px;
-            text-align: center;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
         
@@ -41,7 +40,7 @@
 <body style='display:flex; flex-direction:column; justify-content:space-between;'>
     <div>
         <div style="text-align: center; display:flex; ">
-            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:200px; height:200px;">
+            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:200px; ">
             <h2>Strathmore University International Students Affairs</h2>
         </div>
         <div style="text-align: center;">
@@ -59,30 +58,31 @@
                             <th> Other Names</th>
                             <th> Su Email</th>
                             <th> Course</th>
-                            <th> Country<th>               
+                            <th> Nationality<th>               
                         </tr>
                     </thead>
+                    <tbody>
                     @php $count=1; @endphp
                     @foreach($users as $user)
-                    <tr>
-                        <td>{{$count}}</td>
-                        <td>{{$user['user_id']}}</td>
-                        <td>{{$user['surname']}}</td>
-                        <td>{{$user['other_names']}}</td>
-                        <td>{{$user['email']}}</td>
-                        @if(array_key_exists('course',$user))
-                            <td>{{$user['course']}}</td>
-                        @else
-                            <td>-</td>
-                        @endif
-                        @if(array_key_exists('nationality',$user))
-                            <td>{{$user['nationality']}}</td>
-                        @else
-                            <td>-</td>
-                        @endif
+                        @if(array_key_exists('role',$user))
+                            @if($user['role'] === 'student')
+                            <tr>
+                                <td>{{$count}}</td>
+                                <td>{{$user['user_id']}}</td>
+                                <td>{{$user['surname']}}</td>
+                                <td>{{$user['other_names']}}</td>
+                                <td>{{$user['email']}}</td>
+                                @if(array_key_exists('course',$user))
+                                    <td>{{$user['course']}}</td>
+                                @endif
+                                @if(array_key_exists('nationality',$user))
+                                    <td>{{$user['nationality']}}</td>
+                                @endif
 
-                    </tr>
-                    @php $count= $count+1; @endphp
+                            </tr>
+                            @php $count= $count+1; @endphp
+                            @endif
+                        @endif
                     @endforeach
                         </tbody>
                 </table>

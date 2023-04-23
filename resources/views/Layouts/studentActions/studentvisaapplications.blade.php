@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking])
+@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
                     <div class="container-fluid"><br/>
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
@@ -61,12 +61,16 @@
                                         </thead>
                                         <tbody>
                                         @foreach($data as $appdata)
+                                        @if($appdata->first_open !== null)
+                                            <tr style='background: rgba(144,238,144,.2)'>
+                                        @else
                                             <tr>
+                                        @endif
                                                 <td>{{$appdata->id}} </td>
                                                 <td>{{$appdata->date_of_entry}} </td>
                                                 <td>{{$appdata->application_date}} </td>
                                                 <td>{{$appdata->application_status}} </td>
-                                                <th>-</th>
+                                                <th>{{$appdata->expiry_date}}</th>
                                                 <td>  
                                                     <div class='d-flex align-items-center justify-content-around'>
                                                         <span class="fas fa-eye" role='button' data-toggle="modal" title="View Application" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>

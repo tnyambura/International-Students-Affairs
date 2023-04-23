@@ -4,7 +4,7 @@
     <title>List of all students</title>
     <style>
        table{
-        border-collapse: collapse;
+        /* border-collapse: collapse; */
        }
         
         th {
@@ -17,7 +17,6 @@
             text-transform: uppercase;
             font-weight: bold;
             letter-spacing: 2px;
-            text-align: center;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
         
@@ -52,7 +51,7 @@
         </div><br/>    
         <div class="row">             
             <div class="table table-bordered"  >
-                <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                <table id="dataTable" width="100%">
                     <thead class="thead-dark">
                         <tr>
                             <th>id</th>

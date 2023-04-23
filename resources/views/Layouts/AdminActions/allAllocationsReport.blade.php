@@ -4,27 +4,27 @@
     <title>List of all students</title>
     <style>
        table{
-        border-collapse: collapse;
+        /* border-collapse: collapse; */
        }
         
-        th {
+       th {
             background-color: #000;
             color: #fff;
             border: 1px solid #000;
             text-align: left;
-            font-size: 12px;
-            padding: 4px;
-            text-transform: uppercase;
+            /* font-size: 12px; */
+            padding: 2px;
+            text-transform: capitalize;
             font-weight: bold;
             letter-spacing: 2px;
-            text-align: center;
             font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
         }
         
         td {
-            border: 1px solid #000;
-            text-align: center;
-            padding: 2px;
+            border-color: #959594;
+            border-style: solid;
+            border-width: 1px;
+            font-size: x-small;
             /* font-size: x-small; */
         }
         
@@ -50,7 +50,7 @@
         </div><br/>    
         <div class="row">             
             <div class="table table-bordered"  >
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table id="dataTable" width="100%">
                 <thead>
                     <tr>
                         <th>Student</th>
