@@ -4,7 +4,9 @@ $AppReq = 0;
 if(sizeOf($myAppointments) > 0){
     foreach($myAppointments as $val){
         if($val->status == 'pending'){
-            $AppReq = $AppReq+1;
+            // $AppReq = $AppReq+1;
+            $AppReq = [$val];
+            break;
         }
     }
 }
@@ -21,7 +23,6 @@ if(sizeOf($myAppointments) > 0){
         overflow: visible !important;
     }
     .progress.active{
-        background: red;
         /* background: rgba(10,210,90,.3); */
         animation: 4s progressBarAnim infinite alternate;
     }
@@ -31,64 +32,78 @@ if(sizeOf($myAppointments) > 0){
         right: 0;
         font-size: 25px;
         width: 150px;
-        color: rgba(110,110,110);
+        color: rgb(21,119,247)
         text-align: center;
         padding: 2px,5px;
-        animation: 5s ColorPendingAnim infinite alternate;
+
+        /* animation: 5s ColorPendingAnim infinite alternate; */
     }
     .progress.complete{
+        width: 100%;
         background: rgba(144,238,144,.7);
     }
+    .progress.complete .icon{
+        color: rgb(40,167,68);
+        animation: none;
+        z-index:2;
+    }
     .progress-bar{
-        box-shadow: 0 0 10px rgba(110, 110, 110,.9);
-        background: rgba(255, 255, 255,.9);
-        color: rgba(110, 110, 110,.5);
+        box-shadow: 0 0 0px rgba(110, 110, 110,.9);
+        /* background: rgba(255, 255, 255,.9); */
+        background: none;
+        color: #fff;
         /* background: rgba(24, 39, 74,.9); */
     }
     .progress-bar,.progress{
-        border-radius: 10px
+        border-radius: 5px
     }
     @keyframes progressBarAnim {
         to {width: 100%;}
     }
     @keyframes ColorPendingAnim {
         0% {color: rgba(110,110,110);}
-        80% {color: rgba(90,220,255,.7);}
-        100% {color: rgba(90,190,255,.7);}
+        50% {color: rgba(90,220,255,.7);}
+        100% {color: rgb(21,119,247);}
     }
 </style>
 <?php
-function findObjectById($item,$array){
-
-foreach ( $array as $element ) {
-    if ( isset( $array[$id] ) ) {
-        return $array[$id];
+    function findObjectById($item,$array){
+        foreach ( $array as $element ) {
+            if ( isset( $array[$id] ) ) {
+                return $array[$id];
+            }
+        }
+        return false;
     }
-}
-
-return false;
-}
 ?>
-
-<div class="container-fluid"><br/>
-    <div class=" pb-4 row ">
-        <div class="progress-bar col p-0 mx-2">
-            <span class='pb-2'>Pending</span>
-            <!-- ExtData   kppsData -->
-            @if($ExtData)
-            <div class="progress active" style='background: rgba(200,200,200,.8);'>
-                <i class='icon fab fa-cc-visa'></i>
-            </div>
-        </div>
-        <div class="progress-bar col p-0 mx-2">
-            <span class='pb-2'>In Progress</span>
-            <div class="progress " style='background: rgba(90,220,25590);'></div>
-        </div>
-        <div class="progress-bar col p-0 mx-2">
-            <span class='pb-2'>Declined | Approved</span>
-            <div class="progress " style='background: red;'></div>
+<div class=" p-2 mb-2 mx-4 bg-warning row row-cols-auto">
+    @foreach($ExpireDocs as $val)
+        <span class='col-md-4 col-lg my-1' style='color: var(--danger);'>{{$val}}</span>
+    @endforeach
+</div>
+@if($ProgressAppData[0] !== false || $ProgressAppData[1] !== false)
+    <div class="breadcrumb p-2 mb-4 mx-4" style='background: rgb(54,78,152);'>
+        <span class='mb-2' style='font-weight:bold; color:#fff;'>Track my Application</span>
+        <div class=" row w-100 mx-4" > 
+            @foreach($ProgressAppData as $key => $progress)
+                @if($progress !== false)
+                <div class="progress-bar col p-0 mx-2" >
+                    @if($key === 0)
+                    <span class='pb-3'>Extension visa  ({{$progress}})</span>
+                    @else
+                    <span class='pb-3'>Student Visa ({{$progress}})</span>
+                    @endif
+                    <!-- ExtData   kppsData -->
+                    <div class="progress {{($progress == 'approved')?'complete':'active'}}" style='background: {{($progress == "approved")?"rgb(40,167,68)":"rgb(21,119,247)"}};'>
+                        <i class='icon fab fa-cc-visa'></i>
+                    </div>
+                </div>
+                @endif
+            @endforeach
         </div>
     </div>
+@endif
+<div class="container-fluid">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -217,55 +232,55 @@ return false;
                         <tbody>
                             @if(sizeOf($myAppointments) > 0)
                                 @foreach($myAppointments as $val)
-                                @php $aptmnt = explode(" ",$val->booked_date_time);@endphp
+                                    @php $aptmnt = explode(" ",$val->booked_date_time);@endphp
                                     @if($val->status === 'pending')
-                                    <tr>
-                                        <td>{{$val->id}}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                {{date('Y-M-d',strtotime($aptmnt[0]))}}
-                                                </span>
-                                                <div class='badge badge-warning d-flex justify-content-center align-items-center'>
-                                                    <i class="fa fa-clock"></i>
-                                                    <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                        <tr>
+                                            <td>{{$val->id}}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                    {{date('Y-M-d',strtotime($aptmnt[0]))}}
+                                                    </span>
+                                                    <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                        <i class="fa fa-clock"></i>
+                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td style='text-transform:capitalize;'>{{$val->status}}</td>
-                                    </tr>
+                                            </td>
+                                            <td style='text-transform:capitalize;'>{{$val->status}}</td>
+                                        </tr>
                                     @elseif($val->status == 'past')
-                                    <tr>
-                                        <td>{{$val->id}}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                {{date('Y-M-d',strtotime($aptmnt[0]))}}
-                                                </span>
-                                                <div class='badge badge-secondary d-flex justify-content-center align-items-center'>
-                                                    <i class="fa fa-clock"></i>
-                                                    <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                        <tr>
+                                            <td>{{$val->id}}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                    {{date('Y-M-d',strtotime($aptmnt[0]))}}
+                                                    </span>
+                                                    <div class='badge badge-secondary d-flex justify-content-center align-items-center'>
+                                                        <i class="fa fa-clock"></i>
+                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td style='text-transform:capitalize;'>{{$val->status}}</td>
-                                    </tr>
+                                            </td>
+                                            <td style='text-transform:capitalize;'>{{$val->status}}</td>
+                                        </tr>
                                     @else
-                                    <tr>
-                                        <td>{{$val->id}}</td>
-                                        <td>
-                                            <div class="d-flex justify-content-between">
-                                                <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                {{date('Y-M-d',strtotime($aptmnt[0]))}}
-                                                </span>
-                                                <div class='badge badge-success d-flex justify-content-center align-items-center'>
-                                                    <i class="fa fa-clock"></i>
-                                                    <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                        <tr>
+                                            <td>{{$val->id}}</td>
+                                            <td>
+                                                <div class="d-flex justify-content-between">
+                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                                    {{date('Y-M-d',strtotime($aptmnt[0]))}}
+                                                    </span>
+                                                    <div class='badge badge-success d-flex justify-content-center align-items-center'>
+                                                        <i class="fa fa-clock"></i>
+                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td style='text-transform:capitalize;'>{{$val->status}}</td>
-                                    </tr>
+                                            </td>
+                                            <td style='text-transform:capitalize;'>{{$val->status}}</td>
+                                        </tr>
                                     @endif
                                 @endforeach
                             @else
@@ -288,13 +303,6 @@ return false;
             $(document).ready(function() {
                 $('.alert').alert()
             })
-            // const progress = document.querySelector('.progress');
-
-            // function updateProgress(percent) {
-            // progress.style.width = percent + '%';
-            // }
-
-            // updateProgress(50); // updates the progress to 50%
 
         </script>
 

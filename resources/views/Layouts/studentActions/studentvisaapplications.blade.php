@@ -61,7 +61,7 @@
                                         </thead>
                                         <tbody>
                                         @foreach($data as $appdata)
-                                        @if($appdata->first_open !== null)
+                                        @if(!empty($appdata->first_open))
                                             <tr style='background: rgba(144,238,144,.2)'>
                                         @else
                                             <tr>
@@ -73,7 +73,11 @@
                                                 <th>{{$appdata->expiry_date}}</th>
                                                 <td>  
                                                     <div class='d-flex align-items-center justify-content-around'>
-                                                        <span class="fas fa-eye" role='button' data-toggle="modal" title="View Application" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>
+                                                    @if(!empty($appdata->first_open))
+                                                        <span class="fas fa-eye first-Open" data-app-id='{{$appdata->id}}' role='button' data-toggle="modal" title="View Application" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>
+                                                    @else
+                                                        <span class="fas fa-eye"  role='button' data-toggle="modal" title="View Application" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>
+                                                    @endif
                                                         @if($appdata->application_status === 'pending')
                                                         <a role="button" href='{{__("cancelextApp")}}' title="Cancel Application" class="cancelext-btn" style=" color:#CC0D0D">
                                                             <span class="fas fa-trash " role='button' ></span>
@@ -91,7 +95,7 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="card mb-4">
-                                                                    <div class="card-header">
+                                                                    <div class="card-header" style='background: {{($appdata->application_status == "approved")? "rgb(40,167,68)": "inherite"}}'>
                                                                         <i class="fas fa-table mr-1"></i>
                                                                     My Student Pass Application View.
                                                                     </div>
@@ -131,8 +135,8 @@
                                                                                 @if($v->id === $appdata->id)
                                                                                 <div class="col">
                                                                                 <div class="form-group">
-                                                                                    <label for="usr">Date Of Entryr:</label>
-                                                                                    <input type="text" class="form-control" id="usr" value="----" disabled>
+                                                                                    <label for="usr">Expiry Date:</label>
+                                                                                    <input type="text" class="form-control" id="usr" value="{{$v->expiry_date}}" disabled>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">
@@ -172,7 +176,7 @@
                                                                                     <tbody>
                                                                                     <tr>
                                                                                         @if($v->uploads)
-                                                                                        <td class='bg-info' style='color:white'> <a href="/downloadKpps/{{$v->uploads}}"> Download</a></td>
+                                                                                        <td class='bg-info'> <a href="/downloadKpps/{{$v->uploads}}" style='color:white'> Download</a></td>
                                                                                         @else
                                                                                         <td > <span style="color:grey"> No File to Download</a></td>
                                                                                         @endif
@@ -206,6 +210,15 @@
                     <script defer>
                         $(document).ready(function() {
                             console.log('{{json_encode($getDataView)}}');
+                            $('.first-Open').on('click',function(e){
+                                // console.log(parseInt($(this).attr('data-app-id')));
+                                $.ajax({
+                                    url: '{{route("add.firstOpen")}}',
+                                    method: 'GET',
+                                    data: {id:parseInt($(this).attr('data-app-id')),table:'extension_application'},
+                                    success: function(res){ console.log(res);}
+                                })
+                            })
                             $('.cancelext-btn').on('click',function(e){
                                 e.preventDefault()
                                 if(confirm('Do you really want to cancel this application?')){

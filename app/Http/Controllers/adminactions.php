@@ -95,7 +95,7 @@ class adminactions extends Controller
             $fileUpload = FileUploader::fileupload($request,'fileResponse','ExtensionDoc'.$request->app_id,'extension/');
         }
 
-        $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new aproved']); 
+        $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new approved']); 
         $msg = 'Your Visa extention application is '.$request->status_select;
         if($updateStatus){
             return redirect()->route('emailsend',[$request->applicant_email,$msg]);
@@ -107,7 +107,7 @@ class adminactions extends Controller
         if($request->fileResponse){
             $fileUpload = FileUploader::fileupload($request,'fileResponse','StudentPassDoc'.$request->app_id,'kpps/');
         }
-        $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new aproved']); 
+        $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new approved']); 
         $msg = 'Your Student Pass application is '.$request->status_select;
         if($updateStatus){
             return redirect()->route('emailsend',[$request->applicant_email,$msg]);

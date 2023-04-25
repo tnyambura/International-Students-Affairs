@@ -66,6 +66,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::post('/ApplyKpps', [studentactions::class, 'Create_Newstudentpass'])->middleware('isUser')->name('add.newkppapp');
      Route::get('/ApplyVisa', [studentactions::class, 'NewVisaextension'])->middleware('isUser');
      Route::get('/MyAppVIEW/{id}', [studentactions::class, 'NewKPPAPPVIEW'])->middleware('isUser');
+     Route::get('/first-open', [studentactions::class, 'VisaFirstOpen'])->middleware('isUser')->name('add.firstOpen');
 
      Route::get('/MyAppEDIT/{id}', [studentactions::class, 'NewKPPAPPEDIT'])->middleware('isUser');
      Route::put('/MyAppEDIT/{id}', [studentactions::class, 'updateKPP'])->middleware('isUser')->name('edit.MyAppEDIT');

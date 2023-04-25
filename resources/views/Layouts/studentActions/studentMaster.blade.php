@@ -70,8 +70,8 @@
                                 <div class="nav-link" role='button' data-toggle="modal" data-target="#BookMeeting_{{Auth::user()->id}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
                                     Book Meeting
-                                    @if($NoBooking > 0)
-                                        <span class="badge badge-warning ml-2">{{$NoBooking}}</span>
+                                    @if(sizeOf($NoBooking) > 0)
+                                        <span class="badge badge-warning ml-2">{{sizeOf($NoBooking)}}</span>
                                     @endif
                                 </div>
                         </div>
@@ -144,7 +144,7 @@
                                         <label for="id">Admission No:</label>
                                         <input type="text" class="form-control" name="u_id" id="id" aria-describedby="idHelp" value="{{Auth::user()->id}}">
                                     </div>
-                                @if($userData)
+                            @if($userData)
                                     <div class="col">
                                         <label for="phone_no">phone number</label>
                                         <input type="text" class="form-control" name="phone" id="phone_no" value="{{$userData['phone_number']}}">
@@ -177,7 +177,7 @@
                                         <label for="passport_ex">passport expire date</label>
                                         <input type="text" class="form-control" name="passEx" id="passport_ex" value="{{$userData['passport_expire_date']}}">
                                     </div>
-                                @endif
+                            @endif
                                 </div>
                                 <span class='btn btn-warning' id='change_pass' role='button'>Change Password</span>
                                 <input type="hidden" name="is_change_active" id="is_change_active" value="false">
@@ -239,6 +239,19 @@
                                     <input type="hidden" name="selected_date_data" id='selected_date_data' value='[]'>
                                     <input class="btn btn-info w-100 align-self-center" id='save_schedule' type="submit" value="Book Now">
                                 </form>
+                            </div>
+                            <div class='container my-4'>
+                                <span class='p-2 rounded mb-5' style=' background: #113C7A; color:#fff; font-size: 15px; font-weight: bolder;'>My Appointment</span>
+                                @php $aptmnt = explode(" ",$NoBooking[0]->booked_date_time); @endphp
+                                <div class="d-flex justify-content-between my-3">
+                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
+                                    {{date('Y-M-d',strtotime($aptmnt[0]))}}
+                                    </span>
+                                    <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                        <i class="fa fa-clock"></i>
+                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

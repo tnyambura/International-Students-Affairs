@@ -68,6 +68,26 @@ class DashboardController extends Controller
 
         return view('Layouts/AdminActions/statisticsReport',['NoStudents'=>sizeOf($allStd),'data'=>$this->getStatistics($getYear),'year'=>$getYear]);
     }
+    public function KppAppProgressCatcher( Request $req){
+        $id = $req->user()->id; $res = false;
+        $kppApp = DB::table('kpps_application')->where('student_id',$id)->get();
+        foreach ($kppApp as $value) {
+            if($value->application_status == 'pending'){ $res = $value->application_status; break; }
+            if($value->application_status == 'in progress'){ $res = $value->application_status; break; }
+            if($value->application_status == 'approved' && $value->first_open === 'new approved'){ $res = $value->application_status; break; }
+        }
+        return $res;
+    }
+    public function ExtAppProgressCatcher( Request $req){
+        $id = $req->user()->id; $res = false;
+        $ExtApp = DB::table('extension_application')->where('student_id',$id)->get();
+        foreach ($ExtApp as $ext) {
+            if($ext->application_status == 'pending'){ $res = $ext->application_status; break; }
+            if($ext->application_status == 'in progress'){ $res = $ext->application_status; break; }
+            if($ext->application_status == 'approved' && $ext->first_open == 'new approved'){ $res = $ext->application_status; break; }
+        }
+        return $res;
+    }
 
     public function index(Request $request){
         if(!Auth::user()){
@@ -109,7 +129,7 @@ class DashboardController extends Controller
                 $IsABubby = DB::table("user_roles")->where('user_id',Auth::user()->id)->where('role','buddy')->get();
                 
                 if(sizeOf($IsABubby) > 0){ $is_buddy=true;}
-                return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy, 'availability'=>$this->AvailabilityGetter(), 'myAppointments'=>$this->GetAllbookedMeeting(),'NoExt'=>studentactions::NotOpenedExt(),'NoKpps'=>studentactions::NotOpenedKpps(),'ExtData'=>studentactions::FetchExtensionAppView(),'kppsData'=>studentactions::FetchKppView()]);
+                return view($userRoleVal,['user'=>$fetcher[0],'is_buddy'=> $is_buddy, 'availability'=>$this->AvailabilityGetter(), 'myAppointments'=>$this->GetAllbookedMeeting(),'NoExt'=>studentactions::NotOpenedExt(),'NoKpps'=>studentactions::NotOpenedKpps(),'ProgressAppData'=>[$this->ExtAppProgressCatcher($request),$this->KppAppProgressCatcher($request)],'ExpireDocs'=>studentactions::DocumentExpiry()]);
             }else{
                 $allStd = DB::table("user_roles")->where('role','student')->get();
                 $kppsReq = DB::table("kpps_application")->get();

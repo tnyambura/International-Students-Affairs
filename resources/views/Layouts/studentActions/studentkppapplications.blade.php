@@ -69,12 +69,12 @@
                                         </thead>
                                         <tbody>
                                         @foreach($data as $appdata)
-                                        @if($appdata->first_open !== null)
+                                        @if(!empty($appdata->first_open))
                                             <tr style='background: green'>
                                         @else
                                             <tr>
                                         @endif
-                                                <td>{{$appdata->first_open}} </td>
+                                                <td>{{$appdata->id}} </td>
                                                 <td>{{$userDetails->surname.' '.$userDetails->other_names}} </td>
                                                 <td>{{$userDetails->passport_number}} </td>
                                                 <td>{{$appdata->application_date}} </td>
@@ -102,7 +102,7 @@
                                                                     </button>
                                                                 </div>
                                                                 <div class="card mb-4">
-                                                                    <div class="card-header">
+                                                                    <div class="card-header" style='background: {{($appdata->application_status == "approved")? "rgb(40,167,68)": "inherite"}}'>
                                                                         <i class="fas fa-table mr-1"></i>
                                                                     My Student Pass Application View.
                                                                     </div>

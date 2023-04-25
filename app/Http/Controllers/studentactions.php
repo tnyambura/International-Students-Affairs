@@ -47,12 +47,78 @@ class studentactions extends Controller
         return $CurrentDate;
     }
     public static function NotOpenedKpps(){
-        $NoKpps = DB::table('kpps_application')->where('student_id',Auth::user()->id)->where('first_open','new aproved')->get();
+        $NoKpps = DB::table('kpps_application')->where('student_id',Auth::user()->id)->where('first_open','new approved')->get();
         return sizeOf($NoKpps);
     }
     public static function NotOpenedExt(){
-        $NoExt = DB::table('extension_application')->where('student_id',Auth::user()->id)->where('first_open','new aproved')->get();
+        $NoExt = DB::table('extension_application')->where('student_id',Auth::user()->id)->where('first_open','new approved')->get();
         return sizeOf($NoExt);
+    }
+    public static function CountRemainingTime($visaName,$date){
+        date_default_timezone_set("africa/nairobi");
+
+        $month=date("m", strtotime($date));
+        $day=date("d", strtotime($date));
+        $year=date("Y", strtotime($date));
+
+        $remainingDays = false;
+
+        if(((int) $year - (int)date('Y')) == 0){
+            $monthRemain = (int)$month - (int)date('m');
+            if($visaName === 'passport'){
+                if($monthRemain < 5 && $monthRemain > 1){
+                    $remainingDays = 'in '.$monthRemain.' month(s).';
+                }
+            }
+            if($visaName === 'kpp'){
+                if($monthRemain < 4 && $monthRemain > 1){
+                    $remainingDays = 'in '.$monthRemain.' month(s).';
+                }
+            }
+            if($monthRemain <= 1 && $monthRemain >= 0){
+                $WeekRemain = date('W',strtotime($date)) - date('W',strtotime(date('Y-m-d'))) ;
+                // if($WeekRemain < 2){
+                //     $dayRemain = (int)$day - (int)date('d');
+                //     if($dayRemain > 0){
+                //         $remainingDays = 'in '.$dayRemain.' day(s).';
+                //     }else if($dayRemain == 0){
+                //         $remainingDays = ' today.';
+                //     }
+                // }else{
+                    $remainingDays = 'in '.$WeekRemain.' week(s).';
+                // }
+            }
+        }
+
+        return $remainingDays;
+        
+    }
+    public static function DocumentExpiry(){
+        $data = [];
+        $ExpireExt = DB::table('extension_application')->select('expiry_date')->where('student_id',Auth::user()->id)->where('application_status','approved')->get();
+        $ExpireKpp = DB::table('kpps_application')->select('expiry_date')->where('student_id',Auth::user()->id)->where('application_status','approved')->get();
+        $ExpirePassport = DB::table('student_details')->select('passport_expire_date')->where('student_id',Auth::user()->id)->limit(1)->get()[0]->passport_expire_date;
+        
+        if($ExpirePassport){
+            $remainingTime = self::CountRemainingTime('passport',$ExpirePassport);
+            if($remainingTime){
+                array_push($data,'Your Passport will expire '.$remainingTime);
+            }
+        }
+        foreach($ExpireExt as $val){
+            $remainingTime = self::CountRemainingTime('ext',$val->expiry_date);
+            if($remainingTime){
+                array_push($data,'Your Extension Visa will expire '.$remainingTime);
+            }
+        }
+        foreach($ExpireKpp as $val){
+
+            $remainingTime = self::CountRemainingTime('kpp',$val->expiry_date);
+            if($remainingTime){
+                array_push($data,'Your Student Visa will expire '.$remainingTime);
+            }
+        }
+        return $data;
     }
     public function GetuserDetails(Request $request){
         $id = $request->user()->id; 
@@ -627,6 +693,15 @@ class studentactions extends Controller
         }   
     }
 
+    public function VisaFirstOpen(Request $request){
+        $id = Auth::user()->id;        
+        $appId = $request->id;        
+        $table = $request->table;        
+        $UpdateTable = DB::table($table)->where('student_id',$id)->where('id',$appId)->update(['first_open'=>null]);
+        if($UpdateTable){return true;}else{return false;}
+        // return Response::send($appId.'->'.$table.'->'.$id);
+        // return $table;
+    }
     public function NewVisaextension(Request $request){
         $id = $request->user()->id;        
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
@@ -665,7 +740,7 @@ class studentactions extends Controller
     public function GetAllbookedMeeting(){
         $data = BookingList::where('student_id',Auth::user()->id)->where('status','pending')->get();
         
-        return sizeOf($data);
+        return $data;
     }
     public function bookMeeting(Request $req){
         $data = [$req->selected_date_data,$req->time_selected];
