@@ -143,7 +143,7 @@
                                                                                 <div class="col">
                                                                                 <div class="form-group">
                                                                                     <label for="usr">Date Of Entryr:</label>
-                                                                                    <input type="text" class="form-control" id="usr" value="----" disabled>
+                                                                                    <input type="text" class="form-control" id="usr" value="{{$v->date_entry}}" disabled>
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col">

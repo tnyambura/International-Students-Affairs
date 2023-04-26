@@ -53,56 +53,36 @@
                             <!-- surNAME -->
                             <input type="hidden" name="status" value='active' />
                             <div class="form-row">
-                            <div class="col-md-4 mb-3">   
-                                <label for="surNAME">SURNAME</label>  
-                                <input id="surNAME" class="form-control" type="text" name="surNAME" required autofocus />
+                            <div class="col-lg-6 mb-3">   
+                                <label for="staff_surNAME">SURNAME</label>  
+                                <input id="staff_surNAME" class="form-control" type="text" name="surNAME" required autofocus />
                             </div></br>
                             <!-- otherNAMES -->
-                            <div class="col-md-4 mb-3">            
-                            <label for="otherNAMES">OTHERNAMES</label>  
-                                <input id="otherNAMES" class="form-control" type="text" name="otherNAMES" required autofocus />
+                            <div class="col-lg-6 mb-3">            
+                            <label for="staff_otherNAMES">OTHERNAMES</label>  
+                                <input id="staff_otherNAMES" class="form-control" type="text" name="otherNAMES" required autofocus />
                             </div></br>
 
                             <!-- suID or Username -->
-                            <div class="col-md-4 mb-3">            
-                            <label for="suID">suID</label>  
-                                <input id="suID" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="form-control" type="number" name="id" required autofocus />
+                            <div class="col-lg-6 mb-3">            
+                            <label for="staff_suID">suID</label>  
+                                <input id="staff_suID" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="form-control" type="number" name="id" required autofocus />
                             </div></br>
 
                             <!-- Email Address -->
-                            <div class="col-md-4 mb-3">            
-                            <label for="email">Email</label>  
-                                <input id="email" class="form-control" type="text" name="email" required autofocus />
+                            <div class="col-lg-6 mb-3">            
+                            <label for="staff_email">Email</label>  
+                                <input id="staff_email" class="form-control" type="text" name="email" required autofocus />
                             </div>
-                            <div class="col-md-4 mb-3"> 
+                            <div class="col-lg-6 mb-3"> 
                             <label for="role_id">Register as:</label>  
-                                <select name="user_role" class="form-control">
+                                <select name="user_role" id='role_id' class="form-control">
                                     @foreach($roles as $role)
                                         <option value={{strtolower($role)}}> {{$role}} </option>
                                     @endforeach
                                 </select>
 
                             </div></br>
-
-                            <!-- Password -->
-                            <!-- <div class="col-md-4 mb-3">            
-                            <label for="password">Password</label>  
-
-                                <input id="password" class="form-control"
-                                                type="password"
-                                                name="password"
-                                                required autocomplete="new-password" />
-                            </div> -->
-
-                            <!-- Confirm Password -->
-                            <!-- <div class="col-md-4 mb-3">            
-                                <label for="password_confirmation">Password</label>  
-                                <input id="password_confirmation" class="form-control"
-                                                type="password"
-                                                name="password_confirmation" required />
-                            </div> -->
-                            <!-- Select Role -->
-                            
                             </div>
                             <br/>
                             <div class="form-row">
@@ -125,76 +105,68 @@
 
                         <form method="POST"  class='new-student-form' action="{{route('Add.signup')}}">
                             @csrf
+                            <x-auth-validation-errors class="mb-4" :errors="$errors" />
                                 <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                    <label for="Surname">NOM (SURNAME)</label>
+                                    <div class="col-lg-4 mb-3">
+                                    <label for="surNAME">NOM (SURNAME)</label>
                                     <input type="text" maxlength="50" class="form-control" name ="surNAME" id="surNAME" placeholder="Surname" autofocus required>
                                     
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                    <label for="oNAME">First Name</label>
-                                    <input type="text" maxlength="50" class="form-control" name ="otherNAMES" id="oNAME" placeholder="Other Names"
-                                         required>                                    
-                                    </div>                                   
+                                    <div class="col-lg-4 mb-3">
+                                        <label for="oNAME">Other Names</label>
+                                        <input type="text" maxlength="50" class="form-control" name ="otherNAMES" id="oNAME" placeholder="Other Names"
+                                        required>                                    
+                                    </div>                                  
+                                    <div class="col-lg-4 mb-3">
+                                        <label for="suID">Admission Number</label>
+                                        <input type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="form-control" name ="id" id="suID" placeholder="Admission Number"required>
+                                    </div>
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-md-4 mb-3">
-                                    <label for="suID">Admission Number</label>
-                                    <input type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="form-control" name ="id" id="suID" placeholder="Admission Number"
-                                         required>
-                                    
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="suEMAIL">Email Address</label>
+                                        <input type="text" class="form-control" name ="email" id="suEMAIL" placeholder="Email" required>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                    <label for="Course">Course</label>
-                                    <input type="text" maxlength="50" class="form-control" name ="Course" id="Course" placeholder="Course of Study"
-                                         required>
-                                    
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="phoneNUMBER">Kenyan Phone Number</label>
+                                        <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="phoneNUMBER" name ="phoneNUMBER" placeholder="(+254) 700 000000" required>
                                     </div>
-                                    <div class="col-md-4 mb-3">
-                                    <label for="Faculty">Faculty</label>
-                                    <input type="text" maxlength="50" class="form-control"  name ="Faculty" id="Faculty" placeholder="Faculty"
-                                         required>
-                                    
-                                    </div>
-                                  
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                    <label for="email">Email Address</label>
-                                    <input type="text" class="form-control" name ="email" id="suEMAIL" placeholder="Email"
-                                        required>
-                                  </div>
-                                    <div class="col-md-3 mb-3">
-                                    <label for="Nationality">Country</label>
-                                    <select class='form-control' name ="Nationality" id="Nationality" required>
-                                        <option>--Select--</option>
-                                        @foreach($countries as $country)
-                                            <option value='{{$country}}'>{{$country}}</option>
-                                        @endforeach
-                                    </select>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="Nationality">Country</label>
+                                        <select class='form-control' name ="Nationality" id="Nationality" required>
+                                            <option>--Select--</option>
+                                            @foreach($countries as $country)
+                                                <option value='{{$country}}'>{{$country}}</option>
+                                            @endforeach
+                                        </select>
                                     </div>
-                                    <div class="col-md-3 mb-3">
-                                    <label for="validationServerUsername33">Passport Number</label>
-                                    <input type="text" class="form-control" maxlength='15' id="validationServer023" name ="passport_number" placeholder="Passport Number"
-                                         required>
-                                    </div>    
-                                    <div class="col-md-3 mb-3">
-                                    <label for="validationServerUsername33">Passport Expiry Date</label>
-                                    <input type="date" class="form-control" min='{{date("Y-m-d",strtotime("+1 year"))}}' id="validationServer023" name ="passport_expire" placeholder="Passport Expire Date"required />
-                                    </div>    
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="Residence">Residence</label>
+                                        <input type="text" class="form-control" maxlength="100" name ="Residence" id="Residence" placeholder="Residence" required>
+                                    </div> 
                                 </div>
                                 <div class="form-row">
-                                    <div class="col-md-6 mb-3">
-                                    <label for="PhoneNumber">Kenyan Phone Number</label>
-                                    <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="phoneNUMBER" name ="phoneNUMBER" placeholder="(+254) 700 000000"
-                                        required>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="Course">Course</label>
+                                        <input type="text" maxlength="50" class="form-control" name ="Course" id="Course" placeholder="Course of Study" required>
+                                    </div>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="Faculty">Faculty</label>
+                                        <input type="text" maxlength="50" class="form-control"  name ="Faculty" id="Faculty" placeholder="Faculty" required>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="passNo">Passport Number</label>
+                                        <input type="text" class="form-control" maxlength='15' id="passNo" name ="passport_number" placeholder="Passport Number" required>
                                     </div>    
-                                    <div class="col-md-4 mb-3">
-                                    <label for="Residence">Residence</label>
-                                    <input type="text" class="form-control" maxlength="100" name ="Residence" id="Residence" placeholder="Residence"
-                                         required>
-                                    </div>                         
-                                </div><br>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="passExp">Passport Expiry Date</label>
+                                        <input type="date" class="form-control" min='{{date("Y-m-d",strtotime("+1 year"))}}' id="passExp" name ="passport_expire" placeholder="Passport Expire Date" required />
+                                    </div>    
+                                </div>
 
                                 <div>
                                     <h4>PARENTS DETAIL</h4>
@@ -207,22 +179,19 @@
                                 </div>
                                 <div class="form-row parent-details">
                                    
-                                    <div class="col-md-4 mb-3">
-                                    <label for="ParentEmail">Parent Email</label>
-                                    <input type="text" class="form-control" name ="ParentEmail" id="ParentEmail" placeholder="Parents Email"
-                                         required>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="ParentEmail">Parent Email</label>
+                                        <input type="text" class="form-control" name ="ParentEmail" id="ParentEmail" placeholder="Parents Email" required>
                                     </div>  
                                     
-                                    <div class="col-md-4 mb-3">
-                                    <label for="ParentPhone">Your parents Phone Number</label>
-                                    <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="ParentPhone" name ="ParentPhone" placeholder="Parent Phone Number"
-                                        required>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="ParentPhone">Your parents Phone Number</label>
+                                        <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="ParentPhone" name ="ParentPhone" placeholder="Parent Phone Number" required>
                                     </div>
                                     
-                                    <div class="col-md-4 mb-3">
-                                    <label for="ParentNames">Your parents Names</label>
-                                    <input type="text" class="form-control" id="ParentNames" name ="ParentNames" placeholder="Full Names "
-                                        required>
+                                    <div class="col-lg-6 mb-3">
+                                        <label for="ParentNames">Your parents Names</label>
+                                        <input type="text" class="form-control" id="ParentNames" name ="ParentNames" placeholder="Full Names " required>
                                     </div>
                                 </div>
                                

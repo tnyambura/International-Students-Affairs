@@ -160,10 +160,12 @@
                                                                                     </thead>
                                                                                     <tbody>
                                                                                     <tr>
-                                                                                        <td > <a href="/file-view/extension/{{Crypt::encrypt($v->passport_biodata)}}" style="color:green"> Download</a></td>
-                                                                                        <!-- <td > <a href="/downloadExtension/{{$v->passport_biodata}}" style="color:green"> Download</a></td> -->
+                                                                                        <td > <a href="/downloadExtension/{{$v->passport_biodata}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadExtension/{{$v->current_visa}}" style="color:green"> Download</a></td>
+                                                                                        <td > <a href="/downloadExtension/{{$v->entry_visa}}" style="color:green"> Download</a></td>
+                                                                                        <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($v->passport_biodata)}}" style="color:green"> Download</a></td>
                                                                                         <td > <a href="/file-view/extension/{{Crypt::encrypt($v->current_visa)}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/file-view/extension/{{$v->entry_visa}}" style="color:green"> View</a></td>
+                                                                                        <td > <a href="/file-view/extension/{{$v->entry_visa}}" style="color:green"> View</a></td> -->
                                                                                         <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($v->entry_visa)}}" style="color:green"> Download</a></td> -->
                                                                                     </tr>
                                                                                     </tbody>

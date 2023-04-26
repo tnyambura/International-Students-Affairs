@@ -32,8 +32,14 @@ class DashboardController extends Controller
         return $data;
     }
     public function GetAllbookedMeeting(){
-        $data = DB::table('all_bookings')->where('u_id',Auth::user()->id)->get();
+        $lastMeeting = DB::table('bookingList')->where('student_id',Auth::user()->id)->where('status','pending')->limit(1)->get();
         $res = [];
+        if(sizeOf($lastMeeting)>0){
+            if(date('Y-m-d',strtotime($lastMeeting[0]->booked_date_time)) < date('Y-m-d')){
+                DB::table('bookingList')->where('id',$lastMeeting[0]->id)->update(['status'=>'past']);
+            }
+        }
+        $data = DB::table('all_bookings')->where('u_id',Auth::user()->id)->get();
         if(sizeOf($data) > 0){
             $res = $data;
         }

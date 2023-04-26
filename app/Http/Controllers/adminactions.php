@@ -539,7 +539,12 @@ class adminactions extends Controller
             'buddy_id'=>'required',
             ]
         );
-        DB::table('buddies_allocations')->where('student_id',$req->student_id)->update(['buddy_id'=>$req->buddy_id]);
+        if($req->change_req === 'normal'){
+            DB::table('buddies_allocations')->where('student_id',$req->student_id)->update(['buddy_id'=>$req->buddy_id]);
+        }
+        if($req->change_req === 'ChangeRequested'){
+            DB::table('buddies_allocations')->where('student_id',$req->student_id)->update(['buddy_id'=>$req->buddy_id, 'request_change'=>null]);
+        }
         return back()->with('Buddy_modification_success','Allocation successful!');
             
             
@@ -707,7 +712,7 @@ class adminactions extends Controller
         return view('Layouts/AdminActions/listofBuddyRequests',['buddiesRequests'=>$this->BuddiesRequestFecher()],['buddies'=>$this->BuddiesFecher()]);
     }
     public function myScheduleView(){
-        $t = MySchedule::select('my_schedule')->where('user_id',Auth::user()->id)->get();
+        $t = MySchedule::select('my_schedule')->get();
         $bookingRequests = [];
         if(sizeOf($t) > 0){
             $t = $t[0]->my_schedule;

@@ -61,26 +61,24 @@
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="Surname">NOM (SURNAME)</label>
-                                    <input type="text" class="form-control" name="surNAME" id="Surname" value="{{ $getUserDetails->surname}}"
-                                         >
+                                    <input type="text" class="form-control" name="surNAME" id="Surname" value="{{ $getUserDetails->surname}}" disabled>
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="othernames">Prenom (Other Names)</label>
-                                    <input type="text" class="form-control" name="otherNAMES" id="othernames" value="{{ $getUserDetails->other_names}}"
-                                         >
+                                    <input type="text" class="form-control" name="otherNAMES" id="othernames" value="{{ $getUserDetails->other_names}}"  disabled>
                                     
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="validationServerUsername33">Passport Number</label>
-                                    <input type="text" name="passportNUMBER" class="form-control" id="validationServer023" value="{{ $getUserDetails->passport_number}}" >
+                                    <input type="text"  disabled name="passportNUMBER" class="form-control" id="validationServer023" value="{{ $getUserDetails->passport_number}}" >
                                     </div>
                                 </div>
 
                                 <div class="form-row">
                                     <div class="col-md-4 mb-3">
                                     <label for="AdmissionNo">Admission Number</label>
-                                    <input type="number" name="suID" class="form-control" id="admissionNo" placeholder="{{ Auth::user()->id}}" value="{{ Auth::user()->id}}" readonly="readonly"/>
+                                    <input type="number"  disabled name="suID" class="form-control" id="admissionNo" placeholder="{{ Auth::user()->id}}" value="{{ Auth::user()->id}}" readonly="readonly"/>
                                     </div>
                                     <div class="col-md-4 mb-3">
                                     <label for="Course">Course</label>
@@ -95,19 +93,19 @@
                                 </div>
                                 
                                 <div class="form-row">
-                                   <div class="col-md-4 mb-3">
+                                   <div class="col mb-3">
                                     <label for="email">Email Address</label>
                                     <input type="text" name="suEMAIL" class="form-control" id="email" value="{{ Auth::user()->email}}" readonly="readonly">
                                    </div>
                                    
-                                   <div class="col-md-4 mb-3">
+                                   <div class="col mb-3">
                                     <label for="Residence">Residence</label>
-                                    <input type="text" name="Residence" class="form-control" id="Residence" placeholder="Residence" value="{{ $getUserDetails->residence}}">
+                                    <input type="text"  disabled name="Residence" class="form-control" id="Residence" placeholder="Residence" value="{{ $getUserDetails->residence}}">
                                    </div>
 
-                                    <div class="col-md-4 mb-3">
+                                    <div class="col mb-3">
                                         <label for="EntryDate">Date of Entry</label>
-                                        <input type="date" name="dateofENTRY" class="form-control" id="Entrydate" placeholder="Date of Entry"
+                                        <input type="date" name="entry_date" class="form-control" id="Entrydate" placeholder="Date of Entry"
                                             >                                    
                                      </div>
                                    </div>
@@ -115,12 +113,12 @@
 
                                 <div class="form-row">
                                     <div class="col-md-6 mb-3">
-                                    <label for="PhoneNumber">Kenyan Phone Number</label>
-                                    <input type="number" name="phoneNUMBER" class="form-control" id="PhoneNumber" placeholder="(+254) 700 000000" value="{{ $getUserDetails->phone_number}}" >
+                                    <label for="PhoneNumber">Phone Number</label>
+                                    <input type="number"  disabled name="phoneNUMBER" class="form-control" id="PhoneNumber" placeholder="(+254) 700 000000" value="{{ $getUserDetails->phone_number}}" >
                                     </div> 
                                     <div class="col-md-6 mb-3">
                                     <label for="Faculty">Faculty</label>
-                                    <input type="text" name="Faculty" class="form-control" id="Faculty" placeholder="Faculty" value="{{ $getUserDetails->faculty}}">
+                                    <input type="text"  disabled name="Faculty" class="form-control" id="Faculty" placeholder="Faculty" value="{{ $getUserDetails->faculty}}">
                                     </div>                                      
                                 </div></br>
 

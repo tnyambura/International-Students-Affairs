@@ -242,6 +242,7 @@
                             </div>
                             <div class='container my-4'>
                                 <span class='p-2 rounded mb-5' style=' background: #113C7A; color:#fff; font-size: 15px; font-weight: bolder;'>My Appointment</span>
+                                @if(sizeOf($NoBooking) > 0)
                                 @php $aptmnt = explode(" ",$NoBooking[0]->booked_date_time); @endphp
                                 <div class="d-flex justify-content-between my-3">
                                     <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
@@ -252,6 +253,7 @@
                                         <span class='ml-2'>{{$aptmnt[1]}}</span>
                                     </div>
                                 </div>
+                                @endif
                             </div>
                         </div>
 

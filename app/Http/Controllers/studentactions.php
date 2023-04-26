@@ -166,62 +166,6 @@ class studentactions extends Controller
         }
         return [];
     }
-    public function updateVISA( request $req ){
-
-        $data = applyvisaextension::find($req->id);
-
-        if($req->hasFile('passportPIC','Biodata','currentVISA','entryVISA')) 
-        {
-            $path_pp = 'storage/visaExtensionfiles/'. $data->passportPIC;
-            $path_bd = 'storage/visaExtensionfiles/'. $data->passportBIO;
-            $path_cv = 'storage/visaExtensionfiles/'.$data->currentVISA;
-            $path_ev = 'storage/visaExtensionfiles/'.$data->entryVISA;
-
-            if(File::exists($path_pp,$path_bd,$path_cv,$path_ev)){
-               File::delete($path_pp,$path_bd,$path_cv,$path_ev);
-        }
-
-        $data->surNAME = $req->surNAME;
-        $data->otherNAMES = $req->otherNAMES;
-        $data->passportNUMBER = $req->passportNUMBER;
-        $data->suID = $req->suID;
-        $data->suEMAIL = $req->suEMAIL;
-        $data->Nationality = $req->Nationality;
-        $data->dateofENTRY = $req->dateofENTRY;
-       
-
-        $path_pp=$req->file('passportPIC');
-        $path_bd=$req->file('Biodata');
-        $path_cv=$req->file('currentVISA');
-        $path_ev=$req->file('entryVISA');
-        
-
-        $extension1 = $path_pp -> getClientOriginalName();
-        $extension2 = $path_bd -> getClientOriginalName();
-        $extension3 = $path_cv -> getClientOriginalName();
-        $extension4 = $path_ev -> getClientOriginalName();
-
-        $filename1 = time().'.'.$extension1;
-        $filename2 = time().'.'.$extension2;
-        $filename3 = time().'.'.$extension3;
-        $filename4 = time().'.'.$extension4;
-      
-
-        $path_pp->move('storage/visaExtensionfiles/',$filename1);
-        $path_bd->move('storage/visaExtensionfiles/',$filename2);
-        $path_cv->move('storage/visaExtensionfiles/',$filename3);
-        $path_ev->move('storage/visaExtensionfiles/',$filename4);
-      
-
-        $data->passportPIC = $filename1;
-        $data->Biodata = $filename2;
-        $data->currentVISA = $filename3;
-        $data->entryVISA = $filename4;
-        $data->update();
-        return redirect ('/MyvisaextApplications')->with('visa_updated_successfully', 'Record Updated Successfully');
-    
-    }
-    }
 
     
 
@@ -298,7 +242,8 @@ class studentactions extends Controller
                     $post = new applykpp();
 
                     $post->id = $appId;
-                    $post->student_id = $request->suID;
+                    $post->student_id = Auth::user()->id;
+                    $post->date_entry = $request->entry_date;
                     $post->passport_picture = $passportPic;
                     $post->passport_biodata = $passportBio;
                     $post->current_visa = $currentV;
@@ -370,7 +315,7 @@ class studentactions extends Controller
                     $post = new applyvisaextension();
                     
                     $post->id = $appId;
-                    $post->student_id = $request->suID;
+                    $post->student_id = Auth::user()->id;
                     $post->passport_biodata = $passportBio;
                     $post->entry_visa = $entryV;
                     $post->current_visa = $currentV;
@@ -775,7 +720,7 @@ class studentactions extends Controller
 
         if($request->filled('id','surNAME','otherNAMES','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence')){
             $this->validate($request,[
-                'id'=>'required|max:6',
+                'id'=>'required|max:8',
                 'surNAME'=>'required',
                 'otherNAMES'=>'required',
                 'email'=>'required|email',

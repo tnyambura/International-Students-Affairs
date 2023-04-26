@@ -747,7 +747,9 @@
                                                                             @if(strtolower($option) == strtolower($ext_applicationStatus[1]))
                                                                                 <option selected value='{{$option}}' >{{$option}}</option>
                                                                             @else
+                                                                                @if(strtolower($option) === 'in progress')
                                                                                 <option value='{{$option}}' >{{$option}}</option>
+                                                                                @endif
                                                                             @endif
                                                                         @endforeach
                                                                     </select>

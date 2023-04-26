@@ -305,15 +305,15 @@
                                                     <li class="mb-2 py-2 border-bottom position-relative">
                                                     @else
                                                     <li class="mb-2 border-bottom position-relative">
-                                                        <div class="row w-100 position-absolute" style="z-index:2">
-                                                            <span class='col-8 btn-warning' role='button' data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}">Change Requested</span>
-                                                            <span class='col btn-danger' role='button'>Dissmiss</span>
+                                                        <div class="row w-100 position-absolute" style="z-index:2; right:-78%;">
+                                                            <span class='col-8 btn-warning text-nowrap' role='button' data-toggle="modal" data-target="#NewAllocation_{{$st_u->id}}">Change Requested</span>
+                                                            <span class='col btn-danger text-nowrap' role='button'>Dissmiss</span>
                                                         </div>
                                                     @endif
-                                                        <div class="row ">
-                                                            <span class="col">{{$bdAlloc['id']}}</span>
-                                                            <span class="col-6">{{$bdAlloc['surname'].' '.$bdAlloc['other_names']}}</span>
-                                                            <div class="col d-flex justify-content-around align-items-center">
+                                                        <div class="row flex-nowrap">
+                                                            <span class="col-3 text-nowrap">{{$bdAlloc['id']}}</span>
+                                                            <span class="col-6 text-nowrap">{{$bdAlloc['surname'].' '.$bdAlloc['other_names']}}</span>
+                                                            <div class="col-3  d-flex justify-content-around align-items-center">
                                                                 <span data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}" style=" color:blue" class="fas fa-edit" aria-hidden="true"></span>
                                                                 <form action="{{route('add.dismiss')}}" method='post'> @csrf
                                                                     <input type="hidden" name="req_id" value="{{$bdAlloc['req_id']}}">
@@ -348,6 +348,7 @@
                                                                             </div>
                                                                             <form method="POST" action="{{ __('EditAllocatedBuddy') }}" class='new-staff-form p-4'>
                                                                                 @csrf
+                                                                                <input type="hidden" value="normal" name='change_req'>
                                                                                 <div class="row">
                                                                                     <div class="col">
                                                                                         <label for="Residence">Surname</label>
@@ -392,8 +393,69 @@
                                                                             </form>
                                                                             <br/>
                                                                         </div>
-                                                                    </div>
+                                                                </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="modal fade " id="NewAllocation_{{$st_u->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                        aria-hidden="true">
+                                                            <div class="modal-dialog" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header text-center">
+                                                                        <h4 class="modal-title w-100 font-weight-bold">New Buddy Allocation</h4>
+                                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                        </button>
+                                                                    </div>
+                                                                    <form method="POST" action="{{ __('EditAllocatedBuddy') }}" class='new-staff-form p-4'>
+                                                                        @csrf
+                                                                        
+                                                                        <input type="hidden" value="ChangeRequested" name='change_req'>
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <label for="Residence">Surname</label>
+                                                                                <input type="text" value="{{Auth::user()->surname}}" class="form-control" disabled>
+                                                                            </div>
+                                                                            <div class="col">
+                                                                                <label for="Residence">Other names</label>
+                                                                                <input type="text" value="{{Auth::user()->other_names}}" class="form-control" disabled>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                            <label for="Residence">Admission No</label>
+                                                                            <input type="text" value="{{Auth::user()->id}}" class="form-control" disabled>
+                                                                            </div>
+                                                                            <div class="col">
+                                                                            <label for="Residence">Email</label>
+                                                                            <input type="text" value="{{Auth::user()->email}}" class="form-control" disabled>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col d-flex flex-column my-4 ">   
+                                                                                
+                                                                                <input id="student_id" type="hidden" value='{{$st_u->id}}' name="student_id" required autofocus />
+                                                                                <label for="surNAME">Select Buddy</label> 
+                                                                                <select class='form-select form-select-lg' name="buddy_id">
+                                                                                    <option disabled selected>--SELECT BUDDY--</option> 
+                                                                                    @foreach($allbuddies as $a_buddy)
+                                                                                        @if($Buddy->id !== $a_buddy->id)
+                                                                                            @if($a_buddy->id == $bdAlloc['bd_id'])
+                                                                                                <option value={{$a_buddy->id}} selected>{{$a_buddy->id.' - '. $a_buddy->surname. $a_buddy->other_names}}</option> 
+                                                                                            @else
+                                                                                                <option value={{$a_buddy->id}}>{{$a_buddy->id.' - '. $a_buddy->surname. $a_buddy->other_names}}</option> 
+                                                                                            @endif
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </select> 
+                                                                            </div></br>
+                                                                        </div>
+                                                                        <br/>
+                                                                        <div class="">
+                                                                            <input class="btn btn-success w-50" value="Allocate" type="submit" />
+                                                                        </div>
+                                                                    </form>
+                                                                    <br/>
+                                                                </div>
                                                         </div>
                                                     </li>
                                                 @endif

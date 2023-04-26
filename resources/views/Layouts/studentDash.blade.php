@@ -1,5 +1,5 @@
 <?php
-$AppReq = 0;
+$AppReq = [];
 
 if(sizeOf($myAppointments) > 0){
     foreach($myAppointments as $val){
@@ -76,14 +76,16 @@ if(sizeOf($myAppointments) > 0){
         return false;
     }
 ?>
+@if(sizeOf($ExpireDocs) > 0)
 <div class=" p-2 mb-2 mx-4 bg-warning row row-cols-auto">
     @foreach($ExpireDocs as $val)
         <span class='col-md-4 col-lg my-1' style='color: var(--danger);'>{{$val}}</span>
     @endforeach
 </div>
+@endif
 @if($ProgressAppData[0] !== false || $ProgressAppData[1] !== false)
     <div class="breadcrumb p-2 mb-4 mx-4" style='background: rgb(54,78,152);'>
-        <span class='mb-2' style='font-weight:bold; color:#fff;'>Track my Application</span>
+        <span class='px-3 mb-2' style='font-weight:bold; color:#fff;'> <i class='fa fa-search mr-3'></i>Track my Application</span>
         <div class=" row w-100 mx-4" > 
             @foreach($ProgressAppData as $key => $progress)
                 @if($progress !== false)
@@ -94,7 +96,7 @@ if(sizeOf($myAppointments) > 0){
                     <span class='pb-3'>Student Visa ({{$progress}})</span>
                     @endif
                     <!-- ExtData   kppsData -->
-                    <div class="progress {{($progress == 'approved')?'complete':'active'}}" style='background: {{($progress == "approved")?"rgb(40,167,68)":"rgb(21,119,247)"}};'>
+                    <div class="progress {{($progress == 'approved')?'complete':'active'}}" style='background: {{($progress == "approved")?"rgb(40,167,68)":(($progress == "pending")?"rgb(110,110,110)":"rgb(21,119,247)")}};'>
                         <i class='icon fab fa-cc-visa'></i>
                     </div>
                 </div>
@@ -179,36 +181,6 @@ if(sizeOf($myAppointments) > 0){
                 </div>
             </div>
             @endif
-        </div>
-
-        <div class="card p-3 mb-3 d-flex flex-row">
-            <div>
-                <figure class='profile-figure d-flex justify-centent-center align-items-center'>
-                    <img src="asset/img/logo.png" class="">
-                </figure>
-            </div>
-            <div class="d-flex flex-column flex-grow-1 pl-3" style='font-size:12px'>
-                <div class="container flex-grow-1" >
-                    <div class="row">
-                        <div class='col d-flex flex-column'>
-                            <label for="id">Identity No</label>
-                            <span class='font-weight-bold' id="id">{{Auth::user()->id}}</span>
-                        </div>
-                        <div class='col d-flex flex-column'>
-                            <label for="surname">Surname</label>
-                            <span class='font-weight-bold' id="surname">{{Auth::user()->surname}}</span>
-                        </div>
-                        <div class='col d-flex flex-column'>
-                            <label for="othernames">Other names</label>
-                            <span class='font-weight-bold' id="othernames">{{Auth::user()->other_names}}</span>
-                        </div>
-                        <div class='col d-flex flex-column'>
-                            <label for="email">Email</label>
-                            <span class='font-weight-bold' id="email">{{Auth::user()->email}}</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         
         
