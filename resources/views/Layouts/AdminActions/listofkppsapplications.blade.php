@@ -73,8 +73,8 @@
                                             </div>
                                             <div class="col">
                                                 <div class="form-group">
-                                                    <label for="usr">Date Of Entryr:</label>
-                                                    <input type="text" class="form-control" id="usr" value="----" disabled>
+                                                    <label for="usr">Date Of Entry:</label>
+                                                    <input type="text" class="form-control" id="usr" value="{{$val['date_of_entry']}}" disabled>
                                                 </div>
                                             </div>
                                             <div class="col">
@@ -415,8 +415,8 @@
                                                                 </div>
                                                                 <div class="col">
                                                                     <div class="form-group">
-                                                                        <label for="usr">Date Of Entryr:</label>
-                                                                        <input type="text" class="form-control" id="usr" value="----" disabled>
+                                                                        <label for="usr">Date Of Entry:</label>
+                                                                        <input type="text" class="form-control" id="usr" value="{{$kpps['date_of_entry']}}" disabled>
                                                                     </div>
                                                                 </div>
                                                                 <div class="col">
@@ -652,8 +652,8 @@
                                                                                 </div>
                                                                                 <div class="col">
                                                                                     <div class="form-group">
-                                                                                        <label for="usr">Date Of Entryr:</label>
-                                                                                        <input type="text" class="form-control" id="usr" value="----" disabled>
+                                                                                        <label for="usr">Date Of Entry:</label>
+                                                                                        <input type="text" class="form-control" id="usr" value="{{$val['date_of_entry']}}" disabled>
                                                                                     </div>
                                                                                 </div>
                                                                                 <div class="col">

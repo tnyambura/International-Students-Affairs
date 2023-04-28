@@ -40,7 +40,7 @@
 <body style='display:flex; flex-direction:column; justify-content:space-between;'>
     <div>
         <div style="text-align: center; display:flex; ">
-            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:200px; ">
+            <img src="data:image/png;base64,{{base64_encode(file_get_contents(public_path('asset/img/logo.png')))}}" style="width:220px; height:150px;">
             <h2>Strathmore University International Students Affairs</h2>
         </div>
         <div style="text-align: center;">

@@ -120,6 +120,13 @@
                         Student Details
                         </div>
                         <div class="card-body">
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <ul>
+                                <li><i class="glyphicon glyphicon-warning-sign mx-3"></i><span>Be aware that all changes you will make, will affect your notifications</span></li>
+                                <li><span>In case wrong inputs are saved. Your Visa Requests might be affected as well</span></li>
+                                <li><span>And cannot proceed to the next step with false information.</span></li>
+                            </ul>
+                        </div>
 
                             <form method="POST" action="{{route('add.editMyProfile')}}">
                                 @csrf
