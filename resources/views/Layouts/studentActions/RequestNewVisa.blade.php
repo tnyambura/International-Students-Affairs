@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
+@extends('Layouts.studentActions.studentMaster',['title'=>'Req. Ext','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
                 <div class="container-fluid"><br/>
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">

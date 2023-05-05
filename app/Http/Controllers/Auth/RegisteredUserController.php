@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
     }
 
     Public function AddNewUser(){
-        $roles = ['admin','super_admin','buddy'];
+        $roles = ['admin','super_admin'];
         return view('Layouts/AdminActions/addnewuser', ['roles'=>$roles,'countries'=>$this->getCountries()]);
     }
     Public function SuperAddNewUser(){

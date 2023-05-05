@@ -34,14 +34,14 @@
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-light " id="sidenavAccordion">
+                <nav class="sb-sidenav accordion sb-sidenav " style='background:#113C7A; color:#fff; border:none;' id="sidenavAccordion">
                     <div class="d-flex flex-column mt-6">
-                        <div class="dropbtn d-flex align-self-center justify-content-center mx-2" style="border:1px solid rgba(110,110,110,.6); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropbtn d-flex align-self-center justify-content-center mx-2" style="border:1px solid rgba(180,180,180); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img style="width:100%;" src="asset/img/logo.png" />
                         </div>
                         <div class=' d-flex flex-column'>
                             <span class="pt-2" style='font-weight:bolder; text-align:center;'>{{Auth::user()->surname.' '.explode(' ',Auth::user()->other_names)[0]}}</span>
-                            <small class='mt-2 border-bottom py-2 px-3' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(110,110,110,.5)'>View profile</small>
+                            <small class='mt-2 border-bottom py-2 px-3' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(180,180,180)'>View profile</small>
                         </div>
                     </div>    
                     <div class="sb-sidenav-menu d-flex flex-column justify-content-between pt-4">

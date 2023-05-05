@@ -1,7 +1,7 @@
 @extends('Layouts.AdminActions.adminMaster')
 @section('content')   
     <div class="container-fluid"><br/>
-        <ol class="breadcrumb mb-4 border-2" style="background: #113C7A; color:#fff;" >
+        <ol class="breadcrumb mb-4 border-2" style="background: #113C7A; color:#fff; border:none;" >
             <li class="breadcrumb-item active d-flex justify-content-between w-100" style="color:white;"> 
                 <span style='color:#fff;' >List of all International students registered as Users.</span>
                 <div class='d-flex align-items-center'>

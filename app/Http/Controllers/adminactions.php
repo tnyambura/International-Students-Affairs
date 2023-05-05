@@ -154,10 +154,10 @@ class adminactions extends Controller
        return response()->download('storage/visaExtensionfiles/'.$file);
         }else{
 
-             return back()->with('No_File','File Not Found');
-            }
-            
+            return back()->with('No_File','File Not Found');
         }
+        
+    }
     public function editStaffData(Request $r){
         
         // $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
@@ -737,6 +737,7 @@ class adminactions extends Controller
 
         }else{
             $post->user_id = Auth::user()->id;
+            $post->month = 'may';
             $post->my_schedule = $req->selected_date_data;
     
             $post->timestamps=false;

@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
+@extends('Layouts.studentActions.studentMaster',['title'=>'My Ext','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
                     <div class="container-fluid"><br/>
                         <ol class="breadcrumb mb-4" style="background:#286DE7;">
@@ -178,7 +178,7 @@
                                                                                     <tbody>
                                                                                     <tr>
                                                                                         @if($v->uploads)
-                                                                                        <td class='bg-info'> <a href="/downloadKpps/{{$v->uploads}}" style='color:white'> Download</a></td>
+                                                                                        <td class='bg-info'> <a href="/downloadExtension/{{$v->uploads}}" style='color:white'> Download</a></td>
                                                                                         @else
                                                                                         <td > <span style="color:grey"> No File to Download</a></td>
                                                                                         @endif

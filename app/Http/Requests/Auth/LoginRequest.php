@@ -50,7 +50,7 @@ class LoginRequest extends FormRequest
     public function authenticate(Request $request){
         $this->ensureIsNotRateLimited();
 
-        $credentials = array('id'=>$this->input('suID'),'password'=>$this->input('password'));
+        // $credentials = array('id'=>$this->input('suID'),'password'=>$this->input('password'));
 
         // $userRole = DB::table('roles')->where('user_id', '=',$this->input('suID'))->limit(1)->get();
         // // if(1 !== 0){
@@ -96,9 +96,10 @@ class LoginRequest extends FormRequest
         //         //     'id'=>"Your account is not activated ".json_encode($userRole)
         //         // ]);
         //     }else{
-            $user = DB::table('users')->where('id',$this->input('suID'))->limit(1)->get();
+            $user = DB::table('users')->where('id',$this->input('suID'))->orWhere('email',$this->input('suID'))->limit(1)->get();
             
             if(sizeOf($user) > 0){
+                $credentials = array('id'=>$user[0]->id,'password'=>$this->input('password'));
                 if($user[0]->status === 1){
                     if(!Auth::attempt($credentials)){
                         RateLimiter::hit($this->throttleKey());

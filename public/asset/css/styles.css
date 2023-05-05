@@ -165,12 +165,14 @@ sup {
 }
 
 a {
-  color: #007bff;
+  color: #fff;
   text-decoration: none;
   background-color: transparent;
+  transition: .4s;
 }
 a:hover {
-  color: #0056b3;
+  color: rgb(199, 140, 22);
+  font-weight: 800;
   text-decoration: underline;
 }
 
@@ -578,6 +580,9 @@ pre code {
     max-width: 1140px;
   }
 }
+@media (max-width: 600px) {
+.meeting-status-note{ display: none;}
+}
 .row {
   display: flex;
   flex-wrap: wrap;
@@ -814,6 +819,7 @@ pre code {
 }
 
 @media (min-width: 576px) {
+  
   .col-sm {
     flex-basis: 0;
     flex-grow: 1;
@@ -3922,9 +3928,9 @@ input[type=button].btn-block {
 }
 .nav-tabs .nav-link.active,
 .nav-tabs .nav-item.show .nav-link {
-  color: #495057;
-  background-color: #fff;
-  border-color: #dee2e6 #dee2e6 #fff;
+  color: red;
+  /* background-color: #fff; */
+  /* border-color: #dee2e6 #dee2e6 #fff; */
 }
 .nav-tabs .dropdown-menu {
   margin-top: -1px;
@@ -4270,7 +4276,7 @@ input[type=button].btn-block {
 .navbar-light .navbar-nav .nav-link.show,
 .navbar-light .navbar-nav .nav-link.active {
   color: rgba(0, 0, 0, 0.9);
-  background: red;
+  /* background: red; */
 }
 .navbar-light .navbar-toggler {
   color: rgba(0, 0, 0, 0.5);
@@ -10187,7 +10193,9 @@ body {
   letter-spacing: 2px;
 }
 .sb-sidenav .sb-sidenav-menu .nav-link.active {
-  color: #007bff;
+  color: rgb(199, 140, 22);
+  margin-left: 10px;
+  border-right: 2px solid rgb(199, 140, 22); 
   /* background: rgba(100, 100, 100, 0.1); */
   /* border-right: 2px solid #007bff;
   border-radius: 10px 0 0 10px;
@@ -10260,15 +10268,15 @@ body {
   color: #adb5bd;
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link:hover {
-  color: rgb(58,93,174);
+  color: rgb(199, 140, 22);
   font-weight: bolder;
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link.active {
-  color: rgb(58,93,174);
+  color: rgb(199, 140, 22);
   font-weight: bolder;
   border-radius: 10px 0 0 10px;
   margin-left: 10px;
-  border-right: 2px solid rgb(58,93,174);
+  border-right: 2px solid rgb(199, 140, 22); 
 }
 .sb-sidenav-light .sb-sidenav-menu .nav-link.active .sb-nav-link-icon {
   color: #007bff;

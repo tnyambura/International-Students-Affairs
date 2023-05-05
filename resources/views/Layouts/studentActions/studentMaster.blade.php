@@ -6,11 +6,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard || Student</title>
+        <title>SU International Students || {{$title}}</title>
         <link href="../../asset/css/styles.css" rel="stylesheet"/>
+        <link href="../../asset/css/cards.css" rel="stylesheet"/>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
-        
+        <script src="https://kit.fontawesome.com/0c120fc23d.js" crossorigin="anonymous"></script>
     <style>
     
     </style>
@@ -21,14 +23,14 @@
         </nav>
         <div id="layoutSidenav">
             <div id="layoutSidenav_nav">
-                <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+                <nav class="sb-sidenav accordion sb-sidenav" style='background:#113C7A; color:#fff; border:none;' id="sidenavAccordion">
                     <div class="d-flex flex-column mt-6">
-                        <div class="dropbtn d-flex align-self-center justify-content-center mx-2" style="border:1px solid rgba(110,110,110,.6); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropbtn d-flex align-self-center justify-content-center mx-2" style="border:1px solid rgba(180,180,180); width:80px; height:80px; border-radius:50%; object-fit:contain; overflow:hidden;" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <img style="width:100%;" src="asset/img/logo.png" />
                         </div>
                         <div class=' d-flex flex-column'>
                             <span class="pt-2" style='font-weight:bolder; text-align:center;'>{{Auth::user()->surname.' '.explode(' ',Auth::user()->other_names)[0]}}</span>
-                            <small class='mt-2 border-bottom py-2 px-3' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(110,110,110,.5)'>View profile</small>
+                            <small class='mt-2 border-bottom py-2 px-3' data-toggle="modal" data-target="#MyProfile_{{Auth::user()->id}}" role='button' style='color: rgba(180,180,180)'>View profile</small>
                         </div>
                     </div> 
                     <div class="sb-sidenav-menu d-flex flex-column justify-content-between">
@@ -41,14 +43,14 @@
                                 <!-- Add a student list controller and view page-->
                                 <a class="nav-link" href="{{ __('MykppApplications')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                    My Student Pass Applications.
+                                    My Student Pass
                                     @if($NoKpps > 0)
                                         <span class="badge badge-warning ml-2">{{$NoKpps}}</span>
                                     @endif
                                 </a>
                                 <a class="nav-link" href="{{ __('MyvisaextApplications')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-list"></i></div>
-                                    My Visa Extension Requests.
+                                    My Extension
                                     @if($NoExt > 0)
                                         <span class="badge badge-warning ml-2">{{$NoExt}}</span>
                                     @endif
@@ -60,11 +62,11 @@
                                 <!-- Add a student list controller and view page-->
                                 <a class="nav-link" href="{{ __('ApplyKpp')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-marker"></i></div>
-                                    Initiate a student pass Application.
+                                    Initiate a student pass
                                 </a>
                                 <a class="nav-link" href="{{ __('ApplyVisa')}}">
                                     <div class="sb-nav-link-icon"><i class="fas fa-plus"></i></div>
-                                    Initiate a Visa Extension Application.
+                                    Initiate an Extension
                                 </a>
                                 
                                 <div class="nav-link" role='button' data-toggle="modal" data-target="#BookMeeting_{{Auth::user()->id}}">
@@ -243,9 +245,20 @@
                                 <form action="{{route('add.bookMeeting')}}" method="post"> @csrf
                                     <div class="row row-cols-auto my-2 get-selected-dates"></div>
                 
-                                    <input type="hidden" name="selected_date_data" id='selected_date_data' value='[]'>
-                                    <input class="btn btn-info w-100 align-self-center" id='save_schedule' type="submit" value="Book Now">
+                                    <input type="hidden" name="selected_date_data" id='selected_date_data'>
+                                    @if(sizeOf($availability) >0)
+                                    <input class="btn btn-info w-100 align-self-center" disabled id='save_schedule' type="submit" value="Book Now">
+                                    @endif
                                 </form>
+                                <script>
+                                    // $(document).ready(function(){
+                                    //     $('#save_schedule').on('click',function(e){
+                                    //         e.preventDefault()
+
+                                    //         console.log($(this).siblings('#selected_date_data').val());
+                                    //     })
+                                    // })
+                                </script>
                             </div>
                             <div class='container my-4'>
                                 <span class='p-2 rounded mb-5' style=' background: #113C7A; color:#fff; font-size: 15px; font-weight: bolder;'>My Appointment</span>
@@ -299,15 +312,16 @@
                             const days_title = datePicker.querySelector('.days_title');
                             const daysGrid = datePicker.querySelector('.days');
 
+                            
                             let currentDate = new Date();
                             let TodayDate = new Date();
-
+                            
                             let availableDays=JSON.parse('{!! json_encode($availability) !!}')
-
+                            
                             let bookedDays = []
                             let allSelectedContainer = document.querySelector('.get-selected-dates')
                             let allSelectedInput = document.querySelector('#selected_date_data')
-
+                            
                         
                             
                             prevBtn.addEventListener('click', () => {
@@ -387,13 +401,13 @@
                                         Timeicon.setAttribute('aria-haspopup','true')
                                         Timeicon.setAttribute('aria-expanded','false')
                                         Timeicon.setAttribute('role','button')
-                                        Timeicon.setAttribute('id',`timebtn_${year.textContent}_${month.textContent}_${m}`)
+                                        Timeicon.setAttribute('id',`timebtn_${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`)
                                         dropdownContainer.classList.add('dropdown')
                                         dropdownContainer.style.display='none'
 
                                         this_day.innerHTML= parseInt(m)>0 ? m :''
                                         dropdownList.classList.add('dropdown-menu')
-                                        dropdownList.setAttribute('aria-labelledby',`timebtn_${year.textContent}_${month.textContent}_${m}`)
+                                        dropdownList.setAttribute('aria-labelledby',`timebtn_${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`)
                                         this_day.classList.add('col','text-center','border','py-3','position-relative','day-disabled')
                                         
                                         parseInt(m)>0 ? this_day.classList.add('day-btn') :''
@@ -406,8 +420,8 @@
                                             check.setAttribute('disabled',true)
                                             check.setAttribute('onClick','TimeCheck(event,this)')
                                             check.setAttribute('type','checkBox')
-                                            check.setAttribute('data-time-check',`time_${t}_${year.textContent}_${month.textContent}_${m}`)
-                                            check.setAttribute('id',`${year.textContent}_${month.textContent}_${m}`)
+                                            check.setAttribute('data-time-check',`time_${t}_${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`)
+                                            check.setAttribute('id',`${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`)
                                             check.value= t.toLowerCase()
                                             
                                             leb.innerHTML= t.toUpperCase()
@@ -425,7 +439,7 @@
                                                 this_day.classList.add('day-disabled')
                                             }else{
                                                 parseInt(m)>0 ? this_day.setAttribute('onClick',"GetClickedDay(event,this)") :''
-                                                parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${m}`) :''
+                                                parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`) :''
                                                 parseInt(m)>0 ? this_day.setAttribute('role','button') :''
                                             }
                                         }else{
@@ -445,7 +459,7 @@
                             function SaveScheduleBtn(){
                                 // let TimeSelect = document.querySelector('#save_schedule').previousElementSibling.previousElementSibling.querySelector('select')
                                 // if(TimeSelect){
-                                    if(JSON.parse(document.querySelector('#selected_date_data').value).length < 1 ){
+                                    if(document.querySelector('#selected_date_data').value == '' ){
                                         document.querySelector('#save_schedule').disabled = true
                                     }
                                     else{
@@ -547,6 +561,7 @@
                                             //     }
                                 // })
                                 
+                                console.log(availableDays)
                                 
                                 setInterval(() => {
                                     let selectedTime = $('#save_schedule').siblings('.get-selected-dates').find('select')
@@ -562,6 +577,7 @@
                                         $('#save_schedule').attr('disabled',false)
                                     }
                                     if(availableDays.length > 0){
+                                        // console.log(availableDays);
                                         for(let n in availableDays){
                                             for(let x in availableDays[n][2]){
                                                 $('body').find(`[data-day='${availableDays[n][2][x][0]}']`).removeClass('day-disabled')

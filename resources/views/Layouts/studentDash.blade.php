@@ -12,7 +12,7 @@ if(sizeOf($myAppointments) > 0){
 }
 ?>
 
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$AppReq,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
+@extends('Layouts.studentActions.studentMaster',['title'=>'Dashboard','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$AppReq,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')   
 
 <style>
@@ -77,9 +77,9 @@ if(sizeOf($myAppointments) > 0){
     }
 ?>
 @if(sizeOf($ExpireDocs) > 0)
-<div class=" p-2 mb-2 mx-4 bg-warning row row-cols-auto">
+<div class=" p-2 mb-2 mx-4 row row-cols-auto" style='background:#113C7A;'>
     @foreach($ExpireDocs as $val)
-        <span class='col-md-4 col-lg my-1' style='color: var(--danger);'>{{$val}}</span>
+        <span class='col-md-4 col-lg my-1' style='color: var(--light);'>{{$val}}</span>
     @endforeach
 </div>
 @endif
@@ -182,89 +182,40 @@ if(sizeOf($myAppointments) > 0){
             </div>
             @endif
         </div>
-        
-        
-        <div class="card mb-4">
-            <div class="card-header d-flex justify-content-between">
-                <div>
-                    <i class="fas fa-table mr-1"></i>
-                    My Appointments 
-                </div>
+
+        <!-- <ol class="breadcrumb mb-4 border-2" style="background: #113C7A; color:#fff; border:none;" >
+            <li class="breadcrumb-item active d-flex justify-content-between w-100" style="color:white;"> 
+                <span style='color:#fff;' >My Appointments</span>
+            </li>
+        </ol> -->
+
+        <div class="card mb-4" style='border:none;'>
+            <div class="card-header">
+            <i class="fa-solid fa-calendar mr-2"></i>
+                <span>Appointments for <strong>{{date('M')}}</strong></span>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>id</th>
-                                <th>Appointment On</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @if(sizeOf($myAppointments) > 0)
-                                @foreach($myAppointments as $val)
-                                    @php $aptmnt = explode(" ",$val->booked_date_time);@endphp
-                                    @if($val->status === 'pending')
-                                        <tr>
-                                            <td>{{$val->id}}</td>
-                                            <td>
-                                                <div class="d-flex justify-content-between">
-                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                    {{date('Y-M-d',strtotime($aptmnt[0]))}}
-                                                    </span>
-                                                    <div class='badge badge-warning d-flex justify-content-center align-items-center'>
-                                                        <i class="fa fa-clock"></i>
-                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style='text-transform:capitalize;'>{{$val->status}}</td>
-                                        </tr>
-                                    @elseif($val->status == 'past')
-                                        <tr>
-                                            <td>{{$val->id}}</td>
-                                            <td>
-                                                <div class="d-flex justify-content-between">
-                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                    {{date('Y-M-d',strtotime($aptmnt[0]))}}
-                                                    </span>
-                                                    <div class='badge badge-secondary d-flex justify-content-center align-items-center'>
-                                                        <i class="fa fa-clock"></i>
-                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style='text-transform:capitalize;'>{{$val->status}}</td>
-                                        </tr>
-                                    @else
-                                        <tr>
-                                            <td>{{$val->id}}</td>
-                                            <td>
-                                                <div class="d-flex justify-content-between">
-                                                    <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
-                                                    {{date('Y-M-d',strtotime($aptmnt[0]))}}
-                                                    </span>
-                                                    <div class='badge badge-success d-flex justify-content-center align-items-center'>
-                                                        <i class="fa fa-clock"></i>
-                                                        <span class='ml-2'>{{$aptmnt[1]}}</span>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style='text-transform:capitalize;'>{{$val->status}}</td>
-                                        </tr>
-                                    @endif
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="5">No Appointment Found</td>
-                                </tr>
-                            @endif
+                
 
-                            
-                        </tbody>
-                    </table>
-                </div>
+                @if(sizeOf($myAppointments) > 0)
+                    @foreach($myAppointments as $val)
+                    @php $aptmnt = explode(" ",$val->booked_date_time);@endphp
+                    <?php 
+                    $color; $icon; $statusVal;
+                    if($val->status === 'pending'){$color='var(--secondary)'; $icon='fa-solid fa-minus'; $statusVal='Pending';}
+                    if($val->status === 'met'){$color='var(--success)'; $icon='fa-solid fa-check'; $statusVal='Met';}
+                    if($val->status === 'past'){$color='var(--danger)'; $icon='fa-solid fa-xmark'; $statusVal='Not Met';}
+                    ?>
+                        <div class='row p-2 mb-4 rounded align-items-center' style='box-shadow: 0 0 5px var(--secondary);'>
+                            <i class="fa-solid fa-calendar col-2" style='color: {{$color}}; text-align:center; font-size: 30px;'></i>
+                            <div class="col-8" style='display:flex; flex-direction: column;'>
+                                <p>Date: <strong>{{date('Y-M-d',strtotime($aptmnt[0]))}}</strong></p>
+                                <p class='m-0'>Time: <strong>{{$aptmnt[1]}}</strong></p>
+                            </div>
+                            <p class='col-2 d-flex align-items-center p-0  m-0'><i class="{{$icon}} col-1" style='text-align:center; font-size: 20px; color: {{$color}};'></i><strong class='meeting-status-note mx-2' style='box-sizing: none;'>{{$statusVal}}</strong></p>
+                        </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>

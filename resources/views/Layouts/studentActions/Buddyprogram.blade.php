@@ -1,4 +1,4 @@
-@extends('Layouts.studentActions.studentMaster',['userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
+@extends('Layouts.studentActions.studentMaster',['title'=>'Buddy Program','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
 
     @if(!$is_buddy)
@@ -112,10 +112,21 @@
                                             @elseif(strtolower($data['status']) == 'pending') 
                                             <form action="{{route('add.cancelBuddy')}}" method='post'> @csrf
                                                 <input type="hidden" name='bd_rq_id' value="{{$data['buddy_request_id']}}">
-                                                <button class='btn border-none bg-transparent' type='submit'>
+                                                <button class='bd-cancelBtn btn border-none bg-transparent' type='submit' data-target="{{$data['buddy_request_id']}}">
                                                     <span class="fas fa-trash" style="color:red"></span> Cancel
                                                 </button>
                                             </form>
+                                            <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+                                            <script defer>
+                                                $(document).ready(function() {
+                                                    $('.bd-cancelBtn').on('click',function(e){
+                                                        e.preventDefault()
+                                                        if(confirm(`Do you really want to cancel this buddy request with id: ${$(this).attr('data-target')}?`)){
+                                                            $(this).parent().submit()
+                                                        }
+                                                    })
+                                                })
+                                            </script>
                                             @else
                                             <span class="fas fa-trash" style="color:grey; cursor: default"></span> Cancel
                                             @endif

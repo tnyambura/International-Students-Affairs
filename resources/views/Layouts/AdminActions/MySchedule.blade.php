@@ -8,11 +8,11 @@
             </div>
             @endif
             <div class="schedule-btn-toggle d-flex align-items-center btn border rounded mb-3" role='button' onclick="ToggleScheduleView(this)" style="background: #113C7A; color:#fff;">
-                <i class="material-icons" id='btn_schd_icon' style='color:var(--danger)'>remove</i>
-                <span class='ml-2 fw-bold' id='sched_title'> Hide Schedule</span>
+                <i class="material-icons" id='btn_schd_icon' style='color:var(--success)'>add</i>
+                <span class='ml-2 fw-bold' id='sched_title'> Add Schedule</span>
             </div>
 
-            <div class="append-schedule">
+            <div class="append-schedule d-none">
                 <div class="date-picker">
                     <div class="row">
                         <button class="col prev"><i class="fas fa-angle-left"></i></button>
@@ -158,7 +158,7 @@
                         Timeicon.setAttribute('aria-haspopup','true')
                         Timeicon.setAttribute('aria-expanded','false')
                         Timeicon.setAttribute('role','button')
-                        Timeicon.setAttribute('id',`timebtn_${year.textContent}_${month.textContent}_${m}`)
+                        Timeicon.setAttribute('id',`timebtn_${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`)
                         dropdownContainer.classList.add('dropdown')
                         dropdownContainer.style.display='none'
 
@@ -176,8 +176,8 @@
 
                             check.setAttribute('onClick','TimeCheck(event,this)')
                             check.setAttribute('type','checkBox')
-                            check.setAttribute('data-time-check',`time_${t}_${year.textContent}_${month.textContent}_${m}`)
-                            check.setAttribute('id',`${year.textContent}_${month.textContent}_${m}`)
+                            check.setAttribute('data-time-check',`time_${t}_${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`)
+                            check.setAttribute('id',`${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`)
                             check.value= t.toLowerCase()
                             
                             leb.innerHTML= t.toUpperCase()
@@ -199,7 +199,7 @@
                                 }
                             }else{
                                 parseInt(m)>0 ? this_day.setAttribute('onClick',"GetClickedDay(event,this)") :''
-                                parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${m}`) :''
+                                parseInt(m)>0 ? this_day.setAttribute('data-day',`${year.textContent}_${month.textContent}_${(parseInt(m)>9)?m:'0'+m}`) :''
                                 parseInt(m)>0 ? this_day.setAttribute('role','button') :''
                             }
                         }else{
@@ -405,18 +405,18 @@
                                                 <td title="Given Masheka">{{$bookRq->id}}</td>
                                                 <td>{{$bookRq->student_id}}</td>
                                                 <td>
-                                                @php $aptmnt = explode(" ",$bookRq->booked_date_time);@endphp
+                                                @php $aptmnt = explode(" ",$bookRq->booked_date_time); $color= ($bookRq->status == 'met')?'var(--success)':(($bookRq->status == 'past')?'var(--danger)':(($bookRq->status == 'pending')?'var(--warning)':'#fff')); @endphp
                                                     <div class="d-flex justify-content-between">
                                                         <span class='mr-4' style='font-size: 20px; font-weight: bolder;'>
                                                         {{$aptmnt[0]}}
                                                         </span>
-                                                        <div class='badge badge-warning d-flex justify-content-center align-items-center'>
+                                                        <div class='badge d-flex justify-content-center align-items-center' style='background:{{$color}}; color: #fff;'>
                                                             <i class="fa fa-clock"></i>
                                                             <span class='ml-2'>{{$aptmnt[1]}}</span>
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td>{{$bookRq->status}}</td>
+                                                <td style='text-transform:capitalize;'>{{$bookRq->status}}</td>
                                             </tr>
                                         @endif
                                     @endforeach

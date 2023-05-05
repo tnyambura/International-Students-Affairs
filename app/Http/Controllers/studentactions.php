@@ -192,7 +192,7 @@ class studentactions extends Controller
 
             
             $this->validate($request,[
-            'dateofENTRY' => 'required|date',
+            'entry_date' => 'required|date',
             'passportPICTURE' => 'required|mimes:png,jpg,jpeg,pdf',
             'biodataPAGE' => 'required|mimes:png,jpg,jpeg,pdf',
             'currentVISA' => 'required|mimes:png,jpg,jpeg,pdf',
@@ -243,7 +243,7 @@ class studentactions extends Controller
 
                     $post->id = $appId;
                     $post->student_id = Auth::user()->id;
-                    $post->date_entry = $request->entry_date;
+                    $post->date_of_entry = $request->entry_date;
                     $post->passport_picture = $passportPic;
                     $post->passport_biodata = $passportBio;
                     $post->current_visa = $currentV;
@@ -688,12 +688,13 @@ class studentactions extends Controller
         return $data;
     }
     public function bookMeeting(Request $req){
-        $data = [$req->selected_date_data,$req->time_selected];
+        $data = [str_replace('_','-',$req->selected_date_data),$req->time_selected];
 
+        // echo json_encode($data);
         if(sizeOf(BookingList::where('student_id',Auth::user()->id)->where('status','pending')->get()) < 1){
             $post = new BookingList();
 
-            $tm = date("Y-m-d h:i",strtotime(str_replace('_','-',$data[0].' '.$data[1])));
+            $tm = date("Y-m-d h:i",strtotime($data[0].' '.$data[1]));
     
             // $post->admin_id = '66753';
             // $post->admin_id = $value[0];

@@ -14,6 +14,6 @@ class MySchedule extends Model
     protected $table = "scheduleTime";
 
     protected $fillable = [
-      'user_id', 'my_schedule'
+      'user_id','month','my_schedule'
 	];
 }
