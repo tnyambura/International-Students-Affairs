@@ -60,7 +60,6 @@
                             <div class="visa-card-container">
                             @foreach($data as $appdata)
                             
-                                <div class="courses-container">
                                     <div class="course">
                                         <div class="course-preview">
                                             <div class="d-flex flex-column justify-content-between h-100">
@@ -225,7 +224,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                             @endforeach
                             </div>
                         <!-- </div> -->
