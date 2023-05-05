@@ -1,9 +1,12 @@
 @extends('Layouts.studentActions.studentMaster',['title'=>'My Kpp','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
                     <div class="container-fluid"><br/>
-                        <ol class="breadcrumb mb-4" style="background:#286DE7;">
-                            <li class="breadcrumb-item active" style="color:white;">List of my Student pass Applications</li>
-                        </ol>
+                        <div class="breadcrumb mb-4 bg-light" style="border:1px solid rgb(110,110,110); border-radius:10px;">
+                            <p class="breadcrumb-item active">
+                            All applications with wrong information will be directly rejected. 
+                            At each stage a document will be attached as result to the process.
+                            </p>
+                        </div>
 
                         @if(Session::has('booking-success'))
                         <div class="alert alert-success" role="alert">
@@ -47,10 +50,13 @@
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif  
-                        
-                        
-                        
-                       
+
+
+                        @if(sizeOf($data) == 0)
+                        <!-- <div class="card d-flex align-items-center" style=""> -->
+                            {!! file_get_contents(public_path('asset/img/dataNotFound.svg')) !!}
+                        <!-- </div> -->
+                        @else
                         <!-- <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
@@ -239,6 +245,7 @@
                             @endforeach
                             <!-- </div>
                         </div> -->
+                        @endif
                     </div>
                     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
                     <script defer>

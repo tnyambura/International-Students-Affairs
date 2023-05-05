@@ -1,9 +1,12 @@
 @extends('Layouts.studentActions.studentMaster',['title'=>'My Ext','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
                     <div class="container-fluid"><br/>
-                        <ol class="breadcrumb mb-4" style="background:#286DE7;">
-                            <li class="breadcrumb-item active" style="color:white;">List of my Visa Extension Requests</li>
-                        </ol>
+                        <div class="breadcrumb mb-4 bg-light" style="border:1px solid rgb(110,110,110); border-radius:10px;">
+                            <p class="breadcrumb-item active">
+                            All extension applications with wrong information will be directly rejected. 
+                            At each stage a document will be attached as result to the process.
+                            </p>
+                        </div>
 
                         @if(Session::has('booking-success'))
                         <div class="alert alert-success" role="alert">
@@ -41,172 +44,192 @@
                         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         @endif 
-                        <div class="card mb-4">
+
+
+
+                        @if(sizeOf($data) == 0)
+                        <!-- <div class="card d-flex align-items-center" style=""> -->
+                            {!! file_get_contents(public_path('asset/img/dataNotFound.svg')) !!}
+                        <!-- </div> -->
+                        @else
+                        <!-- <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table mr-1"></i>
-                               My Visa Extension Request List.
-                            </div>                      
-                            <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr class='sticky-top'>
-                                                <th>application Id</th>
-                                                <th>entry date</th>
-                                                <th>application date</th>
-                                                <th>application status</th>
-                                                <th>expire date</th>
-                                                <th>action</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        @foreach($data as $appdata)
-                                        @if(!empty($appdata->first_open))
-                                            <tr style='background: rgba(144,238,144,.2)'>
-                                        @else
-                                            <tr>
-                                        @endif
-                                                <td>{{$appdata->id}} </td>
-                                                <td>{{$appdata->date_of_entry}} </td>
-                                                <td>{{$appdata->application_date}} </td>
-                                                <td>{{$appdata->application_status}} </td>
-                                                <th>{{$appdata->expiry_date}}</th>
-                                                <td>  
-                                                    <div class='d-flex align-items-center justify-content-around'>
-                                                    @if(!empty($appdata->first_open))
-                                                        <span class="fas fa-eye first-Open" data-app-id='{{$appdata->id}}' role='button' data-toggle="modal" title="View Application" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>
-                                                    @else
-                                                        <span class="fas fa-eye"  role='button' data-toggle="modal" title="View Application" data-target="#Viewextapp_{{$appdata->id}}" style=" color:blue"></span>
-                                                    @endif
-                                                        @if($appdata->application_status === 'pending')
-                                                        <a role="button" href='{{__("cancelextApp")}}' title="Cancel Application" class="cancelext-btn" style=" color:#CC0D0D">
-                                                            <span class="fas fa-trash " role='button' ></span>
-                                                        </a>
-                                                        @endif
-                                                    </div> 
-                                                    <div class="modal fade modal-md w-100"  id="Viewextapp_{{$appdata->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                                                    aria-hidden="true">
-                                                        <div class="modal-dialog modal-lg" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header text-center">
-                                                                    <h4 class="modal-title w-100 font-weight-bold">{{$userDetails->surname.' '.$userDetails->other_names}}</h4>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                    <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="card mb-4">
-                                                                    <div class="card-header" style='background: {{($appdata->application_status == "approved")? "rgb(40,167,68)": "inherite"}}'>
-                                                                        <i class="fas fa-table mr-1"></i>
-                                                                    My Student Pass Application View.
-                                                                    </div>
-                                                                    
-                                                                    <div class="card-body">                                    
-                                                                        <div class="form-row " style="text-align:justify;">
-    
-                                                                            <div class="col">
-                                                                                <div class="form-group">
-                                                                                <label for="usr">Strathmore ID:</label>
-                                                                                <input type="text" class="form-control" id="usr" value="{{$userDetails->student_id}}" disabled>
-                                                                                </div>
-                                                                            </div> 
-                                                                            <div class="col">
-                                                                            <div class="form-group">
-                                                                                <label for="usr">Surname:</label>
-                                                                                <input type="text" class="form-control" id="usr" value="{{$userDetails->surname}} " disabled>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col">
-                                                                            <div class="form-group">
-                                                                                <label for="usr">Other Names:</label>
-                                                                                <input type="text" class="form-control" id="usr" value="{{$userDetails->other_names}}" disabled>
-                                                                                </div>
-                                                                            </div>
-                                                                            </div>
-    
-                                                                            <div class="form-row" style="text-align:justify;">
-                                                                            <div class="col">
-                                                                                <div class="form-group">
-                                                                                    <label for="usr">Passport Number:</label>
-                                                                                    <input type="text" class="form-control" id="usr" value="{{$userDetails->passport_number}}  " disabled>
-                                                                                </div>
-                                                                            </div>
-                                                                            
-                                                                            @foreach($getDataView as $v)
-                                                                                @if($v->id === $appdata->id)
-                                                                                <div class="col">
-                                                                                <div class="form-group">
-                                                                                    <label for="usr">Expiry Date:</label>
-                                                                                    <input type="text" class="form-control" id="usr" value="{{$v->expiry_date}}" disabled>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="col">
-                                                                                <div class="form-group">
-                                                                                    <label for="usr">Date Requested:</label>
-                                                                                    <input type="text" class="form-control" id="usr" value="{{$v->application_date}}  " disabled>
-                                                                                </div>
-                                                                            </div>                                                                                                                                                                                                                                     
-                                                                            </div><br/> 
-                                                                            <h4>Required Documents</h4><br/>
-                                                                            <div class="container">
-                                                                                <div class="row">
-                                                                                    
-                                                                                <table class="table table-striped">
-                                                                                    <thead>
-                                                                                    <tr>
-                                                                                        <th>Passport Biodata</th>
-                                                                                        <th>Current Visa Page</th>
-                                                                                        <th>Entry Visa</th>
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                    <tr>
-                                                                                        <td > <a href="/downloadExtension/{{$v->passport_biodata}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadExtension/{{$v->current_visa}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/downloadExtension/{{$v->entry_visa}}" style="color:green"> Download</a></td>
-                                                                                        <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($v->passport_biodata)}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/file-view/extension/{{Crypt::encrypt($v->current_visa)}}" style="color:green"> Download</a></td>
-                                                                                        <td > <a href="/file-view/extension/{{$v->entry_visa}}" style="color:green"> View</a></td> -->
-                                                                                        <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($v->entry_visa)}}" style="color:green"> Download</a></td> -->
-                                                                                    </tr>
-                                                                                    </tbody>
-    
-                  
-                                                                                    <tr>
-                                                                                        <th>Application Response</th>
-                                                                                    </tr>
-                                                                                    </thead>
-                                                                                    <tbody>
-                                                                                    <tr>
-                                                                                        @if($v->uploads)
-                                                                                        <td class='bg-info'> <a href="/downloadExtension/{{$v->uploads}}" style='color:white'> Download</a></td>
-                                                                                        @else
-                                                                                        <td > <span style="color:grey"> No File to Download</a></td>
-                                                                                        @endif
-                                                                                    </tr>
-                                                                                    </tbody>
-                                                                                </table>
-                                                                            
-                                                                                
-                                                                            </div>
-                                                                                
-                                                                            <br/>
-                                                                        </div>
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </div>
-                                                                </div>
-                                                                <br/>
-                                                            </div>
-                                                        </div>
+                               My student Pass Applications List.
+                            </div>-->
+                            <div class="visa-card-container">
+                            @foreach($data as $appdata)
+                            
+                                <div class="courses-container">
+                                    <div class="course">
+                                        <div class="course-preview">
+                                            <div class="d-flex flex-column justify-content-between h-100">
+                                                <h6>Student Pass
+                                                    <small>{{$appdata->id}}</small>
+                                                </h6>
+                                                <div class='d-flex align-items-center' title="View Application" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:#fff; font-size:12px;">
+                                                    <span class="material-icons view-app-btn mr-2">attachment</span>
+                                                    View More
+                                                </div>
+                                            </div>
+                                            @php $ContentW='100%'; @endphp
+                                            @if(!empty($appdata->uploads))
+                                            @php $ContentW='80%'; @endphp
+                                            <a href='/downloadKpps/{{$appdata->uploads}}' class='top-rslt-file ' style='display:none; width: 20%; color:red;'><i style='box-sizing:content-box; font-size:30px;' class='far fa-file-pdf'></i></a>
+                                            @endif
+                                        </div>
+                                        <div class="course-info" style=''>
+                                        @php $classAdd='active'; @endphp
+                                        @if(!empty($appdata->first_open)) @php $classAdd='firstOpen'; @endphp @endif
+                                        @if(empty($appdata->first_open) && $appdata->application_status === 'approved') @php $classAdd='completed'; @endphp @endif
+                                        @if($appdata->application_status === 'declined') @php $classAdd='declined'; @endphp @endif
+                                        @if($appdata->application_status === 'approved' && date($appdata->expiry_date) < date('Y-m-d')) @php $classAdd='expired'; @endphp  @endif
+                                            <div class='w-100 d-flex align-items-center status-progress {{$classAdd}}' style='height:15px;'>
+                                            @if(!empty($appdata->expiry_date) && date($appdata->expiry_date) < date('Y-m-d'))
+                                            <span>Expired</span>
+                                            @else
+                                            <span>{{$appdata->application_status}}...</span>
+                                            @endif
+                                            </div>
+                                            <div class='main-data d-flex align-items-center mx-4 my-3'>
+                                                <div style='font-size: 13px; width:{{$ContentW}};'>
+                                                    <p>Full Name: <strong>{{$userDetails->surname.' '.$userDetails->other_names}}</strong></p>
+                                                    <p class='m-0'>Passport: <strong>{{$userDetails->passport_number}}</strong> </p>
+                                                    <p class='m-0'>Requested Date: <strong>{{$appdata->application_date}}</strong></p>
+                                                    <p>Expiry Date: <strong>{{$appdata->expiry_date}}</strong></p>
+                                                </div>
+                                                @if(!empty($appdata->uploads))
+                                                <a href='/downloadKpps/{{$appdata->uploads}}' class='rslt-file d-flex align-items-center justify-content-center' style='width: 20%; color:red;'><i style='box-sizing:content-box; font-size:30px;' class='far fa-file-pdf'></i></a>
+                                                @endif
+                                                @if($appdata->application_status === 'pending')
+                                                <a role="button" href='{{__("cancelextApp")}}' class="cancelkpp-btn" style=" color:#CC0D0D" title="Cancel Application" data-target='{{$appdata->id}}'>
+                                                    <span class="fas fa-trash " role='button' data-action="" aria-hidden="false" data-toggle="modal" data-target="#" data-target-focus=""></span>
+                                                </a>
+                                                @endif
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal fade modal-md w-100"  id="Viewextapp_{{$appdata->id}}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                    aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header text-center">
+                                                    <h4 class="modal-title w-100 font-weight-bold">{{$userDetails->surname.' '.$userDetails->other_names}}</h4>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="card mb-4">
+                                                    <div class="card-header" style='background: {{($appdata->application_status == "approved")? "rgb(40,167,68)": "inherite"}}'>
+                                                        <i class="fas fa-table mr-1"></i>
+                                                    My Student Pass Application View.
                                                     </div>
-                                                </td>
-                                            </tr>
-                                        @endforeach
-                                        </tbody>
-                                    </table>
+                                                    
+                                                    <div class="card-body">                                    
+                                                        <div class="form-row " style="text-align:justify;">
+
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                <label for="usr">Strathmore ID:</label>
+                                                                <input type="text" class="form-control" id="usr" value="{{$userDetails->student_id}}" disabled>
+                                                                </div>
+                                                            </div> 
+                                                            <div class="col">
+                                                            <div class="form-group">
+                                                                <label for="usr">Surname:</label>
+                                                                <input type="text" class="form-control" id="usr" value="{{$userDetails->surname}} " disabled>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                            <div class="form-group">
+                                                                <label for="usr">Other Names:</label>
+                                                                <input type="text" class="form-control" id="usr" value="{{$userDetails->other_names}}" disabled>
+                                                                </div>
+                                                            </div>
+                                                            </div>
+
+                                                            <div class="form-row" style="text-align:justify;">
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label for="usr">Passport Number:</label>
+                                                                    <input type="text" class="form-control" id="usr" value="{{$userDetails->passport_number}}  " disabled>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            @foreach($getDataView as $v)
+                                                                @if($v->id === $appdata->id)
+                                                                <div class="col">
+                                                                <div class="form-group">
+                                                                    <label for="usr">Expiry Date:</label>
+                                                                    <input type="text" class="form-control" id="usr" value="{{$v->expiry_date}}" disabled>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col">
+                                                                <div class="form-group">
+                                                                    <label for="usr">Date Requested:</label>
+                                                                    <input type="text" class="form-control" id="usr" value="{{$v->application_date}}  " disabled>
+                                                                </div>
+                                                            </div>                                                                                                                                                                                                                                     
+                                                            </div><br/> 
+                                                            <h4>Required Documents</h4><br/>
+                                                            <div class="container">
+                                                                <div class="row">
+                                                                    
+                                                                <table class="table table-striped">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Passport Biodata</th>
+                                                                        <th>Current Visa Page</th>
+                                                                        <th>Entry Visa</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        <td > <a href="/downloadExtension/{{$v->passport_biodata}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/downloadExtension/{{$v->current_visa}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/downloadExtension/{{$v->entry_visa}}" style="color:green"> Download</a></td>
+                                                                        <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($v->passport_biodata)}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/file-view/extension/{{Crypt::encrypt($v->current_visa)}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/file-view/extension/{{$v->entry_visa}}" style="color:green"> View</a></td> -->
+                                                                        <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($v->entry_visa)}}" style="color:green"> Download</a></td> -->
+                                                                    </tr>
+                                                                    </tbody>
+
+    
+                                                                    <tr>
+                                                                        <th>Application Response</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr>
+                                                                        @if($v->uploads)
+                                                                        <td class='bg-info'> <a href="/downloadExtension/{{$v->uploads}}" style='color:white'> Download</a></td>
+                                                                        @else
+                                                                        <td > <span style="color:grey"> No File to Download</a></td>
+                                                                        @endif
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            
+                                                                
+                                                            </div>
+                                                                
+                                                            <br/>
+                                                        </div>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                                <br/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
+                            @endforeach
                             </div>
-                        </div>
+                        <!-- </div> -->
+                        @endif
                     </div>
                     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
                     <script defer>
