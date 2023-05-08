@@ -27,6 +27,9 @@ use App\Models\applyvisaextension;
 use App\Models\BookingList;
 use Dompdf\Dompdf;
 use Dompdf\Options;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\UsersExport;
+use App\Exports\VisaExport;
 use PDF;
 use DB;
 
@@ -81,6 +84,7 @@ class adminactions extends Controller
             return false;
         }
     }
+    
     
     // public function cancelExtApp(Request $request){
     //     $id = $request->user()->id; 
@@ -429,6 +433,24 @@ class adminactions extends Controller
                 array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0],['req_id'=>$allocation->request_id,'change_req'=>$allocation->request_change]));
         }
         return $data;
+    }
+    public function ExcelExport(Request $req){
+        $title = $req->title;
+        $exportFrom = $req->from;
+        // $title = 'List_of_Extension_Applications_'.date('Y');
+        $exportDataFrom= new UsersExport;
+
+        switch ($exportFrom) {
+            case 'visa':
+                $exportDataFrom= new VisaExport;
+                break;
+            case 'buddy':
+                $exportDataFrom= new BuddyExport;
+                break;
+        }
+        
+        // 'List_of_kpps_Application_'.date('Y').
+        return Excel::download( $exportDataFrom, $title.'.xlsx');
     }
     // public function AllocationsFecher(){
     //     $bdAllocations = DB::table('buddies_allocations')->get();

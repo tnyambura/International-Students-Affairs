@@ -1,4 +1,4 @@
-@extends('Layouts.AdminActions.adminMaster')
+@extends('Layouts.AdminActions.adminMaster',['title'=>'My schedule'])
 @section('content')
         <div class="container-fluid"><br/>
             @if(Session::has('success_schedule_save') )

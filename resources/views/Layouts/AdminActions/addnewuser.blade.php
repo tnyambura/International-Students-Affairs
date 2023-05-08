@@ -1,4 +1,4 @@
-@extends('Layouts.AdminActions.adminMaster')
+@extends('Layouts.AdminActions.adminMaster',['title'=>'New User'])
 @section('content')
                 <div class="container-fluid"><br/>
                         <ol class="breadcrumb mb-4 d-flex align-items-center" style="background: #113C7A;">

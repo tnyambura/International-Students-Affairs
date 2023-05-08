@@ -171,8 +171,9 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/viewVisaReport', [adminactions::class,'getAllApprovedVisaReport'])->middleware('isAdmin');
      Route::post('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin')->name('add.statistics');
      Route::post('/StatReport', [DashboardController::class,'statReport'])->middleware('isAdmin')->name('add.stat');
-    //  Route::get('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin');
+     //  Route::get('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin');
      Route::get('/statistics-filter/{year}', [DashboardController::class,'getStatistics'])->middleware('isAdmin');
+     Route::post('/exportExcel', [adminactions::class,'ExcelExport'])->middleware('isAdmin')->name('add.exportExcel');
 
 
 

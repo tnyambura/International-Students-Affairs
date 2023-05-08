@@ -1,4 +1,4 @@
-@extends('Layouts.AdminActions.adminMaster')
+@extends('Layouts.AdminActions.adminMaster',['title'=>'Visa Application'])
 @section('content')
 
 <?php
@@ -297,9 +297,16 @@
             </div>
         </div>
         <div class="tab-link main-tab" role='button' data-load-target='#visa_responses'>
-            <div style='color:var(--info)'>
+            <div class='d-flex' style='color:var(--info)'>
                 <i class="fas fa-table mr-1"></i>
                 <span >Visa Responses</span>
+                <form action='{{route("add.exportExcel")}}' method='post'>@csrf
+                    <input type="hidden" name="title" value='List of all visa applications {{date("Y")}}'>
+                    <input type="hidden" name="from" value='visa'>
+                    <button type='submit' style='outline:none'>
+                    <i role='button' style='color:green; font-size:20px;' class='far fa-file-excel ml-3'></i>
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -836,7 +843,6 @@
                         <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
                         </button>
                     </form>
-                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
                 </div>
             </div>
             <div class="card-body">
@@ -879,7 +885,6 @@
                         <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
                         </button>
                     </form>
-                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
                 </div>
             </div>
             <div class="card-body">
@@ -922,7 +927,6 @@
                         <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
                         </button>
                     </form>
-                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
                 </div>
             </div>
             <div class="card-body">

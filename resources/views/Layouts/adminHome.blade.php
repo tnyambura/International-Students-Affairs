@@ -1,4 +1,4 @@
-@extends('Layouts.AdminActions.adminMaster')
+@extends('Layouts.AdminActions.adminMaster',['title'=>'Dashboard'])
 @section('content')
     <div class="container-fluid"><br/>
         <div class="row d-flex justify-content-center">
@@ -76,7 +76,7 @@
                                     <h6 class='pb-3 pt-1'>No of Allocations</h6>
                                     @php $bdCount = 0; @endphp
                                     @foreach($BuddyStatistics as $v)
-                                        @if($v->status === 'approved')
+                                        @if($v['status'] === 'approved')
                                             @php $bdCount = $bdCount + 1; @endphp
                                         @endif
                                     @endforeach
@@ -151,7 +151,7 @@
                         @php $ValReq[$month]=$ValReq[$month]+1; @endphp
                     @endif
                     @if(array_key_exists('request_date',(array)$v))
-                        @php $month = (int) explode('-',$v->request_date)[1]-1; @endphp
+                        @php $month = (int) explode('-',$v['request_date'])[1]-1; @endphp
                         @php $ValReq[$month]=$ValReq[$month]+1; @endphp
                     @endif
                     @if(array_key_exists('booked_date_time',(array)$v))
@@ -179,8 +179,8 @@
                     @endif
                     @if(array_key_exists('status',(array)$v))
                         @if(array_key_exists('request_date',(array)$v))
-                            @php $month = (int) explode('-',$v->request_date)[1]-1; @endphp
-                            @if($v->status === 'approved')
+                            @php $month = (int) explode('-',$v['request_date'])[1]-1; @endphp
+                            @if($v['status'] === 'approved')
                                 @php $CountApp = $CountApp + 1; 
                                 $ValApp[$month]=$ValApp[$month]+1;
                                 @endphp
@@ -225,14 +225,14 @@
             options: {
                 responsive: true,
                 legend: {display: false},
-                plugins: {
                 title:{
                     display: true,
                     text: "{{$item['name'].' '.$year.' Requests'}}"
                 },
-                scales: {
-                yAxes: [{ticks: {min: 0, max:ReqMaxNo}}],
-                }
+                plugins: {
+                    scales: {
+                    yAxes: [{ticks: {min: 0, max:ReqMaxNo}}],
+                    }
                 }
             }
             });
@@ -401,14 +401,14 @@
                                 ReqMaxNo = (Math.max(...yValuesReq) < 10)? 10: Math.max(...yValuesReq)
                                 AppMaxNo = (Math.max(...yValuesApp) < 10)? 10: Math.max(...yValuesApp)
 
-                                ChatData += `<div class="data-statistics row" data-yValuesReq="${JSON.stringify(ValReq)}" data-yValuesApp="${JSON.stringify(ValApp)}" data-ReqMax="${ReqMaxNo}" data-AppMax="${AppMaxNo}">
+                                ChatData += `<div class="data-statistics row" data-yValuesReq="${JSON.stringify(ValReq)}" data-yValuesApp="${JSON.stringify(ValApp)}" data-ReqMax="${ReqMaxNo}" data-AppMax="${AppMaxNo}" data-target-name='${category.name}'>
                                     <div class="col-lg-6" style='width:100%; padding: 0 10px;'>
                                         <canvas id="request_${category.name.replaceAll(' ','_')}" style="width:100%;max-width:700px"></canvas>
                                         <strong style="font-family: 'Gill Sans'; font-size: 12px;">Year Analysis</strong>
                                         <div class='year_details mt-1 mb-4' style='font-size: 12px;'>
                                             <p>Total number of Students registered: <span style='font-weight: bold; margin-left:10px;'>{{$NoStudents}}</span></p>
                                             <p>Total number of request placed: <span style='font-weight: bold; margin-left:10px;'>${category.DataArray.length}</span></p>
-                                            <p>Percentage: <span style='font-weight: bold; margin-left:10px;'>${(category.DataArray.length*100/parseInt('{{$NoStudents}}')).toFixed(2)}%</span></p>
+                                            <p>Percentage: <span style='font-weight: bold; margin-left:10px;'>${category.DataArray.length > 0 ?(category.DataArray.length*100/parseInt('{{$NoStudents}}')).toFixed(2):0}%</span></p>
                                         </div>
                                     </div>
                                     <div class="col-lg-6" style='width:100%; padding: 0 10px;'>
@@ -417,7 +417,7 @@
                                         <div class='year_details mt-1 mb-4' style='font-size: 12px;'>
                                             <p>Total number of request placed: <span style='font-weight: bold; margin-left:10px;'>${category.DataArray.length}</span></p>
                                             <p>Total number of request approved: <span style='font-weight: bold; margin-left:10px;'>${CountApp}</span></p>
-                                            <p>Percentage: <span style='font-weight: bold; margin-left:10px;'>${(CountApp*100/category.DataArray.length).toFixed(2)}%</span></p>
+                                            <p>Percentage: <span style='font-weight: bold; margin-left:10px;'>${category.DataArray.length > 0 ?(CountApp*100/category.DataArray.length).toFixed(2):0}%</span></p>
                                         </div>
                                     </div>
                                     </div>`;
@@ -450,11 +450,11 @@
                                     options: {
                                         responsive: true,
                                         legend: {display: false},
-                                        plugins: {
                                         title:{
                                             display: true,
-                                            text: "Naaame"
+                                            text: `${$(this).attr('data-target-name')+' '+value} Requests`
                                         },
+                                        plugins: {
                                         scales: {
                                         yAxes: [{ticks: {min: 0, max:MaxReq}}],
                                         }
@@ -476,7 +476,7 @@
                                         legend: {display: false},
                                         title:{
                                             display: true,
-                                            text: "name"
+                                            text: `${$(this).attr('data-target-name')+' '+value} Approved Requests`
                                         },
                                         scales: {
                                         yAxes: [{ticks: {min: 0, max:MaxApp}}],

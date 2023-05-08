@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Dashboard || Dashboard</title>
+        <title>Dashboard || {{$title}}</title>
         <link href="asset/css/styles.css" rel="stylesheet"/>
         <link href="asset/css/progress.css" rel="stylesheet"/>
         <link href="asset/css/custom_select.css" rel="stylesheet"/>
@@ -29,10 +29,11 @@
        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
-        <nav class="sb-topnav navbar navbar-expand navbar-dark position-relative d-flex justify-content-end">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark position-relative d-flex justify-content-end" style='position:sticky !important; z-index:3000;  top:0;'>
+            <span style='margin-right: 20px; letter-spacing:2px; font-weight:bold; text-transform: capitalize; color: #113C7A;'>{{$title}}</span>
             <button class="btn btn-link btn-sm order-1 bg-light" id="sidebarToggle" href="#"><i class="fas fa-bars"  style='color:rgb(58,93,174);'></i></button>
         </nav>
-        <div id="layoutSidenav">
+        <div id="layoutSidenav" style='z-index:4000;'>
             <div id="layoutSidenav_nav">
                 <nav class="sb-sidenav accordion sb-sidenav " style='background:#113C7A; color:#fff; border:none;' id="sidenavAccordion">
                     <div class="d-flex flex-column mt-6">

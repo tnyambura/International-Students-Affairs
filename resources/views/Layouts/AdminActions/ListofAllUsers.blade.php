@@ -1,4 +1,4 @@
-@extends('Layouts.AdminActions.adminMaster')
+@extends('Layouts.AdminActions.adminMaster',['title'=>'List of Users'])
 @section('content')   
     <div class="container-fluid"><br/>
         <ol class="breadcrumb mb-4 border-2" style="background: #113C7A; color:#fff; border:none;" >
@@ -11,7 +11,13 @@
                         <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
                         </button>
                     </form>
-                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                    <form action='{{route("add.exportExcel")}}' method='post'>@csrf
+                        <input type="hidden" name="title" value='List of all students {{date("Y")}}'>
+                        <input type="hidden" name="from" value='student'>
+                        <button type='submit' style='outline:none'>
+                        <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
+                        </button>
+                    </form>
                 </div>
             </li>
         </ol>

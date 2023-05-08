@@ -1,4 +1,4 @@
-@extends('Layouts.AdminActions.adminMaster')
+@extends('Layouts.AdminActions.adminMaster',['title'=>'Buddy Management'])
 @section('content')
     <div class="tab-nav d-flex mb-2 ">
         <div class="tab-link active" role='button' data-load-target='#buddies_list'>

@@ -59,10 +59,22 @@ class DashboardController extends Controller
         
         $kppsReq = DB::table("kpps_application")->where('application_date','LIKE',$year.'%')->get();
         $ExtReq = DB::table("extension_application")->where('application_date','LIKE',$year.'%')->get();
+        $BuddyReqDataCheck = [];
+        $BuddyReqData = [];
         $BdReq = DB::table("buddy_request")->where('request_date','LIKE',$year.'%')->get();
+        if(sizeOf($BdReq) > 0){
+            foreach($BdReq as  $bd){
+                if($bd->status === 'pending' || $bd->status === 'approved'){
+                    if(!array_key_exists($bd->student_id,$BuddyReqDataCheck)){
+                        array_push($BuddyReqDataCheck,$bd->student_id);
+                        array_push($BuddyReqData,['request_date'=>$bd->request_date,'status'=>$bd->status]);
+                    }
+                }
+            }
+        }
         $AppointmentReq = DB::table("bookingList")->where('booked_date_time','LIKE',$year.'%')->get();
 
-        $data = ['kpps'=>$kppsReq, 'ex'=>$ExtReq, 'bd'=>$BdReq, 'meet'=>$AppointmentReq];
+        $data = ['kpps'=>$kppsReq, 'ex'=>$ExtReq, 'bd'=>$BuddyReqData, 'meet'=>$AppointmentReq];
 
         return $data;
     }
@@ -151,9 +163,19 @@ class DashboardController extends Controller
                 $allStd = DB::table("user_roles")->where('role','student')->get();
                 $kppsReq = DB::table("kpps_application")->get();
                 $ExtReq = DB::table("extension_application")->get();
-                $BdReq = DB::table("buddy_request")->get();
+                $BuddyReqDataCheck = [];
+                $BuddyReqData = [];
+                $BdReq = DB::table("buddy_request")->where('status','pending')->orWhere('status','approved')->get();
+                if(sizeOf($BdReq) > 0){
+                    foreach($BdReq as  $bd){
+                        if(!array_key_exists($bd->student_id,$BuddyReqDataCheck)){
+                            array_push($BuddyReqDataCheck,$bd->student_id);
+                            array_push($BuddyReqData,['request_date'=>$bd->request_date,'status'=>$bd->status]);
+                        }
+                    }
+                }
                 $AppointmentReq = DB::table("bookingList")->get();
-                return view($userRoleVal,['NoStudents'=>sizeOf($allStd),'KppStatistics'=>$kppsReq,'ExtStatistics'=>$ExtReq,'BuddyStatistics'=>$BdReq,'MeetingStatistics'=>$AppointmentReq]);
+                return view($userRoleVal,['NoStudents'=>sizeOf($allStd),'KppStatistics'=>$kppsReq,'ExtStatistics'=>$ExtReq,'BuddyStatistics'=>$BuddyReqData,'MeetingStatistics'=>$AppointmentReq]);
             }
         }
         
