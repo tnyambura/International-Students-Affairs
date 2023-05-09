@@ -1,5 +1,8 @@
-@extends('Layouts.AdminActions.adminMaster',['title'=>'Visa Application'])
+@extends('Layouts.AdminActions.adminMaster',['title'=>'Visa Application','newVisaReq'=>$newVisaReq,'BdCountReq'=>$BdCountReq])
 @section('content')
+<nav class="d-flex align-items-center top-title-sticky" style='position:sticky; top:0; z-index:2999; padding:8px; background:#fff; width:100%; height: 56px;'>
+    <span>Visa Application</span>
+</nav>
 
 <?php
     function DisplayData($dataArray,$tablename,$applicationStatus,$state='normal'){
@@ -297,7 +300,7 @@
             </div>
         </div>
         <div class="tab-link main-tab" role='button' data-load-target='#visa_responses'>
-            <div class='d-flex' style='color:var(--info)'>
+            <div class='d-flex align-items-center' style='color:var(--info)'>
                 <i class="fas fa-table mr-1"></i>
                 <span >Visa Responses</span>
                 <form action='{{route("add.exportExcel")}}' method='post'>@csrf
@@ -525,10 +528,12 @@
                                                                 <label for="application_status_select">Change Status</label>
                                                                 <select class="form-select form-select w-100 outline-none" id="application_status_select" width='100' name='status_select'>
                                                                     @foreach($applicationStatus[0] as $option)
-                                                                        @if(strtolower($option) == strtolower($applicationStatus[1]))
-                                                                            <option selected value='{{$option}}' >{{$option}}</option>
-                                                                        @else
-                                                                            <option value='{{$option}}' >{{$option}}</option>
+                                                                        @if(strtolower($option) == 'pending' || strtolower($option) == 'in progress')
+                                                                            @if(strtolower($option) == strtolower($applicationStatus[1]))
+                                                                                <option selected value='{{$option}}' >{{$option}}</option>
+                                                                            @else
+                                                                                <option value='{{$option}}' >{{$option}}</option>
+                                                                            @endif
                                                                         @endif
                                                                     @endforeach
                                                                 </select>
@@ -812,19 +817,19 @@
         <div class="tab-nav d-flex mb-4 mt-0">
             <div class="tab-link sub-tab active" role='button' data-load-target='#approved_visas'>
                 <div style='color:var(--primary)'>
-                    <i class="fas fa-table mr-1"></i>
+                    <i class="fa fa-check mr-1"></i>
                     <span >Approved Visas</span>
                 </div>
             </div>
             <div class="tab-link sub-tab" role='button' data-load-target='#in_progress_visas'>
                 <div style='color:var(--success)'>
-                    <i class="fas fa-table mr-1"></i>
+                    <i class="fa fa-spinner mr-1"></i>
                     <span >Progress Visas</span>
                 </div>
             </div>
             <div class="tab-link sub-tab" role='button' data-load-target='#declined_visas'>
                 <div style='color:var(--danger)'>
-                    <i class="fas fa-table mr-1"></i>
+                    <i class="fa fa-ban mr-1"></i>
                     <span >Declined Visas</span>
                 </div>
             </div>

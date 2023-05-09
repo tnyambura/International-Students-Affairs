@@ -10650,3 +10650,13 @@ div label{
   bottom:5px;
   right:8px;
 }
+.top-title-sticky span{
+  color: rgba(17, 60, 122,.4);
+  margin-left: 20px; 
+  letter-spacing:2px; 
+  font-weight:bold; 
+  text-transform: capitalize;
+}
+.modal{
+  z-index: 4500;
+}

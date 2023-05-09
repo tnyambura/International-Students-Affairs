@@ -12,6 +12,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\adminactions;
 use DB;
 
 
@@ -36,7 +37,7 @@ class RegisteredUserController extends Controller
 
     Public function AddNewUser(){
         $roles = ['admin','super_admin'];
-        return view('Layouts/AdminActions/addnewuser', ['roles'=>$roles,'countries'=>$this->getCountries()]);
+        return view('Layouts/AdminActions/addnewuser', ['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'roles'=>$roles,'countries'=>$this->getCountries()]);
     }
     Public function SuperAddNewUser(){
         return view('Layouts/SuperAdminActions/addnewuser');

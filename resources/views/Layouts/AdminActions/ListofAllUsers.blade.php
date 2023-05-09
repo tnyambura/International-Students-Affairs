@@ -1,5 +1,8 @@
-@extends('Layouts.AdminActions.adminMaster',['title'=>'List of Users'])
-@section('content')   
+@extends('Layouts.AdminActions.adminMaster',['title'=>'All Users','newVisaReq'=>$newVisaReq,'BdCountReq'=>$BdCountReq])
+@section('content')  
+    <nav class="d-flex align-items-center top-title-sticky" style='position:sticky; top:0; z-index:2999; padding:8px; background:#fff; width:100%; height: 56px;'>
+        <span>All Users</span>
+    </nav> 
     <div class="container-fluid"><br/>
         <ol class="breadcrumb mb-4 border-2" style="background: #113C7A; color:#fff; border:none;" >
             <li class="breadcrumb-item active d-flex justify-content-between w-100" style="color:white;"> 

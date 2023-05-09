@@ -83,28 +83,6 @@ if(sizeOf($myAppointments) > 0){
     @endforeach
 </div>
 @endif
-@if($ProgressAppData[0] !== false || $ProgressAppData[1] !== false)
-    <div class="breadcrumb p-2 mb-4 mx-4" style='background: rgb(54,78,152);'>
-        <span class='px-3 mb-2' style='font-weight:bold; color:#fff;'> <i class='fa fa-search mr-3'></i>Track my Application</span>
-        <div class=" row w-100 mx-4" > 
-            @foreach($ProgressAppData as $key => $progress)
-                @if($progress !== false)
-                <div class="progress-bar col p-0 mx-2" >
-                    @if($key === 0)
-                    <span class='pb-3'>Extension visa  ({{$progress}})</span>
-                    @else
-                    <span class='pb-3'>Student Visa ({{$progress}})</span>
-                    @endif
-                    <!-- ExtData   kppsData -->
-                    <div class="progress {{($progress == 'approved')?'complete':'active'}}" style='background: {{($progress == "approved")?"rgb(40,167,68)":(($progress == "pending")?"rgb(110,110,110)":"rgb(21,119,247)")}};'>
-                        <i class='icon fab fa-cc-visa'></i>
-                    </div>
-                </div>
-                @endif
-            @endforeach
-        </div>
-    </div>
-@endif
 <div class="container-fluid">
         <div class="alert alert-warning alert-dismissible fade show" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">

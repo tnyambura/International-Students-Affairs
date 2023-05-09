@@ -39,6 +39,24 @@ use DB;
 
 class adminactions extends Controller
 {
+    public static function BdCount(){
+        $sizeData= DB::table('buddy_request')->where('status','pending')->get();
+        return sizeOf($sizeData);
+    }
+    public static function newVisaNotify(){
+        $newVisaReq = 0;
+        $KppStatistics= DB::table('kpps_application')->where('application_status','pending')->get();
+        $ExtStatistics= DB::table('extension_application')->where('application_status','pending')->get();
+        if(sizeOf($KppStatistics) > 0 || sizeOf($ExtStatistics) > 0){
+            foreach($KppStatistics as $k){
+                if($k->application_status === 'pending'){ $newVisaReq = $newVisaReq+1; }
+            }
+            foreach($ExtStatistics as $e){
+                if($e->application_status === 'pending'){ $newVisaReq = $newVisaReq+1; }
+            }
+        }
+        return $newVisaReq;
+    }
     public function GetUserRole(){
         $userID= Auth::user()->id;
         $data = DB::table("user_roles")->where('user_id','=',$userID)->limit(1)->get();
@@ -51,8 +69,7 @@ class adminactions extends Controller
         
         return [$data,$userData];
     }
-    public function NewKPPAPPVIEW(Request $request,$id){
-        // $userID= $request->user()->id;        
+    public function NewKPPAPPVIEW(Request $request,$id){     
         return view('Layouts/AdminActions/kppapplicationView', ['data'=>$this->KppsUserData($id)[0][0]], ['userData'=>$this->KppsUserData($id)[1][0]]);
     }
     public function NewVISAAPPVIEW($id){       
@@ -61,9 +78,7 @@ class adminactions extends Controller
         
         return view('Layouts/AdminActions/visaapplicationView',['visarequests'=>$data[0]], ['userData'=>$userData[0]]);
     }
-
-    public function changeStatus(Request $request, $id)
-    {
+    public function changeStatus(Request $request, $id){
         $id = $request->id;
         $Initiate = applyvisaextension::find($id);
         
@@ -83,15 +98,7 @@ class adminactions extends Controller
         }else{
             return false;
         }
-    }
-    
-    
-    // public function cancelExtApp(Request $request){
-    //     $id = $request->user()->id; 
-    //     $FileDlt = DB::table("extension_application")->where('student_id',$id)->where('application_status','pending')->limit(1)->get();
-    //     $files = [public_path('Storage/extension/'.$FileDlt[0]->passport_biodata),public_path('Storage/extension/'.$FileDlt[0]->entry_visa),public_path('Storage/extension/'.$FileDlt[0]->current_visa)];
-    //     if($this->deleteFiles($files)){
-            
+    }      
     public function ExtensionStatusUpdate(Request $request){
          
         $fileUpload = null;
@@ -119,36 +126,17 @@ class adminactions extends Controller
         }
         return back()->with('error','could not update data ->'.$request->fileResponse.' -> '.$request->applicant_email.' -> '.$request->app_id);
     }
-
-// public function changeVisastatus(Request $request, $id)
-// {
-//     $id = $request->id;
-//     $Initiate = applyvisaextension::find($id);
-
-//     if($Initiate){
-       
-//     $Initiate->status = 'Approved';
-//     $Initiate->save();
-//     return back()->with('');
-
-//     }else{
-       
-//         return back()->with('Inprogress','The Application is already in progress');
-//     }
+    public function download(Request $request, $file){   
     
-// }
-   public function download(Request $request, $file){   
-   
-    $path = 'storage/kpps/'.$file;
+        $path = 'storage/kpps/'.$file;
 
-    if(storage::exists($path)){
+            if(storage::exists($path)){
+                return response()->download('storage/kpps/'.$file);
+            }else{
+                return back()->with('No_File','File Not Found');
+            }
 
-   return response()->download('storage/kpps/'.$file);
-    }else{
-        return back()->with('No_File','File Not Found');
     }
-
-   }
     public function visadownload(Request $request, $file){   
 
         $path = 'storage/visaExtensionfiles/'.$file;
@@ -182,9 +170,7 @@ class adminactions extends Controller
         $userData = ['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email];
         $UpdateUsersDetails=[];
         $getCurrentPass = DB::table('users')->select('password')->where('id',$r->cr_id)->limit(1)->get()[0]->password;
-//         old_pass
-// new_pass
-// conf_pass    
+   
         if($r->is_change_active !== "false"){
 
             if(!Hash::check($r->old_pass, $getCurrentPass)){
@@ -305,7 +291,7 @@ class adminactions extends Controller
                 }
             }
         }
-        return view('Layouts/AdminActions/ListofAllUsers',['users'=>$data]);
+        return view('Layouts/AdminActions/ListofAllUsers',['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>$this->BdCount(),'users'=>$data]);
     }
     public function getallAllBuddiesReport(){
 
@@ -396,7 +382,7 @@ class adminactions extends Controller
         //    return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
             
             return view('Layouts/AdminActions/listofkppsapplications',
-            ['data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus,'extApproved'=>$this->getVisaData('extension_application','approved'),'extProgress'=>$this->getVisaData('extension_application','in progress'),'extDeclined'=>$this->getVisaData('extension_application','declined'),'kppApproved'=>$this->getVisaData('kpps_application','approved'),'kppProgress'=>$this->getVisaData('kpps_application','in progress'),'kppDeclined'=>$this->getVisaData('kpps_application','declined')]);
+            ['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>$this->BdCount(),'data'=>$data,'applicationStatus'=>$applicationStatus,'visarequests'=>$ext_data,'ext_applicationStatus'=>$ext_applicationStatus,'extApproved'=>$this->getVisaData('extension_application','approved'),'extProgress'=>$this->getVisaData('extension_application','in progress'),'extDeclined'=>$this->getVisaData('extension_application','declined'),'kppApproved'=>$this->getVisaData('kpps_application','approved'),'kppProgress'=>$this->getVisaData('kpps_application','in progress'),'kppDeclined'=>$this->getVisaData('kpps_application','declined')]);
     }
     public function BuddiesRequestFecher(){
         $u_request = DB::table('buddy_request')->select('student_id','buddy_request_id')->where('status','pending')->get();
@@ -452,17 +438,6 @@ class adminactions extends Controller
         // 'List_of_kpps_Application_'.date('Y').
         return Excel::download( $exportDataFrom, $title.'.xlsx');
     }
-    // public function AllocationsFecher(){
-    //     $bdAllocations = DB::table('buddies_allocations')->get();
-    //     $data=[];
-        
-    //     foreach ($bdAllocations as $allocation) {
-    //         $StudentData = DB::table('users')->select('id','surname','other_names','email')->where('id',$allocation->student_id)->limit(1)->get();
-    //         $buddyData = DB::table('users')->select('id as bd_id','surname as bd_srnm','other_names as bd_onm','email as bd_eml')->where('id',$allocation->buddy_id)->limit(1)->get();
-    //             array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0]));
-    //     }
-    //     return $data;
-    // }
     public function RegisterNewBuddy(Request $req){
             $postRole=new Role();
 
@@ -590,28 +565,9 @@ class adminactions extends Controller
 
     
 
-    public function visaextrequests(){
-        return view('Layouts/AdminActions/Listofvisaextensionrequests');
-    }
     public function BuddiesManagement(){
-        return view('Layouts/AdminActions/Buddies',['buddies'=>$this->BuddiesFecher(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
+        return view('Layouts/AdminActions/Buddies',['newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
     }
-    public function BuddyAllocationsList(){
-        return view('Layouts/AdminActions/listofBuddyAllocations',['BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher()]);
-    }
-    public function listofinternationslstudents(){
-        return view('Layouts/AdminActions/listofinternationalstudents');
-    }
-    public function uploads(){
-        return view('Layouts/AdminActions/uploads');
-    }
-    public function initiatedkppApps(){
-        return view('Layouts/AdminActions/initiatedkppapps');
-    }
-    public function AddNewStudent(){
-        return view('Layouts/AdminActions/AddNewStudent');
-    }
-
     public function generateAllocatedBuddieslist(){
         $list = $this->BuddiesFecher();
         if(sizeOf($list) > 0){        
@@ -632,8 +588,6 @@ class adminactions extends Controller
         }   
                    
     }
-    // 'Layouts/AdminActions/StudentsListPDF'
-    
     public function getAllApprovedVisaReport(){
         $loadView = 'Layouts/AdminActions/allApprovedVisaReport';
         $fileName = 'ApprovedVisaList_'.date("Y_m_d");
@@ -740,7 +694,7 @@ class adminactions extends Controller
             $t = $t[0]->my_schedule;
             $bookingRequests = DB::table('bookingList')->get();
         }
-        return view('Layouts/AdminActions/MySchedule',['schedule_list'=>json_decode($t),'bookingRequests'=>$bookingRequests]);
+        return view('Layouts/AdminActions/MySchedule',['newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'schedule_list'=>json_decode($t),'bookingRequests'=>$bookingRequests]);
         
     }
     public function MeetingDone($id){

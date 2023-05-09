@@ -1,5 +1,8 @@
-@extends('Layouts.AdminActions.adminMaster',['title'=>'Dashboard'])
+@extends('Layouts.AdminActions.adminMaster',['title'=>'Dashboard','newVisaReq'=>$newVisaReq])
 @section('content')
+    <nav class="d-flex align-items-center top-title-sticky" style='position:sticky; top:0; z-index:2999; padding:8px; background:#fff; width:100%; height: 56px;'>
+        <span>Dashboard</span>
+    </nav>
     <div class="container-fluid"><br/>
         <div class="row d-flex justify-content-center">
             <div class="col-xl-12">

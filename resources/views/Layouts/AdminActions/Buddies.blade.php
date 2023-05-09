@@ -1,5 +1,8 @@
-@extends('Layouts.AdminActions.adminMaster',['title'=>'Buddy Management'])
+@extends('Layouts.AdminActions.adminMaster',['title'=>'Buddy Management','newVisaReq'=>$newVisaReq,'BdCountReq'=>$BdCountReq])
 @section('content')
+    <nav class="d-flex align-items-center top-title-sticky" style='position:sticky; top:0; z-index:2999; padding:8px; background:#fff; width:100%; height: 56px;'>
+        <span>Buddy Management</span>
+    </nav>
     <div class="tab-nav d-flex mb-2 ">
         <div class="tab-link active" role='button' data-load-target='#buddies_list'>
             <div style='color:var(--primary)'>

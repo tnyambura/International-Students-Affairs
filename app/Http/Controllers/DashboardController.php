@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\studentactions;
+use App\Http\Controllers\adminactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\addNewStudent;
@@ -175,7 +176,7 @@ class DashboardController extends Controller
                     }
                 }
                 $AppointmentReq = DB::table("bookingList")->get();
-                return view($userRoleVal,['NoStudents'=>sizeOf($allStd),'KppStatistics'=>$kppsReq,'ExtStatistics'=>$ExtReq,'BuddyStatistics'=>$BuddyReqData,'MeetingStatistics'=>$AppointmentReq]);
+                return view($userRoleVal,['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'NoStudents'=>sizeOf($allStd),'KppStatistics'=>$kppsReq,'ExtStatistics'=>$ExtReq,'BuddyStatistics'=>$BuddyReqData,'MeetingStatistics'=>$AppointmentReq]);
             }
         }
         

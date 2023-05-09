@@ -1,5 +1,8 @@
 @extends('Layouts.studentActions.studentMaster',['title'=>'Buddy Program','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$NoBooking, 'NoBooking'=>$NoBooking,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
 @section('content')
+<nav class="d-flex align-items-center top-title-sticky" style='position:sticky; top:0; z-index:2999; padding:8px; background:#fff; width:100%; height: 56px;'>
+    <span>Buddy Program</span>
+</nav>
 
     @if(!$is_buddy)
         <div class="tab-nav d-flex mb-2 w-100">
