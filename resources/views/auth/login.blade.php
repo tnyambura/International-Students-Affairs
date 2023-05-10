@@ -24,7 +24,10 @@
                 <div class="mx-auto" style="width: 28rem; align:center;">
                 <img class="card-img-top" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
             </div> 
-            <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+            <div>
+                <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+                
+            </div>
             <form class="form-signin" method="POST" action="{{ route('login') }}">
             @csrf
                 <x-auth-validation-errors class="mb-4" :errors="$errors" />

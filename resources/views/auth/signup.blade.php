@@ -120,8 +120,8 @@
                             <label for="Course">Course</label>
                             <select class='form-control' name ="Course" id="Course" required>
                                 <option>--Select--</option>
-                                @foreach($coursesArray as $v)
-                                    <option value='{{$v}}'>{{$v}}</option>
+                                @foreach($courses as $v)
+                                    <option value='{{$v[0]}}'>{{$v[0].' ('.$v[1].')'}}</option>
                                 @endforeach
                             </select>
                         </div>

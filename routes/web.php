@@ -42,6 +42,7 @@ Route::get('/passwordreset', [PasswordResetLinkController::class, 'create']);
 // Route::post('/passwordreset', [PasswordResetLinkController::class, 'create'])->name('password.email');
 
 Route::post('/getBuddyDetails', [BuddyController::class, 'getBuddyDetails']);
+Route::get('/downloadGuides/{file}', [studentactions::class, 'downloadGuides']);
 Route::get('/downloadKpps/{file}', [studentactions::class, 'downloadKpps']);
 Route::get('/downloadExtension/{file}', [studentactions::class, 'downloadExtensions']);
 

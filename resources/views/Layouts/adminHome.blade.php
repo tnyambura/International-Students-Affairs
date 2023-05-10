@@ -30,13 +30,13 @@
                             </button>
                         </form> -->
                     </div>
+                    <ol class="breadcrumb d-flex mb-4 " style="border-radius:0; border-bottom:1px solid grey; background:transparent;" >
+                        <li class="breadcrumb-item active d-flex w-100" style=""> 
+                            <div class='mr-4' style='font-weight:bolder;'><i class='fa fa-mars mr-2' style='color:#113C7A;font-size:30px;'></i>Male: <span style='font-size:20px;'>{{$NumMale}}</span></div>
+                            <div style='font-weight:bolder;'><i class='fa fa-venus mr-2' style='font-size:30px; color:#7A1171;'></i>Female: <span style='font-size:20px;'>{{$NumFemale}}</</span></div>
+                        </li>
+                    </ol> 
                     <div class="card-block statistics-display">
-                        <ol class="breadcrumb d-flex mb-4 " style="border-radius:0; border-bottom:1px solid grey; background:transparent;" >
-                            <li class="breadcrumb-item active d-flex w-100" style=""> 
-                                <div class='mr-4' style='font-weight:bolder;'><i class='fa fa-mars mr-2' style='color:#113C7A;font-size:30px;'></i>Male: <span style='font-size:20px;'>{{$NumMale}}</span></div>
-                                <div style='font-weight:bolder;'><i class='fa fa-venus mr-2' style='font-size:30px; color:#7A1171;'></i>Female: <span style='font-size:20px;'>{{$NumFemale}}</</span></div>
-                            </li>
-                        </ol> 
                         <div class="row">
                             <div class="col-xl-3 col-md-6 mt-4 mb-1">
                                 <h6>No of Kpp Request</h6>

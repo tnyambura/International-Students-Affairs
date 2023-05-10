@@ -13,7 +13,10 @@ if(sizeOf($myAppointments) > 0){
 ?>
 
 @extends('Layouts.studentActions.studentMaster',['title'=>'Dashboard','userData'=>$user,'availability'=>$availability, 'NoBooking'=>$AppReq,'NoExt'=>$NoExt,'NoKpps'=>$NoKpps])
-@section('content')   
+@section('content')  
+<nav class="d-flex align-items-center top-title-sticky" style='position:sticky; top:0; z-index:2999; padding:8px; background:#fff; width:100%; height: 56px;'>
+    <span>Dashboard</span>
+</nav> 
 
 <style>
     .progress{

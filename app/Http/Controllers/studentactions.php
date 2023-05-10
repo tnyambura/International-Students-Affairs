@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Crypt;
 // use Illuminate\Support\Facades\File;
 // use App\Http\Controllers\Auth;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FileUploader;
 // use Auth;
 use App\Models\addNewStudent;
@@ -415,16 +416,16 @@ class studentactions extends Controller
          }
     }
 
-    public function getCountries(){
-        $get_data= CountryController::readFile();
-        $country = array();
-        foreach($get_data as $key => $data){
-            if($key > 0){
-                array_push($country , $data[0]);
-            }
-        }
-        return $country;
-    }
+    // public function getCountries(){
+    //     $get_data= CountryController::readFile();
+    //     $country = array();
+    //     foreach($get_data as $key => $data){
+    //         if($key > 0){
+    //             array_push($country , $data[0]);
+    //         }
+    //     }
+    //     return $country;
+    // }
     
 
     /* Update Visa Application */
@@ -443,7 +444,7 @@ class studentactions extends Controller
 
     
     public function Newstudentpass(Request $request){
-        return view('Layouts/studentActions/RequestNewKPP',['getCountries'=>$this->getCountries(),'getUserDetails'=>$this->userDetailsFetcher($request),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
+        return view('Layouts/studentActions/RequestNewKPP',['getCountries'=>RegisteredUserController::getCountries(),'getUserDetails'=>$this->userDetailsFetcher($request),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
     }
     
     //BUDDIES MANAGEMENT SECTION//
@@ -617,6 +618,16 @@ class studentactions extends Controller
                 
     //     return response()->download(public_path('Storage/visaExtensionfiles/'.$file));    
     // }
+    public function downloadGuides($file){    
+        $file_path = storage_path().'/Guides'.'/'.$file;
+        if (file_exists($file_path)){
+            return Response::download($file_path, $file, [
+                'Content-Length: '. filesize($file_path)
+            ]);
+        }else{
+            return back()->with('download_fail','Requested file does not exist on our server!'.$file_path);
+        }   
+    }
     public function downloadKpps(Request $request,$file){    
         $file_path = public_path('Storage/kpps/'. $file);
         if (file_exists($file_path)){
@@ -652,7 +663,7 @@ class studentactions extends Controller
         $userData = DB::table("student_view_data")->where('student_id','=',$id)->limit(1)->get();
         $ext = DB::table("extension_application")->where('student_id',$id)->get();
         
-        return view('Layouts/studentActions/RequestNewVisa',['userData'=>$userData[0],'data'=>$ext,'getCountries'=>$this->getCountries(),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
+        return view('Layouts/studentActions/RequestNewVisa',['userData'=>$userData[0],'data'=>$ext,'getCountries'=>RegisteredUserController::getCountries(),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
     }
     public function visaExtensions(Request $request){
         $id = $request->user()->id;        
@@ -678,7 +689,7 @@ class studentactions extends Controller
     }
 
     public function NewSignup(){
-        return view('auth/signup',['countries'=>$this->getCountries()]);
+        return view('auth/signup',['countries'=>RegisteredUserController::getCountries(),'courses'=>RegisteredUserController::getCourses()]);
     
     }
 

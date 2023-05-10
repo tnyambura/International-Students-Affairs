@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FileUploader;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Models\addNewStudent;
 use App\Models\Request_Buddy;
 use App\Models\FetchBuddyRequests;

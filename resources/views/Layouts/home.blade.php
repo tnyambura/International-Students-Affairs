@@ -91,8 +91,27 @@
         border-radius: 10px 10px 0 0;
         ">
     <div class="col-md-6 d-flex flex-column align-items-center">
-      <img class="card-img-top" style="max-width: 28rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
+      <img class="card-img-top" style="max-width: 15rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
       <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+      @if(Session::has('download_fail') )
+      <div class="alert alert-success" role="alert">
+      {{Session::get('download_fail')}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      @endif
+      <div class='mt-4' style='text-align:left'>
+      @php 
+        $Guides = [
+          ['International students Guide Booklet','guide.pdf'],
+          ['Student Pass Applications Requirements - First Time Applications','newKpp.php'],
+          ['Student Pass Applications Requirements - For Renewals','kppsRenewal.php'],
+          ['Jubilee Medical Insurance - Write up and Membership','jubilee.php']
+          ]
+      @endphp
+      @foreach($Guides as $v)
+        <p>{{$v[0]}}<a class='ml-3' href="/downloadGuides/{{$v[1]}}">Get File</a></p>
+      @endforeach
+      </div>
     </div>
     <div class="col py-5 px-md-5">
           <h2 class="fw-bold mb-5">Login</h2>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CountryController;
+use App\Http\Controllers\CoursesController;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\addNewStudent;
@@ -24,7 +25,17 @@ class RegisteredUserController extends Controller
      * @return \Illuminate\View\View
      */
     
-     public function getCountries(){
+    public static function getCourses(){
+        $get_data= CoursesController::readFile();
+        $courses = array();
+        foreach($get_data as $key => $data){
+            if($key > 0){
+                array_push($courses , [$data[0],$data[1]]);
+            }
+        }
+        return $courses;
+    }
+    public static function getCountries(){
         $get_data= CountryController::readFile();
         $country = array();
         foreach($get_data as $key => $data){
@@ -37,7 +48,7 @@ class RegisteredUserController extends Controller
 
     Public function AddNewUser(){
         $roles = ['admin','super_admin'];
-        return view('Layouts/AdminActions/addnewuser', ['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'roles'=>$roles,'countries'=>$this->getCountries()]);
+        return view('Layouts/AdminActions/addnewuser', ['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'roles'=>$roles,'countries'=>$this->getCountries(),'courses'=>$this->getCourses()]);
     }
     Public function SuperAddNewUser(){
         return view('Layouts/SuperAdminActions/addnewuser');
