@@ -39,6 +39,16 @@ use DB;
 
 class adminactions extends Controller
 {
+    public static function GenderCount(){
+        $NMale = 0; $NFemale=0;
+        $allStdTb = DB::table("users")->get();
+        foreach ($allStdTb as $value) {
+            $GetUsersRole = DB::table('user_roles')->where('user_id',$value->id)->limit(1)->get();
+            if($GetUsersRole[0]->role === 'student' && $value->gender === 'm' ){ $NMale = $NMale+1; }
+            if($GetUsersRole[0]->role === 'student' && $value->gender === 'f' ){ $NFemale = $NFemale+1; }
+        }
+        return [$NMale,$NFemale];
+    }
     public static function BdCount(){
         $sizeData= DB::table('buddy_request')->where('status','pending')->get();
         return sizeOf($sizeData);
@@ -249,7 +259,7 @@ class adminactions extends Controller
         $id = $req->user()->id;
         $data=[];
         $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
-        $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
+        $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','gender','email','status')->get();
         $GetUsersRole = DB::table('user_roles')->get();
         
         if($MyRole[0]->role === 'super_admin'){
@@ -291,7 +301,7 @@ class adminactions extends Controller
                 }
             }
         }
-        return view('Layouts/AdminActions/ListofAllUsers',['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>$this->BdCount(),'users'=>$data]);
+        return view('Layouts/AdminActions/ListofAllUsers',['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>$this->BdCount(),'users'=>$data, 'NumMale'=>$this->GenderCount()[0], 'NumFemale'=>$this->GenderCount()[1]]);
     }
     public function getallAllBuddiesReport(){
 

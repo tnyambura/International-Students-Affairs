@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.20, for macos10.15 (x86_64)
 --
--- Host: 127.0.0.1    Database: isa_db
+-- Host: localhost    Database: isa_db
 -- ------------------------------------------------------
 -- Server version	8.0.23
 
@@ -63,7 +63,7 @@ CREATE TABLE `bookingList` (
   PRIMARY KEY (`id`),
   KEY `student_id` (`student_id`),
   CONSTRAINT `bookinglist_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -72,7 +72,7 @@ CREATE TABLE `bookingList` (
 
 LOCK TABLES `bookingList` WRITE;
 /*!40000 ALTER TABLE `bookingList` DISABLE KEYS */;
-INSERT INTO `bookingList` VALUES (4,11111,'2023-04-18 21:00:00','met'),(5,11111,'2023-04-27 21:00:00','pending'),(6,11111,'2023-04-19 09:00:00','past'),(7,66121,'2023-04-30 00:00:00','pending');
+INSERT INTO `bookingList` VALUES (13,101618,'2023-05-08 22:00:00','past');
 /*!40000 ALTER TABLE `bookingList` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,7 +105,7 @@ CREATE TABLE `buddies_allocations` (
 
 LOCK TABLES `buddies_allocations` WRITE;
 /*!40000 ALTER TABLE `buddies_allocations` DISABLE KEYS */;
-INSERT INTO `buddies_allocations` VALUES (105299,140410,11111,22122,NULL);
+INSERT INTO `buddies_allocations` VALUES (201242,86526,101618,999999,NULL);
 /*!40000 ALTER TABLE `buddies_allocations` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -152,7 +152,7 @@ CREATE TABLE `buddy_request` (
 
 LOCK TABLES `buddy_request` WRITE;
 /*!40000 ALTER TABLE `buddy_request` DISABLE KEYS */;
-INSERT INTO `buddy_request` VALUES (18849,66121,'cancel','2023-04-26 08:27:34'),(140410,11111,'approved','2023-04-16 13:52:33'),(564443,11111,'cancel','2023-03-02 21:00:00'),(605725,66121,'pending','2023-04-26 08:27:51');
+INSERT INTO `buddy_request` VALUES (40981,101618,'cancel','2023-05-05 07:59:41'),(86526,101618,'approved','2023-05-05 08:07:34'),(485413,101618,'cancel','2023-05-05 07:59:57'),(508060,101618,'cancel','2023-05-05 08:04:26');
 /*!40000 ALTER TABLE `buddy_request` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -187,7 +187,7 @@ CREATE TABLE `extension_application` (
 
 LOCK TABLES `extension_application` WRITE;
 /*!40000 ALTER TABLE `extension_application` DISABLE KEYS */;
-INSERT INTO `extension_application` VALUES (149215,66121,'66121_PassportBioData_149215.png','66121_entryPage_149215.png','66121_CurrentVisa_149215.png','2023-03-19','2023-03-16 00:00:00','in progress',NULL,NULL,NULL),(868342,101618,'101618_PassportBioData_868342.png','101618_entryPage_868342.png','101618_CurrentVisa_868342.png','2023-03-19','2023-03-16 00:00:00','pending',NULL,NULL,NULL),(996322,11111,'11111_PassportBioData_996322.png','11111_entryPage_996322.pdf','11111_CurrentVisa_996322.png','2023-03-19','2023-04-16 00:00:00','approved','66753_ExtensionDoc996322.png','2023-05-02',NULL);
+INSERT INTO `extension_application` VALUES (785647,101618,'101618_PassportBioData_785647.png','101618_entryPage_785647.png','101618_CurrentVisa_785647.png','2023-03-19','2023-03-16 00:00:00','approved','66753_ExtensionDoc785647.png','2025-12-17',NULL);
 /*!40000 ALTER TABLE `extension_application` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -201,7 +201,7 @@ DROP TABLE IF EXISTS `kpps_application`;
 CREATE TABLE `kpps_application` (
   `id` int NOT NULL,
   `student_id` int NOT NULL,
-  `date_entry` date NOT NULL,
+  `date_of_entry` date NOT NULL,
   `passport_picture` text,
   `passport_biodata` text NOT NULL,
   `current_visa` text NOT NULL,
@@ -226,7 +226,6 @@ CREATE TABLE `kpps_application` (
 
 LOCK TABLES `kpps_application` WRITE;
 /*!40000 ALTER TABLE `kpps_application` DISABLE KEYS */;
-INSERT INTO `kpps_application` VALUES (100656,11111,'2023-05-02','11111_PassportPhoto.png','11111_PassportBioData.png','11111_CurrentVisa.png','11111_GuardianBio.png','11111_CommitmentLetter.png','11111_AcademicTranscript.png','11111_PoliceClearance.png','2023-04-06 12:29:08','approved',NULL,'2023-06-25',''),(217952,11111,'2023-05-02','11111_PassportPhoto.png','11111_PassportBioData.png','11111_CurrentVisa.png','11111_GuardianBio.png','11111_CommitmentLetter.png','11111_AcademicTranscript.png','11111_PoliceClearance.png','2023-03-05 21:44:16','declined',NULL,NULL,NULL),(258197,11111,'2023-05-02','11111_PassportPhoto.png','11111_PassportBioData.png','11111_CurrentVisa.png','11111_GuardianBio.png','11111_CommitmentLetter.png','11111_AcademicTranscript.png','11111_PoliceClearance.png','2023-02-04 00:29:48','approved','66753_StudentPassDoc258197.png',NULL,NULL),(262367,101618,'2023-05-02','101618_PassportPhoto.png','101618_PassportBioData.png','101618_CurrentVisa.png','101618_GuardianBio.png','101618_CommitmentLetter.png','101618_AcademicTranscript.png','101618_PoliceClearance.png','2023-01-19 14:26:36','pending',NULL,NULL,NULL),(805152,66121,'2023-05-02','66121_PassportPhoto.png','66121_PassportBioData.png','66121_CurrentVisa.png','66121_GuardianBio.png','66121_CommitmentLetter.png','66121_AcademicTranscript.png','66121_PoliceClearance.png','2023-04-26 11:46:56','pending',NULL,NULL,NULL);
 /*!40000 ALTER TABLE `kpps_application` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,11 +268,12 @@ DROP TABLE IF EXISTS `scheduleTime`;
 CREATE TABLE `scheduleTime` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
+  `month` varchar(45) DEFAULT NULL,
   `my_schedule` longtext,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id` (`user_id`),
   CONSTRAINT `scheduletime_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -282,7 +282,7 @@ CREATE TABLE `scheduleTime` (
 
 LOCK TABLES `scheduleTime` WRITE;
 /*!40000 ALTER TABLE `scheduleTime` DISABLE KEYS */;
-INSERT INTO `scheduleTime` VALUES (2,66753,'[[\"2023_Apr_19\",[\"12:00 pm\",\"10:00 am\",\"4:00 pm\"]],[\"2023_Apr_28\",[\"4:00 pm\",\"2:00 pm\",\"11:00 am\"]],[\"2023_Apr_30\",[\"11:00 am\",\"8:00 am\",\"3:00 pm\"]]]');
+INSERT INTO `scheduleTime` VALUES (3,66753,'may','[[\"2023_May_04\",[\"8:00 am\",\"9:00 am\",\"11:00 am\",\"12:00 pm\"]],[\"2023_May_09\",[\"11:00 am\",\"1:00 pm\",\"3:00 pm\"]],[\"2023_May_26\",[\"4:00 pm\",\"2:00 pm\",\"1:00 pm\",\"12:00 pm\",\"3:00 pm\"]]]');
 /*!40000 ALTER TABLE `scheduleTime` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -338,7 +338,7 @@ CREATE TABLE `student_details` (
   UNIQUE KEY `passport_number_UNIQUE` (`passport_number`),
   KEY `student_details_ibfk_1` (`student_id`),
   CONSTRAINT `student_details_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -347,7 +347,7 @@ CREATE TABLE `student_details` (
 
 LOCK TABLES `student_details` WRITE;
 /*!40000 ALTER TABLE `student_details` DISABLE KEYS */;
-INSERT INTO `student_details` VALUES (22,101618,'0718744632','FIT','BBIT','Democratic Republic of the Congo','OP0071855','2026-07-20','passport.jpg','Qwetu Willson View'),(23,11111,'0718744677','FIT','BBIT','Kenya','OP007185S','2025-07-28','passport.jpg','Qwetu'),(24,4444,'0718744699','FIT','BBIT','Kenya','OP0099855','2023-04-20','passport.jpg','Qwetu'),(25,45665,'0718884632','FIT','BBIT','Kenya','8765OI','2023-04-21','passport.jpg','Qwetu'),(27,22122,'0718744632','FIT','ijuhg','Kenya','P006WDS','2023-04-27','passport.jpg','Qwetu'),(28,987,'0768744639','FIT','BBIT','Kenya','678YYU','2023-04-21','passport.jpg','Qwetu'),(29,99871,'0718744632','FIT','BBIT','Kenya','P006W','2023-04-20','passport.jpg','Qwetu'),(30,11988,'0093877742123','FIT','BBIT','Australia','OSPP988','2024-04-29','passport.jpg','Qwetu'),(31,45654,'0718744635','FIT','BBIT','Iraq','OP0009332','2024-04-23','passport.jpg','Qwetu'),(32,66121,'0712746778','FIT','BBIT','Barbados','OOPI0009','2024-04-22','passport.jpg','Qwetu'),(33,201010,'0718755332','FIT','BCOM','Anguilla','OP007199L','2024-04-24','passport.jpg','Qwetu'),(34,778110,'0798733612','FIT','BCOM','Benin','P006W55G','2024-04-22','passport.jpg','Qwetu'),(35,34567,'0718744776889','FIT','BBIT','Kenya','P006W678YY','2024-04-25','passport.jpg','Qwetu'),(36,999999,'0718744999','FIT','BBIT','Ivory Coast','OP9971855','2024-04-30','passport.jpg','Qwetu'),(37,7777777,'07187777632','FIT','BBIT','Kenya','P006W777','2024-04-27','passport.jpg','Qwetu');
+INSERT INTO `student_details` VALUES (38,101618,'0718744632','FIT','BBIT','Democratic Republic of the Congo','OP0071855','2024-05-30','passport.jpg','Qwetu'),(39,999999,'0758744321','FIT','BBIT','Ireland','OP1171855','2024-05-21','passport.jpg','Qwetu');
 /*!40000 ALTER TABLE `student_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -368,7 +368,7 @@ CREATE TABLE `student_guardian` (
   PRIMARY KEY (`id`),
   KEY `student_guardian_ibfk_1` (`student_id`),
   CONSTRAINT `student_guardian_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -377,7 +377,7 @@ CREATE TABLE `student_guardian` (
 
 LOCK TABLES `student_guardian` WRITE;
 /*!40000 ALTER TABLE `student_guardian` DISABLE KEYS */;
-INSERT INTO `student_guardian` VALUES (19,101618,'Parent1','givenshr8@gmail.com','0718744632','primary'),(20,11111,'Parent1','givenshr8@gmail.com','0718744632','primary'),(21,4444,'pnnn','givenshr8@gmail.com','0718744632','primary'),(22,45665,'Parent1','givenshr8@gmail.com','0718744632','primary'),(24,22122,'pnnnd','givenshr8@gmail.com','0718744632','primary'),(25,987,'dfghj','givenshr8@gmail.com','0718744632','primary'),(26,99871,'dfghj','givenshr8@gmail.com','0718744632','primary'),(27,11988,'ParentNew','parent@e.e','948763778','primary'),(28,45654,'pnnn','givenshr8@gmail.com','0718744632','primary'),(29,66121,'Parent Name','paaaarent@gmail.com','0718744632','primary'),(30,778110,'Not Applicable','Not Applicable','Not Applicable','notApplicable'),(31,34567,'Not Applicable','Not Applicable','Not Applicable','notApplicable'),(32,999999,'Not Applicable','Not Applicable','Not Applicable','notApplicable'),(33,7777777,'Not Applicable','Not Applicable','Not Applicable','notApplicable');
+INSERT INTO `student_guardian` VALUES (34,101618,'Not Applicable','Not Applicable','Not Applicable','notApplicable'),(35,999999,'Not Applicable','Not Applicable','Not Applicable','notApplicable');
 /*!40000 ALTER TABLE `student_guardian` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -417,7 +417,7 @@ CREATE TABLE `user_roles` (
   PRIMARY KEY (`id`),
   KEY `user_roles_ibfk_1` (`user_id`),
   CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -426,7 +426,7 @@ CREATE TABLE `user_roles` (
 
 LOCK TABLES `user_roles` WRITE;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES (29,66753,'super_admin'),(30,101618,'student'),(31,11111,'student'),(33,45665,'student'),(37,44321,'admin'),(41,4444,'admin'),(42,22122,'student'),(43,22122,'buddy'),(44,987,'student'),(45,99871,'student'),(47,45665,'buddy'),(48,56709876,'admin'),(49,68983456,'admin'),(50,13456743,'admin'),(51,11988,'student'),(52,45654,'student'),(53,66121,'student'),(54,778110,'student'),(55,34567,'student'),(56,999999,'student'),(57,7777777,'student');
+INSERT INTO `user_roles` VALUES (29,66753,'super_admin'),(58,101618,'student'),(59,100001,'admin'),(60,999999,'student'),(61,999999,'buddy');
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -448,7 +448,7 @@ CREATE TABLE `user_verification` (
   PRIMARY KEY (`id`),
   KEY `user_verification_ibfk_1` (`user_id`),
   CONSTRAINT `user_verification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -457,7 +457,7 @@ CREATE TABLE `user_verification` (
 
 LOCK TABLES `user_verification` WRITE;
 /*!40000 ALTER TABLE `user_verification` DISABLE KEYS */;
-INSERT INTO `user_verification` VALUES (17,101618,1,'2023-04-01 21:10:58','','2023-04-01 21:10:58','2023-04-01 21:10:58'),(18,11111,0,'2023-04-03 18:27:45','','2023-04-03 18:27:45','2023-04-03 18:27:45'),(19,4444,0,'2023-04-03 18:34:45','','2023-04-03 18:34:45','2023-04-03 18:34:45'),(20,45665,0,'2023-04-03 18:40:51','','2023-04-03 18:40:51','2023-04-03 18:40:51'),(22,22122,1,'2023-04-05 13:10:39','','2023-04-05 13:10:39','2023-04-05 13:10:39'),(23,987,1,'2023-04-12 12:24:20','','2023-04-12 12:24:20','2023-04-12 12:24:21'),(24,99871,1,'2023-04-12 12:27:28','','2023-04-12 12:27:28','2023-04-12 12:27:28'),(25,11988,1,'2023-04-18 13:15:41','','2023-04-18 13:15:41','2023-04-18 13:15:41'),(26,45654,0,'2023-04-20 07:41:41','','2023-04-20 07:41:41','2023-04-20 07:41:41'),(27,66121,0,'2023-04-20 07:58:47','','2023-04-20 07:58:47','2023-04-20 07:58:47'),(28,778110,0,'2023-04-20 08:24:08','','2023-04-20 08:24:08','2023-04-20 08:24:08'),(29,34567,1,'2023-04-20 19:09:12','','2023-04-20 19:09:12','2023-04-20 19:09:12'),(30,999999,1,'2023-04-26 06:56:41','','2023-04-26 06:56:41','2023-04-26 06:56:41'),(31,7777777,1,'2023-04-26 06:58:52','','2023-04-26 06:58:52','2023-04-26 06:58:52');
+INSERT INTO `user_verification` VALUES (32,101618,1,'2023-05-05 07:44:03','','2023-05-05 07:44:03','2023-05-05 07:44:04'),(33,999999,0,'2023-05-05 07:51:34','','2023-05-05 07:51:34','2023-05-05 07:51:34');
 /*!40000 ALTER TABLE `user_verification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -472,6 +472,7 @@ CREATE TABLE `users` (
   `id` int NOT NULL,
   `surname` varchar(50) NOT NULL,
   `other_names` varchar(100) NOT NULL,
+  `gender` enum('m','f') NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` longtext NOT NULL,
   `remember_token` varchar(100) DEFAULT NULL,
@@ -487,7 +488,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (987,'Masheka','Given bbbb','oigivenshr8@gmail.com','$2y$10$I8aLteTqn1YzanDMY0hENeOD9ePLNngq5XBVwVPxY/ETm65tAZzde',NULL,1),(4444,'Masheka','Given Ishara','givenshr8ymii@gmail.com','$2y$10$Om9usdiYDYU/o2lkmHFyzeo5Ei7J9CpOCfqZzOZYgUzbgSWDvh4A6',NULL,0),(11111,'Sidney','Oyen Omin','ishapa.given@strathmore.edu','$2y$10$YoA6uNK5U78lCMWuYIml5uJBz0yuvA9oPXkOGK/VqiTq.vDq3RZ2C',NULL,1),(11988,'Smith','Timo Mash','givenmasheka@hotmail.fr','$2y$10$YHSBB3uh8bXTLH.z9xiugu1xJjkFrA4PUyLr212T3lELL7jqPZsT.',NULL,1),(22122,'Masheka','Given Ishara','stgivenmasheka@gmail.com','$2y$10$sb9Y6Lynbz2jj83qtpznKeucUdlCKnwlfVgL7PJmEXNN9WU0mOBFm',NULL,1),(34567,'Masheka','Given','givensyyhr8@gmail.com','$2y$10$z8UGn4cwNtfnAAyyl64c/e2nB.ZzH1Ifr7oxhvGBHoLeOhhtnANm6',NULL,1),(44321,'Neee','Given','givenshiu@gmail.com','$2y$10$o/Dq8QpviZ8nmvejrD4sWOqLPb8r/qfTTr.G1M15dF9GQkiDPC.k2',NULL,1),(45654,'Jane','Yoom','janeyoom@gmail.com','$2y$10$leDAskFObvhc3gkUQxbCfeJ2zBzTv1kR57.ipbmCH11ggHPqHJCIC',NULL,0),(45665,'Masheka','Given Ishara','gjjhivenshr8@gmail.com','$2y$10$CFtaKXJDXbqjscujMok2hel4rm6FZAjWNP/XxwC4dAH8FkEWF2bXG',NULL,1),(66121,'Tata','Oscar','tataoscar@gmail.com','$2y$10$D9hqyCjP6AcagCu8zQcMZOurE8Xq/wUl0GUfCPHBNc2ENhClE.EYa',NULL,1),(66753,'Neeel','Ottttr','neeee@gmail.com','$2y$10$EMfcP3omxlZgqKtq9w8B/ebE.nitADK8hYC0tANaZX/QEXezVRye.',NULL,1),(99871,'Masheka','Given loasO','givenuishr8@gmail.com','$2y$10$HZ6eOoT40szkW4dVVa3Zx.WXGzXbdCFxAGvsraeb6GAl7Hbm2uKbq',NULL,1),(101618,'Masheka','Ishara Given','givenshr8@gmail.com','$2y$10$ZXDa95yq2UzjPbfKncok/ODojZ4lXUMVU21WlA2QYlHTbVwzQjMkO',NULL,1),(201010,'Shame','Glad','shametod@gmail.com','$2y$10$kjoIs9OKP3rHAb2hLytwc.ssmFOWSI6iz2eZCJKl/HpSTZRvlnYoC',NULL,0),(778110,'Kaka','Junior','kakajunior@gmail.com','$2y$10$fA9iw9OPm5r7KERu.z1v2eYUgFOsiZLAjnoTAEq/WboHSpoWIYIYq',NULL,0),(999999,'Jojo','Otttt','givenshr99@gmail.com','$2y$10$afmiSmKYASo4vr7EkWycwupRjwOoWlikPPta1dwTpM50DueE2d4Kq',NULL,1),(7777777,'Mercy','Jiji','givenshr777@gmail.com','$2y$10$t.hUrtykz3h6lhWqzn7Bdu3G85ZXBpHn5b55.1HPkuGbUxQaThN1C',NULL,1),(13456743,'Midi','Simon','midisimon@examp.com','$2y$10$HGnNKBp12uN0wNFOCZtYT.R5LJSBbWHMy5ZYfe6MCcabH4kf9ZnEy',NULL,1),(56709876,'Kiiimi','Yoom','kimiiiyoom@exam.com','$2y$10$eXPwKMe2yUicbtQGkGe5/u8CD1NGqMCrKoxH4HzxuQKAgCbGpU.He',NULL,1),(68983456,'Jean','Joan','jeanj@examp.com','$2y$10$xKxCW2uC.Fd61nEqWOdLteCSUCa.8buEjf38p0EcvssfAry1/vTui',NULL,1);
+INSERT INTO `users` VALUES (66753,'Neeel','Ottttr','m','neeee@gmail.com','$2y$10$EMfcP3omxlZgqKtq9w8B/ebE.nitADK8hYC0tANaZX/QEXezVRye.',NULL,1),(100001,'admin','admin','f','admin@admin.io','$2y$10$0inpQljmvg7K05FnRT8C4OjIIMPisFwnahw7BD9tizYdNMB9uqhaC',NULL,1),(101618,'Given Masheka','Masheka','m','givenshr8@gmail.com','$2y$10$R64okhtqkqT2/iollDirXO1ebqyeYmdQ6MqcJyMaSzKmNJYpH7Vg6',NULL,1),(999999,'Smith','John','m','jamessmith@gmail.com','$2y$10$Xxsq2hFJUQB.PSUeFdGKH.egiqZlQpEMZfrFiZp2G8R4yzC1.yWre',NULL,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -562,4 +563,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-04-26 12:14:03
+-- Dump completed on 2023-05-10 11:10:22

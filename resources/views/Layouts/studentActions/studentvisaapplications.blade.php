@@ -69,7 +69,7 @@
                                 <h6>Student Pass
                                     <small>{{$appdata->id}}</small>
                                 </h6>
-                                <div class='d-flex align-items-center' title="View Application" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewextapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:#fff; font-size:12px;">
+                                <div class='d-flex align-items-center first-Open' data-app-id='{{$appdata->id}}' title="View Application" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewextapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:#fff; font-size:12px;">
                                     <span class="material-icons view-app-btn mr-2">attachment</span>
                                     View More
                                 </div>
@@ -235,9 +235,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <script defer>
         $(document).ready(function() {
-            console.log('{{json_encode($getDataView)}}');
             $('.first-Open').on('click',function(e){
-                // console.log(parseInt($(this).attr('data-app-id')));
                 $.ajax({
                     url: '{{route("add.firstOpen")}}',
                     method: 'GET',

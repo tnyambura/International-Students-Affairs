@@ -75,7 +75,7 @@
                                 <h6>Student Pass
                                     <small>{{$appdata->id}}</small>
                                 </h6>
-                                <div class='d-flex align-items-center' title="View Application" role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:#fff; font-size:12px;">
+                                <div class='d-flex align-items-center first-Open' data-app-id='{{$appdata->id}}' title="View Application" id='view_first_{{$appdata->id}}' role='button' aria-hidden="false" data-toggle="modal" data-target="#Viewkppapp_{{$appdata->id}}" data-target-focus="Viewkppapp_{{$appdata->id}}" style=" color:#fff; font-size:12px;">
                                     <span class="material-icons view-app-btn mr-2">attachment</span>
                                     View More
                                 </div>
@@ -259,17 +259,22 @@
                 if(confirm(`Do you really want to cancel the application with id: ${$(this).attr('data-target')}?`)){
                     window.location = $(this).attr('href')
                 }
-
-                
             })
 
+            $('.first-Open').on('click',function(e){
+                $.ajax({
+                    url: '{{route("add.firstOpen")}}',
+                    method: 'GET',
+                    data: {id:parseInt($(this).attr('data-app-id')),table:'extension_application'},
+                    success: function(res){ console.log(res);}
+                })
+            })
+            
             $('table').find('.view-app-btn').on('click',function(){
                 let loadDiv = $('body').find(`#${$(this).attr('data-target-focus')}`).find(('.loadKppApplicationData'))
                 let data= []
                 let modalContainer=$('#Viewkppapp_'+parseInt($(this).attr('data-id')))
-                // if(data.length > 0){
-                    // console.log(+1);
-                    // }
+                
                 $.ajax({
                     url: '{{route("add.viewKppApp")}}',
                     method: 'GET',

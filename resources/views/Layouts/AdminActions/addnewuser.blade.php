@@ -49,6 +49,11 @@
             </div>
             @endif 
 
+            @php
+            $facultiesArray = ['SCESA'];
+            $coursesArray = ['BBIT','BCOM','DBIT'];
+            @endphp
+
 
             <form method="POST" action="{{ __('AddUser') }}" class='new-staff-form'>
                 @csrf
@@ -126,11 +131,18 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <div class="col-lg-6 mb-3">
+                        <div class="col-lg-4 mb-4">
+                            <label for="gender">Gender</label>
+                            <select class='form-control' name ="gender" id="gender" required>
+                                <option value='m'>Male</option>
+                                <option value='f'>Female</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-4 mb-3">
                             <label for="suEMAIL">Email Address</label>
                             <input type="text" class="form-control" name ="email" id="suEMAIL" placeholder="Email" required>
                         </div>
-                        <div class="col-lg-6 mb-3">
+                        <div class="col-lg-4 mb-3">
                             <label for="phoneNUMBER">Kenyan Phone Number</label>
                             <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="phoneNUMBER" name ="phoneNUMBER" placeholder="(+254) 700 000000" required>
                         </div>
@@ -153,11 +165,21 @@
                     <div class="form-row">
                         <div class="col-lg-6 mb-3">
                             <label for="Course">Course</label>
-                            <input type="text" maxlength="50" class="form-control" name ="Course" id="Course" placeholder="Course of Study" required>
+                            <select class='form-control' name ="Course" id="Course" required>
+                                <option>--Select--</option>
+                                @foreach($coursesArray as $v)
+                                    <option value='{{$v}}'>{{$v}}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="col-lg-6 mb-3">
                             <label for="Faculty">Faculty</label>
-                            <input type="text" maxlength="50" class="form-control"  name ="Faculty" id="Faculty" placeholder="Faculty" required>
+                            <select class='form-control' name ="Faculty" id="Faculty" required>
+                                <option>--Select--</option>
+                                @foreach($facultiesArray as $v)
+                                    <option value='{{$v}}'>{{$v}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="form-row">

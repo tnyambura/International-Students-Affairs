@@ -24,6 +24,12 @@
                 </div>
             </li>
         </ol>
+        <ol class="breadcrumb d-flex mb-4 " style="border-radius:0; border-bottom:1px solid grey; background:transparent;" >
+            <li class="breadcrumb-item active d-flex w-100" style=""> 
+                <div class='mr-4' style='font-weight:bolder;'><i class='fa fa-mars mr-2' style='color:#113C7A;font-size:30px;'></i>Male: <span style='font-size:20px;'>{{$NumMale}}</span></div>
+                <div style='font-weight:bolder;'><i class='fa fa-venus mr-2' style='font-size:30px; color:#7A1171;'></i>Female: <span style='font-size:20px;'>{{$NumFemale}}</</span></div>
+            </li>
+        </ol>  
         @if(Session::has('data_not_available'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('data_not_available')}}
@@ -65,11 +71,10 @@
         </div>
         @endif 
         <div class="card mb-4">
-            <div class="card-header">
-
+            <!-- <div class="card-header">
                 <i class="fas fa-table mr-1"></i>
                 List of all International students registered as Users.
-            </div>
+            </div> -->
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
@@ -78,6 +83,7 @@
                                 <th>Id</th>
                                 <th>Name</th>
                                 <th>email</th>
+                                <th>gender</th>
                                 <th>Country</th>
                                 <th>Role</th>
                                 <th>Status</th>
@@ -91,6 +97,7 @@
                                 <td>{{$user['user_id']}}</td>
                                 <td>{{$user['surname'].' '.$user['other_names']}}</td>
                                 <td>{{$user['email']}}</td>
+                                <td style="text-transform: capitalize;">{{($user['gender'] === 'm')?'male':'female'}}</td>
                                 <td>{{
                                     array_key_exists($key, $user) ? $user[$key] : null
                                     }}</td>

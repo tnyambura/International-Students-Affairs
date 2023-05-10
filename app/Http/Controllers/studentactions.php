@@ -719,11 +719,12 @@ class studentactions extends Controller
 
     public function AddNewSignup(Request $request){
 
-        if($request->filled('id','surNAME','otherNAMES','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence')){
+        if($request->filled('id','surNAME','otherNAMES','gender','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence')){
             $this->validate($request,[
                 'id'=>'required|max:8',
                 'surNAME'=>'required',
                 'otherNAMES'=>'required',
+                'gender'=>'required',
                 'email'=>'required|email',
                 'phoneNUMBER'=>'required|min:10',
                 'Faculty'=>'required',
@@ -771,6 +772,7 @@ class studentactions extends Controller
                 $post->id = $request->id;
                 $post->surname = $request->surNAME;
                 $post->other_names = $request->otherNAMES;
+                $post->gender = $request->gender;
                 $post->email = $request->email;
                 $post->password = Hash::make('123456');
                 $post->status = $status;

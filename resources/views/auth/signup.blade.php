@@ -51,6 +51,10 @@
       <img class="card-img-top" style="max-width: 28rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
       <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
     </div>
+    @php
+    $facultiesArray = ['SCESA'];
+    $coursesArray = ['BBIT','BCOM','DBIT'];
+    @endphp
     <div class="col py-5 px-md-5">
           <h2 class="fw-bold mb-5">Sign Up</h2>
           <x-auth-validation-errors class="breadcrumb py-0 mb-4 d-flex align-items-center" style="color:#fff; background:#113C7A;" :errors="$errors" />
@@ -87,12 +91,19 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="col-lg-6 mb-4">
+                    <div class="col-lg-3 mb-4">
                         <div class="form-outline">
                             <label for="suID">SU Id</label>
                             <input type="number" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="form-control" name ="id" id="suID" placeholder="Admission Number"
                             required>
                         </div>
+                    </div>
+                    <div class="col-lg-3 mb-4">
+                        <label for="gender">Gender</label>
+                        <select class='form-control' name ="gender" id="gender" required>
+                            <option value='m'>Male</option>
+                            <option value='f'>Female</option>
+                        </select>
                     </div>
                     <div class="col-lg-6 mb-4">
                         <div class="form-outline">
@@ -107,16 +118,24 @@
                     <div class="col-lg-6 mb-4">
                         <div class="form-outline">
                             <label for="Course">Course</label>
-                            <input type="text" maxlength="50" class="form-control" name ="Course" id="Course" placeholder="Course of Study"
-                            required>
+                            <select class='form-control' name ="Course" id="Course" required>
+                                <option>--Select--</option>
+                                @foreach($coursesArray as $v)
+                                    <option value='{{$v}}'>{{$v}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     
                     </div>
                     <div class="col-lg-6 mb-4">
                         <div class="form-outline">
                             <label for="Faculty">Faculty</label>
-                            <input type="text" maxlength="50" class="form-control"  name ="Faculty" id="Faculty" placeholder="Faculty"
-                            required>
+                            <select class='form-control' name ="Faculty" id="Faculty" required>
+                                <option>--Select--</option>
+                                @foreach($facultiesArray as $v)
+                                    <option value='{{$v}}'>{{$v}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     
                     </div>

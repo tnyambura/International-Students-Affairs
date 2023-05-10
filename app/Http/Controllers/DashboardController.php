@@ -167,6 +167,7 @@ class DashboardController extends Controller
                 $BuddyReqDataCheck = [];
                 $BuddyReqData = [];
                 $BdReq = DB::table("buddy_request")->where('status','pending')->orWhere('status','approved')->get();
+                
                 if(sizeOf($BdReq) > 0){
                     foreach($BdReq as  $bd){
                         if(!array_key_exists($bd->student_id,$BuddyReqDataCheck)){
@@ -176,7 +177,7 @@ class DashboardController extends Controller
                     }
                 }
                 $AppointmentReq = DB::table("bookingList")->get();
-                return view($userRoleVal,['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'NoStudents'=>sizeOf($allStd),'KppStatistics'=>$kppsReq,'ExtStatistics'=>$ExtReq,'BuddyStatistics'=>$BuddyReqData,'MeetingStatistics'=>$AppointmentReq]);
+                return view($userRoleVal,['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'NoStudents'=>sizeOf($allStd),'KppStatistics'=>$kppsReq,'ExtStatistics'=>$ExtReq,'BuddyStatistics'=>$BuddyReqData,'MeetingStatistics'=>$AppointmentReq, 'NumMale'=>adminactions::GenderCount()[0], 'NumFemale'=>adminactions::GenderCount()[1]]);
             }
         }
         
