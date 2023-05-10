@@ -50,6 +50,32 @@
     <div class="col-md-6 d-flex flex-column align-items-center">
       <img class="card-img-top" style="max-width: 28rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
       <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+        @if(Session::has('download_fail') )
+        <div class="alert alert-success" role="alert">
+        {{Session::get('download_fail')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        @endif
+        <div class='mt-4 row' style='text-align:left'>
+            @php 
+                $Guidesooo = [
+                ['International students Guide Booklet','guide.pdf'],
+                ['Student Pass Applications Requirements - First Time Applications','newKpp.php'],
+                ['Student Pass Applications Requirements - For Renewals','kppsRenewal.php'],
+                ['Jubilee Medical Insurance - Write up and Membership','jubilee.php']
+                ];
+                $Guides = [
+                ['IS Guide Booklet','guide.pdf'],
+                ['Kpp Requirements - First Time Applications','newKpp.php'],
+                ['Kpp Requirements - Renewals','kppsRenewal.php'],
+                ['Jubilee Medical Insurance','jubilee.php']
+                ];
+            @endphp
+            @foreach($Guides as $v)
+                <a class='col-lg-4 ml-3 mb-2 d-flex' href="/downloadGuides/{{$v[1]}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span>{{$v[0]}}</span></a><br/>
+            @endforeach
+        </div>
+        <!-- <p>{{$v[0]}}<a class='ml-3' href="/downloadGuides/{{$v[1]}}">Get File</a></p> -->
     </div>
     @php
     $facultiesArray = ['SCESA'];
