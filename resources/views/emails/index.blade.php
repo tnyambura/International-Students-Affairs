@@ -11,9 +11,18 @@
         <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
         <title>Account Confirm</title>
        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" crossorigin="anonymous"></script>
+        <style>
+            .content{
+                padding: 10px;
+                border: 1px solid grey;
+                border-radius: 10px;
+                width: 100%;
+                margin-inline: 20px;
+            }
+        </style>
     </head>
     <body class="sb-nav-fixed">
-        <h3>Welcome to the International students Portal</h3>
-        <p>{{$data['body']}}</p>
+        <h3>{{$data['title']}}</h3>
+        <div class='content'>{{$data['body']}}</div>
     </body>
 </html>

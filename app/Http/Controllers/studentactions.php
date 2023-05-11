@@ -838,10 +838,18 @@ class studentactions extends Controller
                 $postRole->save();
                 if(sizeOf($CheckRole) > 0){
                     if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
-                        $msg='Your account has successfully created. Click the link below to get access. ';
+                        $msg='
+                        Your account has successfully been created. Click on the link below to access the system.
+                        Insert login Link.
+                        Username : Email or Student ID
+                        Default Password: 123456
+                        Please remember to change your password to improve your account security.
+                        ';
                         return redirect()->route('emailsend',[$request->email,$msg]);
                     }
                 }else{
+                    $msg='Your account has successfully been created but not yet activated. Do not attempt to login.
+                    Please contact the system administrator for assistance.';
                     return back()->with('New_Student_Added','Your account has been added Successfully');
                 }
             }

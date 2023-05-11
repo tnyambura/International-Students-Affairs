@@ -112,27 +112,29 @@ class adminactions extends Controller
     }      
     public function ExtensionStatusUpdate(Request $request){
          
-        $fileUpload = null;
+        $fileUpload = null; $EmailTitle='Extension Visa Application Update';
         if($request->fileResponse){
             $fileUpload = FileUploader::fileupload($request,'fileResponse','ExtensionDoc'.$request->app_id,'extension/');
         }
 
         $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new approved']); 
-        $msg = 'Your Visa extention application is '.$request->status_select;
+        $msg = 'Your Student Pass application is now '.$request->status_select.'. Please log into the portal and download the progress note for use.
+        We will update you on further progress until approval is granted.
+        Insert Login Link';
         if($updateStatus){
-            return redirect()->route('emailsend',[$request->applicant_email,$msg]);
+            return redirect()->route('emailsend',[$request->applicant_email,$EmailTitle,$msg]);
         }
         return back()->with('error','could not update data');
     }
     public function KppsStatusUpdate(Request $request){
-        $fileUpload = null;
+        $fileUpload = null; $EmailTitle='Student pass Application Update';
         if($request->fileResponse){
             $fileUpload = FileUploader::fileupload($request,'fileResponse','StudentPassDoc'.$request->app_id,'kpps/');
         }
         $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new approved']); 
         $msg = 'Your Student Pass application is '.$request->status_select;
         if($updateStatus){
-            return redirect()->route('emailsend',[$request->applicant_email,$msg]);
+            return redirect()->route('emailsend',[$request->applicant_email,$EmailTitle,$msg]);
             // return back()->with('success','success');
         }
         return back()->with('error','could not update data ->'.$request->fileResponse.' -> '.$request->applicant_email.' -> '.$request->app_id);
@@ -235,17 +237,23 @@ class adminactions extends Controller
     public function activate_user(Request $request){
         $statusSet=0;
         $Message='deactivate';
-        $msg='Your account has temporarily been deactivated. Please reach out to the administrator via studentpass@strathmore.edu for assistance with reactivation. ';
+        $EmailTitle = 'International students Portal: Account Deactivation';
+        $msg='Your account has Temporarily been deactivated. Do not attempt to login.
+        Please contact the system administrator for assistance.';
         if(strtolower($request->action) === 'activate'){
             $statusSet = 1;
             $Message='activate';
-            $msg='Your account has been activated successfully. 
-            Your default password is 123456. Kindly log in and reset the password. ';
+            $EmailTitle = 'International students Portal: Account Activation';
+            $msg='Your account has successfully been Activated. Click on the link below to access the system.
+            Insert login Link.
+            Username : Email or Student ID
+            Default Password: 123456
+            Please remember to change your password to improve your account security.';
         }
         $activateUser = DB::table('users')->where('id', $request->user_id)->update(['status'=>$statusSet]);
         if($activateUser){
             // 
-            return redirect()->route('emailsend',[$request->email,$msg]);
+            return redirect()->route('emailsend',[$request->email,$EmailTitle,$msg]);
             // return back();
         }else{
             return back()->with('activation_failed','We couldn\'t '.$Message.' this account at the moment. Try later!'  );

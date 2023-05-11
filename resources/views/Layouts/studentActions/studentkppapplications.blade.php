@@ -265,7 +265,7 @@
                 $.ajax({
                     url: '{{route("add.firstOpen")}}',
                     method: 'GET',
-                    data: {id:parseInt($(this).attr('data-app-id')),table:'extension_application'},
+                    data: {id:parseInt($(this).attr('data-app-id')),table:'kpps_application'},
                     success: function(res){ console.log(res);}
                 })
             })

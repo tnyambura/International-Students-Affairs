@@ -10654,6 +10654,7 @@ div label{
   color: rgba(17, 60, 122,.4);
   margin-left: 20px; 
   letter-spacing:2px; 
+  font-size: x-large;
   font-weight:bold; 
   text-transform: capitalize;
 }

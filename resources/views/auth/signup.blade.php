@@ -57,7 +57,7 @@
         </div>
         @endif
         <div class='mt-4' style='text-align:left'>
-            <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Guides</h3>
+            <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Useful resources</h3>
             @foreach($Guides as $data)
             <div class='row'>
                 @foreach($data as $v)

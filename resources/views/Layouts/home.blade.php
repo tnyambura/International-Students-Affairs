@@ -24,7 +24,7 @@
 
 </head>
 
-<body id="page-top" style="width: 100vw; height:100: 100vh">
+<body id="page-top" style="width: 100vw; height:100: 100vh; background: rgb(58,93,174)">
 
   <!-- <main class="row w-100 h-100">
     <header class="col masthead d-flex " style="position:relative; padding-top: 10px">
@@ -72,37 +72,46 @@
 
 
   <!-- Section: Design Block -->
-<section class="text-center" style='background: rgb(58,93,174)'>
+<section class="text-centerss d-flex" style='width: 100%; height:100vh; overflow: hidden;' >
   <!-- Background image -->
-  <div class="p-5 bg-image" style="
+  <div class="p-5 w-75 h-100 bg-image" style="
         background-image: url('homeassets/img/bg-masthead.jpg');
         background-position: center;
         background-repeat: no-repeat;
         background-origin: content-box;
-        height: 300px;
         "></div>
   <!-- Background image -->
 
-  <div class="row row-cols-auto mx-4 shadow-5-strong align-items-center justify-content-center" style="
-        margin-top: -100px;
+  <div class=" mx-4 shadow-5-strong align-items-center justify-content-center" style="
+        max-width: 600px;
+        max-height: 100%;
+        /* margin-top: -100px; */
         background: hsla(0, 0%, 100%, 0.8);
         backdrop-filter: blur(30px);
         min-height: calc(100vh - 200px);
-        border-radius: 10px 10px 0 0;
+        border-radius: 10px;
+        overflow: auto;
+        position: absolute;
+        top: 10px;
+        bottom: 10px;
+        right: 10px;
+        box-shadow: 0 0 10px rgb(110,110,110);
         ">
-    <div class="col-md-6 d-flex flex-column align-items-center">
-      <img class="card-img-top" style="max-width: 15rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
-      <h2 style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+    <div class="col-lg w-100 justify-content-center align-items-center position-relative" >
+      <div class='d-flex mt-4' style=''>
+        <img class="card-img-top" style="max-width: 8rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
+        <h2 class='d-flex align-items-center ' style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
+      </div>
       @if(Session::has('download_fail') )
       <div class="alert alert-success" role="alert">
       {{Session::get('download_fail')}}
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       @endif
-      <div class='mt-4' style='text-align:left'>
-        <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Guides</h3>
+      <div class='mt-4 w-100' style='text-align:left'>
+        <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Useful resources</h3>
         @foreach($Guides as $data)
-          <div class='row'>
+          <div class='row flex-nowrap'>
             @foreach($data as $v)
               <a class='col-lg ml-3 mb-2 d-flex' href="/downloadGuides/{{$v[1]}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span style='font-size:12px; color: #113C7A; align-self:center;'>{{$v[0]}}</span></a><br/>
             @endforeach
@@ -121,7 +130,7 @@
               <div class="col-lg-6 mb-4">
                 <div class="form-outline">
                   <input type="text" name="suID" required autofocus class="form-control" />
-                  <label class="form-label" for="form3Example1">SU Id (Email)</label>
+                  <label class="form-label" for="form3Example1">SU Id | Email</label>
                 </div>
               </div>
               <div class="col-lg-6 mb-4">
@@ -131,16 +140,6 @@
                 </div>
               </div>
             </div>
-
-            <!-- Checkbox -->
-            <!-- <div class="form-check d-flex justify-content-center mb-4">
-              <input class="form-check-input me-2" type="checkbox" value="" id="form2Example33" checked />
-              <label class="form-check-label" for="form2Example33">
-                Subscribe to our newsletter
-              </label>
-            </div> -->
-
-            <!-- Submit button -->
             <button type="submit" style='background: #113C7A !important;' class="btn btn-primary btn-block mb-4">
               Next
             </button>

@@ -102,7 +102,7 @@ Route::group(['middleware' => ['auth']], function(){
      
      /** Admin Actions */
      Route::post('/appStatus', [adminactions::class, 'applicationsResponse'])->middleware('isAdmin')->name('add.applicationsResponse');
-     Route::get('/verifyAcnt/{email}/{msg}', [MailController::class, 'index'])->middleware('isAdmin')->name('emailsend');
+     Route::get('/verifyAcnt/{email}/{title}/{msg}', [MailController::class, 'index'])->middleware('isAdmin')->name('emailsend');
      Route::post('/editMyProfile', [adminactions::class, 'editMyProfile'])->name('add.editMyProfile');
      Route::post('/editUserData', [adminactions::class, 'editUserData'])->name('add.editUserData');
      Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('isAdmin')->name('add.activate');

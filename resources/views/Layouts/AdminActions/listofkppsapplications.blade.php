@@ -303,13 +303,6 @@
             <div class='d-flex align-items-center' style='color:var(--info)'>
                 <i class="fas fa-table mr-1"></i>
                 <span >Visa Responses</span>
-                <form action='{{route("add.exportExcel")}}' method='post'>@csrf
-                    <input type="hidden" name="title" value='List of all visa applications {{date("Y")}}'>
-                    <input type="hidden" name="from" value='visa'>
-                    <button type='submit' style='outline:none'>
-                    <i role='button' style='color:green; font-size:20px;' class='far fa-file-excel ml-3'></i>
-                    </button>
-                </form>
             </div>
         </div>
     </div>
@@ -691,10 +684,10 @@
                                                                     </thead>
                                                                     <tbody>
                                                                     <tr>
-                                                                        <td > <a href="/file-view/extension/{{Crypt::encrypt($val['passport_biodata'])}}" style="color:green"> Download</a></td>
-                                                                        <!-- <td > <a href="/downloadKpps/{{$val['passport_biodata']}}" style="color:green"> Download</a></td> -->
-                                                                        <td > <a href="/downloadKpps/{{$val['current_visa']}}" style="color:green"> Download</a></td>
-                                                                        <td > <a href="/downloadKpps/{{$val['entry_visa']}}" style="color:green"> Download</a></td>
+                                                                        <!-- <td > <a href="/file-view/extension/{{Crypt::encrypt($val['passport_biodata'])}}" style="color:green"> Download</a></td> -->
+                                                                        <td > <a href="/downloadExtension/{{$val['passport_biodata']}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/downloadExtension/{{$val['current_visa']}}" style="color:green"> Download</a></td>
+                                                                        <td > <a href="/downloadExtension/{{$val['entry_visa']}}" style="color:green"> Download</a></td>
                                                                     </tr>
                                                                     </tbody>
 
@@ -814,25 +807,34 @@
         </div>
     </div>
     <div class="container-fluid buddy-contents" id="visa_responses"><br/>
-        <div class="tab-nav d-flex mb-4 mt-0">
-            <div class="tab-link sub-tab active" role='button' data-load-target='#approved_visas'>
-                <div style='color:var(--primary)'>
-                    <i class="fa fa-check mr-1"></i>
-                    <span >Approved Visas</span>
+        <div class="tab-nav d-flex mb-4 mt-0 justify-content-between">
+            <div class="d-flex">
+                <div class="tab-link sub-tab active" role='button' data-load-target='#approved_visas'>
+                    <div style='color:var(--primary)'>
+                        <i class="fa fa-check mr-1"></i>
+                        <span >Approved Visas</span>
+                    </div>
+                </div>
+                <div class="tab-link sub-tab" role='button' data-load-target='#in_progress_visas'>
+                    <div style='color:var(--success)'>
+                        <i class="fa fa-spinner mr-1"></i>
+                        <span >Progress Visas</span>
+                    </div>
+                </div>
+                <div class="tab-link sub-tab" role='button' data-load-target='#declined_visas'>
+                    <div style='color:var(--danger)'>
+                        <i class="fa fa-ban mr-1"></i>
+                        <span >Declined Visas</span>
+                    </div>
                 </div>
             </div>
-            <div class="tab-link sub-tab" role='button' data-load-target='#in_progress_visas'>
-                <div style='color:var(--success)'>
-                    <i class="fa fa-spinner mr-1"></i>
-                    <span >Progress Visas</span>
-                </div>
-            </div>
-            <div class="tab-link sub-tab" role='button' data-load-target='#declined_visas'>
-                <div style='color:var(--danger)'>
-                    <i class="fa fa-ban mr-1"></i>
-                    <span >Declined Visas</span>
-                </div>
-            </div>
+            <form action='{{route("add.exportExcel")}}' method='post'>@csrf
+                <input type="hidden" name="title" value='List of all visa applications {{date("Y")}}'>
+                <input type="hidden" name="from" value='visa'>
+                <button type='submit' style='outline:none'>
+                <i role='button' style='color:green; font-size:20px;' class='far fa-file-excel ml-3'></i>
+                </button>
+            </form>
         </div>
         <div class="card subTab-Content mb-4 active" id='approved_visas'>
             <div class="card-header d-flex justify-content-between align-items-center" style="background:#113C7A;">

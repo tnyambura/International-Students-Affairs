@@ -8,9 +8,10 @@ use Mail;
 
 class MailController extends Controller
 {
-    public function index($email,$msg){
+    public function index($email,$title,$msg){
         $data = [
             'subject'=>'Account Verification',
+            'title'=>$title,
             'body'=>$msg
         ];
 
