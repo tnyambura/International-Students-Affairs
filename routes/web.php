@@ -27,7 +27,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 */
 
 Route::get('/',function () {
-    return view('Layouts.home');
+    return view('Layouts.home',['Guides'=>RegisteredUserController::Guides()]);
 })->middleware('guest');
 
 // Route::get('/wl',[adminactions::class , 'getStatReport']);

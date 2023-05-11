@@ -99,24 +99,15 @@
       <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
       </div>
       @endif
-      <div class='mt-4 row' style='text-align:left'>
-      @php 
-        $Guidesooo = [
-          ['International students Guide Booklet','guide.pdf'],
-          ['Student Pass Applications Requirements - First Time Applications','newKpp.php'],
-          ['Student Pass Applications Requirements - For Renewals','kppsRenewal.php'],
-          ['Jubilee Medical Insurance - Write up and Membership','jubilee.php']
-          ];
-        $Guides = [
-          ['IS Guide Booklet','guide.pdf'],
-          ['Kpp Requirements - First Time Applications','newKpp.php'],
-          ['Kpp Requirements - Renewals','kppsRenewal.php'],
-          ['Jubilee Medical Insurance','jubilee.php']
-          ];
-      @endphp
-      @foreach($Guides as $v)
-        <a class='col-lg-4 ml-3 mb-2 d-flex' href="/downloadGuides/{{$v[1]}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span>{{$v[0]}}</span></a><br/>
-      @endforeach
+      <div class='mt-4' style='text-align:left'>
+        <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Guides</h3>
+        @foreach($Guides as $data)
+          <div class='row'>
+            @foreach($data as $v)
+              <a class='col-lg ml-3 mb-2 d-flex' href="/downloadGuides/{{$v[1]}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span style='font-size:12px; color: #113C7A; align-self:center;'>{{$v[0]}}</span></a><br/>
+            @endforeach
+          </div>
+        @endforeach
       </div>
       <!-- <p>{{$v[0]}}<a class='ml-3' href="/downloadGuides/{{$v[1]}}">Get File</a></p> -->
     </div>
@@ -150,7 +141,7 @@
             </div> -->
 
             <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-4">
+            <button type="submit" style='background: #113C7A !important;' class="btn btn-primary btn-block mb-4">
               Next
             </button>
 

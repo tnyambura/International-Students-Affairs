@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\FacultiesController;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\addNewStudent;
@@ -25,6 +26,25 @@ class RegisteredUserController extends Controller
      * @return \Illuminate\View\View
      */
     
+    public static function Guides(){
+        $Guidesooo = [
+            ['International students Guide Booklet','guide.pdf'],
+            ['Student Pass Applications Requirements - First Time Applications','newKpp.php'],
+            ['Student Pass Applications Requirements - For Renewals','kppsRenewal.php'],
+            ['Jubilee Medical Insurance - Write up and Membership','jubilee.php']
+        ];
+        $Guides = [
+            [
+                ['IS Guide Booklet','guide.pdf'],
+                ['Kpp Requirements - First Time Applications','newKpp.php']
+            ],
+            [
+                ['Kpp Requirements - Renewals','kppsRenewal.php'],
+                ['Jubilee Medical Insurance','jubilee.php']
+            ]
+        ];
+        return $Guides;
+    }
     public static function getCourses(){
         $get_data= CoursesController::readFile();
         $courses = array();
@@ -34,6 +54,16 @@ class RegisteredUserController extends Controller
             }
         }
         return $courses;
+    }
+    public static function getFaculties(){
+        $get_data= FacultiesController::readFile();
+        $faculties = array();
+        foreach($get_data as $key => $data){
+            if($key > 0){
+                array_push($faculties , $data[0]);
+            }
+        }
+        return $faculties;
     }
     public static function getCountries(){
         $get_data= CountryController::readFile();
@@ -48,7 +78,7 @@ class RegisteredUserController extends Controller
 
     Public function AddNewUser(){
         $roles = ['admin','super_admin'];
-        return view('Layouts/AdminActions/addnewuser', ['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'roles'=>$roles,'countries'=>$this->getCountries(),'courses'=>$this->getCourses()]);
+        return view('Layouts/AdminActions/addnewuser', ['Guides'=>$this->Guides(),'newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>adminactions::BdCount(),'roles'=>$roles,'countries'=>$this->getCountries(),'courses'=>$this->getCourses(),'faculties'=>$this->getFaculties()]);
     }
     Public function SuperAddNewUser(){
         return view('Layouts/SuperAdminActions/addnewuser');

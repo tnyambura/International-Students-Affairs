@@ -49,11 +49,6 @@
             </div>
             @endif 
 
-            @php
-            $facultiesArray = ['SCESA'];
-            $coursesArray = ['BBIT','BCOM','DBIT'];
-            @endphp
-
 
             <form method="POST" action="{{ __('AddUser') }}" class='new-staff-form'>
                 @csrf
@@ -176,7 +171,7 @@
                             <label for="Faculty">Faculty</label>
                             <select class='form-control' name ="Faculty" id="Faculty" required>
                                 <option>--Select--</option>
-                                @foreach($facultiesArray as $v)
+                                @foreach($faculties as $v)
                                     <option value='{{$v}}'>{{$v}}</option>
                                 @endforeach
                             </select>
