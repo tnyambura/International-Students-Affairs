@@ -23,6 +23,9 @@
             <div style='color:var(--info)'>
                 <i class="fas fa-user-friends mr-1"></i>
                 <span >Buddy Allocations</span>
+                @if($BuddiesChangeRequest > 0)
+                <span class="ml-1 badge badge-warning">{{$BuddiesChangeRequest}}</span>
+                @endif
             </div>
         </div>
     </div>
@@ -274,6 +277,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
+                <!-- <div class="row"><div class="col-sm-12 col-md-6"><div class="dataTables_length" id="dataTable_length"><label>Show <select name="dataTable_length" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div></div><div class="col-sm-12 col-md-6"><div id="dataTable_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable"></label></div></div></div> -->
                     <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
                         <thead class="thead-dark">
                             <tr>
@@ -307,16 +311,18 @@
                                                     @if($bdAlloc['change_req'] == '')
                                                     <li class="mb-2 py-2 border-bottom position-relative">
                                                     @else
-                                                    <li class="mb-2 border-bottom position-relative">
-                                                        <div class="row w-100 position-absolute" style="z-index:2; right:-78%;">
-                                                            <span class='col-8 btn-warning text-nowrap' role='button' data-toggle="modal" data-target="#NewAllocation_{{$st_u->id}}">Change Requested</span>
-                                                            <span class='col btn-danger text-nowrap' role='button'>Dissmiss</span>
+                                                    <li class="mb-2 border-bottom position-relative" style='max-width: 500px; min-width: 400px; overflow: hidden;'>
+                                                        <div class="row w-100 position-absolute hide" style="z-index:2; left:88%; transition: ease-in-out;">
+                                                            <div role='button' class='showBuddyChangeBtn col-2 btn-info text-nowrap d-flex align-items-center justify-content-center'><span class='fa fa-refresh ' >&#xf021;</span></div>
+                                                            <span class='col-6 btn-warning text-nowrap' role='button' data-toggle="modal" data-target="#NewAllocation_{{$st_u->id}}">Change Requested</span>
+                                                            <a href='/dismissBuddyChange/{{$bdAlloc["allocation_id"]}}' class='dissmiss-Request-Change col-4 btn-danger text-nowrap' role='button'>Dissmiss</a>
                                                         </div>
                                                     @endif
                                                         <div class="row flex-nowrap">
                                                             <span class="col-3 text-nowrap">{{$bdAlloc['id']}}</span>
                                                             <span class="col-6 text-nowrap">{{$bdAlloc['surname'].' '.$bdAlloc['other_names']}}</span>
                                                             <div class="col-3  d-flex justify-content-around align-items-center">
+                                                                @if($bdAlloc['change_req'] == '')
                                                                 <span data-toggle="modal" data-target="#EditAllocation_{{$st_u->id}}" style=" color:blue" class="fas fa-edit" aria-hidden="true"></span>
                                                                 <form action="{{route('add.dismiss')}}" method='post'> @csrf
                                                                     <input type="hidden" name="req_id" value="{{$bdAlloc['req_id']}}">
@@ -325,6 +331,7 @@
                                                                         <span style=" color:#CC0D0D" class="fas fa-trash" aria-hidden="true"></span>
                                                                     </button>
                                                                 </form>
+                                                                @endif
                                                                 <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
                                                                 <script defer>
                                                                     $(document).ready(function() {
@@ -479,6 +486,21 @@
     <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
     <script defer>
         $(document).ready(function() {
+            $('.dissmiss-Request-Change').on('click',function(e){
+                e.preventDefault()
+                if(confirm('Do you really want to Dismiss this Buddy change request?')){
+                    location.href=$(this).attr('href')
+                }
+            })
+            $('.showBuddyChangeBtn').on('click',function(e){
+                if($(this).parent().hasClass('hide')){
+                    $(this).parent().removeClass('hide')
+                    $(this).parent().css('left','0%').slow()
+                }else{
+                    $(this).parent().addClass('hide')
+                    $(this).parent().css('left','88%').slow()
+                }
+            })
             
             $('body').find('.select_new_buddy').on('change',function(e){
                 if($(this).val() !== ""){

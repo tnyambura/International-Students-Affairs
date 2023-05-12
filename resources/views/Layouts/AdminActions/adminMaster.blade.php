@@ -55,7 +55,7 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                 Manage Buddies
                                 @if($BdCountReq > 0)
-                                    <span class="badge badge-warning ml-2">{{$newVisaReq}}</span>
+                                    <span class="badge badge-warning ml-2">{{$BdCountReq}}</span>
                                 @endif
                             </a>                        
                             <a class="nav-link" href="{{ __('myschedule')}}">

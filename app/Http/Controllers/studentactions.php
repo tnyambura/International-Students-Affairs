@@ -838,6 +838,7 @@ class studentactions extends Controller
                 $postRole->save();
                 if(sizeOf($CheckRole) > 0){
                     if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
+                        $EmailTitle = 'Welcome to International Student Affaires.';
                         $msg='
                         Your account has successfully been created. Click on the link below to access the system.
                         Insert login Link.
@@ -845,7 +846,7 @@ class studentactions extends Controller
                         Default Password: 123456
                         Please remember to change your password to improve your account security.
                         ';
-                        return redirect()->route('emailsend',[$request->email,$msg]);
+                        return redirect()->route('emailsend',[$request->email,$EmailTitle,$msg]);
                     }
                 }else{
                     $msg='Your account has successfully been created but not yet activated. Do not attempt to login.

@@ -36,10 +36,10 @@ class RegisteredUserController extends Controller
         $Guides = [
             [
                 ['IS Guide Booklet','guide.pdf'],
-                ['Kpp Requirements - First Time Applications','newKpp.php']
+                ['Student Pass(Kpps) Requirements - First Time Applications','newKpp.php']
             ],
             [
-                ['Kpp Requirements - Renewals','kppsRenewal.php'],
+                ['Student Pass(Kpps) Requirements - Renewals','kppsRenewal.php'],
                 ['Jubilee Medical Insurance','jubilee.php']
             ]
         ];
@@ -129,8 +129,15 @@ class RegisteredUserController extends Controller
         // $post->save();
         // $postRole->save();
         if($post->save() && $postRole->save()){
-            $msg='Your account has successfully created. Click the link below to get access. ';
-            return redirect()->route('emailsend',[$request->email,$msg]);
+            $EmailTitle = 'Welcome to International Student Affaires.';
+            $msg='
+            Your account has successfully been created. Click on the link below to access the system.
+            Insert login Link.
+            Username : Email or Student ID
+            Default Password: 123456
+            Please remember to change your password to improve your account security.
+            ';
+            return redirect()->route('emailsend',[$request->email,$EmailTitle,$msg]);
         }
         // return back()->with('New_User_Added','A New User has been Enrolled Successfully');
         }else{

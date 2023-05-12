@@ -435,7 +435,7 @@ class adminactions extends Controller
         foreach ($bdAllocations as $allocation) {
             $StudentData = DB::table('users')->select('id','surname','other_names','email')->where('id',$allocation->student_id)->limit(1)->get();
             $buddyData = DB::table('users')->select('id as bd_id','surname as bd_srnm','other_names as bd_onm','email as bd_eml')->where('id',$allocation->buddy_id)->limit(1)->get();
-                array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0],['req_id'=>$allocation->request_id,'change_req'=>$allocation->request_change]));
+                array_push($data,array_merge((array)$StudentData[0],(array)$buddyData[0],['allocation_id'=>$allocation->id,'req_id'=>$allocation->request_id,'change_req'=>$allocation->request_change]));
         }
         return $data;
     }
@@ -508,6 +508,14 @@ class adminactions extends Controller
             }else{
                 return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user from allocation');
             }
+    }
+    public function BuddiesChangeRequest(){
+            $getRequestData = DB::table('buddies_allocations')->whereNotNull('request_change')->get();
+            return sizeOf($getRequestData);
+    }
+    public function DismissBuddyRequestChange($id){
+            $Dismiss = DB::table('buddies_allocations')->where('id',$id)->update(['request_change'=>null,'already_changed'=>0]);
+            return back()->with('dissmiss_buddy_change_request','Change successuffly dismissed.');
     }
     public function AllocateBuddy(Request $req){ // new allocation
         
@@ -586,7 +594,7 @@ class adminactions extends Controller
     
 
     public function BuddiesManagement(){
-        return view('Layouts/AdminActions/Buddies',['newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
+        return view('Layouts/AdminActions/Buddies',['newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesChangeRequest'=>$this->BuddiesChangeRequest(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
     }
     public function generateAllocatedBuddieslist(){
         $list = $this->BuddiesFecher();

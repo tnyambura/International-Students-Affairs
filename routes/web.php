@@ -151,6 +151,7 @@ Route::group(['middleware' => ['auth']], function(){
     //  Route::post('/EnrolNewBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('isAdmin')->name('add.EnrolNewBuddy');
      Route::get('/listofBuddies',[adminactions::class,'getAllBuddies'])->middleware('isAdmin');
      Route::post('/dismissAllocation',[adminactions::class,'dismissAllocation'])->middleware('isAdmin')->name('add.dismiss');
+     Route::get('/dismissBuddyChange/{id}',[adminactions::class,'DismissBuddyRequestChange'])->middleware('isAdmin');
      Route::post('/EditAllocatedBuddy',[adminactions::class,'EditAllocatedBuddy'])->middleware('isAdmin');
      Route::post('/AllocateBuddy',[adminactions::class,'AllocateBuddy'])->middleware('isAdmin')->name('add.allocate');
      Route::post('/BuddyAllocation',[adminactions::class,'BuddyAllocations'])->middleware('isAdmin');
