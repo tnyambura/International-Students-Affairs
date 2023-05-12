@@ -89,6 +89,7 @@ CREATE TABLE `buddies_allocations` (
   `student_id` int NOT NULL,
   `buddy_id` int NOT NULL,
   `request_change` varchar(45) DEFAULT NULL,
+  `already_changed` tinyint NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `student_id_UNIQUE` (`student_id`),
   KEY `buddy_id` (`buddy_id`),
@@ -105,7 +106,7 @@ CREATE TABLE `buddies_allocations` (
 
 LOCK TABLES `buddies_allocations` WRITE;
 /*!40000 ALTER TABLE `buddies_allocations` DISABLE KEYS */;
-INSERT INTO `buddies_allocations` VALUES (201242,86526,101618,999999,NULL);
+INSERT INTO `buddies_allocations` VALUES (201242,86526,101618,999999,NULL,1);
 /*!40000 ALTER TABLE `buddies_allocations` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -187,7 +188,7 @@ CREATE TABLE `extension_application` (
 
 LOCK TABLES `extension_application` WRITE;
 /*!40000 ALTER TABLE `extension_application` DISABLE KEYS */;
-INSERT INTO `extension_application` VALUES (785647,101618,'101618_PassportBioData_785647.png','101618_entryPage_785647.png','101618_CurrentVisa_785647.png','2023-03-19','2023-03-16 00:00:00','approved','66753_ExtensionDoc785647.png','2025-12-17',NULL);
+INSERT INTO `extension_application` VALUES (586909,101618,'101618_PassportBioData_586909.png','101618_entryPage_586909.png','101618_CurrentVisa_586909.png','2023-03-19','2023-03-16 00:00:00','declined','66753_ExtensionDoc586909.png',NULL,NULL),(785647,101618,'101618_PassportBioData_785647.png','101618_entryPage_785647.png','101618_CurrentVisa_785647.png','2023-03-19','2023-03-16 00:00:00','approved','66753_ExtensionDoc785647.png','2025-12-17',NULL);
 /*!40000 ALTER TABLE `extension_application` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -563,4 +564,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-10 11:10:22
+-- Dump completed on 2023-05-12 15:19:00

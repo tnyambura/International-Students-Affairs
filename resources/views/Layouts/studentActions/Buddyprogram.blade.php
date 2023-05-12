@@ -181,15 +181,17 @@
                                     
                                     <form method='post' action='{{route("add.requestBuddyChange")}}'> @csrf
                                         <input type='hidden' name='request_id' value="{{$Buddy['request_id']}}"/>
-                                        @if($Buddy['request_change'] == '')
-                                        <button target="blank" type='submit' role='button' class='btn btn-info d-flex align-items-center'>
-                                            <span class="fas fa-edit mr-2" aria-hidden="false"></span>Request buddy change
-                                        </button>  
-                                        @else
-                                        <button target="blank" disabled class='btn btn-info d-flex align-items-center'>
-                                            <!-- <span class="badge badge-warning"></span> -->
-                                            <span class="fas fa-exclamation-circle mr-2" style='color:var(--warning)'></span>Request Pending
-                                        </button> 
+                                        @if($Buddy['already_changed'] == 0)
+                                            @if($Buddy['request_change'] == '')
+                                            <button target="blank" type='submit' role='button' class='btn btn-info d-flex align-items-center'>
+                                                <span class="fas fa-edit mr-2" aria-hidden="false"></span>Request buddy change
+                                            </button>  
+                                            @else
+                                            <button target="blank" disabled class='btn btn-info d-flex align-items-center'>
+                                                <!-- <span class="badge badge-warning"></span> -->
+                                                <span class="fas fa-exclamation-circle mr-2" style='color:var(--warning)'></span>Request Pending
+                                            </button> 
+                                            @endif
                                         @endif
                                     </form>
                                     </td>

@@ -458,7 +458,7 @@ class studentactions extends Controller
 
         $myallocation=[];
 
-        $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id','request_id','request_change')->where('student_id',$id)->limit(1)->get();
+        $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id','request_id','request_change','already_changed')->where('student_id',$id)->limit(1)->get();
         if(sizeOf($BuddyId) > 0){
             $BuddyUser = DB::table("users")->select('surname','other_names','email')->where('id',$BuddyId[0]->buddy_id)->limit(1)->get();
             $BuddyDetails = DB::table("student_details")->select('phone_number')->where('student_id',$BuddyId[0]->buddy_id)->limit(1)->get();
@@ -490,7 +490,7 @@ class studentactions extends Controller
         $checkRequest = DB::table("buddies_allocations")->where('request_id',$request->request_id)->get();
 
         if($checkRequest[0]->request_change === null){
-            $data = DB::table("buddies_allocations")->where('request_id',$request->request_id)->update(['request_change'=>$code]);
+            $data = DB::table("buddies_allocations")->where('request_id',$request->request_id)->update(['request_change'=>$code,'request_change'=>1]);
             if($data){ return back()->with('request_change_success','Request placed successfully!'); }
             else{ return back()->with('request_change_fail','Failed to place a change request.  Try later!'); }
         }else{

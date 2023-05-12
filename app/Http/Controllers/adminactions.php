@@ -525,6 +525,7 @@ class adminactions extends Controller
             $post->request_id = $req->request_id;
             $post->student_id = $req->studentId;
             $post->buddy_id = $req->buddy_id;
+            $post->already_changed = 0;
             
             $post->timestamps = false;
 
