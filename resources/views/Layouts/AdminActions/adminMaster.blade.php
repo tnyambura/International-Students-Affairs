@@ -51,6 +51,10 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-bar"></i></div>
                                 Dashboard
                             </a>   
+                            <a class="nav-link" href="{{ __('manageFiles')}}">
+                                <div class="sb-nav-link-icon"><i class="far fa-folder-open"></i></div>
+                                Manage Files
+                            </a>   
                             <a class="nav-link" href="{{ __('ManageBuddies')}}">
                                 <div class="sb-nav-link-icon"><i class="fas fa-clipboard-list"></i></div>
                                 Manage Buddies

@@ -9,6 +9,7 @@ use App\Http\Controllers\FacultiesController;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\addNewStudent;
+use App\Models\Guides;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
@@ -27,22 +28,25 @@ class RegisteredUserController extends Controller
      */
     
     public static function Guides(){
-        $Guidesooo = [
-            ['International students Guide Booklet','guide.pdf'],
-            ['Student Pass Applications Requirements - First Time Applications','newKpp.php'],
-            ['Student Pass Applications Requirements - For Renewals','kppsRenewal.php'],
-            ['Jubilee Medical Insurance - Write up and Membership','jubilee.php']
-        ];
-        $Guides = [
-            [
-                ['IS Guide Booklet','guide.pdf'],
-                ['Student Pass(Kpps) Requirements - First Time Applications','newKpp.php']
-            ],
-            [
-                ['Student Pass(Kpps) Requirements - Renewals','kppsRenewal.php'],
-                ['Jubilee Medical Insurance','jubilee.php']
-            ]
-        ];
+        $Guides = false;
+        if(sizeOf(Guides::all())>0){ $Guides = collect(Guides::all())->toArray(); }
+        
+        // $Guidesooo = [
+        //     ['International students Guide Booklet','guide.pdf'],
+        //     ['Student Pass Applications Requirements - First Time Applications','newKpp.php'],
+        //     ['Student Pass Applications Requirements - For Renewals','kppsRenewal.php'],
+        //     ['Jubilee Medical Insurance - Write up and Membership','jubilee.php']
+        // ];
+        // $Guides = [
+        //     [
+        //         ['IS Guide Booklet','guide.pdf'],
+        //         ['Student Pass(Kpps) Requirements - First Time Applications','newKpp.php']
+        //     ],
+        //     [
+        //         ['Student Pass(Kpps) Requirements - Renewals','kppsRenewal.php'],
+        //         ['Jubilee Medical Insurance','jubilee.php']
+        //     ]
+        // ];
         return $Guides;
     }
     public static function getCourses(){

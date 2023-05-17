@@ -97,31 +97,14 @@
         right: 10px;
         box-shadow: 0 0 10px rgb(110,110,110);
         ">
-    <div class="col-lg w-100 justify-content-center align-items-center position-relative" >
-      <div class='d-flex mt-4' style=''>
-        <img class="card-img-top" style="max-width: 8rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
-        <h2 class='d-flex align-items-center ' style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
-      </div>
-      @if(Session::has('download_fail') )
-      <div class="alert alert-success" role="alert">
-      {{Session::get('download_fail')}}
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-      </div>
-      @endif
-      <div class='mt-4 w-100' style='text-align:left'>
-        <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Useful resources</h3>
-        @foreach($Guides as $data)
-          <div class='row flex-nowrap'>
-            @foreach($data as $v)
-              <a class='col-lg ml-3 mb-2 d-flex' href="/downloadGuides/{{$v[1]}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span style='font-size:12px; color: #113C7A; align-self:center;'>{{$v[0]}}</span></a><br/>
-            @endforeach
-          </div>
-        @endforeach
-      </div>
-      <!-- <p>{{$v[0]}}<a class='ml-3' href="/downloadGuides/{{$v[1]}}">Get File</a></p> -->
+    <div class='d-flex pb-3 flex-column align-items-center mt-4' style='border-bottom: 1px solid #113C7A;'>
+      <img class="card-img-top" style="max-width: 8rem;" src="../../asset/img/logo.png" alt="Card image cap" style="size:14rem">
+      <h2 class='d-flex align-items-center ' style="text-align:center;"><span style="font-weight:bold;">International students Portal</span></h2>
     </div>
-    <div class="col py-5 px-md-5">
-          <h2 class="fw-bold mb-5">Login</h2>
+    <div class="col py-3 px-md-5">
+      
+          <h2 class=" mb-5" style='color:#113C7A; font-size: 25px; font-weight: 800;'>Login</h2>
+
           <form method="POST" action="{{ route('login') }}">
             @csrf
               <x-auth-validation-errors class="breadcrumb py-0 mb-4 d-flex align-items-center bg-danger" style="color:#fff; text-align:left;" :errors="$errors" />
@@ -130,45 +113,66 @@
               <div class="col-lg-6 mb-4">
                 <div class="form-outline">
                   <input type="text" name="suID" required autofocus class="form-control" />
-                  <label class="form-label" for="form3Example1">SU Id | Email</label>
+                  <label class="form-label mt-2" for="form3Example1">SU Id | Email</label>
                 </div>
               </div>
               <div class="col-lg-6 mb-4">
                 <div class="form-outline">
                   <input type="password" name="password" required class="form-control" />
-                  <label class="form-label" for="form3Example2">Password</label>
+                  <label class="form-label mt-2" for="form3Example2">Password</label>
                 </div>
               </div>
             </div>
             <button type="submit" style='background: #113C7A !important;' class="btn btn-primary btn-block mb-4">
-              Next
+              Login
             </button>
-
-            <!-- Register buttons -->
-            <div class="text-center">
-              <p>More links:</p>
-              <a href="/" class="btn btn-link btn-floating mx-1 my-2">
-                About Us</a>
-
-              <button type="button" class="btn btn-link btn-floating mx-1 my-2">
-                Forgot Password
-              </button>
-
-              <button type="button" class="btn btn-link btn-floating mx-1 my-2">
-                AMS
-              </button>
-
-              <button type="button" class="btn btn-link btn-floating mx-1 my-2">
-                <i class="fab fa-github"></i> E-Learning
-              </button>
-              <a href="/signup" class="btn btn-link btn-floating mx-1 my-2">
-                <i class="fab fa-github"></i> Sign Up
-              </a>
-            </div>
           </form>
         <!-- </div>
       </div> -->
     </div>
+    <div class="col-lg w-100 justify-content-center align-items-center position-relative" >
+      
+      @if(Session::has('download_fail') )
+      <div class="alert alert-success" role="alert">
+      {{Session::get('download_fail')}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      @endif
+      <div class='mt-0 w-100' style='text-align:left'>
+        <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Useful resources</h3>
+        @if($Guides)
+          @foreach($Guides as $data)
+            <div class='row align-items-center'>
+                @foreach($data as $v)
+                <a class='col-lg ml-3 mb-2 d-flex ' href="/downloadGuides/{{$v['file']}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span style='font-size:12px; color: #113C7A; align-self:center;'>{{$v['file_name']}}</span></a><br/>
+                @endforeach
+            </div>
+            @endforeach
+        @endif
+      </div>
+
+      <div class=" mb-3">
+      <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>More links</h3>
+        <a href="/" class="btn btn-link btn-floating mx-1 my-2">
+          About Us</a>
+
+        <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+          Forgot Password
+        </button>
+
+        <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+          AMS
+        </button>
+
+        <button type="button" class="btn btn-link btn-floating mx-1 my-2">
+          <i class="fab fa-github"></i> E-Learning
+        </button>
+        <a href="/signup" class="btn btn-link btn-floating mx-1 my-2">
+          <i class="fab fa-github"></i> Sign Up
+        </a>
+      </div>
+    </div>
+    
   </div>
 </section>
 <!-- Section: Design Block -->

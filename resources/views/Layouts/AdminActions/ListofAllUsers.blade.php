@@ -33,41 +33,55 @@
         @if(Session::has('data_not_available'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('data_not_available')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         @if(Session::has('activation_failed'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('activation_failed')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         @if(Session::has('Buddy_Register_success'))
         <div class="alert alert-success" role="alert">
         {{Session::get('Buddy_Register_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         @if(Session::has('Buddy_Register_fail'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('Buddy_Register_fail')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         @if(Session::has('user_update_success'))
         <div class="alert alert-success" role="alert">
         {{Session::get('user_update_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         @if(Session::has('user_update_failed'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('user_update_failed')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         @if(Session::has('email_send_success'))
         <div class="alert alert-success" role="alert">
         {{Session::get('email_send_success')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         @if(Session::has('email_send_fail'))
         <div class="alert alert-danger" role="alert">
         {{Session::get('email_send_fail')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </div>
+        @endif 
+        @if(Session::has('password_reset_error'))
+        <div class="alert alert-danger" role="alert">
+        {{Session::get('password_reset_error')}}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
         <div class="card mb-4">
@@ -195,14 +209,22 @@
                                                         </form>
                                                         
                                                     </div>
-                                                    @if($user['status'] === 1 && $user['isbuddy'] === false && $user['role'] === 'student')
-                                                        <form method="POST" action='{{route("add.makeBuddy")}}'>
+                                                    <div class='row px-4'>
+                                                        @if($user['status'] === 1 && $user['isbuddy'] === false && $user['role'] === 'student')
+                                                        <form method="POST" class='col' action='{{route("add.makeBuddy")}}'>
                                                         @csrf
                                                             <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
                                                             <button type='submit' class="btn btn-success w-100 mb-2">Make a Buddy</button>
                                                         </form>
-                                                    @endif
-                                                    <form method="POST" action='{{route("add.activate")}}'>
+                                                        @endif
+                                                        <form method="POST" class='col' action='{{route("add.reset_password")}}'>
+                                                        @csrf
+                                                            <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
+                                                            <input type="hidden" name="user_email" value='{{$user["email"]}}'/>
+                                                            <button type='submit' data-target="{{$user['surname'].' '.$user['other_names']}}" class="restPassBtn btn btn-warning w-100 mb-2" style='color:#fff;'>Reset Password</button>
+                                                        </form>
+                                                    </div>
+                                                    <form class='px-4' method="POST" action='{{route("add.activate")}}'>
                                                         @csrf
                                                         <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
                                                         <input type="hidden" name="email" value='{{$user["email"]}}'/>
@@ -229,5 +251,18 @@
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
+    <script defer>
+        $(document).ready(function() {
+            $('.restPassBtn').on('click',function(e){
+                e.preventDefault()
+                let form = $(this).parent()
+                if(confirm(`Do you really want to reset password for ${$(this).attr('data-target')}?`)){
+                    form.submit()
+                }
+            })
+        })
+    </script>
                     
  @endsection             

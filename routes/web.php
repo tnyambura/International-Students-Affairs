@@ -27,11 +27,18 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 */
 
 Route::get('/',function () {
-    return view('Layouts.home',['Guides'=>RegisteredUserController::Guides()]);
+    // return view('Layouts.home',['Guides'=>(RegisteredUserController::Guides())?RegisteredUserController::Guides():false]);
+    return view('Layouts.home',['Guides'=>(RegisteredUserController::Guides())?array_chunk(RegisteredUserController::Guides(),2):false]);
 })->middleware('guest');
 
 // Route::get('/wl',[adminactions::class , 'getStatReport']);
 // Route::get('/wl',function(){return view('welcome');});
+
+// Route::get('/eml',function(){return view('emails/index',['data'=>['title'=>'Account Activation','body'=>'<p>Your account has successfully been <i style="color:var(--danger)">Activated</i></p> <p>Click on the link below to access the system.</p>
+//     <p><a style="color:#113C7A" href="http://localhost:8000/">Insert login Link.</a></p>
+//     <p>Username : Email or Student ID</p>
+//     <p>Default Password: 123456</p>
+//     <p>Please remember to change your password to improve your account security.</p>']]);});
 Route::get('/stat/{img}',function($img){return view('welcome',['dt'=>$img]);});
 
 Route::get('/file-view/{path}/{file}', 'App\Http\Controllers\studentactions@PDFFileView')->name('PDFFileView');
@@ -101,8 +108,9 @@ Route::group(['middleware' => ['auth']], function(){
      
      
      /** Admin Actions */
+     Route::get('/manageFiles', [adminactions::class, 'manageFiles'])->middleware('isAdmin');
      Route::post('/appStatus', [adminactions::class, 'applicationsResponse'])->middleware('isAdmin')->name('add.applicationsResponse');
-     Route::get('/verifyAcnt/{email}/{title}/{msg}', [MailController::class, 'index'])->middleware('isAdmin')->name('emailsend');
+     Route::get('/verifyAcnt/{subject}/{email}/{title}/{msg}', [MailController::class, 'index'])->middleware('isAdmin')->name('emailsend');
      Route::post('/editMyProfile', [adminactions::class, 'editMyProfile'])->name('add.editMyProfile');
      Route::post('/editUserData', [adminactions::class, 'editUserData'])->name('add.editUserData');
      Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('isAdmin')->name('add.activate');
@@ -146,6 +154,7 @@ Route::group(['middleware' => ['auth']], function(){
 
      Route::get('/ManageBuddies', [adminactions::class, 'BuddiesManagement'])->middleware('isAdmin');
      Route::post('/RegisterBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('isAdmin')->name('add.makeBuddy');
+     Route::post('/reset_password', [adminactions::class, 'ResetUserPassword'])->middleware('isAdmin')->name('add.reset_password');
      Route::post('/dismissBudy', [adminactions::class, 'RemoveAsBuddy'])->middleware('isAdmin')->name('add.dismissBd');
      Route::get('/AddNewBuddy', [adminactions::class, 'AddNewBuddy'])->middleware('isAdmin')->name('add.AddNewBuddy');
     //  Route::post('/EnrolNewBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('isAdmin')->name('add.EnrolNewBuddy');

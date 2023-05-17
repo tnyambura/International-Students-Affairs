@@ -689,7 +689,7 @@ class studentactions extends Controller
     }
 
     public function NewSignup(){
-        return view('auth/signup',['Guides'=>RegisteredUserController::Guides(),'countries'=>RegisteredUserController::getCountries(),'courses'=>RegisteredUserController::getCourses(),'faculties'=>RegisteredUserController::getFaculties()]);
+        return view('auth/signup',['Guides'=>(RegisteredUserController::Guides())?array_chunk(RegisteredUserController::Guides(),2):false,'countries'=>RegisteredUserController::getCountries(),'courses'=>RegisteredUserController::getCourses(),'faculties'=>RegisteredUserController::getFaculties()]);
     
     }
 

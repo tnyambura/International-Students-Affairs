@@ -113,28 +113,30 @@ class adminactions extends Controller
     public function ExtensionStatusUpdate(Request $request){
          
         $fileUpload = null; $EmailTitle='Extension Visa Application Update';
+        $subject = 'Visa Application Update';
         if($request->fileResponse){
             $fileUpload = FileUploader::fileupload($request,'fileResponse','ExtensionDoc'.$request->app_id,'extension/');
         }
 
         $updateStatus = DB::table('extension_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new approved']); 
-        $msg = 'Your Student Pass application is now '.$request->status_select.'. Please log into the portal and download the progress note for use.
-        We will update you on further progress until approval is granted.
-        Insert Login Link';
+        $msg = '<p>Your Student Pass application is now '.$request->status_select.'. Please log into the portal and download the progress note for use.</p>
+        <p>We will update you on further progress until approval is granted.</p>
+        <p><a href="http://localhost:8000/">Insert login Link.</a></p>';
         if($updateStatus){
-            return redirect()->route('emailsend',[$request->applicant_email,$EmailTitle,$msg]);
+            return redirect()->route('emailsend',[$subject, $request->applicant_email,$EmailTitle,Crypt::encryptString($msg)]);
         }
         return back()->with('error','could not update data');
     }
     public function KppsStatusUpdate(Request $request){
         $fileUpload = null; $EmailTitle='Student pass Application Update';
+        $subject = 'Student Pass Application Update';
         if($request->fileResponse){
             $fileUpload = FileUploader::fileupload($request,'fileResponse','StudentPassDoc'.$request->app_id,'kpps/');
         }
         $updateStatus = DB::table('kpps_application')->where('id', $request->app_id)->update(['application_status'=>$request->status_select, 'uploads'=>$fileUpload, 'expiry_date'=>$request->expiry_date, 'first_open'=>'new approved']); 
         $msg = 'Your Student Pass application is '.$request->status_select;
         if($updateStatus){
-            return redirect()->route('emailsend',[$request->applicant_email,$EmailTitle,$msg]);
+            return redirect()->route('emailsend',[$subject, $request->applicant_email,$EmailTitle,Crypt::encryptString($msg)]);
             // return back()->with('success','success');
         }
         return back()->with('error','could not update data ->'.$request->fileResponse.' -> '.$request->applicant_email.' -> '.$request->app_id);
@@ -237,31 +239,33 @@ class adminactions extends Controller
     public function activate_user(Request $request){
         $statusSet=0;
         $Message='deactivate';
-        $EmailTitle = 'International students Portal: Account Deactivation';
-        $msg='Your account has Temporarily been deactivated. Do not attempt to login.
-        Please contact the system administrator for assistance.';
+        $EmailTitle = 'International students Portal: Account Deactivation Alert!';
+        $subject = 'Account Deactivation';
+        $msg='<p>Your account has Temporarily been deactivated. </p><p>Do not attempt to login.</p>
+        <p>Please contact the system administrator for assistance.</p>';
         if(strtolower($request->action) === 'activate'){
             $statusSet = 1;
+            $subject = 'Account Activation';
             $Message='activate';
             $EmailTitle = 'International students Portal: Account Activation';
-            $msg='Your account has successfully been Activated. Click on the link below to access the system.
-            Insert login Link.
-            Username : Email or Student ID
-            Default Password: 123456
-            Please remember to change your password to improve your account security.';
+            $msg='<p>Your account has successfully been Activated.</p> <p>Click on the link below to access the system.</p>
+            <p><a href="http://localhost:8000/">Insert login Link.</a></p>
+            <p>Username : Email or Student ID</p>
+            <p>Default Password: 123456</p>
+            <p>Please remember to change your password to improve your account security.</p>';
         }
         $activateUser = DB::table('users')->where('id', $request->user_id)->update(['status'=>$statusSet]);
         if($activateUser){
             // 
-            return redirect()->route('emailsend',[$request->email,$EmailTitle,$msg]);
+            return redirect()->route('emailsend',[$subject, $request->email,$EmailTitle,Crypt::encryptString($msg)]);
             // return back();
         }else{
             return back()->with('activation_failed','We couldn\'t '.$Message.' this account at the moment. Try later!'  );
         }
 
     }
-    public function applicationsResponse(){
-
+    public function manageFiles(){
+        return view('Layouts/AdminActions/ManageFiles',['Guides'=>RegisteredUserController::Guides(),'newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesChangeRequest'=>$this->BuddiesChangeRequest(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
     }
 
     public function getallusers(Request $req){
@@ -480,6 +484,25 @@ class adminactions extends Controller
                 return back()->with('Buddy_Register_success','Student successfully registered as buddy!');
             }
 
+    }
+    public function ResetUserPassword(Request $req){
+        $user_id = $req->user_id;
+        $user_email = $req->user_email;
+        $subject = 'Account Password Reset';
+
+        if(DB::table('users')->where('id',$user_id)->update(['password'=>Hash::make('123456')])){
+            $EmailTitle = 'Password Reset';
+            $msg='
+            <p>Your account password was successfully reset.</p>
+            <p>Username : Email or Student ID</p>
+            <p>Default Password: 123456</p>
+            <p>Please remember to change your password to improve your account security.</p>
+            ';
+            return redirect()->route('emailsend',[$subject, $user_email,$EmailTitle,Crypt::encryptString($msg)]);
+        }else{
+            $postRole->save();
+            return back()->with('password_reset_error','Password could not be reset due to an error!');
+        }
     }
     public function RemoveAsBuddy(Request $req){
             $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();

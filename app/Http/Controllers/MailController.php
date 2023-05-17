@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Mail\MailNotify;
+use Illuminate\Support\Facades\Crypt;
 use Mail;
 
 class MailController extends Controller
 {
-    public function index($email,$title,$msg){
+    public function index($subject,$email,$title,$msg){
         $data = [
-            'subject'=>'Account Verification',
+            'subject'=>$subject,
             'title'=>$title,
-            'body'=>$msg
+            'body'=>Crypt::decryptString($msg)
         ];
 
         try {

@@ -58,15 +58,16 @@
         @endif
         <div class='mt-4' style='text-align:left'>
             <h3 class='mb-4' style='color: #113C7A; font-size: 15px;'>Useful resources</h3>
-            @foreach($Guides as $data)
-            <div class='row'>
-                @foreach($data as $v)
-                <a class='col-lg ml-3 mb-2 d-flex' href="/downloadGuides/{{$v[1]}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span style='font-size:12px; color: #113C7A; align-self:center;'>{{$v[0]}}</span></a><br/>
+            @if($Guides)
+                @foreach($Guides as $data)
+                    <div class='row'>
+                        @foreach($data as $v)
+                        <a class='col-lg ml-3 mb-2 d-flex' href="/downloadGuides/{{$v['file']}}"><i class='fa fa-file-pdf mr-2' style='font-size: 30px; color:var(--danger); height: 50px;'></i><span style='font-size:12px; color: #113C7A; align-self:center;'>{{$v['file_name']}}</span></a><br/>
+                        @endforeach
+                    </div>
                 @endforeach
-            </div>
-            @endforeach
+            @endif
         </div>
-        <!-- <p>{{$v[0]}}<a class='ml-3' href="/downloadGuides/{{$v[1]}}">Get File</a></p> -->
     </div>
     <div class="col py-5 px-md-5">
           <h2 class="fw-bold mb-5">Sign Up</h2>

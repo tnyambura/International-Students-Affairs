@@ -94,7 +94,6 @@
                         <i role='button' style='color:red; font-size:30px;' class='far fa-file-pdf'></i>
                         </button>
                     </form>
-                    <i role='button' style='color:green; font-size:30px;' class='far fa-file-excel ml-3'></i>
                 </div>
             </div>
             <div class="card-body">
