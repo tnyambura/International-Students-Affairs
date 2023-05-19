@@ -16,18 +16,19 @@ class FileUploader extends Controller
         //     'filenames.*' => 'mimes:doc,pdf,docx,zip,png,jpge,jpg'
         // ]);
 
-        $file=$request->file($inputName);
+        $file= ($path != 'Guides/')? $request->file($inputName): $request->file('file')[$inputName];
         // $fileNameParts = explode('.', $file);
         // $ext = end($fileNameParts);
 
         
-        $fileRename = $request->user()->id.'_'.$fieldname.'.'.$file->extension();
+        $fileRename = ($path != 'Guides/')?$request->user()->id.'_'.$fieldname.'.'.$file->extension() : $fieldname.'.'.$file->extension();
 
         $fileGet = public_path('Storage/'.$path.$fileRename);
         if(File::exists($fileGet)){
             File::delete($fileGet);
         }
         $file->move('storage/'.$path,$fileRename);
+
         
         return $fileRename;
         

@@ -207,7 +207,7 @@ class studentactions extends Controller
             $appId = rand(1000,1000000);
                 
             if(sizeOf(DB::table('kpps_application')->where('id',$appId)->get()) > 0){
-                Create_Newvisaextension($request);
+                $this->Create_Newvisaextension($request);
             }else{
                 $on_going_request = DB::select('select * from kpps_application where student_id ='.Auth::user()->id.' and (application_status = "pending" or application_status = "in progress") LIMIT 1');
                 
@@ -303,7 +303,7 @@ class studentactions extends Controller
             $appId = rand(1000,1000000);
             
             if(sizeOf(DB::table('extension_application')->where('id',$appId)->get()) > 0){
-                Create_Newvisaextension($request);
+                $this->Create_Newvisaextension($request);
             }else{
                 $on_going_request = DB::select('select * from extension_application where student_id ='.Auth::user()->id.' and (application_status = "pending" or application_status = "in progress") LIMIT 1');
                 if(sizeOf($on_going_request) > 0){
@@ -334,87 +334,6 @@ class studentactions extends Controller
         }
     }
 
-        /* Update Kpp Application */
-    // public function AvailabilityGetter(){
-    //     $availability = MySchedule::select('user_id','my_schedule')->get();
-    //     return $availability;
-    // }
-
-    public function updateKPP(request $req , $id){
-
-        $data = applykpp::find($req->id);
-
-        if($req->hasFile('passportPICTURE','biodataPAGE','biodataPAGE','currentVISA','guardiansID','commitmentLETTER'
-        ,'academicTRANSCRIPTS','policeCLEARANCE')) 
-        {
-            $path_pp= 'storage/kpps/'. $data->passportPICTURE ;
-            $path_bd= 'storage/kpps/'. $data->biodataPAGE;
-            $path_cv='storage/kpps/'.$data->currentVISA;
-            $path_gid='storage/kpps/'.$data->guardiansID;
-            $path_cL='storage/kpps/'.$data->commitmentLETTER;
-            $path_AT='storage/kpps/'.$data->academicTRANSCRIPTS;
-            $path_PC='storage/kpps/'.$data->policeCLEARANCE;
-
-            if(File::exists($path_pp,$path_bd,$path_cv,$path_gid,$path_cL,$path_AT,$path_PC)){
-                File::delete($path_pp,$path_bd,$path_cv,$path_gid,$path_cL,$path_AT,$path_PC);
-        }
-        $data->surNAME = $req->surNAME;
-        $data->otherNAMES = $req->otherNAMES;
-        $data->passportNUMBER = $req->passportNUMBER;
-        $data->suID = $req->suID;
-        $data->Course = $req->Course;
-        $data->Residence = $req->Residence;
-        $data->suEMAIL = $req->suEMAIL;
-        $data->Nationality = $req->Nationality;
-        $data->dateofENTRY = $req->dateofENTRY;
-        $data->phoneNUMBER = $req->phoneNUMBER;
-        $data->Faculty = $req->Faculty;
-
-        $path_pp=$req->file('passportPICTURE');
-        $path_bd=$req->file('biodataPAGE');
-        $path_cv=$req->file('currentVISA');
-        $path_gid=$req->file('guardiansID');
-        $path_cL=$req->file('commitmentLETTER');
-        $path_AT=$req->file('academicTRANSCRIPTS');
-        $path_PC=$req->file('policeCLEARANCE');
-
-        $extension1 = $path_pp -> getClientOriginalName();
-        $extension2 = $path_bd -> getClientOriginalName();
-        $extension3 = $path_cv -> getClientOriginalName();
-        $extension4 = $path_gid -> getClientOriginalName();
-        $extension5 = $path_cL -> getClientOriginalName();
-        $extension6 = $path_AT -> getClientOriginalName();
-        $extension7 = $path_PC -> getClientOriginalName();
-
-
-        $filename1 = time().'.'.$extension1;
-        $filename2 = time().'.'.$extension2;
-        $filename3 = time().'.'.$extension3;
-        $filename4 = time().'.'.$extension4;
-        $filename5 = time().'.'.$extension5;
-        $filename6 = time().'.'.$extension6;
-        $filename7 = time().'.'.$extension7;
-
-
-        $path_pp->move('storage/kpps/',$filename1);
-        $path_bd->move('storage/kpps/',$filename2);
-        $path_cv->move('storage/kpps/',$filename3);
-        $path_PC->move('storage/kpps/',$filename4);
-        $path_AT->move('storage/kpps/',$filename5);
-        $path_cL->move('storage/kpps/',$filename6);
-        $path_gid->move('storage/kpps/',$filename7);
-
-        $data->passportPICTURE = $filename1;
-        $data->biodataPAGE = $filename2;
-        $data->currentVISA = $filename3;
-        $data->guardiansID = $filename4;
-        $data->commitmentLETTER = $filename5;
-        $data->academicTRANSCRIPTS = $filename6;
-        $data->policeCLEARANCE = $filename7;
-        $data->update();
-        return redirect('/MykppApplications')->with('kpp_updated_successfully','Record Updated successfully');
-         }
-    }
 
     // public function getCountries(){
     //     $get_data= CountryController::readFile();
@@ -477,8 +396,9 @@ class studentactions extends Controller
             $All = DB::table("buddies_allocations")->where('buddy_id',$id)->get();
             foreach ($All as $value) {
                 $UserAssigned = DB::table("users")->select('surname','other_names','email')->where('id',$value->student_id)->limit(1)->get();
+                $yearOfStudy = DB::table("buddy_request")->select('year')->where('student_id',$value->student_id)->where('status','approved')->limit(1)->get()[0];
                 $UserAssignedDetails = DB::table("student_details")->where('student_id',$value->student_id)->limit(1)->get();
-                array_push($AllAssigned,array_merge((array)$UserAssigned[0],(array)$UserAssignedDetails[0]));
+                array_push($AllAssigned,array_merge((array)$UserAssigned[0],(array)$UserAssignedDetails[0],(array)$yearOfStudy));
             }
         }
 

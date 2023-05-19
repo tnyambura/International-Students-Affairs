@@ -233,18 +233,10 @@
                                 <th>Student Name</th>
                                 <th>Student Email</th>
                                 <th>Student Telephone</th>
+                                <th>Student Year</th>
                                 <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Student Id</th>
-                                    <th>Student Name</th>
-                                    <th>Student Email</th>
-                                    <th>Student Telephone</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </tfoot>
                             <tbody>
                             @if(sizeOf($allAllocated) > 0)
                             @foreach($allAllocated as $st)
@@ -253,6 +245,7 @@
                                     <td>{{$st['surname'].' '.$st['other_names']}}</td>
                                     <td>{{$st['email']}}</td>
                                     <td>{{$st['phone_number']}}</td>
+                                    <td>{{$st['year']}}</td>
                                     <td>
                                         <span class="fas fa-eye" aria-hidden="false"></span>
                                         

@@ -34,36 +34,47 @@
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
     </div>
     @endif
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <ul>
+            <li><i class="glyphicon glyphicon-warning-sign mx-3"></i><span>All the files must be of type PDF and must have maximum size of 2MB </span></li>
+        </ul>
+    </div>
+    <x-auth-validation-errors class="breadcrumb py-0 mb-4 d-flex align-items-center" style="color:#fff; background:#113C7A;" :errors="$errors" />
 
     <div class="container-fluid buddy-contents active" id="buddies_list"><br/>
         <div class="card mb-4 border-none">
+            @if(true)
+                <span style='margin:auto; font-size:40px; color: rgba(17, 60, 122,.3);'>Page not available!</span>
+            @else
             <div class="card-header d-flex" style='overflow:auto'>
                 <button class='append-new-guide d-flex align-items-center'><i class="material-icons  mr-2" style='color:var(--success)'>add</i> Add a file</button>
                 <button class='edif-guide-files d-flex align-items-center ml-3 pl-2' style='border-left:2px solid rgb(110,110,110,.4)'><i class='fa fa-edit mr-2' style='color:#113C7A'></i> Modify files</button>
             </div>
             <div class="card-body" style='overflow:auto'>
-                @if($Guides)
-                    <form class='file-form' action='{{route("add.FileManage")}}' method="post"> @csrf
-                        @foreach($Guides as $v)
-                            <div class='row my-2 align-item-center form-outline flex-nowrap'>
-                                <a class='col-1 d-flex align-items-center' href="/downloadGuides/8"><i class='fa fa-file-pdf mr-2' style='font-size: 40px; color:var(--danger); height: 50px;'></i></a>
-                                <input class='col-lg mr-3' name='file_name[]' type='text' style='outline:none; border:none; font-size:15px; color: #113C7A; align-self:center;' required value='{{$v["file_name"]}}' placeholder='Enter File label...' />
-                                <div class='col-3 d-flex'>
-                                    <label class='btn d-none' style='width:100px; height:38px; background: #113C7A; color:#fff; text-transform: capitalize;' for='choose_file_{{$v["id"]}}'>
-                                        <span style='font-size:12px;'>Choose File</span>
-                                        <input class='col-2 choose_file ' name='file[]' id='choose_file_{{$v["id"]}}' type='file' style='display: none; font-size:12px; color: #113C7A; align-self:center;'/>
-                                    </label>
-                                    <a class='d-flex align-items-center mx-2 px-2 remove-file' href="/remove-guide/{{$v['id']}}/{{Crypt::encryptString($v['file_name'])}}"><i class='fa fa-trash' style='font-size: 20px; color:var(--danger); height: 50px;'></i></a>
-                                </div>
-                            </div>
-                        @endforeach 
-                        <input class='btn mt-4' style='background: #113C7A; color:#fff; text-transform: capitalize;' type='submit' value='Save files'/>
-                    </form>
-                @else
-                <p>No File uploaded</p>
-                @endif
                 
+                    @if($Guides)
+                        <form class='file-form' action='{{route("add.FileManage")}}' method="post" enctype="multipart/form-data"> @csrf
+                            @foreach($Guides as $v)
+                                <div class='row my-2 align-item-center form-outline flex-nowrap'>
+                                    <a class='col-1 d-flex align-items-center' href="/downloadGuides/8"><i class='fa fa-file-pdf mr-2' style='font-size: 40px; color:var(--danger); height: 50px;'></i></a>
+                                    <input class='col-lg mr-3' name='file_name[]' type='text' style='outline:none; border:none; font-size:15px; color: #113C7A; align-self:center;' required value='{{$v["file_name"]}}' placeholder='Enter File label...' />
+                                    <div class='col-3 d-flex'>
+                                        <label class='btn d-none' style='width:100px; height:38px; background: #113C7A; color:#fff; text-transform: capitalize;' for='choose_file_{{$v["id"]}}'>
+                                            <span style='font-size:12px;'>Choose File</span>
+                                            <input class='col-2 choose_file ' name='file[]' id='choose_file_{{$v["id"]}}' type='file' style='display: none; font-size:12px; color: #113C7A; align-self:center;'/>
+                                        </label>
+                                        <a class='d-flex align-items-center mx-2 px-2 remove-file' href="/remove-guide/{{$v['id']}}/{{Crypt::encryptString($v['file_name'])}}"><i class='fa fa-trash' style='font-size: 20px; color:var(--danger); height: 50px;'></i></a>
+                                    </div>
+                                </div>
+                            @endforeach 
+                            <input class='btn mt-4' style='background: #113C7A; color:#fff; text-transform: capitalize;' type='submit' value='Save files'/>
+                        </form>
+                    @else
+                    <p>No File uploaded</p>
+                    @endif
+                    
             </div>
+            @endif
         </div>
     </div>
 

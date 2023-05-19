@@ -34,10 +34,7 @@ use App\Exports\UsersExport;
 use App\Exports\VisaExport;
 use PDF;
 use DB;
-
-
-
-
+use Mockery\Undefined;
 
 class adminactions extends Controller
 {
@@ -267,22 +264,30 @@ class adminactions extends Controller
     }
     public function FileManage(Request $req){
         $postGuide = new Guides();
+        // $this->validate($req,[
+        //     'file' => 'mimes:pdf'
+        // ]
+        // );
         foreach ($req->file_name as $k => $value) {
-            // $file=null;
-            if($req->file[$k] != null){
-                // $file = $req->file[$k];
-                $postGuide->file = $req->file[$k];
-            }
-            $postGuide->file_name = $value;
+            // if($req->file('file')[$k]){
+            //     if($req->file('file')[$k] != null){
+            //     // array_push($a,$req->file[$k]);
+            //     $fileName = FileUploader::fileupload($req,$k,$value,'Guides/');
 
-            $postGuide->timestamps = false;
+            //     $postGuide->file = $fileName;
+            //     $postGuide->file_name = $value;
+            //     $postGuide->timestamps = false;
+            //     }
+            // }
+            
         }
+        return back()->with('file_saved','The files '.json_encode($req->file_name).' ===> '.json_encode($req->file));
 
-        if($postGuide->save()){
-            return back()->with('file_saved','The files '.json_encode($req->file_name).' were successfully saved.');
-        }else{       
-            return back()->with('file__error','The files could not be save. Try later');
-        }
+        // if($postGuide->save()){
+        //     return back()->with('file_saved','The files '.json_encode($req->file_name).' were successfully saved.'.json_encode($req->file));
+        // }else{
+        //     return back()->with('file__error','The files could not be save. Try later');
+        // }
     }
     public function manageFiles(){
         return view('Layouts/AdminActions/ManageFiles',['Guides'=>RegisteredUserController::Guides(),'newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesChangeRequest'=>$this->BuddiesChangeRequest(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
