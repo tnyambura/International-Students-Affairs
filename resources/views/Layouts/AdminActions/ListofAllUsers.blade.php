@@ -127,7 +127,7 @@
                                 @endif
 
                                 <td>
-                                    <span data-toggle="modal" role='button' data-target="#userDetails_{{$user['user_id']}}" class="fas fa-eye view-app-btn mt-2 mb-2" style=" color:blue"></span>
+                                    <span data-toggle="modal" role='button' data-target="#userDetails_{{$user['user_id']}}" class="fas fa-eye view-app-btn mt-2 mb-2" style=" color:rgb(17,60,122)"></span>
                                 <!-- <div role='button' >
                                     View User
                                 <div> -->
@@ -205,7 +205,7 @@
                                                                 </div>
                                                             @endif
                                                             </div>
-                                                            <button type="submit" class="btn btn-primary w-50 mt-4">Submit</button>
+                                                            <button type="submit" class="btn w-50 mt-4" style='background: rgba(17,60,122,.4); color:#fff'>Submit</button>
                                                         </form>
                                                         
                                                     </div>
@@ -214,14 +214,14 @@
                                                         <form method="POST" class='col' action='{{route("add.makeBuddy")}}'>
                                                         @csrf
                                                             <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
-                                                            <button type='submit' class="btn btn-success w-100 mb-2">Make a Buddy</button>
+                                                            <button type='submit' class="btn w-100 mb-2" style='background:#113C7A; color:#fff'>Make a Buddy</button>
                                                         </form>
                                                         @endif
                                                         <form method="POST" class='col' action='{{route("add.reset_password")}}'>
                                                         @csrf
                                                             <input type="hidden" name="user_id" value='{{$user["user_id"]}}'/>
                                                             <input type="hidden" name="user_email" value='{{$user["email"]}}'/>
-                                                            <button type='submit' data-target="{{$user['surname'].' '.$user['other_names']}}" class="restPassBtn btn btn-warning w-100 mb-2" style='color:#fff;'>Reset Password</button>
+                                                            <button type='submit' data-target="{{$user['surname'].' '.$user['other_names']}}" class="restPassBtn btn w-100 mb-2" style='color:#fff; background: rgba(110,110,110,.6)'>Reset Password</button>
                                                         </form>
                                                     </div>
                                                     <form class='px-4' method="POST" action='{{route("add.activate")}}'>
