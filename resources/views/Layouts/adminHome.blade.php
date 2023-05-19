@@ -37,17 +37,38 @@
                         </li>
                     </ol> 
                     <div class="card-block statistics-display">
+                        <?php $kppCount = 0;
+                            $extCount = 0;
+                            $bdCount = 0;
+                            $meetCount = 0;
+                            $KpRqCnt = [];
+                            $ExRqCnt = [];
+                            if(sizeOf($KppStatistics)>0){
+                                foreach($KppStatistics as $v){
+                                    if(!in_array($v->student_id,$KpRqCnt)){
+                                        array_push($KpRqCnt,$v->student_id);
+                                    }
+                                }
+                            }
+                            if(sizeOf($ExtStatistics)>0){
+                                foreach($ExtStatistics as $v){
+                                    if(!in_array($v->student_id,$ExRqCnt)){
+                                        array_push($ExRqCnt,$v->student_id);
+                                    }
+                                }
+                            }
+
+                        ?>
                         <div class="row">
                             <div class="col-xl-3 col-md-6 mt-4 mb-1">
                                 <h6>No of Kpp Request</h6>
                                 <div class="m-t-30 progresss">
-                                    <div class="progress-bar bg-c-red" data-progress='{{(sizeOf($KppStatistics)>0)?round(sizeOf($KppStatistics)*100/$NoStudents,1):0}}%' style="width:{{(sizeOf($KppStatistics)>0)?sizeOf($KppStatistics)*100/$NoStudents:0}}%"></div>
+                                    <div class="progress-bar bg-c-red" data-progress='{{(sizeOf($KpRqCnt)>0)?round(sizeOf($KpRqCnt)*100/$NoStudents,1):0}}%' style="width:{{(sizeOf($KpRqCnt)>0)?sizeOf($KpRqCnt)*100/$NoStudents:0}}%"></div>
                                 </div>
-                                <h5 class="f-w-700 progress-label pb-2">{{sizeOf($KppStatistics)}}</h5>
+                                <h5 class="f-w-700 progress-label pb-2">{{sizeOf($KpRqCnt)}}</h5>
 
                                 <div class='bg-c-red p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
                                     <h6 class='pb-3 pt-1'>No of Kpps Approved</h6>
-                                    @php $kppCount = 0; @endphp
                                     @if(sizeOf($KppStatistics)>0)
                                     @foreach($KppStatistics as $v)
                                         @if($v->application_status === 'approved')
@@ -61,12 +82,11 @@
                             <div class="col-xl-3 col-md-6 mt-4 mb-1">
                                 <h6>No of Visa Extension Request</h6>
                                 <div class="m-t-30 progresss">
-                                    <div class="progress-bar bg-c-blue"  data-progress='{{(sizeOf($ExtStatistics)>0)?round(sizeOf($ExtStatistics)*100/$NoStudents,1):0}}%' style="width:{{(sizeOf($ExtStatistics)>0)?sizeOf($ExtStatistics)*100/$NoStudents:0}}%"></div>
+                                    <div class="progress-bar bg-c-blue"  data-progress='{{(sizeOf($ExRqCnt)>0)?round(sizeOf($ExRqCnt)*100/$NoStudents,1):0}}%' style="width:{{(sizeOf($ExRqCnt)>0)?sizeOf($ExRqCnt)*100/$NoStudents:0}}%"></div>
                                 </div>
-                                <h5 class="f-w-700 progress-label pb-2">{{sizeOf($ExtStatistics)}}</h5>
+                                <h5 class="f-w-700 progress-label pb-2">{{sizeOf($ExRqCnt)}}</h5>
                                 <div class='bg-c-blue p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
                                     <h6 class='pb-3 pt-1'>No of Extensions Approved</h6>
-                                    @php $extCount = 0; @endphp
                                     @foreach($ExtStatistics as $v)
                                         @if($v->application_status === 'approved')
                                             @php $extCount = $extCount + 1; @endphp
@@ -83,7 +103,6 @@
                                 <h5 class="f-w-700 progress-label pb-2">{{sizeOf($BuddyStatistics)}}</h5>
                                 <div class='bg-c-green p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
                                     <h6 class='pb-3 pt-1'>No of Allocations</h6>
-                                    @php $bdCount = 0; @endphp
                                     @foreach($BuddyStatistics as $v)
                                         @if($v['status'] === 'approved')
                                             @php $bdCount = $bdCount + 1; @endphp
@@ -100,7 +119,6 @@
                                 <h5 class="f-w-700 progress-label pb-2">{{sizeOf($MeetingStatistics)}}</h5>
                                 <div class='bg-c-yellow p-3 pt-0' style="color:#fff; border-radius: 0 0 10px 10px;">
                                     <h6 class='pb-3 pt-1'>No of Meetings Approved</h6>
-                                    @php $meetCount = 0; @endphp
                                     @foreach($MeetingStatistics as $v)
                                         @if($v->status === 'met')
                                             @php $meetCount = $meetCount + 1; @endphp

@@ -512,10 +512,11 @@ class studentactions extends Controller
         // return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
     }
 
-    public function PushBuddyRq($id){
+    public function PushBuddyRq($id,$year){
         $post = new Request_Buddy();
         $post->buddy_request_id = rand(1000,1000000);
         $post->student_id = $id;
+        $post->year = $year;
         $post->status = 'pending';
         $post->request_date = $this->CurrentDate();
 
@@ -528,11 +529,12 @@ class studentactions extends Controller
     public function RequestABuddy(Request $request){
 
         $id = $request->user()->id;             
+        $year = $request->YearOfStudy;             
         $data = DB::table("buddy_request")->where('student_id','=',$id)->get();
         $status = true;
         
         if(sizeOf($data) < 1){
-            if($this->PushBuddyRq($id)){
+            if($this->PushBuddyRq($id,$year)){
                 return back()->with('New_request_assigned','Request submitted Successfully');
             }
         }else{
@@ -547,7 +549,7 @@ class studentactions extends Controller
                 }
             }
             if($status){
-                if($this->PushBuddyRq($id)){
+                if($this->PushBuddyRq($id,$year)){
                     return back()->with('New_request_assigned','Request submitted Successfully');
                 }
             }

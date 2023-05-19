@@ -11,5 +11,4 @@ class Request_Buddy extends Model
 
     protected $table = "buddy_request";
 
-
 }

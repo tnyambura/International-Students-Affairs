@@ -114,7 +114,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::post('/editMyProfile', [adminactions::class, 'editMyProfile'])->name('add.editMyProfile');
      Route::post('/editUserData', [adminactions::class, 'editUserData'])->name('add.editUserData');
      Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('isAdmin')->name('add.activate');
-     Route::get('/kppRequestList', [adminactions::class, 'getAllkppApplications'])->middleware('isAdmin');
+     Route::get('/visa', [adminactions::class, 'getAllkppApplications'])->middleware('isAdmin')->name('visa');
      Route::get('/VisaRequestList', [adminactions::class, 'getAllvisaextensionrequests'])->middleware('isAdmin');
      Route::get('/initiatedkpps', [adminactions::class, 'initiatedkppApps'])->middleware('isAdmin');
      Route::get('/allocations-report', [adminactions::class, 'getallAllocationsReport'])->middleware('isAdmin');
@@ -150,7 +150,8 @@ Route::group(['middleware' => ['auth']], function(){
      
      Route::get('/PDF', [adminactions::class, 'generatestudentlist'])->middleware('isAdmin');
      Route::get('/BuddyAllocationsPDF', [adminactions::class, 'generateBuddyAllocationList'])->middleware('isAdmin');
-
+     
+     Route::get('/remove-guide/{id}/{file}', [adminactions::class, 'RemoveGuideFile'])->middleware('isAdmin');
 
      Route::get('/ManageBuddies', [adminactions::class, 'BuddiesManagement'])->middleware('isAdmin');
      Route::post('/RegisterBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('isAdmin')->name('add.makeBuddy');
@@ -182,6 +183,7 @@ Route::group(['middleware' => ['auth']], function(){
      Route::get('/viewVisaReport', [adminactions::class,'getAllApprovedVisaReport'])->middleware('isAdmin');
      Route::post('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin')->name('add.statistics');
      Route::post('/StatReport', [DashboardController::class,'statReport'])->middleware('isAdmin')->name('add.stat');
+     Route::post('/manage-file-action', [adminactions::class,'FileManage'])->middleware('isAdmin')->name('add.FileManage');
      //  Route::get('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin');
      Route::get('/statistics-filter/{year}', [DashboardController::class,'getStatistics'])->middleware('isAdmin');
      Route::post('/exportExcel', [adminactions::class,'ExcelExport'])->middleware('isAdmin')->name('add.exportExcel');

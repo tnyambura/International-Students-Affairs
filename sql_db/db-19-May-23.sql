@@ -106,7 +106,7 @@ CREATE TABLE `buddies_allocations` (
 
 LOCK TABLES `buddies_allocations` WRITE;
 /*!40000 ALTER TABLE `buddies_allocations` DISABLE KEYS */;
-INSERT INTO `buddies_allocations` VALUES (201242,86526,101618,999999,NULL,1);
+INSERT INTO `buddies_allocations` VALUES (231707,644786,54432,999999,NULL,0);
 /*!40000 ALTER TABLE `buddies_allocations` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -139,6 +139,7 @@ DROP TABLE IF EXISTS `buddy_request`;
 CREATE TABLE `buddy_request` (
   `buddy_request_id` int NOT NULL,
   `student_id` int NOT NULL,
+  `year` int NOT NULL,
   `status` enum('pending','cancel','approved') NOT NULL,
   `request_date` timestamp NOT NULL,
   PRIMARY KEY (`buddy_request_id`),
@@ -153,7 +154,7 @@ CREATE TABLE `buddy_request` (
 
 LOCK TABLES `buddy_request` WRITE;
 /*!40000 ALTER TABLE `buddy_request` DISABLE KEYS */;
-INSERT INTO `buddy_request` VALUES (40981,101618,'cancel','2023-05-05 07:59:41'),(86526,101618,'approved','2023-05-05 08:07:34'),(485413,101618,'cancel','2023-05-05 07:59:57'),(508060,101618,'cancel','2023-05-05 08:04:26');
+INSERT INTO `buddy_request` VALUES (644786,54432,2,'approved','2023-05-12 17:51:47'),(762454,101618,4,'pending','2023-05-19 09:23:55');
 /*!40000 ALTER TABLE `buddy_request` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,8 +189,33 @@ CREATE TABLE `extension_application` (
 
 LOCK TABLES `extension_application` WRITE;
 /*!40000 ALTER TABLE `extension_application` DISABLE KEYS */;
-INSERT INTO `extension_application` VALUES (586909,101618,'101618_PassportBioData_586909.png','101618_entryPage_586909.png','101618_CurrentVisa_586909.png','2023-03-19','2023-03-16 00:00:00','declined','66753_ExtensionDoc586909.png',NULL,NULL),(785647,101618,'101618_PassportBioData_785647.png','101618_entryPage_785647.png','101618_CurrentVisa_785647.png','2023-03-19','2023-03-16 00:00:00','approved','66753_ExtensionDoc785647.png','2025-12-17',NULL);
+INSERT INTO `extension_application` VALUES (210947,101618,'101618_PassportBioData_210947.png','101618_entryPage_210947.png','101618_CurrentVisa_210947.png','2023-03-19','2023-03-16 00:00:00','pending',NULL,NULL,NULL),(586909,101618,'101618_PassportBioData_586909.png','101618_entryPage_586909.png','101618_CurrentVisa_586909.png','2023-03-19','2023-03-16 00:00:00','declined','66753_ExtensionDoc586909.png',NULL,NULL),(785647,101618,'101618_PassportBioData_785647.png','101618_entryPage_785647.png','101618_CurrentVisa_785647.png','2023-03-19','2023-03-16 00:00:00','approved','66753_ExtensionDoc785647.png','2025-12-17',NULL);
 /*!40000 ALTER TABLE `extension_application` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `guide_files`
+--
+
+DROP TABLE IF EXISTS `guide_files`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `guide_files` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `file_name` varchar(200) DEFAULT NULL,
+  `file` text,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `guide_files`
+--
+
+LOCK TABLES `guide_files` WRITE;
+/*!40000 ALTER TABLE `guide_files` DISABLE KEYS */;
+INSERT INTO `guide_files` VALUES (2,'Student Pass Applications Requirements - First Time Applications','guide.pdf'),(3,'Student Pass Applications Requirements - For Renewals','guide.pdf'),(4,'Jubilee Medical Insurance - Write up and Membership','guide.pdf');
+/*!40000 ALTER TABLE `guide_files` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -339,7 +365,7 @@ CREATE TABLE `student_details` (
   UNIQUE KEY `passport_number_UNIQUE` (`passport_number`),
   KEY `student_details_ibfk_1` (`student_id`),
   CONSTRAINT `student_details_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -348,7 +374,7 @@ CREATE TABLE `student_details` (
 
 LOCK TABLES `student_details` WRITE;
 /*!40000 ALTER TABLE `student_details` DISABLE KEYS */;
-INSERT INTO `student_details` VALUES (38,101618,'0718744632','FIT','BBIT','Democratic Republic of the Congo','OP0071855','2024-05-30','passport.jpg','Qwetu'),(39,999999,'0758744321','FIT','BBIT','Ireland','OP1171855','2024-05-21','passport.jpg','Qwetu');
+INSERT INTO `student_details` VALUES (38,101618,'0718744632','FIT','BBIT','Democratic Republic of the Congo','OP0071855','2024-05-30','passport.jpg','Qwetu'),(39,999999,'0758744321','FIT','BBIT','Ireland','OP1171855','2024-05-21','passport.jpg','Qwetu'),(40,54432,'0798700632','Strathmore institute of management','Diploma in Business Creation and Entrepreneurship','Kenya','OP0871899','2024-05-21','passport.jpg','Qwetu');
 /*!40000 ALTER TABLE `student_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -369,7 +395,7 @@ CREATE TABLE `student_guardian` (
   PRIMARY KEY (`id`),
   KEY `student_guardian_ibfk_1` (`student_id`),
   CONSTRAINT `student_guardian_ibfk_1` FOREIGN KEY (`student_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -378,7 +404,7 @@ CREATE TABLE `student_guardian` (
 
 LOCK TABLES `student_guardian` WRITE;
 /*!40000 ALTER TABLE `student_guardian` DISABLE KEYS */;
-INSERT INTO `student_guardian` VALUES (34,101618,'Not Applicable','Not Applicable','Not Applicable','notApplicable'),(35,999999,'Not Applicable','Not Applicable','Not Applicable','notApplicable');
+INSERT INTO `student_guardian` VALUES (34,101618,'Not Applicable','Not Applicable','Not Applicable','notApplicable'),(35,999999,'Not Applicable','Not Applicable','Not Applicable','notApplicable'),(36,54432,'Not Applicable','Not Applicable','Not Applicable','notApplicable');
 /*!40000 ALTER TABLE `student_guardian` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -418,7 +444,7 @@ CREATE TABLE `user_roles` (
   PRIMARY KEY (`id`),
   KEY `user_roles_ibfk_1` (`user_id`),
   CONSTRAINT `user_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -427,7 +453,7 @@ CREATE TABLE `user_roles` (
 
 LOCK TABLES `user_roles` WRITE;
 /*!40000 ALTER TABLE `user_roles` DISABLE KEYS */;
-INSERT INTO `user_roles` VALUES (29,66753,'super_admin'),(58,101618,'student'),(59,100001,'admin'),(60,999999,'student'),(61,999999,'buddy');
+INSERT INTO `user_roles` VALUES (29,66753,'super_admin'),(58,101618,'student'),(59,100001,'admin'),(60,999999,'student'),(61,999999,'buddy'),(62,54432,'student');
 /*!40000 ALTER TABLE `user_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -449,7 +475,7 @@ CREATE TABLE `user_verification` (
   PRIMARY KEY (`id`),
   KEY `user_verification_ibfk_1` (`user_id`),
   CONSTRAINT `user_verification_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -458,7 +484,7 @@ CREATE TABLE `user_verification` (
 
 LOCK TABLES `user_verification` WRITE;
 /*!40000 ALTER TABLE `user_verification` DISABLE KEYS */;
-INSERT INTO `user_verification` VALUES (32,101618,1,'2023-05-05 07:44:03','','2023-05-05 07:44:03','2023-05-05 07:44:04'),(33,999999,0,'2023-05-05 07:51:34','','2023-05-05 07:51:34','2023-05-05 07:51:34');
+INSERT INTO `user_verification` VALUES (32,101618,1,'2023-05-05 07:44:03','','2023-05-05 07:44:03','2023-05-05 07:44:04'),(33,999999,0,'2023-05-05 07:51:34','','2023-05-05 07:51:34','2023-05-05 07:51:34'),(34,54432,1,'2023-05-12 17:42:58','','2023-05-12 17:42:58','2023-05-12 17:42:58');
 /*!40000 ALTER TABLE `user_verification` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -489,7 +515,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (66753,'Neeel','Ottttr','m','neeee@gmail.com','$2y$10$EMfcP3omxlZgqKtq9w8B/ebE.nitADK8hYC0tANaZX/QEXezVRye.',NULL,1),(100001,'admin','admin','f','admin@admin.io','$2y$10$0inpQljmvg7K05FnRT8C4OjIIMPisFwnahw7BD9tizYdNMB9uqhaC',NULL,1),(101618,'Given Masheka','Masheka','m','givenshr8@gmail.com','$2y$10$R64okhtqkqT2/iollDirXO1ebqyeYmdQ6MqcJyMaSzKmNJYpH7Vg6',NULL,1),(999999,'Smith','John','m','jamessmith@gmail.com','$2y$10$Xxsq2hFJUQB.PSUeFdGKH.egiqZlQpEMZfrFiZp2G8R4yzC1.yWre',NULL,1);
+INSERT INTO `users` VALUES (54432,'Cool','Gad','f','ishapa.given@strathmore.edu','$2y$10$JV9sZXLbZKA9Qte0uRuo4u/QTLOBHJ8sBqyCKctSfCg22JCuEg9qC',NULL,1),(66753,'Neeel','Ottttr','m','neeee@gmail.com','$2y$10$EMfcP3omxlZgqKtq9w8B/ebE.nitADK8hYC0tANaZX/QEXezVRye.',NULL,1),(100001,'admin','admin','f','admin@admin.io','$2y$10$0inpQljmvg7K05FnRT8C4OjIIMPisFwnahw7BD9tizYdNMB9uqhaC',NULL,1),(101618,'Given Masheka','Masheka','m','givenshr8@gmail.com','$2y$10$bW4rNrzB4AVe1av7Tpkx9.iYCBpUh.Wtu9oVe817omaZ7C6obImfS',NULL,1),(999999,'Smith','John','m','jamessmith@gmail.com','$2y$10$Xxsq2hFJUQB.PSUeFdGKH.egiqZlQpEMZfrFiZp2G8R4yzC1.yWre',NULL,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -564,4 +590,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-05-12 15:19:00
+-- Dump completed on 2023-05-19 12:27:28

@@ -11,6 +11,6 @@ class Guides extends Model
     protected $table = "guide_files";
 
     protected $fillable = [
-		'file_name','file'
+		'id','file_name','file'
 	];
 }

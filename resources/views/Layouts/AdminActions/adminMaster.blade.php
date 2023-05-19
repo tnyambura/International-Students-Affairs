@@ -75,7 +75,7 @@
                                 List of all Users
                             </a>
                              <!-- Add a student list controller and view page-->
-                             <a class="nav-link" href="{{ __('kppRequestList')}}">
+                             <a class="nav-link" href="{{ __('visa')}}">
                                 <div class="sb-nav-link-icon"><i class="fab fa-cc-visa"></i></div>
                                 Visa Applications
                                 @if($newVisaReq > 0)

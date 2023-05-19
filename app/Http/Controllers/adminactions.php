@@ -12,6 +12,7 @@ use App\Http\Controllers\FileUploader;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Models\Guides;
 use App\Models\addNewStudent;
 use App\Models\Request_Buddy;
 use App\Models\FetchBuddyRequests;
@@ -264,8 +265,36 @@ class adminactions extends Controller
         }
 
     }
+    public function FileManage(Request $req){
+        $postGuide = new Guides();
+        foreach ($req->file_name as $k => $value) {
+            // $file=null;
+            if($req->file[$k] != null){
+                // $file = $req->file[$k];
+                $postGuide->file = $req->file[$k];
+            }
+            $postGuide->file_name = $value;
+
+            $postGuide->timestamps = false;
+        }
+
+        if($postGuide->save()){
+            return back()->with('file_saved','The files '.json_encode($req->file_name).' were successfully saved.');
+        }else{       
+            return back()->with('file__error','The files could not be save. Try later');
+        }
+    }
     public function manageFiles(){
         return view('Layouts/AdminActions/ManageFiles',['Guides'=>RegisteredUserController::Guides(),'newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesChangeRequest'=>$this->BuddiesChangeRequest(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
+    }
+    public function RemoveGuideFile($id,$file){
+        $dropFile = Guides::where('id',$id)->delete();
+        
+        if($dropFile){
+            return back()->with('file_drop_success','The file '.Crypt::decryptString($file).' was successfully dropped.');
+        }else{       
+            return back()->with('file_drop_error','The file '.Crypt::decryptString($file).' couldn\'t be dropped. Try later');
+        }
     }
 
     public function getallusers(Request $req){

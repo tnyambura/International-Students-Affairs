@@ -4,7 +4,7 @@
     <span>Request Student Pass</span>
 </nav>
 <div class="container-fluid"><br/>
-        <ol class="breadcrumb mb-4" style="background:#286DE7;">
+        <ol class="breadcrumb mb-4" style="background:#113C7A;">
             <li class="breadcrumb-item active" style="color:white;">Kenyan Student Pass Application Request</li>
         </ol> 
         @if(Session::has('booking-success'))
