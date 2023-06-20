@@ -1,0 +1,129 @@
+::-webkit-scrollbar{
+    display: none;
+}
+body{
+    width: 100vw;
+    background: rgb(17,60,122);
+    display: grid;
+    grid-template-columns: 40% 1fr;
+}
+.img-logo-container{
+    position: relative;
+    display: flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding-block: 10px;
+}
+.img-logo-container p{
+    padding-inline: 10px;
+    margin-block: 5px;
+    text-transform: capitalize;
+    font-size: 25px;
+    color: #fff;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    text-align:center;
+    line-height: 35px;
+}
+.logo-wrapper{
+    width: 300px;
+    overflow: hidden;
+    background-image: url('../../asset/img/flags.jpeg'),
+    url('../../asset/img/intern2.jpg'),
+    url('../../homeassets/img/bg-masthead.jpg');
+    background-position:
+    top right, center,
+    bottom left; 
+    background-repeat:
+    no-repeat;
+    /* background-size: 100% 100%; */
+    border-radius: 50%;
+    animation: animatedBackground 5s ease-in-out infinite alternate;
+    filter: blur(1px)
+}
+#anim_logo{
+    width:100%;
+}
+.logo-svg{
+
+}
+#path1143{
+    fill: rgb(17,60,122);
+    fill-opacity:.9;
+}
+.form-data {
+    display: grid;
+    grid-template-columns: 1fr;
+    /* flex-direction:column;
+    align-items: center;
+    justify-content: center; */
+    /* place-items:center; */
+    overflow: auto;
+    padding-inline: 30px;
+    margin-block: 20px;
+}
+.form-title{
+    text-align: left;
+    font-size: 30px;
+    color: #fff;
+    width: 100%;
+    margin-block: 10px;
+    margin-top: 50px;
+}
+.form-data form{
+    padding-inline: 40px;
+    width: 100%;
+}
+.form-data form label{
+    color: rgb(199, 140, 22);
+    font-size: 12px !important;
+}
+.form-data form input:not([type='submit']){
+    border-radius: 5px;
+    padding: 10px;
+}
+.more-links-container{
+    display:flex; 
+    justify-content: center;
+    flex-wrap: wrap; 
+    flex: auto;
+    line-height: 25px
+}
+.more-link{
+    margin-block: 10px;
+    padding: 0px 15px;
+    color: #fff;
+    font-size: 12px;
+}
+.more-link:not(.more-link:last-child){ border-right: 2px solid #fff}
+@keyframes animatedBackground {
+    from {
+        background-position: 0 50%;
+    }
+    to {
+        background-position: 100% 50%;
+    }
+}
+
+@media (min-width: 1900px) {
+    body{
+        padding-inline: 10%;
+    }
+}
+@media (max-width: 800px) {
+    body{
+        grid-template-columns: 100%;
+        /* grid-template-rows: 1fr 1fr; */
+    }
+    .logo-wrapper{
+        width: 200px;
+    }
+    .form-data {
+        padding-inline: 20px;
+        overflow: unset;
+    }
+    .form-data form{
+        padding-inline: 0;
+    }
+}
