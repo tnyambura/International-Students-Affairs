@@ -13,9 +13,9 @@ class CreateViewAllBookingsTable extends Migration
      */
     public function up()
     {
-        DB::statement('DROP VIEW IF EXISTS all_bookings');
-        $statement = 'CREATE VIEW all_bookings AS
-        SELECT bookingList.id, users.id AS u_id, users.surname, users.other_names, bookingList.booked_date_time , bookingList.status 
+        // DB::statement('DROP VIEW IF EXISTS all_bookings');
+        $statement = 'CREATE OR REPLACE  VIEW all_bookings AS
+        SELECT bookingList.id, users.id AS u_id, users.surname, users.other_names, bookingList.booked_date_time , bookingList.status
         FROM users,bookingList WHERE users.id = bookingList.student_id';
         DB::statement($statement);
     }

@@ -7,11 +7,12 @@
 node_modules/
 dist/
 public/storage
-vendor
+vendor/*
 storage/*
 .env
 sql_db
 sql
+.vscode
 
 # Compiled Java class files
 *.class
