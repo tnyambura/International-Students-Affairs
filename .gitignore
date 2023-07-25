@@ -6,12 +6,12 @@
 # Node artifact files
 node_modules/
 dist/
-public/storage
-vendor
+public/storage/*
+vendor/
 storage/*
 .env
-sql_db
-sql
+sql_db/
+sql/
 
 # Compiled Java class files
 *.class

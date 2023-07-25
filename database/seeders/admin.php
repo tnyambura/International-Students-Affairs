@@ -25,7 +25,7 @@ class admin extends Seeder
               'surname'         => 'Nyambura',
               'other_names'         => 'Thomas Macharia',
               'gender'         => 'm',
-              'email'       => 'tmacharia@gmail.com',
+              'email'       => 'thomasmacharia3@gmail.com',
               'password' => Crypt::encrypt('123456'),
               'remember_token'       => '',
               'status'       => 1
