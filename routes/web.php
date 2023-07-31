@@ -31,7 +31,7 @@ use App\Models\Role;
 
 Route::get('/',function () {
     // return view('Layouts.home',['Guides'=>(RegisteredUserController::Guides())?RegisteredUserController::Guides():false]);
-    return view('Layouts.home',['Guides'=>(RegisteredUserController::Guides())?array_chunk(RegisteredUserController::Guides(),2):false]);
+    return view('Layouts.home',['Guides'=>RegisteredUserController::Guides(), 'more_links'=>RegisteredUserController::GetMoreLinks()]);
 })->middleware('guest');
 
 Route::get('/stat/{img}',function($img){return view('welcome',['dt'=>$img]);});

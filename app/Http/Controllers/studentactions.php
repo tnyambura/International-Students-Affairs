@@ -796,7 +796,7 @@ class studentactions extends Controller
     }
 
     public function NewSignup(){
-        return view('auth/signup',['Guides'=>(RegisteredUserController::Guides())?array_chunk(RegisteredUserController::Guides(),2):false,'countries'=>RegisteredUserController::getCountries(),'courses'=>RegisteredUserController::getCourses(),'faculties'=>RegisteredUserController::getFaculties()]);
+        return view('auth/signup',['Guides'=>RegisteredUserController::Guides(),'countries'=>RegisteredUserController::getCountries(),'courses'=>RegisteredUserController::getCourses(),'faculties'=>RegisteredUserController::getFaculties(), 'more_links'=>RegisteredUserController::GetMoreLinks()]);
     
     }
 
@@ -841,23 +841,23 @@ class studentactions extends Controller
 
     public function AddNewSignup(Request $request){
 
-        if($request->filled('id','surNAME','otherNAMES','gender','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence')){
-            $this->validate($request,[
-                'id'=>'required|max:8',
-                'surNAME'=>'required',
-                'otherNAMES'=>'required',
-                'gender'=>'required',
-                'email'=>'required|email',
-                'phoneNUMBER'=>'required|min:10',
-                'Faculty'=>'required',
-                'Course'=>'required',
-                'Nationality'=>'required',
-                'passport_number'=>'required',
-                'passport_expire'=>'required',
-                'Residence'=>'required'
+        $this->validate($request,[
+            'id'=>'required|max:8',
+            'surNAME'=>'required',
+            'otherNAMES'=>'required',
+            'gender'=>'required',
+            'email'=>'required|email|unique:users',
+            'phoneNUMBER'=>'required|min:10|unique:users',
+            'Faculty'=>'required',
+            'Course'=>'required',
+            'Nationality'=>'required',
+            'passport_number'=>'required',
+            'passport_expire'=>'required',
+            'Residence'=>'required'
 
-                ]
-            );
+            ]
+        );
+        // if($request->filled('id','surNAME','otherNAMES','gender','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence')){
 
             if($request->notApplicable === 'Applicable'){
                 $this->validate($request,[
@@ -963,9 +963,9 @@ class studentactions extends Controller
                     return back()->with('New_Student_Added','Your account has been added Successfully');
                 }
             }
-        }else{
-            return back()->with('New_Student_failed','some feilds are missing!');
-        }
+        // }else{
+        //     return back()->with('New_Student_failed','some feilds are missing!');
+        // }
 
     }
 

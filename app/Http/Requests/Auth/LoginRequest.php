@@ -35,8 +35,8 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'suID' => 'required|string|string',
-            'password' => 'required|string',
+            'Su_Id_or_Email' => 'required',
+            'password' => 'required',
         ];
     }
 
@@ -50,9 +50,9 @@ class LoginRequest extends FormRequest
     public function authenticate(Request $request){
         $this->ensureIsNotRateLimited();
 
-        // $credentials = array('id'=>$this->input('suID'),'password'=>$this->input('password'));
+        // $credentials = array('id'=>$this->input('Su_Id_or_Email'),'password'=>$this->input('password'));
 
-        // $userRole = DB::table('roles')->where('user_id', '=',$this->input('suID'))->limit(1)->get();
+        // $userRole = DB::table('roles')->where('user_id', '=',$this->input('Su_Id_or_Email'))->limit(1)->get();
         // // if(1 !== 0){
 
         //     $redirectTo ='';
@@ -96,7 +96,7 @@ class LoginRequest extends FormRequest
         //         //     'id'=>"Your account is not activated ".json_encode($userRole)
         //         // ]);
         //     }else{
-            $user = DB::table('users')->where('id',$this->input('suID'))->orWhere('email',$this->input('suID'))->limit(1)->get();
+            $user = DB::table('users')->where('id',$this->input('Su_Id_or_Email'))->orWhere('email',$this->input('Su_Id_or_Email'))->limit(1)->get();
             
             if(sizeOf($user) > 0){
                 $credentials = array('id'=>$user[0]->id,'password'=>$this->input('password'));
@@ -104,7 +104,7 @@ class LoginRequest extends FormRequest
                     if(!Auth::attempt($credentials)){
                         RateLimiter::hit($this->throttleKey());
                         throw ValidationException::withMessages([
-                            'id'=>"Credentials do not match any user"
+                            'fail'=>"Credentials do not match any user"
                         ]);
                     }else{
                             RateLimiter::clear($this->throttleKey());
@@ -114,20 +114,19 @@ class LoginRequest extends FormRequest
                         }
                 }else{
                     throw ValidationException::withMessages([
-                        'id'=>"User found but not activated",
-                        'fix'=>"Kindly contact the admin to activate the account"
+                        'fail'=>"User found but not activated. Kindly contact the admin to activate the account"
                     ]);
                 }
                 
             //     RateLimiter::clear($this->throttleKey());
             }else{
                 throw ValidationException::withMessages([
-                    'id'=>"User not found, register to get access"
+                    'fail'=>"User not found, register to get access"
                 ]);
             }
 
 
-        // $user = DB::table('users')->where('id', '=',$this->input('suID'))->limit(1)->get();
+        // $user = DB::table('users')->where('id', '=',$this->input('Su_Id_or_Email'))->limit(1)->get();
         
         
         // if(! Hash::check($this->input('password'),$user[0]->password)){
@@ -216,6 +215,6 @@ class LoginRequest extends FormRequest
      */
     public function throttleKey()
     {
-        return Str::lower($this->input('suID')).'|'.$this->ip();
+        return Str::lower($this->input('Su_Id_or_Email')).'|'.$this->ip();
     }
 }

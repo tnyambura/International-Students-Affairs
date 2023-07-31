@@ -18,7 +18,8 @@ use Illuminate\Support\Facades\Route;
 //                 ->middleware('guest');
 
 Route::get('/login', function () {
-    return view('Layouts.home',['Guides'=>(RegisteredUserController::Guides())?array_chunk(RegisteredUserController::Guides(),2):false]);
+    
+    return view('Layouts.home',['Guides'=>RegisteredUserController::Guides(), 'more_links'=>RegisteredUserController::GetMoreLinks()]);
 })
                 ->middleware('guest')
                 ->name('login');

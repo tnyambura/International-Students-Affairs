@@ -11,11 +11,12 @@ class CreateStudentViewDataTable extends Migration
      *
      * @return void
      */
-    
+
     public function up()
     {
-        $statement = 'CREATE VIEW student_view_data AS
-        SELECT 
+
+        $statement = 'CREATE OR REPLACE VIEW student_view_data AS
+        SELECT
         `users`.`id` AS `student_id`,
         `users`.`surname` AS `surname`,
         `users`.`other_names` AS `other_names`,

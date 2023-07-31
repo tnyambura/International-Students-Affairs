@@ -6,12 +6,22 @@
 # Node artifact files
 node_modules/
 dist/
+<<<<<<< HEAD
 public/storage/*
 vendor/
 storage/*
 .env
 sql_db/
 sql/
+=======
+public/storage
+vendor/*
+storage/*
+.env
+sql_db
+sql
+.vscode
+>>>>>>> 3c64295e0e340a51ba6f89a62b4bbb2481e03d76
 
 # Compiled Java class files
 *.class

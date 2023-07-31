@@ -13,7 +13,7 @@ class UsersTable extends Migration
      */
     public function up()
     {
-        Schema::dropIfExists('migration');
+        // Schema::dropIfExists('migration');
         // Schema::dropIfExists('users');
         Schema::create('users',function(Blueprint $table){
             $table->bigInteger('id')->primary()->nullable(false);

@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\adminactions;
 use DB;
 
-
 class RegisteredUserController extends Controller
 {
     /**
@@ -49,6 +48,41 @@ class RegisteredUserController extends Controller
         //     ]
         // ];
         return $Guides;
+    }
+    public static function GetMoreLinks(){
+        $more_links = [
+            [
+                'title'=>"About Us",
+                'link'=>"https://susa.strathmore.edu/our-services/international-students/",
+                'icon'=>'fas fa-book-open'
+            ],
+            [
+                'title'=>"Forgot Password",
+                'link'=>"/forgotpassword",
+                'icon'=>'fas fa-user-lock'
+            ],
+            [
+                'title'=>"AMS",
+                'link'=>"https://su-sso.strathmore.edu/susams/servlet/edu/strathmore/ams/susams/Init.html",
+                'icon'=>'fas fa-chalkboard-teacher'
+            ],
+            [
+                'title'=>"E-learning",
+                'link'=>"https://elearning.strathmore.edu/login/index.php",
+                'icon'=>'fas fa-book-reader'
+            ],
+            [
+                'title'=>"Sign in",
+                'link'=>"/login",
+                'icon'=>'fas fa-door-open'
+            ],
+            [
+                'title'=>"Sign up",
+                'link'=>"/signup",
+                'icon'=>'fas fa-user-plus'
+            ],
+        ];
+        return collect($more_links);
     }
     public static function getCourses(){
         $get_data= CoursesController::readFile();
