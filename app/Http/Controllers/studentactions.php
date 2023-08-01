@@ -847,7 +847,7 @@ class studentactions extends Controller
             'otherNAMES'=>'required',
             'gender'=>'required',
             'email'=>'required|email|unique:users',
-            'phoneNUMBER'=>'required|min:10|unique:users',
+            'phone_number'=>'required|min:10|unique:student_details',
             'Faculty'=>'required',
             'Course'=>'required',
             'Nationality'=>'required',
@@ -900,7 +900,7 @@ class studentactions extends Controller
                 $post->status = $status;
     
                 $postDetails->student_id = $request->id;
-                $postDetails->phone_number = $request->phoneNUMBER;
+                $postDetails->phone_number = $request->phone_number;
                 $postDetails->faculty = $request->Faculty;
                 $postDetails->course = $request->Course;
                 $postDetails->nationality = $request->Nationality;
@@ -960,7 +960,7 @@ class studentactions extends Controller
 
                     }
                 }else{
-                    return back()->with('New_Student_Added','Your account has been added Successfully');
+                    return back()->with('success','Your account has been added Successfully');
                 }
             }
         // }else{

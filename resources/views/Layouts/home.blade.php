@@ -150,9 +150,9 @@
         <div class="main-container h-full p-3">
             <div class="form rounded-md translate-x-[5%] left-0 translate-y-[-50%] 2xl:translate-x-[50%] relative md:absolute w-[90%] max-w-[40rem] md:w-[45%] bg-[#113C7A] h-[95%] overflow-y-auto p-3 ">
                 <div class="position-control-container w-full p-3">
-                    <div class="flex md:hidden place-items-center">
-                        <img class="w-[100px]" src="{{asset('asset/img/strathLogo1.png')}}">
-                        <img class="w-[200px] h-[100px] invert" src="{{asset('asset/img/strathLogo2.png')}}">
+                    <div class="flex md:hidden place-items-center place-content-center">
+                        <img class="w-[80px]" src="{{asset('asset/img/strathLogo1.png')}}">
+                        <img class="w-[100px] h-[50px] invert" src="{{asset('asset/img/strathLogo2.png')}}">
                     </div>
                     <div class="position-control hidden md:flex flex-row-reverse gap-1">
                         <div class="right-position" onclick="setPosition(event)"></div>
@@ -161,7 +161,7 @@
                 </div>
                 <form action="{{ route('login') }}" method="POST" class="form-container h-full"> @csrf
                     <div class="my-auto">
-                        <h2 class="my-2 mb-4 text-slate-200 text-[30px] uppercase">SU Portal | Login</h2>
+                        <h2 class="my-auto mb-6 text-center text-slate-200 text-[20px] uppercase">SU Portal | Login</h2>
                         <div class="input-fields-container grid gap-6 ">
                             <x-auth-validation-errors class="rounded-md p-2 w-full text-gray-100 bg-red-700" :errors="$errors" />
                             

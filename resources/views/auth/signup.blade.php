@@ -27,11 +27,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- @vite('resources/css/app.css') -->
     <style>
-        ::-webkit-datetime-edit-year-field:not([aria-valuenow]),
-        ::-webkit-datetime-edit-month-field:not([aria-valuenow]),
-        ::-webkit-datetime-edit-day-field:not([aria-valuenow]) {
-            color: transparent;
-        }
+        /* input[value=""]:not(:focus) { color: transparent; } */
         :root {
             --bg: rgb(17, 60, 122);
             --clt-slate-light: rgb(255, 255, 255);
@@ -147,6 +143,21 @@
                 left: 0 !important;
             }
         }
+        .notApplicable::after{
+            position: absolute;
+            content: '';
+            top: 50%;
+            left: -20px;
+            transform: translateY(-50%);
+            width: 10px;
+            height: 10px;
+            outline: 2px solid #fff;
+            border-radius: 5px;
+        }
+        .notApplicable.active::after{
+            background: #06943e;
+            border-color: #06943e;
+        }
     </style>
 </head>
   <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
@@ -155,9 +166,9 @@
         <div class="main-container h-full p-3">
             <div class="form rounded-md translate-x-[5%] left-0 translate-y-[-50%] 2xl:translate-x-[50%] relative md:absolute w-[90%] max-w-[40rem] md:w-[45%] bg-[#113C7A] h-[95%] overflow-y-auto p-3 ">
                 <div class="position-control-container w-full p-3">
-                    <div class="flex md:hidden place-items-center">
-                        <img class="w-[100px]" src="{{asset('asset/img/strathLogo1.png')}}">
-                        <img class="w-[200px] h-[100px] invert" src="{{asset('asset/img/strathLogo2.png')}}">
+                    <div class="flex md:hidden place-items-center place-content-center">
+                        <img class="w-[80px]" src="{{asset('asset/img/strathLogo1.png')}}">
+                        <img class="w-[100px] h-[50px] invert" src="{{asset('asset/img/strathLogo2.png')}}">
                     </div>
                     <div class="position-control hidden md:flex flex-row-reverse gap-1">
                         <div class="right-position" onclick="setPosition(event)"></div>
@@ -166,14 +177,18 @@
                 </div>
                 <form action="{{ route('Add.signup') }}" method="POST" class="form-container h-full"> @csrf
                     <div class="my-auto">
-                        <h2 class="my-2 mb-4 text-slate-200 text-[30px] uppercase">SU Portal | Sign Up</h2>
+                        <h2 class="my-auto mb-6 text-center text-slate-200 text-[20px] uppercase">SU Portal | Sign Up</h2>
                         <div class="input-fields-container grid gap-6 ">
-                            
+                            @if(Session::has('success'))
+                            <div class="alert alert-success" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            {{Session::get('success')}}
+                            </div>
+                            @endif
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="surname">Surname</label>
                                     <input type="text" maxlength="50" class="w-full p-2 pt-4 outline-none " name='surNAME' value="{{old('surNAME')}}" autofocus  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="surname">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
                                 </div>
                                 <small class="text-red-500 text-xs">@error('surNAME') {{$message}} @enderror</small>
                             </div>
@@ -181,22 +196,20 @@
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="othername">Other Names</label>
                                     <input type="text" maxlength="50" class="w-full p-2 pt-4 outline-none " name='otherNAMES' value="{{old('otherNAMES')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="othername">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
                                 </div>
                                 <small class="text-red-500 text-xs">@error('otherNAMES') {{$message}} @enderror</small>
                             </div>
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="id">SU Id</label>
-                                    <input type="text" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==8) return false;" class="w-full p-2 pt-4 outline-none " name='id' value="{{old('id')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="id">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
+                                    <input type="text"  onKeyPress="if(this.value.length==8) return false;" class="w-full p-2 pt-4 outline-none " name='id' value="{{old('id')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="id">
                                 </div>
                                 <small class="text-red-500 text-xs">@error('id') {{$message}} @enderror</small>
                             </div>
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="gender">Gender</label>
-                                    <select class='w-full p-2 pt-4 outline-none' name ="gender" id="gender" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
+                                    <select  class='w-full p-2 pt-4 outline-none' name ="gender" id="gender" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
                                         <option></option>    
                                         <option value='m'>Male</option>
                                         <option value='f'>Female</option>
@@ -208,14 +221,14 @@
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="email">Email</label>
                                     <input type="text" class="w-full p-2 pt-4 outline-none " name='email' value="{{old('email')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="email">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
+                                    <i class="fa fa-envelope px-4 flex place-items-center place-content-center"></i>
                                 </div>
                                 <small class="text-red-500 text-xs">@error('email') {{$message}} @enderror</small>
                             </div>
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Course">Course</label>
-                                    <select class='w-full p-2 pt-4 outline-none' name ="Course" id="Course">
+                                    <select  class='w-full p-2 pt-4 outline-none' name ="Course" id="Course" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
                                         <option></option>
                                         @foreach($courses as $v)
                                             <option value='{{$v[0]}}'>{{$v[0].' ('.$v[1].')'}}</option>
@@ -227,7 +240,7 @@
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Faculty">Faculty</label>
-                                    <select class='w-full p-2 pt-4 outline-none' name ="Faculty" id="Faculty">
+                                    <select  class='w-full p-2 pt-4 outline-none' name ="Faculty" id="Faculty" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
                                         <option></option>
                                         @foreach($faculties as $v)
                                             <option value='{{$v}}'>{{$v}}</option>
@@ -239,7 +252,7 @@
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Nationality">Nationality</label>
-                                    <select class='w-full p-2 pt-4 outline-none' name ="Nationality" id="Nationality" >
+                                    <select class='w-full p-2 pt-4 outline-none' name ="Nationality" id="Nationality" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
                                         <option></option>
                                         @foreach($countries as $country)
                                             <option value='{{$country}}'>{{$country}}</option>
@@ -252,7 +265,6 @@
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="passport_number">Passport Number</label>
                                     <input type="text" maxlength="50" class="w-full p-2 pt-4 outline-none " name='passport_number' value="{{old('passport_number')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="passport_number">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
                                 </div>
                                 <small class="text-red-500 text-xs">@error('passport_number') {{$message}} @enderror</small>
                             </div>
@@ -260,31 +272,29 @@
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="passport_expire">Passport Expiry Date</label>
                                     <input type="date" maxlength="50" class="w-full p-2 pt-4 outline-none " min='{{date("Y-m-d",strtotime("+1 year"))}}' name='passport_expire' value="{{old('passport_expire')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="passport_expire">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
                                 </div>
                                 <small class="text-red-500 text-xs">@error('passport_expire') {{$message}} @enderror</small>
                             </div>
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="phoneNUMBER">Phone Number (+254)</label>
-                                    <input type="text" maxlength="50" class="w-full p-2 pt-4 outline-none " pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" name='phoneNUMBER' value="{{old('phoneNUMBER')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="phoneNUMBER">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
+                                    <input type="text" maxlength="50" class="w-full p-2 pt-4 outline-none " onKeyPress="if(this.value.length==13) return false;" name='phone_number' value="{{old('phoneNUMBER')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="phoneNUMBER">
+                                    <i class="fa fa-phone px-4 flex place-items-center place-content-center"></i>
                                 </div>
-                                <small class="text-red-500 text-xs">@error('phoneNUMBER') {{$message}} @enderror</small>
+                                <small class="text-red-500 text-xs">@error('phone_number') {{$message}} @enderror</small>
                             </div>
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Residence">Residence</label>
                                     <input type="text" maxlength="50" class="w-full p-2 pt-4 outline-none " name='Residence' value="{{old('Residence')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="Residence">
-                                    <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
+                                    <i class="fa fa-home px-4 flex place-items-center place-content-center"></i>
                                 </div>
                                 <small class="text-red-500 text-xs">@error('Residence') {{$message}} @enderror</small>
                             </div>
-                            <div class="flex justify-between text-white border-b-2 w-full p-2 my-2 mb-3">
+                            <div class="flex justify-between place-item-center text-white border-b-2 w-full p-2 my-2 mb-3">
                                 <span class='text-semibold '>Parent Details</span>
-                                <input class="hidden" type="checkbox" value="Applicable" id="notApplicable" />
                                 <input class="hidden " type="checkbox" value="Applicable" id="notApplicable" />
-                                <label class="text-white text-sm cursor-pointer " for="notApplicable">
+                                <label class="notApplicable relative text-white text-sm cursor-pointer " for="notApplicable">
                                     Not Applicable
                                 </label>
                             </div>
@@ -293,7 +303,6 @@
                                     <div class='flex bg-white overflow-hidden rounded-md'>
                                         <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="ParentNames">Full Name</label>
                                         <input type="text" maxlength="50" class="w-full p-2 pt-4 outline-none " name='ParentNames' value="{{old('ParentNames')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="ParentNames">
-                                        <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
                                     </div>
                                     <small class="text-red-500 text-xs">@error('ParentNames') {{$message}} @enderror</small>
                                 </div>
@@ -301,7 +310,7 @@
                                     <div class='flex bg-white overflow-hidden rounded-md'>
                                         <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="ParentEmail">Email</label>
                                         <input type="email" maxlength="50" class="w-full p-2 pt-4 outline-none " name='ParentEmail' value="{{old('ParentEmail')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="ParentEmail">
-                                        <i class="fa fa-user px-4 flex place-items-center place-content-center"></i>
+                                        <i class="fa fa-envelope px-4 flex place-items-center place-content-center"></i>
                                     </div>
                                     <small class="text-red-500 text-xs">@error('ParentEmail') {{$message}} @enderror</small>
                                 </div>
@@ -309,7 +318,7 @@
                                     <div class='flex bg-white overflow-hidden rounded-md'>
                                         <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="ParentPhone">Phone number</label>
                                         <input type="password" class="w-full p-2 pt-4 outline-none " name='ParentPhone' pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" value="{{old('ParentPhone')}}" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="ParentPhone">
-                                        <i class="fa fa-lock px-4 flex place-items-center place-content-center"></i>
+                                        <i class="fa fa-phone px-4 flex place-items-center place-content-center"></i>
                                     </div>
                                     <small class="text-red-500 text-xs">@error('ParentPhone') {{$message}} @enderror</small>
                                 </div>
@@ -375,6 +384,15 @@
 
     let quotContainer = document.querySelector('.quote-container')
 
+    InputEmptyVal(document.querySelector('[type="date"]'))
+    function InputEmptyVal(element) {
+        let elVal = element.value
+        if(elVal == ""){
+            element.style.color = 'transparent'
+        }else{
+            element.style.color = '#000'
+        }
+    }
     function getQuote(index) {
         let item = quotes[index]
         quotContainer.innerHTML=`
@@ -424,7 +442,7 @@
 
     function inputFocusIn(e) {
         let el = e.target,
-            label = el.previousElementSibling
+        label = el.previousElementSibling
         label.style.cssText = `
             color: ${FOCUS_COLOR};
             font-size: 10px;
@@ -433,6 +451,7 @@
         `
         label.classList.remove('text-slate-400')
         el.nextElementSibling.style.color = FOCUS_COLOR;
+        InputEmptyVal(el)
     }
 
     function inputFocusOut(e) {
@@ -449,6 +468,7 @@
             label.style.color = '#048753'
             el.nextElementSibling.style.color = '#048753';
         }
+        InputEmptyVal(el)
     }
 
     function setPosition(el) {
@@ -494,9 +514,11 @@
 
             $('#notApplicable').on('click',function(){
                 if($(this).is(':checked')){
+                    $(this).siblings('label').addClass('active')
                     $(this).val('notApplicable')
                     $('.parent-details').find('input').prop('disabled',true)
                 }else{
+                    $(this).siblings('label').removeClass('active')
                     $(this).val('Applicable')
                     $('.parent-details').find('input').prop('disabled',false)
                 }
