@@ -79,15 +79,7 @@ class adminactions extends Controller
         
         return [$data,$userData];
     }
-    // public function NewKPPAPPVIEW(Request $request,$id){     
-    //     return view('Layouts/AdminActions/kppapplicationView', ['data'=>$this->KppsUserData($id)[0][0]], ['userData'=>$this->KppsUserData($id)[1][0]]);
-    // }
-    // public function NewVISAAPPVIEW($id){       
-    //     $data = DB::table("extension_application")->where('id','=',$id)->limit(1)->get();
-    //     $userData = DB::table("student_details")->where('student_id','=',$data[0]->student_id)->limit(1)->get();
-        
-    //     return view('Layouts/AdminActions/visaapplicationView',['visarequests'=>$data[0]], ['userData'=>$userData[0]]);
-    // }
+    
     public function changeStatus(Request $request, $id){
         $id = $request->id;
         $Initiate = applyvisaextension::find($id);
@@ -109,7 +101,7 @@ class adminactions extends Controller
             return false;
         }
     }      
-    public function ExtensionStatusUpdate(Request $request){
+    public function ExtensionStatusUpdate(Request $request){ // Email to be activated
          
         $fileUpload = null; $EmailTitle='Extension Visa Application Update';
         $subject = 'Visa Application Update';
@@ -122,11 +114,12 @@ class adminactions extends Controller
         <p>We will update you on further progress until approval is granted.</p>
         <p><a href="http://localhost:8000/">Insert login Link.</a></p>';
         if($updateStatus){
-            return redirect()->route('emailsend',[$subject, $request->applicant_email,$EmailTitle,Crypt::encryptString($msg)]);
+            // return redirect()->route('emailsend',[$subject, $request->applicant_email,$EmailTitle,Crypt::encryptString($msg)]);
+            return back()->with('success','Success');
         }
         return back()->with('error','could not update data');
     }
-    public function KppsStatusUpdate(Request $request){
+    public function KppsStatusUpdate(Request $request){ // Email to be activated
         $fileUpload = null; $EmailTitle='Student pass Application Update';
         $subject = 'Student Pass Application Update';
         if($request->fileResponse){
@@ -138,21 +131,20 @@ class adminactions extends Controller
         <p><a href="http://localhost:8000/">Insert login Link.</a></p>';
 
         if($updateStatus){
-            return redirect()->route('emailsend',[$subject, $request->applicant_email,$EmailTitle,Crypt::encryptString($msg)]);
-            // return back()->with('success','success');
+            // return redirect()->route('emailsend',[$subject, $request->applicant_email,$EmailTitle,Crypt::encryptString($msg)]);
+            return back()->with('success','success');
         }
         return back()->with('error','could not update data ->'.$request->fileResponse.' -> '.$request->applicant_email.' -> '.$request->app_id);
     }
     public function download(Request $request, $file){   
-    
         $path = 'storage/kpps/'.$file;
 
-            if(storage::exists($path)){
-                response()->download('storage/kpps/'.$file);
-                return back();
-            }else{
-                return back()->with('No_File','File Not Found');
-            }
+        if(storage::exists($path)){
+            response()->download('storage/kpps/'.$file);
+            return back();
+        }else{
+            return back()->with('No_File','File Not Found');
+        }
 
     }
     public function visadownload(Request $request, $file){   
@@ -166,21 +158,6 @@ class adminactions extends Controller
 
             return back()->with('No_File','File Not Found');
         }
-        
-    }
-    public function editStaffData(Request $r){
-        
-        // $UpdateUsersDetails = DB::table('student_details')->where('student_id',$r->cr_id)->update(['phone_number'=>$r->phone, 'residence'=>$r->residence, 'faculty'=>$r->faculty, 'course'=>$r->course, 'nationality'=>$r->country, 'passport_number'=>$r->passNo, 'passport_expire_date'=>$r->passEx]);
-        // $UpdateUsers = DB::table('users')->where('id',$r->cr_id)->update(['id'=>$r->u_id,'surname'=>$r->sname, 'other_names'=>$r->oname, 'email'=>$r->email]);
-
-        $mesg = 'Not pushed yet ';
-        // if($UpdateUsers || $UpdateUsersDetails){
-        //     $mesg .= 'user tables successfully!';
-        //     return back()->with('user_update_success',$mesg);
-        // }else{
-        //     $mesg .= 'could not be save. try later';
-        // }
-        return back()->with('user_update_failed',$mesg);
         
     }
     public function editMyProfile(Request $r){
@@ -240,7 +217,7 @@ class adminactions extends Controller
         }
         
     }
-    public function activate_user(Request $request){
+    public function activate_user(Request $request){ // Email to be activated
         $statusSet=0;
         $Message='deactivate';
         $EmailTitle = 'International students Portal: Account Deactivation Alert!';
@@ -260,9 +237,8 @@ class adminactions extends Controller
         }
         $activateUser = DB::table('users')->where('id', $request->user_id)->update(['status'=>$statusSet]);
         if($activateUser){
-            // 
-            return redirect()->route('emailsend',[$subject, $request->email,$EmailTitle,Crypt::encryptString($msg)]);
-            // return back();
+            // return redirect()->route('emailsend',[$subject, $request->email,$EmailTitle,Crypt::encryptString($msg)]);
+            return back()->with('success','Activated successfully');
         }else{
             return back()->with('activation_failed','We couldn\'t '.$Message.' this account at the moment. Try later!'  );
         }
@@ -270,10 +246,6 @@ class adminactions extends Controller
     }
     public function FileManageInsert(Request $req){
         $dataVal = [];
-        // $this->validate($req,[
-        //     'file_data' => 'mimes:pdf|max:'
-        //     ]
-        // );
         if($req->file_data){
             foreach ($req->file_data as $k => $value) {
                 $fileName = FileUploader::fileupload($req,$k,$req->file_name[$k],'Guides/');
@@ -291,22 +263,6 @@ class adminactions extends Controller
             return back()->with('file__error','Some File input are missing. Upload a PDF file.');
         }
     }
-    // public function FileManageUpdate(Request $req){
-    //     $postGuide = new Guides();
-    //     $dataVal=[]; $ids=[];
-    //     $d=['file_name'=>'fl1','file_name'=>'fl2','file_name'=>'fl3'];
-    //     foreach ($req->file_id as $k => $id) {
-    //         if(sizeOf(Guides::where('id',$id)->get())>0){
-    //             if(sizeOf(Guides::where('id',$id)->where('file_name',$req->file_name[$k].'.pdf')->get()) == 0){
-    //                 array_push($ids,['id' => $id]);
-    //                 array_push($dataVal,['title'=>'file_name','value' => $req->file_name[$k]]);
-    //                 Guides::where('id',$id)->update(['file_name'=>$req->file_name[$k].'.pdf']);
-    //             }
-                
-    //         }
-    //     }
-    //    return back();
-    // }
     public function manageFiles(){
         return view('Layouts/AdminActions/ManageFiles',['Guides'=>RegisteredUserController::Guides(),'newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesChangeRequest'=>$this->BuddiesChangeRequest(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
     }
@@ -343,12 +299,9 @@ class adminactions extends Controller
                     if(sizeOf($GetUsersRole) > 0 ){
                         $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
                         if(sizeOf($GetUsersDetails) > 0){
-                            // if($GetUsersRole[0]->role === 'student'){
-                                array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                                // }
+                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
                         }else{
                             array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-
                         }
                     }
                 }
@@ -374,13 +327,10 @@ class adminactions extends Controller
         return view('Layouts/AdminActions/ListofAllUsers',['newVisaReq'=>adminactions::newVisaNotify(),'BdCountReq'=>$this->BdCount(),'users'=>$data, 'NumMale'=>$this->GenderCount()[0], 'NumFemale'=>$this->GenderCount()[1]]);
     }
     public function getallAllBuddiesReport(){
-
         $pdf = PDF::setOptions(['isPhpEnabled' => true,'isHtml5ParserEnabled' => true,'isRemoteEnabled' => true])->LoadView('Layouts/AdminActions/buddiesListReport',['buddies'=>$this->BuddiesFecher(),'img'=>public_path('logo.png')]);
         return $pdf->download('All_Buddies_'.date("Y-m-d").'.pdf');
-        // return view('Layouts/AdminActions/buddiesListReport',['buddies'=>$this->BuddiesFecher(),'img'=>public_path('logo.png')]);
     }
     public function getallAllocationsReport(){
-
         $tableGetter = DB::table('buddies_allocations')->get();
         $data = [];
         
@@ -392,31 +342,28 @@ class adminactions extends Controller
         }
         $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView('Layouts/AdminActions/allAllocationsReport',['allocations'=>$data]);
         return $pdf->download('Buddy-allocation-list_'.date("Y-m-d").'.pdf');
-        // return view(,['allocations'=>$data]);
     }
-
     public function getallusersReport(Request $req){
         $id = $req->user()->id;
         $data=[];
         $MyRole = DB::table('user_roles')->select('role')->where('user_id',$id)->limit(1)->get();
         $GetUsers = DB::table('users')->select('id as user_id','surname','other_names','email','status')->get();
         $GetUsersRole = DB::table('user_roles')->get();
-            foreach ($GetUsers as $value) {
-                if($value->user_id !== $id){
-                    $thisUser=[];
-                    $isBuddy=false;
-                    $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','student')->limit(1)->get();
-                    $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
-                    if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
-                    if(sizeOf($GetUsersRole) > 0 ){
-                        $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
-                        if(sizeOf($GetUsersDetails) > 0){
-                            array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                        }
+        foreach ($GetUsers as $value) {
+            if($value->user_id !== $id){
+                $thisUser=[];
+                $isBuddy=false;
+                $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','student')->limit(1)->get();
+                $isBuddyChecker = DB::table('user_roles')->where('user_id',$value->user_id)->where('role','buddy')->get();
+                if(sizeOf($isBuddyChecker) > 0 ){ $isBuddy = true; }
+                if(sizeOf($GetUsersRole) > 0 ){
+                    $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
+                    if(sizeOf($GetUsersDetails) > 0){
+                        array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
                     }
                 }
             }
-        // }
+        }
         return view('Layouts/AdminActions/allUsersReport',['users'=>$data]);
     }
     public function getVisaData($table,$status){
@@ -464,48 +411,43 @@ class adminactions extends Controller
         abort(404,'not found');
     }
     public function getAllApplications($type,$status){
-            $kppsDb = DB::table('kpps_application')->where('application_status','pending')->get();
-            $extDb = DB::table('extension_application')->where('application_status','pending')->get();
-            $data=[];
-            
-            $applicationStatus=[['pending','in progress','declined','approved']];
-            $ext_data=[];
-            $ext_applicationStatus=[['pending','in progress','declined','approved']];
-            
-            foreach ($kppsDb as $application) {
-                $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
-                $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
-                array_push($applicationStatus,$application->application_status);
-                $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
-                array_push($data,array_merge((array)$uData,(array)$application));
-            }
-            
-            foreach ($extDb as $application) {
-                $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
-                $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
-                array_push($ext_applicationStatus,$application->application_status);
-                $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
-                array_push($ext_data,array_merge((array)$uData,(array)$application));
-            }
-        //    return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
-            
-        // if($type){
-            return 
-            ['newVisaReq'=>adminactions::newVisaNotify(),
-            'BdCountReq'=>$this->BdCount(),
-            'data'=>$data,
-            'applicationStatus'=>$applicationStatus,
-            'visarequests'=>$ext_data,
-            'ext_applicationStatus'=>$ext_applicationStatus,
-            'extApproved'=>$this->getVisaData('extension_application','approved'),
-            'extProgress'=>$this->getVisaData('extension_application','in progress'),
-            'extDeclined'=>$this->getVisaData('extension_application','declined'),
-            'kppApproved'=>$this->getVisaData('kpps_application','approved'),
-            'kppProgress'=>$this->getVisaData('kpps_application','in progress'),
-            'kppDeclined'=>$this->getVisaData('kpps_application','declined')];
-
-            
+        $kppsDb = DB::table('kpps_application')->where('application_status','pending')->get();
+        $extDb = DB::table('extension_application')->where('application_status','pending')->get();
+        $data=[];
         
+        $applicationStatus=[['pending','in progress','declined','approved']];
+        $ext_data=[];
+        $ext_applicationStatus=[['pending','in progress','declined','approved']];
+        
+        foreach ($kppsDb as $application) {
+            $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
+            $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
+            array_push($applicationStatus,$application->application_status);
+            $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+            array_push($data,array_merge((array)$uData,(array)$application));
+        }
+        
+        foreach ($extDb as $application) {
+            $fetchUser = DB::table('users')->where('id','=',$application->student_id)->limit(1)->get();
+            $fetched = DB::table('student_details')->where('student_id','=',$application->student_id)->limit(1)->get();
+            array_push($ext_applicationStatus,$application->application_status);
+            $uData = array_merge((array)$fetched[0],(array)$fetchUser[0]);
+            array_push($ext_data,array_merge((array)$uData,(array)$application));
+        }
+
+        return 
+        ['newVisaReq'=>adminactions::newVisaNotify(),
+        'BdCountReq'=>$this->BdCount(),
+        'data'=>$data,
+        'applicationStatus'=>$applicationStatus,
+        'visarequests'=>$ext_data,
+        'ext_applicationStatus'=>$ext_applicationStatus,
+        'extApproved'=>$this->getVisaData('extension_application','approved'),
+        'extProgress'=>$this->getVisaData('extension_application','in progress'),
+        'extDeclined'=>$this->getVisaData('extension_application','declined'),
+        'kppApproved'=>$this->getVisaData('kpps_application','approved'),
+        'kppProgress'=>$this->getVisaData('kpps_application','in progress'),
+        'kppDeclined'=>$this->getVisaData('kpps_application','declined')];
     }
     public function BuddiesRequestFecher(){
         $u_request = DB::table('buddy_request')->select('student_id','buddy_request_id')->where('status','pending')->get();
@@ -519,7 +461,6 @@ class adminactions extends Controller
     }
     public function UsersFecher(){
         $allUsers = DB::table('users')->select('id','surname','other_names','email')->get();
-        
         return $allUsers;
     }
     public function BuddiesFecher(){
@@ -546,7 +487,6 @@ class adminactions extends Controller
     public function ExcelExport(Request $req){
         $title = $req->title;
         $exportFrom = $req->from;
-        // $title = 'List_of_Extension_Applications_'.date('Y');
         $exportDataFrom= new UsersExport;
 
         switch ($exportFrom) {
@@ -558,7 +498,6 @@ class adminactions extends Controller
                 break;
         }
         
-        // 'List_of_kpps_Application_'.date('Y').
         return Excel::download( $exportDataFrom, $title.'.xlsx');
     }
     public function RegisterNewBuddy(Request $req){
@@ -585,7 +524,7 @@ class adminactions extends Controller
             }
 
     }
-    public function ResetUserPassword(Request $req){
+    public function ResetUserPassword(Request $req){ // Email to be activated
         $user_id = $req->user_id;
         $user_email = $req->user_email;
         $subject = 'Account Password Reset';
@@ -598,87 +537,74 @@ class adminactions extends Controller
             <p>Default Password: 123456</p>
             <p>Please remember to change your password to improve your account security.</p>
             ';
-            return redirect()->route('emailsend',[$subject, $user_email,$EmailTitle,Crypt::encryptString($msg)]);
+            // return redirect()->route('emailsend',[$subject, $user_email,$EmailTitle,Crypt::encryptString($msg)]);
+            return back()->with('success','Password reset successfully!');
         }else{
             $postRole->save();
             return back()->with('password_reset_error','Password could not be reset due to an error!');
         }
     }
     public function RemoveAsBuddy(Request $req){
-            $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
-            foreach ($allAllocatedUsers as $value) {
-                if(DB::table('buddy_request')->where('status','approved')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
-                    DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
-                }
+        $allAllocatedUsers = DB::table('buddies_allocations')->select('student_id')->where('buddy_id',$req->bd_id)->get();
+        foreach ($allAllocatedUsers as $value) {
+            if(DB::table('buddy_request')->where('status','approved')->where('student_id',$value->student_id)->update(['status'=>'pending'])){
+                DB::table('buddies_allocations')->where('student_id',$value->student_id)->where('buddy_id',$req->bd_id)->delete();
             }
-            if(DB::table('user_roles')->where('user_id',$req->bd_id)->where('role','buddy')->delete()){
-                return back()->with('Buddy_Removed_success','User successfully removed as buddy!');
-            }else{
-                return back()->with('Buddy_Removed_fail','We couldn\'t remove the user as buddy. Try later!');
-            }
+        }
+        if(DB::table('user_roles')->where('user_id',$req->bd_id)->where('role','buddy')->delete()){
+            return back()->with('Buddy_Removed_success','User successfully removed as buddy!');
+        }else{
+            return back()->with('Buddy_Removed_fail','We couldn\'t remove the user as buddy. Try later!');
+        }
 
     }
     public function dismissAllocation(Request $req){
-            $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user)->delete();
+        $deleteAllocation = DB::table('buddies_allocations')->where('student_id',$req->user)->delete();
 
-            if($deleteAllocation){
-                $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->delete();
-                if($deleteFromRequest){
-                    return back()->with('dissmiss_student','Student dissmissed');
-                }else{
-                    return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user');
-                }
+        if($deleteAllocation){
+            $deleteFromRequest = DB::table('buddy_request')->where('student_id',$req->user)->delete();
+            if($deleteFromRequest){
+                return back()->with('dissmiss_student','Student dissmissed');
             }else{
-                return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user from allocation');
+                return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user');
             }
+        }else{
+            return back()->with('dissmiss_student-fail','Couldn\'t dissmiss user from allocation');
+        }
     }
     public function BuddiesChangeRequest(){
-            $getRequestData = DB::table('buddies_allocations')->whereNotNull('request_change')->get();
-            return sizeOf($getRequestData);
+        $getRequestData = DB::table('buddies_allocations')->whereNotNull('request_change')->get();
+        return sizeOf($getRequestData);
     }
     public function DismissBuddyRequestChange($id){
-            $Dismiss = DB::table('buddies_allocations')->where('id',$id)->update(['request_change'=>null,'already_changed'=>0]);
-            return back()->with('dissmiss_buddy_change_request','Change successuffly dismissed.');
+        $Dismiss = DB::table('buddies_allocations')->where('id',$id)->update(['request_change'=>null,'already_changed'=>0]);
+        return back()->with('dissmiss_buddy_change_request','Change successuffly dismissed.');
     }
     public function AllocateBuddy(Request $req){ // new allocation
         
         $generatedId = rand(1000,1000000);
-        // if($req->hasFile('studentId','buddy_id')){
-
-            $this->validate($req,[
-                'studentId'=>'required',
-                'buddy_id'=>'required',
-                ]
-            );
-            $post = new AllocateBuddyModel;
-            
-            $post->id = $generatedId;
-            $post->request_id = $req->request_id;
-            $post->student_id = $req->studentId;
-            $post->buddy_id = $req->buddy_id;
-            $post->already_changed = 0;
-            
-            $post->timestamps = false;
-
-            if($post->save()){
-                return back()->with('Buddy_Allocation_success','Allocation successful!');
-            }else{
-                return back()->with('Buddy_Allocation_fail','Allocation failed! Try later.');
-            }
-            
-            // $allocatedQuery = ;
-
-            // if($post->save()){
-            //     return back()->with('Buddy_Allocation_success','Allocation successful!');
-        // }else{
-        //     return back()->with('Buddy_Allocation_failed','Some fields are missing');
-        // }
-            
-            
-        // }
+        $this->validate($req,[
+            'studentId'=>'required',
+            'buddy_id'=>'required',
+            ]
+        );
+        $post = new AllocateBuddyModel;
         
+        $post->id = $generatedId;
+        $post->request_id = $req->request_id;
+        $post->student_id = $req->studentId;
+        $post->buddy_id = $req->buddy_id;
+        $post->already_changed = 0;
+        
+        $post->timestamps = false;
+
+        if($post->save()){
+            return back()->with('Buddy_Allocation_success','Allocation successful!');
+        }else{
+            return back()->with('Buddy_Allocation_fail','Allocation failed! Try later.');
+        }
     }
-    public function EditAllocatedBuddy(Request $req){ // new allocation
+    public function EditAllocatedBuddy(Request $req){ // edit allocation
         
         $generatedId = rand(1000,1000000);
 
@@ -694,10 +620,6 @@ class adminactions extends Controller
             DB::table('buddies_allocations')->where('student_id',$req->student_id)->update(['buddy_id'=>$req->buddy_id, 'request_change'=>null]);
         }
         return back()->with('Buddy_modification_success','Allocation successful!');
-            
-            
-        // }
-        
     }
     public function getAllvisaextensionrequests(){
         $extDb = DB::table('extension_application')->get();
@@ -713,8 +635,6 @@ class adminactions extends Controller
         }
        return view('Layouts/AdminActions/Listofvisaextensionrequests',['visarequests'=>$data],['applicationStatus'=>$applicationStatus]);
     }
-
-    
 
     public function BuddiesManageList(){
         return view('Layouts/AdminActions/buddy/list',['newVisaReq'=>$this->newVisaNotify(),'BdCountReq'=>$this->BdCount(),'buddies'=>$this->BuddiesFecher(),'BuddiesChangeRequest'=>$this->BuddiesChangeRequest(),'BuddiesAllocations'=>$this->AllocationsFecher(),'allbuddies'=>$this->BuddiesFecher(),'stUsers'=>$this->UsersFecher(),'buddiesRequests'=>$this->BuddiesRequestFecher(),'buddies'=>$this->BuddiesFecher()]);
@@ -751,7 +671,6 @@ class adminactions extends Controller
         
         $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]);
         return $pdf->download($fileName.'.pdf');
-        // return view($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]); 
     }
     public function getAllInProgressVisaReport(){
         $loadView = 'Layouts/AdminActions/allInProgressVisaReport';
@@ -759,7 +678,6 @@ class adminactions extends Controller
         
         $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['exVisas'=>$this->getVisaData('extension_application','in progress'),'kppVisas'=>$this->getVisaData('kpps_application','in progress')]);
         return $pdf->download($fileName.'.pdf');
-        // return view($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]); 
     }
     public function getAllDeclinedVisaReport(){
         $loadView = 'Layouts/AdminActions/allDeclinedVisaReport';
@@ -767,7 +685,6 @@ class adminactions extends Controller
         
         $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['exVisas'=>$this->getVisaData('extension_application','declined'),'kppVisas'=>$this->getVisaData('kpps_application','declined')]);
         return $pdf->download($fileName.'.pdf');
-        // return view($loadView,['exVisas'=>$this->getVisaData('extension_application','approved'),'kppVisas'=>$this->getVisaData('kpps_application','approved')]); 
     }
     public function getAllStudentsReport(){
         $table = 'users';
@@ -782,8 +699,6 @@ class adminactions extends Controller
         }
         $data =[];
         foreach ($list as $value) {
-            // $GetUsersDetails = DB::table('student_details')->where('student_id',$value->student_id)->limit(1)->get();        
-            // array_push($data,(array)$GetUsersDetails);
             $thisUser=[];
             $isBuddy=false;
             $GetUsersRole = DB::table('user_roles')->where('user_id',$value->user_id)->limit(1)->get();
@@ -792,24 +707,14 @@ class adminactions extends Controller
             if(sizeOf($GetUsersRole) > 0 ){
                 $GetUsersDetails = DB::table('student_details')->where('student_id',$value->user_id)->limit(1)->get();
                 if(sizeOf($GetUsersDetails) > 0){
-                    // if($GetUsersRole[0]->role === 'student'){
-                        array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-                        // }
+                    array_push($data,array_merge((array)$value,(array)$GetUsersDetails[0],['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
                 }else{
                     array_push($data,array_merge((array)$value,['isbuddy'=>$isBuddy,'role'=>$GetUsersRole[0]->role]));
-
                 }
             }
         }
         $pdf = PDF::setOptions(['isPhpEnabled' => true])->LoadView($loadView,['users'=>$data]);
-        return $pdf->download($fileName.'.pdf');
-        // return view($loadView,['users'=>$data]);
-        // if(sizeOf($list) > 0){ 
-
-
-        // }else{
-        //     return back()->with('data_not_available','There is no data available to generate a report.');
-        // }   
+        return $pdf->download($fileName.'.pdf');  
     }
     public function ExportToEXCEL($table,$cols,$loadView,$fileName){
         $list = DB::table($table)->select($cols)->get();
@@ -823,8 +728,7 @@ class adminactions extends Controller
     }
 
     public function GeneratePDF(Request $request){
-        $function = $request->function;
-        
+        $function = $request->function;     
         return $this->$function();
     }
 
@@ -879,39 +783,6 @@ class adminactions extends Controller
     
             return back()->with('success_schedule_save','Schedule Availability has been successfully saved.');
         }
-
-    }
-    
-   
-   public function StudentDetailsEdit($id){
-    $dataID= Crypt::decrypt($id); 
-    $data= addNewStudent::find($dataID);
-    return view('Layouts/AdminActions/EditNewStudent', compact('data'));
-        }
-
-    public function StudentDetailsUpdate(request $req , $id){
-        
-        $data = addNewStudent::find($req->id);        
-        
-        $data->surNAME = $req->surNAME;
-        $data->firstNAME = $req->firstNAME;
-        $data->lastNAME = $req->lastNAME;
-        $data->suID = $req->suID;
-        $data->suEMAIL = $req->suEMAIL;
-        $data->Faculty = $req->Faculty;
-        $data->Nationality = $req->Nationality;
-        $data->Course = $req->Course;
-        $data->Residence = $req->Residence;
-        $data->phoneNUMBER = $req->phoneNUMBER;
-        $data->passportNUMBER = $req->passportNUMBER;
-
-        $data->ParentEmail = $req->ParentEmail;
-        $data->ParentPhone = $req->ParentPhone;
-        $data->ParentNames = $req->ParentNames;
-
-        $data->update();
-        // return back()->with('Record_Updated','Record has been Updated Successfully');
-        return redirect('/listofIS')->with('Record_Updated','Record has been Updated Successfully');        
 
     }
 

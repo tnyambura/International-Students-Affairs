@@ -50,52 +50,6 @@ class LoginRequest extends FormRequest
     public function authenticate(Request $request){
         $this->ensureIsNotRateLimited();
 
-        // $credentials = array('id'=>$this->input('Su_Id_or_Email'),'password'=>$this->input('password'));
-
-        // $userRole = DB::table('roles')->where('user_id', '=',$this->input('Su_Id_or_Email'))->limit(1)->get();
-        // // if(1 !== 0){
-
-        //     $redirectTo ='';
-
-            // switch ($userRole[0]->role) {
-            //     case 'admin':
-            //         $redirectTo = '/studentDashboard';
-            //         // RateLimiter::hit($this->throttleKey());
-            //         // throw ValidationException::withMessages([
-            //         //     'id'=>"Your are an admin "
-            //         // ]);
-            //         break;
-                
-            //     case 'super_admin':
-            //         $redirectTo = '/studentDashboard';
-            //         // RateLimiter::hit($this->throttleKey());
-            //         // throw ValidationException::withMessages([
-            //         //     'id'=>"Your are a superAdmin "
-            //         // ]);
-            //         break;
-                
-            //     case 'student':
-            //         $redirectTo = '/studentDashboard';
-            //         // RateLimiter::hit($this->throttleKey());
-            //         // throw ValidationException::withMessages([
-            //         //     'id'=>"Your are a student "
-            //         // ]);
-            //         break;
-                
-            //     default:
-            //         $redirectTo = '/';
-            //         // RateLimiter::hit($this->throttleKey());
-            //         // throw ValidationException::withMessages([
-            //         //     'id'=>"This account is not identified "
-            //         // ]);
-            //         break;
-            // }
-        // if($redirectTo === 'student'){
-        //         // RateLimiter::hit($this->throttleKey());
-        //         // throw ValidationException::withMessages([
-        //         //     'id'=>"Your account is not activated ".json_encode($userRole)
-        //         // ]);
-        //     }else{
             $user = DB::table('users')->where('id',$this->input('Su_Id_or_Email'))->orWhere('email',$this->input('Su_Id_or_Email'))->limit(1)->get();
             
             if(sizeOf($user) > 0){
@@ -103,85 +57,23 @@ class LoginRequest extends FormRequest
                 if($user[0]->status === 1){
                     if(!Auth::attempt($credentials)){
                         RateLimiter::hit($this->throttleKey());
+                        
                         throw ValidationException::withMessages([
                             'fail'=>"Credentials do not match any user"
                         ]);
                     }else{
                             RateLimiter::clear($this->throttleKey());
-                            // return Redirect::to($redirectTo);
-                            // return redirect()->route($redirectTo);
-                            
                         }
                 }else{
                     throw ValidationException::withMessages([
                         'fail'=>"User found but not activated. Kindly contact the admin to activate the account"
                     ]);
                 }
-                
-            //     RateLimiter::clear($this->throttleKey());
             }else{
                 throw ValidationException::withMessages([
                     'fail'=>"User not found, register to get access"
                 ]);
             }
-
-
-        // $user = DB::table('users')->where('id', '=',$this->input('Su_Id_or_Email'))->limit(1)->get();
-        
-        
-        // if(! Hash::check($this->input('password'),$user[0]->password)){
-        //     RateLimiter::hit($this->throttleKey());
-            
-        //     throw ValidationException::withMessages([
-        //         'error' => 'Your credentials did not match',
-        //     ]);
-            
-        // }else{
-        //     $userRole = DB::table('roles')->where('user_id', '=',$user[0]->id)->limit(1)->get();
-        //     if($user[0]->status === 0){
-        //         $userData = array(
-        //             'id' => $user[0]->id,
-        //             'name' => $user[0]->surname.' '.$user[0]->other_names,
-        //             'email' => $user[0]->email,
-        //             'role' => $userRole
-        //         );
-                
-        //         $request->session()->put('user', $userData);
-        //         // $request->session()->put('user', json_encode($userData));
-        //         // $id = $user[0]->id;
-
-                
-        //         // $data = DB::table("session")->where('user_id','=',$id)->limit(1)->get();
-                
-        //         // if(sizeOf($data) < 1){
-        //         //     $createNewSession = new sessionUpdate();
-
-        //         //     $createNewSession->user_id = $user[0]->id;
-        //         //     $createNewSession->last_activity = '2023-03-12 01:45';
-        //         //     $createNewSession->status = 0;
-
-        //         //     $createNewSession->timestamps = false; 
-        //         //     $createNewSession->save(); 
-        //         // }else{
-        //         //     DB::table('session')->where('user_id','=',$id)->update(['last_activity'=>'2023-03-12 01:55','status'=>'1']);
-        //         // }
-
-        //             // echo Auth::user();
-
-
-        //             RateLimiter::clear($this->throttleKey());
-        //             // return redirect()->route('/studentDashboard')->with('success','log');
-        //         // return redirect('/studentDashboard');
-        //         // echo $this->session()->get($user[0]->id);
-        //     }else{
-        //         $error = ValidationException::withMessages([
-        //             'error1'=> 'Your account was successfully found',
-        //             'error2'=> 'Unfortunately you cannot access the system',
-        //             'error3'=> 'Reach out to the admin to activate your account']) ;
-        //         throw $error;
-        //     }
-        // }
-
     }
 
     /**

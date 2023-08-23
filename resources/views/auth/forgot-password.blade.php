@@ -1,53 +1,4 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="">
-  <meta name="author" content="">
-
-  <title>International Students Affairs</title>
-
-  <!-- Bootstrap Core CSS -->
-  <link href="../../homeassets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Custom Fonts -->
-  <link href="../../homeassets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-  <link href="../../homeassets/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet">
-
-  <!-- Custom CSS -->
-  <link href="../../homeassets/css/stylish-portfolio.min.css" rel="stylesheet">
-  <link href="../../asset/css/styles.css" rel="stylesheet"/>
-  <link href="../../asset/css/startPage.css" rel="stylesheet"/>
-  <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
-
-  
-</head>
-
-<body id="page-top" >
-
-  <div class='loader-load-container d-none align-items-center justify-content-center position-fixed' style='top:0;left:0'>
-      <div class='loader-load d-flex align-items-center justify-content-center'>
-          <img src="{{asset('asset/img/isa_logo.png')}}" />
-          <div><span></span></div>
-      </div>
-  </div>
-
-  <div class="img-logo-container" >
-      <div class='logo-wrapper'>
-          <div class='logo-svg'>
-              {!! file_get_contents(public_path('asset/img/strathLg.svg')) !!}
-          </div>
-      </div>
-      <p>SU internation student's <br/> affairs</p>
-  </div>
-  <div class='form-data'>
-      
-
-  @if(Session::has('user-error'))
+<!-- @if(Session::has('user-error'))
   <div class="alert alert-danger" role="alert">
   {{Session::get('user-error')}}
   <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -82,49 +33,184 @@
   {{Session::get('code_exists')}}
   </div>
   @endif
-  <div class="py-3 px-md-5 d-flex flex-column justify-content-center">
-    <h2 class='form-title mb-5'>SU Portal | {{$title}} </h2>  
-    @yield('content')
-  </div>
-  <div class="w-100 justify-content-center align-items-center position-relative" >
+   -->
+  <!DOCTYPE html>
+<html lang="en">
 
-    <div class=" mb-3" style='line-height: 50px; '>
-      <h3 class='mb-4' style='color: rgb(199, 140, 22); font-size: 15px;'>More links</h3>
-      <div class="more-links-container">
-      <a href="https://susa.strathmore.edu/our-services/international-students/" class="more-link">
-      <i class="fas fa-book-open pr-2"></i>About Us
-      </a>
-      <a href="/forgotpassword" class="more-link">
-      <i class="fas fa-user-lock pr-2"></i>Forgot Password
-      </a>
-      <a href="https://su-sso.strathmore.edu/susams/servlet/edu/strathmore/ams/susams/Init.html" class="more-link">
-      <i class="fas fa-chalkboard-teacher pr-2"></i>AMS
-      </a>
-      <a href="https://elearning.strathmore.edu/login/index.php" class="more-link">
-      <i class="fas fa-book-reader pr-2"></i>E-learning
-      </a>
-      <a href="/" class="more-link">
-      <i class="fas fa-lock-open pr-2"></i> Login
-      </a>
-      </div>
-    </div>
-  </div>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>International Students Affairs</title>
+    <link href="{{asset('homeassets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{asset('homeassets/vendor/css/landingPage.css')}}" rel="stylesheet" type="text/css">
+    <script src="https://cdn.tailwindcss.com"></script>
     
-
-  <script src="../../asset/js/scripts.js"></script>
-  <!-- Bootstrap core JavaScript -->
-  <script src="../../homeassets/vendor/jquery/jquery.min.js"></script>
-  <script src="../../homeassets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-  <!-- Plugin JavaScript -->
-  <script src="../../homeassets/vendor/jquery-easing/jquery.easing.min.js"></script>
-
-  <!-- Custom scripts for this template -->
-  <script src="../../homeassets/js/stylish-portfolio.min.js"></script>
-
+</head>
+<body>
+    <main class="w-screen h-screen z-[2]">
+        <div class="main-container h-max-content p-3">
+            <div class="form rounded-md translate-x-[5%] left-0 translate-y-[0%] 2xl:translate-x-[50%] relative  w-[90%] max-w-[40rem] md:w-[45%] h-[95%] overflow-y-auto p-3 ">
+                <div class="position-control-container w-full p-3">
+                    <div class="flex md:hidden place-items-center place-content-center">
+                        <img class="w-[80px]" src="{{asset('asset/img/strathLogo1.png')}}">
+                        <img class="w-[100px] h-[50px] invert" src="{{asset('asset/img/strathLogo2.png')}}">
+                    </div>
+                    <div class="position-control hidden md:flex flex-row-reverse gap-1">
+                        <div class="right-position" onclick="setPosition(event)"></div>
+                        <div class="left-position active" onclick="setPosition(event)"></div>
+                    </div>
+                </div>
+                @if(Session::has('error') )
+                <div class="rounded-md mb-3 p-2 w-full text-gray-100 bg-red-900" role="alert">
+                    {{Session::get('error')}}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                @endif
+                @yield('content')
+                
+            </div>
+            <div class="quote px-4 h-full md:w-[45%] translate-y-[-50%] md:translate-x-[5%] p-3 hidden md:grid my-auto place-content-center text-slate-300">
+                <div class="flex py-3 place-content-center place-items-center">
+                    <img class="w-[100px]" src="{{asset('asset/img/strathLogo1.png')}}">
+                    <img class="w-[200px] h-[100px] invert" src="{{asset('asset/img/strathLogo2.png')}}">
+                </div>
+                <div class="quote-container p-2 rounded-[5px]" onmouseover="quoteHover(event) " onmouseout="quoteHoverOut(event)"></div>
+            </div>
+        </div>
+    </main>
 </body>
 
 </html>
+<script>
+    let FOCUS_COLOR = '#D0A153';
+
+    let quotes = [
+        {
+            author: 'Mission',
+            quote: 'To provide a student-centered, co-curricular environment that enhances the academic mission of the university and help students to be better persons through personal development programmes.',
+        },
+        {
+            author: 'Vision',
+            quote: 'To provide quality and challenging extracurricular activities to all Strathmore University students in contribution to the University’s mission of offering an all-round education.',
+        },
+        {
+            author: 'Values',
+            quote: 'Fostering excellence, freedom and responsibility; ethical practice; service to society; continuous improvement.',
+        }
+    ]
+
+    let quotContainer = document.querySelector('.quote-container')
+
+    function getQuote(index) {
+        let item = quotes[index]
+        quotContainer.innerHTML=`
+        <p class="max-w-[50rem]">${item.quote}</p>
+        <p class="m-0 w-full font-semibold text-[${FOCUS_COLOR}] text-sm text-center italic py-3">-- ${item.author} --</p>
+        `
+    }
+    let i=quotes.length-1
+    getQuote(i);
+    let QuoteRoll = setInterval(()=>{
+        getQuote(i)
+        if(i == 0){
+            i=quotes.length-1
+        }else{
+            i --
+        }
+    }, 5500);
+    // quotes.forEach((item)=>{
+    // })
+    function quoteHover(e){
+        let el = e.target
+        if(el.classList.contains('quote-container')){
+            el.style.background='rgb(208,161,83,.2)'
+        }else{
+            el.parentNode.style.background='rgb(208,161,83,.2)'
+            // e.target.style.color='#fff'
+        }
+        clearInterval(QuoteRoll)
+        QuoteRoll = null
+    }
+    function quoteHoverOut(e){
+        let el = e.target
+        if(el.classList.contains('quote-container')){
+            el.style.background=''
+        }else{
+            el.parentNode.style.background=''
+        }
+        QuoteRoll=setInterval(()=>{
+            getQuote(i)
+            if(i == 0){
+                i=quotes.length-1
+            }else{
+                i --
+            }
+        }, 5500);
+    }
+
+    function inputFocusIn(e) {
+        let el = e.target,
+            label = el.previousElementSibling
+        label.style.cssText = `
+            color: ${FOCUS_COLOR};
+            font-size: 10px;
+            left: 5px;
+            transform: translateY(0%);
+        `
+        label.classList.remove('text-slate-400')
+        el.nextElementSibling.style.color = FOCUS_COLOR;
+    }
+
+    function inputFocusOut(e) {
+        let el = e.target,
+        label = el.previousElementSibling
+        if(el.value == ""){
+            label.style.cssText = `
+                font-size: revert;
+                transform: translateY(50%);
+            `
+            label.classList.add('text-slate-400')
+            el.nextElementSibling.style.color = 'initial';
+        }else{
+            label.style.color = '#048753'
+            el.nextElementSibling.style.color = '#048753';
+        }
+    }
+
+    function setPosition(el) {
+        let e = el.target,
+            e_class = el.classList,
+            eParent = e.parentNode
+        let currentPosition = e.classList.contains('right-position') ? 'left-position' : 'right-position'
+        eParent.querySelector(`.${currentPosition}`).classList.remove('active')
+        e.classList.add('active')
+
+        let formContainer = document.querySelector('.form'),
+            quoteContainer = document.querySelector('.quote')
+
+        if (currentPosition == 'left-position') {
+            formContainer.style.cssText = `
+            left: 50%;
+            `
+            quoteContainer.style.cssText = `
+            right: 55%;
+            `
+        } else {
+            formContainer.style.cssText = `
+            left: 0%;
+            `
+            quoteContainer.style.cssText = `
+            right: 5%;
+            `
+        }
+
+    }
+</script>
+  <script src="{{asset('asset/js/scripts.js')}}"></script>
 
 
 

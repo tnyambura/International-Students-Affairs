@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Storage;
@@ -11,13 +10,10 @@ use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
-// use Illuminate\Support\Facades\File;
-// use App\Http\Controllers\Auth;
 use App\Http\Controllers\MailController;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\FileUploader;
-// use Auth;
 
 use App\Models\Request_Buddy;
 use App\Models\addNewStudent;
@@ -58,7 +54,7 @@ class studentactions extends Controller
         else if(!preg_match('/(?=.*[.!@#$%^&*_])/',$password)){
             return 'Passwords must contain at least 1 special character. Allowed: .,!,@,#,$,%,^,&,*,-,_  Try again.';
         }else{
-            if(User::where('id',$id)->update(['password'=>Hash::make($password)])){
+            if(User::where('id','=',$id)->update(['password'=>Hash::make($password)])){
                 return 'password_success';
             }else{
                 return 'Passwords could not be changed at the moment. Try later.';
@@ -75,27 +71,6 @@ class studentactions extends Controller
         }else{
             return back()->with('password_success','Passwords successfully changed.');
         }
-
-        // if(strcmp($newPassword,$confPassword) !== 0){
-        //     return back()->with('password_error','Passwords do not match. Try again.');
-        // }
-        // else if(strlen($newPassword) <= 8){
-        //     return back()->with('password_error','Passwords must contain at least 8 characters. Try again.');
-        // }
-        // else if(!preg_match("#[0-9]+#",$newPassword)){
-        //     return back()->with('password_error','Passwords must contain at least 1 number. Try again.');
-        // }
-        // else if(!preg_match("#[A-Z]+#",$newPassword)){
-        //     return back()->with('password_error','Passwords must contain at least 1 capital letter. Try again.');
-        // }
-        // else if(!preg_match('/(?=.*[.!@#$%^&*-_])/',$newPassword)){
-        //     return back()->with('password_error','Passwords must contain at least 1 special character. Allowed: .,!,@,#,$,%,^,&,*,-,_  Try again.');
-        // }
-        // if(User::where('id',Auth::user()->id)->update(['password'=>Hash::make($newPassword)])){
-        //     return back()->with('password_success','Passwords successfully changed.');
-        // }else{
-        //     return back()->with('password_error','Passwords could not be changed at the moment. Try later.');
-        // }
     }
     private function crypto_rand_secure($min, $max){
         $range = $max - $min;
@@ -179,7 +154,7 @@ class studentactions extends Controller
         
     }
     public function ForgotpassUsernameVerifyView(Request $request){
-        return view('auth/userverification');
+        return view('auth/userverification',['more_links'=>RegisteredUserController::GetMoreLinks()]);
     }
     public function ForgotpassCodeVerifyView(Request $request){
         return view('auth/codeverification');
@@ -212,17 +187,17 @@ class studentactions extends Controller
                         if(User::where('id',$userData[0]->id)->update(['password'=> Hash::make($this->GenerateCode(30))])){
                             return redirect('/forgotpassword/code-verification')->with('username',Crypt::encrypt($userData[0]->id))->with('email',Crypt::encrypt($userData[0]->email));
                         }else{
-                            return back()->with('update_error','Password could not reset. Try again.')->with('username',$user);
+                            return back()->with('error','Password could not reset. Try again.')->with('username',$user);
                         }
                     }else{
-                        return back()->with('code_error','We are unable to queue your request at the moment. Contact our technical agent for help.')->with('username',$user);
+                        return back()->with('error','We are unable to queue your request at the moment. Contact our technical agent for help.')->with('username',$user);
                     }
                 }else{
-                    return back()->with('email_code_error','We are unable to send you a code at the moment, Try later.')->with('username',$user);
+                    return back()->with('error','We are unable to send you a code at the moment, Try later.')->with('username',$user);
                 }
             }
         }else{
-            return back()->with('user-error','Sorry this user was not found!')->with('username',$user);
+            return back()->with('error','Sorry this user was not found!')->with('username',$user);
         }
     }
     public function ForgotpassCodeVerify(Request $request){
@@ -234,7 +209,7 @@ class studentactions extends Controller
         if(sizeOf($CodeVerify)>0){
             return redirect('/forgotpassword/reset-password')->with('username',Crypt::encrypt($userGetter[0]->id));
         }else{
-            return back()->with('code-error','Wrong Code input, try again!')->with('username',Crypt::encrypt($userGetter[0]->id))->with('email',Crypt::encrypt($userGetter[0]->email));
+            return back()->with('error','Wrong Code input, try again!')->with('username',Crypt::encrypt($userGetter[0]->id))->with('email',Crypt::encrypt($userGetter[0]->email));
         }
     }
     public function ForgotpassNewPass(Request $request){
@@ -248,23 +223,16 @@ class studentactions extends Controller
             if(!Hash::check($newPassword,$oldPasswordword)){
                 $result = $this->PasswordVerify($user,$newPassword,$confPassword);
                 if($result !== 'password_success'){
-                    return back()->with('reset_error',$result);
+                    return back()->with('error',$result);
                 }else{
-                    return back()->with('update_success','Your password has been successfully updated. Login to join.')->with('username',Crypt::encrypt($user));
+                    PasswordReset::where('user_id',$user)->delete();
+                    return back()->with('success','Your password has been successfully updated. Login to join.')->with('username',Crypt::encrypt($user));
                 }
-                // $newPassword=Hash::make($newPassword);
-                // if(User::where('id',$user)->update(['password'=>$newPassword])){
-                //     if(PasswordReset::where('user_id',$user)->delete()){
-                //         return back()->with('update_success','Your password has been successfully updated. Login to join.')->with('username',Crypt::encrypt($user));
-                //     }
-                // }else{
-                //     return back()->with('update_error','Password cannot be updated at the moment. Try again.')->with('username',Crypt::encrypt($user));
-                // }
             }else{
-                return back()->with('reset_error','Password can not be the same as the previous one, Try again.')->with('username',Crypt::encrypt($user));
+                return back()->with('error','Password can not be the same as the previous one, Try again.')->with('username',Crypt::encrypt($user));
             }
         }else{
-            return back()->with('reset_error','Password do not match. Try again.')->with('username',Crypt::encrypt($user));
+            return back()->with('error','Password do not match. Try again.')->with('username',Crypt::encrypt($user));
         }
     }
     public static function DocumentExpiry(){
@@ -319,8 +287,6 @@ class studentactions extends Controller
         $data = [];
         array_push($data,array_merge((array)$user[0],(array)$userDetails[0]));
         if(sizeOf($kppApp) > 0){
-            // array_push($data,$kppApp);
-            // return $data;
             return $kppApp;
         }
         return [];
@@ -334,37 +300,31 @@ class studentactions extends Controller
         $data = [];
         array_push($data,array_merge((array)$user[0],(array)$userDetails[0]));
         if(sizeOf($extApp) > 0){
-            // array_push($data,$kppApp);
-            // return $data;
             return $extApp;
         }
         return [];
     }
+    public function AvailabilityGetter(){
+        $availability = DB::table('all_availability')->get();
+        $data = [];
+        foreach ($availability as $value) {
+            $userData = [];
+            array_push($userData,$value->surname.' '.$value->other_names);
+            array_push($userData,$value->user_id);
+            array_push($userData,json_decode($value->my_schedule));
 
+            array_push($data,$userData);
+        }
+        return $data;
+    }
     
 
     public function Create_Newstudentpass(request $request){
         $id = $request->user()->id; 
        
-        // $validator = validator()->make(request()->all(), [
-        //     'passportPICTURE' => 'required|mimes:png,jpg,jpeg,pdf',
-        //     'biodataPAGE' => 'mimes:png,jpg,jpeg,pdf',
-        //     'currentVISA' => 'mimes:png,jpg,jpeg,pdf',
-        //     'guardiansID' => 'mimes:png,jpg,jpeg,pdf',
-        //     'commitmentLETTER' => 'mimes:png,jpg,jpeg,pdf',
-        //     'academicTRANSCRIPTS' => 'mimes:png,jpg,jpeg,pdf',
-        //     'policeCLEARANCE' => 'mimes:png,jpg,jpeg,pdf'
-        // ]);
-        
-        // if ($validator->fails())
-        // {
-        //     redirect()->back()->with('error', ['your message here']);
-        // }
         if($request->hasFile('passportPICTURE','biodataPAGE','biodataPAGE','currentVISA','guardiansID','commitmentLETTER'
         ,'academicTRANSCRIPTS','policeCLEARANCE'))
         {
-
-            
             $this->validate($request,[
             'entry_date' => 'required|date',
             'passportPICTURE' => 'required|mimes:png,jpg,jpeg,pdf',
@@ -395,14 +355,6 @@ class studentactions extends Controller
                     $path_cL=$request->file('commitmentLETTER');
                     $path_AT=$request->file('academicTRANSCRIPTS');
                     $path_PC=$request->file('policeCLEARANCE');
-        
-                    // $allowedFileTypes = config('app.allowedFieTypes');
-                    // $maxFileSize = config('app.maxFileSize');
-                    // $rules = [
-                    //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
-                    // ];
-                    
-                    // $this->validate( $request,$rules);
         
                     $passportPic = FileUploader::fileupload($request,'passportPICTURE','PassportPhoto','kpps/');
                     $passportBio = FileUploader::fileupload($request,'biodataPAGE','PassportBioData','kpps/');
@@ -441,19 +393,6 @@ class studentactions extends Controller
        
 
     }
-    public function AvailabilityGetter(){
-        $availability = DB::table('all_availability')->get();
-        $data = [];
-        foreach ($availability as $value) {
-            $userData = [];
-            array_push($userData,$value->surname.' '.$value->other_names);
-            array_push($userData,$value->user_id);
-            array_push($userData,json_decode($value->my_schedule));
-
-            array_push($data,$userData);
-        }
-        return $data;
-    }
     public function Create_Newvisaextension(request $request){
 
         if($request->hasFile('entryVISA','Biodata','visaPAGE'))
@@ -465,14 +404,6 @@ class studentactions extends Controller
             ]
             );
 
-            
-            // $allowedFileTypes = config('app.allowedFieTypes');
-            // $maxFileSize = config('app.maxFileSize');
-            // $rules = [
-                //          'file' => 'required|mimes:'.$allowedFileTypes.'|max'.$maxFileSize 
-                // ];
-                
-                // $this->validate( $request,$rules);
             $appId = rand(1000,1000000);
             
             if(sizeOf(DB::table('extension_application')->where('id',$appId)->get()) > 0){
@@ -497,7 +428,6 @@ class studentactions extends Controller
                     $post->application_date = date('Y-m-d');
                     $post->application_status = 'pending';
         
-        
                     $post->timestamps = false;
                     $post->save();
             
@@ -507,33 +437,17 @@ class studentactions extends Controller
         }
     }
 
-
-    // public function getCountries(){
-    //     $get_data= CountryController::readFile();
-    //     $country = array();
-    //     foreach($get_data as $key => $data){
-    //         if($key > 0){
-    //             array_push($country , $data[0]);
-    //         }
-    //     }
-    //     return $country;
-    // }
-    
-
     /* Update Visa Application */
     public function PDFFileView($path,$file ){
-        $thisFile= $file;   
-        // $thisFile= Crypt::decrypt($file);   
-
-         return view('Layouts/PdfView', ['file'=>$path.'/'.$thisFile]);
+        $thisFile= $file;    
+        return view('Layouts/PdfView', ['file'=>$path.'/'.$thisFile]);
     }
     public function NewVISAAPPEDIT($id ){
         $dataID= Crypt::decrypt($id);   
 
         $data= applyvisaextension::find($dataID);
-         return view('Layouts/studentActions/visaapplicationedit', compact('data'));
+        return view('Layouts/studentActions/visaapplicationedit', compact('data'));
     }
-
     
     public function Newstudentpass(Request $request){
         return view('Layouts/studentActions/RequestNewKPP',['getCountries'=>RegisteredUserController::getCountries(),'getUserDetails'=>$this->userDetailsFetcher($request),'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
@@ -611,9 +525,7 @@ class studentactions extends Controller
         $id = $request->user()->id;        
         $data = DB::table("student_details")->where('student_id',$id)->limit(1)->get();
         
-        // return back()->with('request_success','Your request was successful');
         return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0], 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
-        // return view('Layouts/studentActions/RequestABuddy',['user'=>$data[0]]);
     }
 
     public function PushBuddyRq($id,$year){
@@ -631,7 +543,6 @@ class studentactions extends Controller
     }
 
     public function RequestABuddy(Request $request){
-
         $id = $request->user()->id;             
         $year = $request->YearOfStudy;             
         $data = DB::table("buddy_request")->where('student_id','=',$id)->get();
@@ -708,22 +619,12 @@ class studentactions extends Controller
         $BuddyId = DB::table("buddies_allocations")->select('id as allocation_id','buddy_id')->where('student_id',$id)->limit(1)->get();
         if(sizeOf($BuddyId) > 0){
             $BuddyUser = DB::table("users")->select('surname','other_names','email')->where('id',$BuddyId[0]->buddy_id)->limit(1)->get();
-            // $BuddyDetails = DB::table("student_details")->select('phone_number')->where('student_id',$BuddyId[0]->buddy_id)->limit(1)->get();
             array_push($data,array_merge((array)$BuddyUser[0],(array)$BuddyId[0]));
         }
-
         return view('Layouts/studentActions/AllocatedBuddies',['allocationGetter'=>$data, 'availability'=>$this->AvailabilityGetter(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
     }
 
     
-
-    //END OF BUDDY MANAGEMENT SECTION//
-   
-    
-    // public function downloadVisaFile(Request $request, $file){   
-                
-    //     return response()->download(public_path('Storage/visaExtensionfiles/'.$file));    
-    // }
     public function downloadGuides($file){    
         $file_path = public_path('storage/Guides/'.Crypt::decrypt($file));
         if (file_exists($file_path)){
@@ -762,8 +663,6 @@ class studentactions extends Controller
         $table = $request->table;        
         $UpdateTable = DB::table($table)->where('student_id',$id)->where('id',$appId)->update(['first_open'=>null]);
         if($UpdateTable){return true;}else{return false;}
-        // return Response::send($appId.'->'.$table.'->'.$id);
-        // return $table;
     }
     public function NewVisaextension(Request $request){
         $id = $request->user()->id;        
@@ -788,9 +687,6 @@ class studentactions extends Controller
         $fecthData =$this->FetchKppView($request);
         return view('Layouts/studentActions/studentkppapplications',['data'=>$data,'userDetails'=>$userData[0],'getDataView'=>$fecthData,'user'=>$this->GetuserDetails($request), 'availability'=>$this->AvailabilityGetter(),'NoBooking'=>$this->GetAllbookedMeeting(),'NoExt'=>$this->NotOpenedExt(),'NoKpps'=>$this->NotOpenedKpps()]);
     }
-    public function issuedKpp(){
-        return view('Layouts/studentActions/IssuedKpp');
-    }
     public function BuddyRequest(){
         return view('auth/BuddyRequest');
     }
@@ -814,13 +710,9 @@ class studentactions extends Controller
     
                 $tm = date("Y-m-d h:i",strtotime($data[0].' '.$data[1]));
         
-                // $post->admin_id = '66753';
-                // $post->admin_id = $value[0];
                 $post->student_id = Auth::user()->id;
                 $post->booked_date_time = $tm;
-                // $post->booked_date_time = json_encode($data);
                 $post->status = 'pending';
-                // $post->requested_at = date("Y-m-d h:i:s");
         
                 $post->timestamps = false;
         
@@ -835,7 +727,6 @@ class studentactions extends Controller
         }else{
             return back()->with('booking-error','You have not selected a date/time for the meeting. Try again ');
         }
-        // echo json_encode($data);
 
     }
 
@@ -857,116 +748,111 @@ class studentactions extends Controller
 
             ]
         );
-        // if($request->filled('id','surNAME','otherNAMES','gender','email','phoneNUMBER','Faculty','Course','Nationality','passport_number','Residence')){
+
+        if($request->notApplicable === 'Applicable'){
+            $this->validate($request,[
+                'ParentNames'=>'required',
+                'ParentEmail'=>'required',
+                'ParentPhone'=>'required'
+                ]
+            );
+        }
+
+        $CheckId = DB::table("users")->where('id',$request->id)->get();
+        $CheckEmail = DB::table("users")->where('email',$request->email)->get();
+        $CheckPassport = DB::table("student_details")->where('passport_number',$request->passport_number)->get();
+        $status=0;
+
+        if(sizeOf($CheckId) > 0 || sizeOf($CheckEmail) > 0 || sizeOf($CheckPassport) > 0){
+            return back()->with('New_Student_failed','User with the same data found. Try again');
+        }else{
+            $CheckRole=[];
+            if($request->user()){
+                $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
+            }
+
+            $post = new addNewStudent();
+            $postDetails = new addStudentDetails();
+            $postGuardian = new studentGuardian();
+            $postVerification = new userVerification();
+            $postRole = new Role();
+            if(sizeOf($CheckRole) >0){
+                if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $status = 1;}
+            }
+
+            $post->id = $request->id;
+            $post->surname = $request->surNAME;
+            $post->other_names = $request->otherNAMES;
+            $post->gender = $request->gender;
+            $post->email = $request->email;
+            $post->password = Hash::make('123456');
+            $post->status = $status;
+
+            $postDetails->student_id = $request->id;
+            $postDetails->phone_number = $request->phone_number;
+            $postDetails->faculty = $request->Faculty;
+            $postDetails->course = $request->Course;
+            $postDetails->nationality = $request->Nationality;
+            $postDetails->passport_number = strtoupper($request->passport_number);
+            $postDetails->passport_expire_date = $request->passport_expire;
+            $postDetails->passport_image = 'passport.jpg';
+            $postDetails->residence = $request->Residence;
+
 
             if($request->notApplicable === 'Applicable'){
-                $this->validate($request,[
-                    'ParentNames'=>'required',
-                    'ParentEmail'=>'required',
-                    'ParentPhone'=>'required'
-                    ]
-                );
+                $postGuardian->student_id = $request->id;
+                $postGuardian->full_name = $request->ParentNames;
+                $postGuardian->email = $request->ParentEmail;
+                $postGuardian->phone_number = $request->ParentPhone;
+                $postGuardian->status = 'primary';
+            }else{
+                $postGuardian->student_id = $request->id;
+                $postGuardian->full_name = 'Not Applicable';
+                $postGuardian->email ='Not Applicable';
+                $postGuardian->phone_number = 'Not Applicable';
+                $postGuardian->status = 'notApplicable';
             }
             
 
-            $CheckId = DB::table("users")->where('id',$request->id)->get();
-            $CheckEmail = DB::table("users")->where('email',$request->email)->get();
-            $CheckPassport = DB::table("student_details")->where('passport_number',$request->passport_number)->get();
-            $status=0;
+            $postVerification->user_id = $request->id;
+            $postVerification->status = $status;
+            $postVerification->verified_at = $this->CurrentDate();
+            $postVerification->remember_token = "";
+            $postVerification->created_at = $this->CurrentDate();
+            $postVerification->updated_at = $this->CurrentDate();
 
-            if(sizeOf($CheckId) > 0 || sizeOf($CheckEmail) > 0 || sizeOf($CheckPassport) > 0){
-                return back()->with('New_Student_failed','User with the same data found. Try again');
+            $postRole->user_id = $request->id;
+            $postRole->role = 'student';
+
+            $post->timestamps = false;
+            $postDetails->timestamps = false;
+            $postGuardian->timestamps = false;
+            $postVerification->timestamps = false;
+            $postRole->timestamps = false;
+
+            
+            $post->save();
+            $postDetails->save();
+            $postGuardian->save();
+            $postVerification->save();
+            $postRole->save();
+            if(sizeOf($CheckRole) > 0){
+                if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
+                    $EmailTitle = 'Welcome to International Student Affaires.';
+                    $subject = 'Account Creation';
+                    $msg='
+                    <p>Your account has successfully been created. Click on the link below to access the system. </p>
+                    <p><a href="http://localhost:8000/" style="padding:5px; border-radius:5px; background:rgb(17,60,122); color:#fff; ">Login Now</a></p>
+                    <p>Please remember to change your password to improve your account security. </p>';
+
+                    // return redirect()->route('emailsend',[$subject, $request->email,$EmailTitle,Crypt::encryptString($msg)]);
+                    return back()->with('success','Account has been added Successfully');
+
+                }
             }else{
-                $CheckRole=[];
-                if($request->user()){
-                    $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
-                }
-
-                $post = new addNewStudent();
-                $postDetails = new addStudentDetails();
-                $postGuardian = new studentGuardian();
-                $postVerification = new userVerification();
-                $postRole = new Role();
-                if(sizeOf($CheckRole) >0){
-                    if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $status = 1;}
-                }
-    
-                $post->id = $request->id;
-                $post->surname = $request->surNAME;
-                $post->other_names = $request->otherNAMES;
-                $post->gender = $request->gender;
-                $post->email = $request->email;
-                $post->password = Hash::make('123456');
-                $post->status = $status;
-    
-                $postDetails->student_id = $request->id;
-                $postDetails->phone_number = $request->phone_number;
-                $postDetails->faculty = $request->Faculty;
-                $postDetails->course = $request->Course;
-                $postDetails->nationality = $request->Nationality;
-                $postDetails->passport_number = strtoupper($request->passport_number);
-                $postDetails->passport_expire_date = $request->passport_expire;
-                $postDetails->passport_image = 'passport.jpg';
-                $postDetails->residence = $request->Residence;
-    
-    
-                if($request->notApplicable === 'Applicable'){
-                    $postGuardian->student_id = $request->id;
-                    $postGuardian->full_name = $request->ParentNames;
-                    $postGuardian->email = $request->ParentEmail;
-                    $postGuardian->phone_number = $request->ParentPhone;
-                    $postGuardian->status = 'primary';
-                }else{
-                    $postGuardian->student_id = $request->id;
-                    $postGuardian->full_name = 'Not Applicable';
-                    $postGuardian->email ='Not Applicable';
-                    $postGuardian->phone_number = 'Not Applicable';
-                    $postGuardian->status = 'notApplicable';
-                }
-                
-    
-                $postVerification->user_id = $request->id;
-                $postVerification->status = $status;
-                $postVerification->verified_at = $this->CurrentDate();
-                $postVerification->remember_token = "";
-                $postVerification->created_at = $this->CurrentDate();
-                $postVerification->updated_at = $this->CurrentDate();
-    
-                $postRole->user_id = $request->id;
-                $postRole->role = 'student';
-    
-                $post->timestamps = false;
-                $postDetails->timestamps = false;
-                $postGuardian->timestamps = false;
-                $postVerification->timestamps = false;
-                $postRole->timestamps = false;
-    
-                
-                $post->save();
-                $postDetails->save();
-                $postGuardian->save();
-                $postVerification->save();
-                $postRole->save();
-                if(sizeOf($CheckRole) > 0){
-                    if($CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){
-                        $EmailTitle = 'Welcome to International Student Affaires.';
-                        $subject = 'Account Creation';
-                        $msg='
-                        <p>Your account has successfully been created. Click on the link below to access the system. </p>
-                        <p><a href="http://localhost:8000/" style="padding:5px; border-radius:5px; background:rgb(17,60,122); color:#fff; ">Login Now</a></p>
-                        <p>Please remember to change your password to improve your account security. </p>';
-
-                        return redirect()->route('emailsend',[$subject, $request->email,$EmailTitle,Crypt::encryptString($msg)]);
-
-                    }
-                }else{
-                    return back()->with('success','Your account has been added Successfully');
-                }
+                return back()->with('success','Your account has been added Successfully');
             }
-        // }else{
-        //     return back()->with('New_Student_failed','some feilds are missing!');
-        // }
-
+        }
     }
 
 }

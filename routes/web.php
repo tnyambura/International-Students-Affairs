@@ -79,18 +79,6 @@ Route::group(['middleware' => ['auth']], function(){
     Route::get('/visa/extension/cancel', [studentactions::class, 'cancelExtApp'])->middleware('isUser')->name('view.cancelextension');
 
     Route::get('/first-open', [studentactions::class, 'VisaFirstOpen'])->middleware('isUser')->name('add.firstOpen');
-//  Route::get('/MyAppVIEW/{id}', [studentactions::class, 'NewKPPAPPVIEW'])->middleware('isUser');
-
-//  Route::get('/MyAppEDIT/{id}', [studentactions::class, 'NewKPPAPPEDIT'])->middleware('isUser');
-//  Route::put('/MyAppEDIT/{id}', [studentactions::class, 'updateKPP'])->middleware('isUser')->name('edit.MyAppEDIT');
-
-//  Route::get('/MyvisaAppEDIT/{id}', [studentactions::class, 'NewVISAAPPEDIT'])->middleware('isUser');
-//  Route::put('/MyvisaAppEDIT/{id}', [studentactions::class, 'updateVISA'])->middleware('isUser')->name('edit.MyvisaAppEDIT');
-
-
-//  Route::get('/MyVisaRequestVIEW/{id}', [studentactions::class, 'NewVisaAPPVIEW'])->middleware('isUser');
-//  Route::get('/MyVisaRequestDownload/{file}', [studentactions::class, 'downloadVisaFile'])->middleware('isUser');
-    
     
     Route::get('/visa/kpp', [studentactions::class, 'Listofkpps'])->middleware('isUser')->name('view.mykpp');
     Route::get('/visa/extension', [studentactions::class, 'visaExtensions'])->middleware('isUser')->name('view.myextension');
@@ -120,17 +108,13 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/editUserData', [adminactions::class, 'editUserData'])->name('add.editUserData');
     Route::post('/activate_user', [adminactions::class, 'activate_user'])->middleware('isAdmin')->name('add.activate');
 
-    // Route::get('/visa', [adminactions::class, 'getAllkppApplications'])->middleware('isAdmin')->name('visa');
     Route::get('/visa/{type}/{status}', [adminactions::class, 'visaRequestData'])->middleware('isAdmin')->name('view.visa');
     Route::get('/visa/{type}/response/{response_status}', [adminactions::class, 'visaResponses'])->middleware('isAdmin');
-    // Route::get('/visa', [adminactions::class, 'getAllkppApplications'])->middleware('isAdmin')->name('visa');
 
-    // Route::get('/visa', [adminactions::class, 'getAllkppApplications'])->middleware('isAdmin')->name('visa');
     Route::get('/VisaRequestList', [adminactions::class, 'getAllvisaextensionrequests'])->middleware('isAdmin');
     Route::get('/initiatedkpps', [adminactions::class, 'initiatedkppApps'])->middleware('isAdmin');
     Route::get('/allocations-report', [adminactions::class, 'getallAllocationsReport'])->middleware('isAdmin');
     Route::get('/users-report', [adminactions::class, 'getallusersReport'])->middleware('isAdmin');
-    //  Route::get('/AddNewStudent', [adminactions::class, 'AddNewStudent']);
     Route::get('/users/add', [RegisteredUserController::class, 'AddNewUser'])->middleware('isAdmin')->name('view.newuser');
     Route::post('/AddUser', [RegisteredUserController::class, 'store'])->middleware('isAdmin')->name('add.newuser');
     Route::get('/NewKPPVIEW/{id}', [adminactions::class, 'NewKPPAPPVIEW'])->middleware('isAdmin');
@@ -171,7 +155,6 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/reset_password', [adminactions::class, 'ResetUserPassword'])->middleware('isAdmin')->name('add.reset_password');
     Route::post('/dismissBudy', [adminactions::class, 'RemoveAsBuddy'])->middleware('isAdmin')->name('add.dismissBd');
     Route::get('/AddNewBuddy', [adminactions::class, 'AddNewBuddy'])->middleware('isAdmin')->name('add.AddNewBuddy');
-//  Route::post('/EnrolNewBuddy', [adminactions::class, 'RegisterNewBuddy'])->middleware('isAdmin')->name('add.EnrolNewBuddy');
     Route::get('/listofBuddies',[adminactions::class,'getAllBuddies'])->middleware('isAdmin');
     Route::post('/dismissAllocation',[adminactions::class,'dismissAllocation'])->middleware('isAdmin')->name('add.dismiss');
     Route::get('/dismissBuddyChange/{id}',[adminactions::class,'DismissBuddyRequestChange'])->middleware('isAdmin');
@@ -198,7 +181,6 @@ Route::group(['middleware' => ['auth']], function(){
     Route::post('/StatReport', [DashboardController::class,'statReport'])->middleware('isAdmin')->name('add.stat');
     Route::post('/manage-file-insert', [adminactions::class,'FileManageInsert'])->middleware('isAdmin')->name('add.FileInsert');
     Route::post('/manage-file-update', [adminactions::class,'FileManageUpdate'])->middleware('isAdmin')->name('add.FileUpdate');
-    //  Route::get('/viewStatisticsReport', [DashboardController::class,'statisticsReport'])->middleware('isAdmin');
     Route::get('/statistics-filter/{year}', [DashboardController::class,'getStatistics'])->middleware('isAdmin');
     Route::post('/exportExcel', [adminactions::class,'ExcelExport'])->middleware('isAdmin')->name('add.exportExcel');
                 

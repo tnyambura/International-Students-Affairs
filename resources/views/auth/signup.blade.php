@@ -10,161 +10,15 @@
 
   <title>International Students Affairs</title>
 
-  <!-- Bootstrap Core CSS -->
-  <!-- <link href="{{asset('homeassets/vendor/bootstrap/css/bootstrap.min.css')}}" rel="stylesheet"> -->
-
-  <!-- Custom Fonts -->
   <link href="{{asset('homeassets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-  <!-- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-  <link href="{{asset('homeassets/vendor/simple-line-icons/css/simple-line-icons.css')}}" rel="stylesheet"> -->
-
-  <!-- Custom CSS -->
-  <!-- <link href="{{asset('homeassets/css/stylish-portfolio.min.css')}}" rel="stylesheet">
-  <link href="{{asset('asset/css/styles.css')}}" rel="stylesheet"/>
-  <link href="{{asset('asset/css/startPage.css')}}" rel="stylesheet"/> -->
-  <!-- <link href="{{asset('css/app.css')}}" rel="stylesheet"/> -->
-  <!-- <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script> -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- @vite('resources/css/app.css') -->
-    <style>
-        /* input[value=""]:not(:focus) { color: transparent; } */
-        :root {
-            --bg: rgb(17, 60, 122);
-            --clt-slate-light: rgb(255, 255, 255);
-            --clt-slate-dim: rgb(255, 255, 255, .4);
-        }
-
-        main {
-            background: url('https://www.patternfly.org/v4/images/basic.f4f127adeeaf58d28161c05c04b22668.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            position: relative;
-        }
-
-        main::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            background: rgb(17, 60, 122, .5);
-            z-index: -1;
-        }
-
-        .main-container {
-            display: flex;
-            /* flex-direction: row-reverse; */
-            position: relative;
-            max-height: 48rem;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-
-        .main-container>* {
-            position: absolute;
-            top: 50%;
-            height: 90%;
-            /* transform: translateY(-50%) translateX(5%); */
-            transition: .8s;
-        }
-
-        .main-container>:first-child {
-            left: 0;
-            z-index: 2;
-        }
-
-        .main-container>:last-child {
-            right: 5%;
-        }
-
-        .position-controller {}
-
-        .left-position,
-        .right-position {
-            border: var(--clt-slate-dim) solid 1px;
-            border-radius: 5px;
-            width: 1.2rem;
-            height: 1.5rem;
-            background: var(--bg);
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-        }
-
-        .left-position.active,
-        .right-position.active {
-            border-color: var(--clt-slate-light);
-        }
-
-        .left-position::before,
-        .right-position::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            width: 50%;
-            background: var(--clt-slate-dim);
-        }
-
-        .left-position.active::before,
-        .right-position.active::before {
-            background: var(--clt-slate-light);
-        }
-
-        .right-position::before {
-            left: 50%;
-        }
-        .form::-webkit-scrollbar{
-            display: none;
-        }
-        .form{
-            display: grid;
-            grid-template-rows: auto 1fr
-        }
-        .form-container{
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between
-        }
-        .form-footer .more-links-container{
-            display: grid;
-            gap:2px;
-            grid-template-columns: repeat(auto-fit,minmax(min(100%,150px),1fr));
-        }
-        .form-footer .more-links-container a{
-            padding-inline: 5px;
-            color: #fff;
-        }
-        .form-footer .more-links-container a:hover{
-            color: #D0A153;
-        }
-        @media(max-width:768px){
-            .form{
-                left: 0 !important;
-            }
-        }
-        .notApplicable::after{
-            position: absolute;
-            content: '';
-            top: 50%;
-            left: -20px;
-            transform: translateY(-50%);
-            width: 10px;
-            height: 10px;
-            outline: 2px solid #fff;
-            border-radius: 5px;
-        }
-        .notApplicable.active::after{
-            background: #06943e;
-            border-color: #06943e;
-        }
-    </style>
+  <link href="{{asset('homeassets/vendor/css/landingPage.css')}}" rel="stylesheet" type="text/css">
+  <script src="https://cdn.tailwindcss.com"></script>
+    
 </head>
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
 <body>
     <main class="w-screen h-screen z-[2]">
         <div class="main-container h-full p-3">
-            <div class="form rounded-md translate-x-[5%] left-0 translate-y-[-50%] 2xl:translate-x-[50%] relative md:absolute w-[90%] max-w-[40rem] md:w-[45%] bg-[#113C7A] h-[95%] overflow-y-auto p-3 ">
+            <div class="form rounded-md translate-x-[5%] left-0 translate-y-[-50%] 2xl:translate-x-[50%] relative md:absolute w-[90%] max-w-[40rem] md:w-[45%] h-[95%] overflow-y-auto p-3 ">
                 <div class="position-control-container w-full p-3">
                     <div class="flex md:hidden place-items-center place-content-center">
                         <img class="w-[80px]" src="{{asset('asset/img/strathLogo1.png')}}">
@@ -179,11 +33,14 @@
                     <div class="my-auto">
                         <h2 class="my-auto mb-6 text-center text-slate-200 text-[20px] uppercase">SU Portal | Sign Up</h2>
                         <div class="input-fields-container grid gap-6 ">
-                            @if(Session::has('success'))
-                            <div class="alert alert-success" role="alert">
-                                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            {{Session::get('success')}}
-                            </div>
+                            @if($errors->any())
+                                <div class="rounded-md p-2 w-full text-gray-100 bg-red-900" role="alert">
+                                    <ul>
+                                        @foreach($errors->all() as $error)
+                                            <li>{{$error}}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
                             @endif
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
@@ -227,18 +84,6 @@
                             </div>
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
-                                    <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Course">Course</label>
-                                    <select  class='w-full p-2 pt-4 outline-none' name ="Course" id="Course" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
-                                        <option></option>
-                                        @foreach($courses as $v)
-                                            <option value='{{$v[0]}}'>{{$v[0].' ('.$v[1].')'}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <small class="text-red-500 text-xs">@error('Course') {{$message}} @enderror</small>
-                            </div>
-                            <div class="input-field w-full rounded-md relative ">
-                                <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Faculty">Faculty</label>
                                     <select  class='w-full p-2 pt-4 outline-none' name ="Faculty" id="Faculty" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
                                         <option></option>
@@ -249,6 +94,20 @@
                                 </div>
                                 <small class="text-red-500 text-xs">@error('Faculty') {{$message}} @enderror</small>
                             </div>
+
+                            <div class="input-field w-full rounded-md relative ">
+                                <div class='flex bg-white overflow-hidden rounded-md'>
+                                    <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Course">Course</label>
+                                    <select  class='w-full p-2 pt-4 outline-none' name ="Course" id="Course" onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)">
+                                        <option></option>
+                                        @foreach($courses as $v)
+                                            <option value='{{$v[0]}}'>{{$v[0].' ('.$v[1].')'}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <small class="text-red-500 text-xs">@error('Course') {{$message}} @enderror</small>
+                            </div>
+                            
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="Nationality">Nationality</label>
@@ -325,7 +184,7 @@
                             </div>
                         </div>
                         <div class="sub-btn w-full mt-10 grid place-items-center place-content-center">
-                            <button type="submit" class="py-2 px-4 w-[150px] rounded text-white bg-[#D0A153]">Login</button>
+                            <button type="submit" class="py-2 px-4 w-[150px] rounded text-white bg-[#D0A153]">Save</button>
                         </div>
                     </div>
                     <div class="form-footer w-full p-2">

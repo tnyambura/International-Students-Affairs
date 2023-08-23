@@ -12,16 +12,11 @@ class CountryController extends Controller
 
         if(($open=fopen(storage_path().'/Data/countries.csv','r')) !== false){
 
-            // $header = fgetcsv($file);
             while (($row = fgetcsv($open,1000,',')) !== false) {
                 $fileData[] = $row;
-                // $users[] = array_combine($header, $row);
             }
             fclose($open);
         }
-        // $filePath = storage_path('app/users.csv');
-        // $file = fopen($filePath, 'r');
-        // print_r($fileData);
         return $fileData;
     }
 }
