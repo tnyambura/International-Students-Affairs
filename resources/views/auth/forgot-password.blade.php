@@ -47,7 +47,7 @@
   <title>International Students Affairs</title>
     <link href="{{asset('homeassets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('homeassets/vendor/css/landingPage.css')}}" rel="stylesheet" type="text/css">
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{asset('homeassets/vendor/js/index.js')}}"></script>
     
 </head>
 <body>

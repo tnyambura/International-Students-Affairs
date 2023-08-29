@@ -11,7 +11,7 @@
   <title>International Students Affairs</title>
   <link href="{{asset('homeassets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
   <link href="{{asset('homeassets/vendor/css/landingPage.css')}}" rel="stylesheet" type="text/css">
-  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="{{asset('homeassets/vendor/js/index.js')}}"></script>
 </head>
 <body>
     <main class="w-screen h-screen z-[2]">
@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <form action="{{ route('login') }}" method="POST" class="form-container h-full"> @csrf
-                    <div class="my-auto">
+                    <div class="form-body my-auto">
                         <h2 class="my-auto mb-6 text-center text-slate-200 text-[20px] uppercase">SU Portal | Login</h2>
                         <div class="input-fields-container grid gap-6 ">
                             <!-- <x-auth-validation-errors class="rounded-md p-2 w-full text-gray-100 bg-red-700" :errors="$errors" /> -->
@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="form-footer w-full p-2">
-                        <h3 class='mb-2' style='color: rgb(199, 140, 22); font-size: 15px;'>Useful resources</h3>
+                        <h3 class='mb-2 text-[15px] text-slate-300' >Useful resources</h3>
                         <div class="more-links-container p-2 mb-2">
                             @if($Guides)
                             @foreach($Guides as $v)
