@@ -10,7 +10,7 @@
 
   <title>International Students Affairs</title>
   <link href="{{asset('homeassets/vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
-  <link href="{{asset('homeassets/css/landingPage.css')}}" rel="stylesheet" type="text/css">
+  <link href="{{asset('css/landing-page.css')}}" rel="stylesheet" type="text/css">
   <script src="{{asset('homeassets/js/index.js')}}"></script>
 </head>
 <body>

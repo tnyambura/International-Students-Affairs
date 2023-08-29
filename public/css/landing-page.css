@@ -6,7 +6,7 @@
 
 main {
     /* background: url('https://www.petesduelingpianostogo.com/images/backgrounds/background-10-1920x1062.jpg'); */
-    background: url('../../img/bg-masthead.jpg');
+    background: url('../img/bg-masthead.jpg');
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
