@@ -33,7 +33,19 @@
                     <div class="my-auto">
                         <h2 class="my-auto mb-6 text-center text-slate-200 text-[20px] uppercase">SU Portal | Sign Up</h2>
                         <div class="input-fields-container grid gap-6 ">
-                            @if($errors->any())
+                            @if(Session::has('success'))
+                            <div class="rounded-md p-2 w-full text-gray-100 bg-green-900" role="alert">
+                                <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                                {{Session::get('success')}} 
+                            </div>
+                            @endif
+                            @if(Session::has('error'))
+                            <div class="rounded-md p-2 w-full text-gray-100 bg-red-900" role="alert">
+                                <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
+                                {{Session::get('error')}}
+                            </div>
+                            @endif
+                            <!-- @if($errors->any())
                                 <div class="rounded-md p-2 w-full text-gray-100 bg-red-900" role="alert">
                                     <ul>
                                         @foreach($errors->all() as $error)
@@ -41,7 +53,7 @@
                                         @endforeach
                                     </ul>
                                 </div>
-                            @endif
+                            @endif -->
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="surname">Surname</label>
@@ -150,6 +162,22 @@
                                 </div>
                                 <small class="text-red-500 text-xs">@error('Residence') {{$message}} @enderror</small>
                             </div>
+                            <div class="input-field w-full rounded-md relative ">
+                                <div class='flex bg-white overflow-hidden rounded-md'>
+                                    <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="password">Password</label>
+                                    <input type="password" maxlength="50" class="w-full p-2 pt-4 outline-none " name='password' value="{{old('password')}}"  onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="password">
+                                    <i class="fa fa-key px-4 flex place-items-center place-content-center"></i>
+                                </div>
+                                <small class="text-red-500 text-xs">@error('password') {{$message}} @enderror</small>
+                            </div>
+                            <div class="input-field w-full rounded-md relative ">
+                                <div class='flex bg-white overflow-hidden rounded-md'>
+                                    <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="c_password">Confirm password</label>
+                                    <input type="password" maxlength="50" class="w-full p-2 pt-4 outline-none " name='password_confirmation' onfocusin="inputFocusIn(event)" onfocusout="inputFocusOut(event)" id="c_password">
+                                    <i class="fa fa-key px-4 flex place-items-center place-content-center"></i>
+                                </div>
+                                <small class="text-red-500 text-xs">@error('password_confirmation') {{$message}} @enderror</small>
+                            </div>
                             <div class="flex justify-between place-item-center text-white border-b-2 w-full p-2 my-2 mb-3">
                                 <span class='text-semibold '>Parent Details</span>
                                 <input class="hidden " type="checkbox" value="Applicable" id="notApplicable" />
@@ -243,15 +271,12 @@
 
     let quotContainer = document.querySelector('.quote-container')
 
-    InputEmptyVal(document.querySelector('[type="date"]'))
-    function InputEmptyVal(element) {
-        let elVal = element.value
-        if(elVal == ""){
-            element.style.color = 'transparent'
-        }else{
-            element.style.color = '#000'
+    inputFocusIn(document.querySelector('[type="date"]'))
+    document.querySelector('.form-container').querySelectorAll('input:not([type="submit"]):not([type="checkbox"]):not([type="hidden"])').forEach(function(e){
+        if(e.value != '' && e.value != null){
+            inputFocusIn(e)
         }
-    }
+    })
     function getQuote(index) {
         let item = quotes[index]
         quotContainer.innerHTML=`
@@ -300,34 +325,44 @@
     }
 
     function inputFocusIn(e) {
-        let el = e.target,
-        label = el.previousElementSibling
-        label.style.cssText = `
-            color: ${FOCUS_COLOR};
-            font-size: 10px;
-            left: 5px;
-            transform: translateY(0%);
-        `
-        label.classList.remove('text-slate-400')
-        el.nextElementSibling.style.color = FOCUS_COLOR;
-        InputEmptyVal(el)
+        let el = (e.target)?e.target:e,
+        label = el.previousElementSibling;
+        // console.log(el);
+        if(label){
+            label.style.cssText = `
+                color: ${FOCUS_COLOR};
+                font-size: 10px;
+                left: 5px;
+                transform: translateY(0%);
+            `
+            label.classList.remove('text-slate-400')
+
+            if(el.nextElementSibling){
+                el.nextElementSibling.style.color = FOCUS_COLOR;
+            }
+        }
     }
 
     function inputFocusOut(e) {
         let el = e.target,
         label = el.previousElementSibling
-        if(el.value == ""){
-            label.style.cssText = `
-                font-size: revert;
-                transform: translateY(50%);
-            `
-            label.classList.add('text-slate-400')
-            el.nextElementSibling.style.color = 'initial';
-        }else{
-            label.style.color = '#048753'
-            el.nextElementSibling.style.color = '#048753';
+        if(label){
+            if(el.value == ""){
+                label.style.cssText = `
+                    font-size: revert;
+                    transform: translateY(50%);
+                `
+                label.classList.add('text-slate-400')
+                if(el.nextElementSibling){
+                    el.nextElementSibling.style.color = 'initial';
+                }
+            }else{
+                label.style.color = '#048753'
+                if(el.nextElementSibling){
+                    el.nextElementSibling.style.color = '#048753';
+                }
+            }
         }
-        InputEmptyVal(el)
     }
 
     function setPosition(el) {

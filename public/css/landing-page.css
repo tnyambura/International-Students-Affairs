@@ -100,6 +100,9 @@ main::before {
     -ms-overflow-style: none; 
     scrollbar-width: none;  
 }
+.form-container input, .form-container select{
+    color: rgb(148 163 184)
+}
 .form::-webkit-scrollbar, .form-container::-webkit-scrollbar{
     display: none;
 }

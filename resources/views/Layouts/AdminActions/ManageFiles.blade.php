@@ -110,6 +110,7 @@
                                         <span style='font-size:12px;'>Choose File</span>
                                         <input onchange='FileChanged(event)' class='choose_file' accept=".pdf" name='file_data[]' id='choose_file_${randId}' type='file' style='display: none; font-size:12px; color: #113C7A; align-self:center;'/>
                                     </label>
+                                    <small class="text-red-500 text-xs">@error('file_data') {{$message}} @enderror</small>
                                     <div class='remove-added-file' onclick='RemoveElement(event)' role='button'><i class=' fa fa-trash mx-2 px-2' style='font-size: 40px; color:var(--danger);'></i></div>
                                 </div></div>`
                 form.prepend(fileInput);

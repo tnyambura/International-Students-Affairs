@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Password;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades;
@@ -744,8 +745,16 @@ class studentactions extends Controller
             'Nationality'=>'required',
             'passport_number'=>'required',
             'passport_expire'=>'required',
-            'Residence'=>'required'
-
+            'Residence'=>'required',
+            'password'=>[
+                "required", "confirmed",
+                Password::min(8)->letters()
+                ->mixedCase()
+                ->numbers()
+                ->symbols()
+                ->uncompromised()
+            ],
+            'password_confirmation'=>'required',
             ]
         );
 
@@ -771,13 +780,15 @@ class studentactions extends Controller
                 $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
             }
 
+            $password = $request->password;
+
             $post = new addNewStudent();
             $postDetails = new addStudentDetails();
             $postGuardian = new studentGuardian();
             $postVerification = new userVerification();
             $postRole = new Role();
             if(sizeOf($CheckRole) >0){
-                if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $status = 1;}
+                if($request->status === 'active' || $CheckRole[0]->role === 'admin' || $CheckRole[0]->role === 'super_admin'){ $password='123456'; $status = 1;}
             }
 
             $post->id = $request->id;
@@ -785,7 +796,7 @@ class studentactions extends Controller
             $post->other_names = $request->otherNAMES;
             $post->gender = $request->gender;
             $post->email = $request->email;
-            $post->password = Hash::make('123456');
+            $post->password = Hash::make($password);
             $post->status = $status;
 
             $postDetails->student_id = $request->id;

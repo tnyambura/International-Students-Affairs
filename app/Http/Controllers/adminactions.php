@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use Exeption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Crypt;
@@ -246,6 +246,14 @@ class adminactions extends Controller
     }
     public function FileManageInsert(Request $req){
         $dataVal = [];
+        $this->validate($req,[
+            'file_data.*'=>'required|mimes:pdf|max:1024',
+        ],[
+            'file_data.*.required'=>'File is required',
+            'file_data.*.mimes'=>'Only PDF files are allowed',
+            'file_data.*.max'=>'File is too large to be saved',
+            ]
+        );
         if($req->file_data){
             foreach ($req->file_data as $k => $value) {
                 $fileName = FileUploader::fileupload($req,$k,$req->file_name[$k],'Guides/');
