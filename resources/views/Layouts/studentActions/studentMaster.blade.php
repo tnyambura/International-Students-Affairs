@@ -268,15 +268,6 @@
                                     <input class="btn btn-info w-100 align-self-center" disabled id='save_schedule' type="submit" value="Book Now">
                                     @endif
                                 </form>
-                                <script>
-                                    // $(document).ready(function(){
-                                    //     $('#save_schedule').on('click',function(e){
-                                    //         e.preventDefault()
-
-                                    //         console.log($(this).siblings('#selected_date_data').val());
-                                    //     })
-                                    // })
-                                </script>
                             </div>
                             <div class='container my-4'>
                                 <span class='p-2 rounded mb-5' style=' background: #113C7A; color:#fff; font-size: 15px; font-weight: bolder;'>My Appointment</span>
@@ -297,9 +288,6 @@
 
                         <script src="https://code.jquery.com/jquery-3.6.4.js" integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E=" crossorigin="anonymous"></script>
                         <script defer>
-
-                            
-
                             function ToggleScheduleView(e){
                                 let dataPicker = document.querySelector('.append-schedule')
                                 if(dataPicker.classList.contains('d-none')){
@@ -478,10 +466,14 @@
                                 // let TimeSelect = document.querySelector('#save_schedule').previousElementSibling.previousElementSibling.querySelector('select')
                                 // if(TimeSelect){
                                     if(document.querySelector('#selected_date_data').value == '' ){
-                                        document.querySelector('#save_schedule').disabled = true
+                                        if(document.querySelector('#save_schedule')){
+                                            document.querySelector('#save_schedule').disabled = true
+                                        }
                                     }
                                     else{
-                                        document.querySelector('#save_schedule').disabled = false
+                                        if(document.querySelector('#save_schedule')){
+                                            document.querySelector('#save_schedule').disabled = false
+                                        }
                                     }
                                 // }else{
                                 //     document.querySelector('#save_schedule').disabled = true

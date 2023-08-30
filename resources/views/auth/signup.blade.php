@@ -34,7 +34,7 @@
                         <h2 class="my-auto mb-6 text-center text-slate-200 text-[20px] uppercase">SU Portal | Sign Up</h2>
                         <div class="input-fields-container grid gap-6 ">
                             @if(Session::has('success'))
-                            <div class="rounded-md p-2 w-full text-gray-100 bg-green-900" role="alert">
+                            <div class="rounded-md p-2 w-full text-green-100 bg-green-900" role="alert">
                                 <!-- <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>-->
                                 {{Session::get('success')}} 
                             </div>
@@ -45,15 +45,6 @@
                                 {{Session::get('error')}}
                             </div>
                             @endif
-                            <!-- @if($errors->any())
-                                <div class="rounded-md p-2 w-full text-gray-100 bg-red-900" role="alert">
-                                    <ul>
-                                        @foreach($errors->all() as $error)
-                                            <li>{{$error}}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif -->
                             <div class="input-field w-full rounded-md relative ">
                                 <div class='flex bg-white overflow-hidden rounded-md'>
                                     <label class="absolute text-[15px] translate-y-[50%] left-[10px] text-slate-400" for="surname">Surname</label>

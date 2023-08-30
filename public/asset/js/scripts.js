@@ -205,14 +205,15 @@ function prevTab(elem) {
 //VISA EXT SCRIPTS//
 
 var uploadentryV = document.getElementById("entryV");
-
-                 uploadentryV.onchange = function() {
-                    const oFile = document.getElementById("entryV").files[0];                    
-                    if (oFile.size > 2097152) // 2 MiB for bytes.
-                        {
-                            alert("The entry Visa File must be below 2MB!");
-                        this.value = "";
-                        }
-                };
+if(uploadentryV){
+    uploadentryV.onchange = function() {
+       const oFile = document.getElementById("entryV").files[0];                    
+       if (oFile.size > 2097152) // 2 MiB for bytes.
+           {
+               alert("The entry Visa File must be below 2MB!");
+           this.value = "";
+           }
+   };
+}
 
 
