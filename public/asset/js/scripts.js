@@ -23,10 +23,17 @@
 
 /** File Manage script */
 function FileChanged(e){
+    let fileElement = e.target
     let file = e.target.value.replace(/.*(\/|\\)/,'');
     let fileType = file.split('.')
-
-    e.target.previousElementSibling.innerHTML=`${fileType[0].substring(0,5)}...${fileType[fileType.length-1]}`
+    
+    const fileSizeGetter = Math.round((fileElement.files[0].size / 1024));
+    if (fileSizeGetter > 2048) {
+        fileElement.value = null
+        alert("File too Big, please select a file less than 2mb");
+    }else{
+        e.target.previousElementSibling.innerHTML=`${fileType[0].substring(0,5)}...${fileType[fileType.length-1]}`
+    }
 }
 function RemoveElement(e){
     let form = document.querySelector('.file-form-new')

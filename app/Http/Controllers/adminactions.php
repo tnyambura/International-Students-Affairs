@@ -247,7 +247,7 @@ class adminactions extends Controller
     public function FileManageInsert(Request $req){
         $dataVal = [];
         $this->validate($req,[
-            'file_data.*'=>'required|mimes:pdf|max:1024',
+            'file_data.*'=>'required|mimes:pdf|max:2048',
         ],[
             'file_data.*.required'=>'File is required',
             'file_data.*.mimes'=>'Only PDF files are allowed',

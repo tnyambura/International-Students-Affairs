@@ -33,9 +33,9 @@ class MailController extends Controller
         try {
             Mail::to($email)->send(new MailNotify($data));
             // return response()->json(['Great sent']);
-            return back()->with('email_send_success','A verification email has been sent to '.$email);
+            return back()->with('success','A verification email has been sent to '.$email);
         } catch (Exception $th) {
-            return back()->with('email_send_fail','We counldn\'t send a verification email to '.$email.'. Try again later!');
+            return back()->with('fail','We counldn\'t send a verification email to '.$email.'. Try again later!');
         }
     }
 }

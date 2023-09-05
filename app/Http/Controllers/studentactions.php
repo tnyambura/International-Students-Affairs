@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rules\Password;
 
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades;
 use Illuminate\Support\Facades\Hash;
@@ -384,7 +385,7 @@ class studentactions extends Controller
                     $post->timestamps = false;
         
                     $post->save();
-                    return back()->with('kpp_request_added','Your student pass application Request has been submitted successfully');
+                    return back()->with('success','Your student pass application Request has been submitted successfully');
                 }
             }
             
@@ -432,7 +433,7 @@ class studentactions extends Controller
                     $post->timestamps = false;
                     $post->save();
             
-                    return back()->with('visa_request_added','Your visa extension request has been submitted successfully');
+                    return back()->with('success','Your visa extension request has been submitted successfully');
                 }
             }
         }
@@ -510,10 +511,10 @@ class studentactions extends Controller
 
         if($checkRequest[0]->request_change === null){
             $data = DB::table("buddies_allocations")->where('request_id',$request->request_id)->update(['request_change'=>$code,'request_change'=>1]);
-            if($data){ return back()->with('request_change_success','Request placed successfully!'); }
-            else{ return back()->with('request_change_fail','Failed to place a change request.  Try later!'); }
+            if($data){ return back()->with('success','Request placed successfully!'); }
+            else{ return back()->with('fail','Failed to place a change request.  Try later!'); }
         }else{
-            return back()->with('request_change_fail','Failed to place a new change request. One is still pending!');
+            return back()->with('fail','Failed to place a new change request. One is still pending!');
         }
     }
     public function MyBuddyRequest(request $request){
@@ -551,22 +552,22 @@ class studentactions extends Controller
         
         if(sizeOf($data) < 1){
             if($this->PushBuddyRq($id,$year)){
-                return back()->with('New_request_assigned','Request submitted Successfully');
+                return back()->with('success','Request submitted Successfully');
             }
         }else{
             foreach ($data as $value) {
                 if(strtolower($value->status) === 'pending'){
                     $status = false;
-                    return back()->with('New_request_failed','Your Request for a buddy is already in Progress! Please be patient');
+                    return back()->with('fail','Your Request for a buddy is already in Progress! Please be patient');
                 }
                 if(strtolower($value->status) === 'approved'){
                     $status = false;
-                    return back()->with('New_request_failed','You have already been assigned a buddy! We cannot initiate new request.');
+                    return back()->with('fail','You have already been assigned a buddy! We cannot initiate new request.');
                 }
             }
             if($status){
                 if($this->PushBuddyRq($id,$year)){
-                    return back()->with('New_request_assigned','Request submitted Successfully');
+                    return back()->with('success','Request submitted Successfully');
                 }
             }
         }
@@ -587,10 +588,10 @@ class studentactions extends Controller
         if($this->deleteFiles($files)){
             $KppAppCancel = DB::table("extension_application")->where('student_id',$id)->where('application_status','pending')->delete();
             if($KppAppCancel){
-                return back()->with('extApp_cancel_success','You have canceled your student pass request successfully. You can not re-activate your request, place a new request when needed.');
+                return back()->with('success','You have canceled your student pass request successfully. You can not re-activate your request, place a new request when needed.');
             }
         }
-        return back()->with('extApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
+        return back()->with('fail','We couldn\'t cancel your request at the moment, try later.');
     }
     public function cancelKppApp(Request $request){
         $id = $request->user()->id; 
@@ -599,19 +600,19 @@ class studentactions extends Controller
         if($this->deleteFiles($files)){
             $KppAppCancel = DB::table("kpps_application")->where('student_id',$id)->where('application_status','pending')->delete();
             if($KppAppCancel){
-                return back()->with('kppApp_cancel_success','You have canceled your student pass request successfully. You can not re-activate your request, place a new request when needed.');
+                return back()->with('success','You have canceled your student pass request successfully. You can not re-activate your request, place a new request when needed.');
             }
         }
-        return back()->with('kppApp_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
+        return back()->with('fail','We couldn\'t cancel your request at the moment, try later.');
     }
     public function cancelBuddy(Request $request){
         $id = $request->bd_rq_id; 
         $BuddyCancel = DB::table("buddy_request")->where('buddy_request_id',$id)->update(['status'=>'cancel']);
 
         if($BuddyCancel){
-            return back()->with('buddy_cancel_success','You have canceled your buddy request successfully. You can not re-activate your request, place a new request when needed.');
+            return back()->with('success','You have canceled your buddy request successfully. You can not re-activate your request, place a new request when needed.');
         }
-        return back()->with('buddy_cancel_fail','We couldn\'t cancel your request at the moment, try later.');
+        return back()->with('fail','We couldn\'t cancel your request at the moment, try later.');
     }
     public function MyBuddyAllocation(Request $request){
         $id = $request->user()->id;        
@@ -633,7 +634,7 @@ class studentactions extends Controller
                 'Content-Length: '. filesize($file_path)
             ]);
         }else{
-            return back()->with('download_fail','Requested file does not exist on our server!'.$file_path);
+            return back()->with('fail','Requested file does not exist on our server!'.$file_path);
         }   
     }
     public function downloadKpps(Request $request,$file){    
@@ -644,7 +645,7 @@ class studentactions extends Controller
             ]);
             
         }else{
-            return back()->with('download_fail','Requested file does not exist on our server!');
+            return back()->with('fail','Requested file does not exist on our server!');
         }   
     }
     public function downloadExtensions(Request $request,$file){    
@@ -654,7 +655,7 @@ class studentactions extends Controller
                 'Content-Length: '. filesize($file_path)
             ]);
         }else{
-            return back()->with('download_fail','Requested file does not exist on our server!');
+            return back()->with('fail','Requested file does not exist on our server!');
         }   
     }
 
@@ -733,6 +734,21 @@ class studentactions extends Controller
 
     public function AddNewSignup(Request $request){
 
+        if($request->password && $request->password_confirmation){
+            $this->validate($request,[
+                'password'=>[
+                    "required", "confirmed",
+                    Password::min(8)->letters()
+                    ->mixedCase()
+                    ->numbers()
+                    ->symbols()
+                    ->uncompromised()
+                ],
+                'password_confirmation'=>'required',
+                ]
+            );
+        }
+
         $this->validate($request,[
             'id'=>'required|max:8',
             'surNAME'=>'required',
@@ -746,15 +762,6 @@ class studentactions extends Controller
             'passport_number'=>'required',
             'passport_expire'=>'required',
             'Residence'=>'required',
-            'password'=>[
-                "required", "confirmed",
-                Password::min(8)->letters()
-                ->mixedCase()
-                ->numbers()
-                ->symbols()
-                ->uncompromised()
-            ],
-            'password_confirmation'=>'required',
             ]
         );
 
@@ -773,14 +780,14 @@ class studentactions extends Controller
         $status=0;
 
         if(sizeOf($CheckId) > 0 || sizeOf($CheckEmail) > 0 || sizeOf($CheckPassport) > 0){
-            return back()->with('New_Student_failed','User with the same data found. Try again');
+            return back()->with('fail','User with the same data found. Try again');
         }else{
             $CheckRole=[];
             if($request->user()){
                 $CheckRole = DB::table("user_roles")->select('role')->where('user_id',$request->user()->id)->limit(1)->get();
             }
 
-            $password = $request->password;
+            $password = str_replace(' ','',$request->password);
 
             $post = new addNewStudent();
             $postDetails = new addStudentDetails();

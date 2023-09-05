@@ -29,61 +29,19 @@
                 <div class='mr-4' style='font-weight:bolder;'><i class='fa fa-mars mr-2' style='color:#113C7A;font-size:30px;'></i>Male: <span style='font-size:20px;'>{{$NumMale}}</span></div>
                 <div style='font-weight:bolder;'><i class='fa fa-venus mr-2' style='font-size:30px; color:#7A1171;'></i>Female: <span style='font-size:20px;'>{{$NumFemale}}</</span></div>
             </li>
-        </ol>  
-        @if(Session::has('data_not_available'))
-        <div class="alert alert-danger" role="alert">
-        {{Session::get('data_not_available')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        @endif 
-        @if(Session::has('activation_failed'))
-        <div class="alert alert-danger" role="alert">
-        {{Session::get('activation_failed')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        @endif 
-        @if(Session::has('Buddy_Register_success'))
+        </ol> 
+        @if(Session::has('success'))
         <div class="alert alert-success" role="alert">
-        {{Session::get('Buddy_Register_success')}}
+        {{Session::get('success')}}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
         @endif 
-        @if(Session::has('Buddy_Register_fail'))
+        @if(Session::has('fail'))
         <div class="alert alert-danger" role="alert">
-        {{Session::get('Buddy_Register_fail')}}
+        {{Session::get('fail')}}
         <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </div>
-        @endif 
-        @if(Session::has('user_update_success'))
-        <div class="alert alert-success" role="alert">
-        {{Session::get('user_update_success')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        @endif 
-        @if(Session::has('user_update_failed'))
-        <div class="alert alert-danger" role="alert">
-        {{Session::get('user_update_failed')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        @endif 
-        @if(Session::has('email_send_success'))
-        <div class="alert alert-success" role="alert">
-        {{Session::get('email_send_success')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        @endif 
-        @if(Session::has('email_send_fail'))
-        <div class="alert alert-danger" role="alert">
-        {{Session::get('email_send_fail')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        @endif 
-        @if(Session::has('password_reset_error'))
-        <div class="alert alert-danger" role="alert">
-        {{Session::get('password_reset_error')}}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        </div>
-        @endif 
+        @endif
         <div class="card mb-4">
             <!-- <div class="card-header">
                 <i class="fas fa-table mr-1"></i>

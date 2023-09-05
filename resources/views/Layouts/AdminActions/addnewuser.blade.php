@@ -12,55 +12,18 @@
                 </div>
                 </li>
             </ol> 
-            @if(Session::has('user_update_success'))
+            @if(Session::has('success'))
             <div class="alert alert-success" role="alert">
-            {{Session::get('user_update_success')}}
+            {{Session::get('success')}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             @endif 
-            @if(Session::has('user_update_failed'))
+            @if(Session::has('fail'))
             <div class="alert alert-danger" role="alert">
-            {{Session::get('user_update_failed')}}
+            {{Session::get('fail')}}
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             @endif 
-            @if(Session::has('New_User_Added') )
-            <div class="alert alert-success" role="alert">
-            {{Session::get('New_User_Added')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            @endif
-            @if(Session::has('New_Student_Added'))
-            <div class="alert alert-success" role="alert">
-            {{Session::get('New_Student_Added')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            @endif
-            @if(Session::has('New_User_failed'))
-            <div class="alert alert-danger" role="alert">
-            {{Session::get('New_User_failed')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            @endif
-            @if(Session::has('New_Student_failed'))
-            <div class="alert alert-danger" role="alert">
-            {{Session::get('New_Student_failed')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            @endif
-            @if(Session::has('email_send_success'))
-            <div class="alert alert-success" role="alert">
-            {{Session::get('email_send_success')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            @endif 
-            @if(Session::has('email_send_fail'))
-            <div class="alert alert-danger" role="alert">
-            {{Session::get('email_send_fail')}}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            </div>
-            @endif 
-
 
             <form method="POST" action="{{ route('add.newuser') }}" class='new-staff-form'>
                 @csrf
@@ -147,7 +110,7 @@
                         </div>
                         <div class="col-lg-4 mb-3">
                             <label for="phoneNUMBER">Kenyan Phone Number</label>
-                            <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="phoneNUMBER" name ="phoneNUMBER" placeholder="(+254) 700 000000" required>
+                            <input type="number" class="form-control" pattern="/^-?\d+\.?\d*$/" onKeyPress="if(this.value.length==13) return false;" id="phoneNUMBER" name ="phone_number" placeholder="(+254) 700 000000" required>
                         </div>
                     </div>
                     <div class="form-row">
@@ -267,7 +230,7 @@
                         });
                     }
                     if(studentCheckers.checked == true){
-                        studentForm.querySelectorAll('input').forEach(element => {
+                        studentForm.querySelectorAll('input:not([type="password"])').forEach(element => {
                             element.disabled=false
                         });
                         studentForm.querySelectorAll('select').forEach(element => {

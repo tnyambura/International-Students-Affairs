@@ -165,8 +165,6 @@ class RegisteredUserController extends Controller
         $post->timestamps = false;
         $postRole->timestamps = false;
         
-        // $post->save();
-        // $postRole->save();
         if($post->save() && $postRole->save()){
             $EmailTitle = 'Welcome to International Student Affaires.';
             $subject = 'Account Creation';
@@ -175,12 +173,12 @@ class RegisteredUserController extends Controller
             <p><a href="http://localhost:8000/" style="padding:5px; border-radius:5px; background:rgb(17,60,122); color:#fff; ">Login Now</a></p>
             <p>Please remember to change your password to improve your account security. </p>';
 
-            return redirect()->route('emailsend',[$subject, $request->email,$EmailTitle,Crypt::encryptString($msg)]);
+            return back()->with('success','User successfully added');
+            // return redirect()->route('emailsend',[$subject, $request->email,$EmailTitle,Crypt::encryptString($msg)]);
 
         }
-        // return back()->with('New_User_Added','A New User has been Enrolled Successfully');
         }else{
-            return back()->with('New_User_failed','A user with Same suID is already Registered');    
+            return back()->with('fail','A user with Same suID is already Registered');    
         }
 
     }
